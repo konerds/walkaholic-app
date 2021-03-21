@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_regLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.mapo.walkaholic.RegisterActivity">
+
+    <ImageView
+        android:id="@+id/signup_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="145dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="18dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo_title"
+        app:layout_constraintBottom_toTopOf="@+id/signup_contents"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/signup_contents"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="18dp"
+        android:background="#000000"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarSize="4dp"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbarThumbVertical="@color/colorAccent"
+        android:scrollbarTrackVertical="@color/colorPrimaryDark"
+        android:scrollbars="vertical"
+        android:text="회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관회원 약관"
+        android:textColor="#FFFFFF"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/signup_agreeall"
+        app:layout_constraintTop_toBottomOf="@id/signup_imageView" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/signup_agreeall"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:checkable="true"
+        android:gravity="center_vertical"
+        android:text="모두 동의"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/signup_agreea"
+        app:layout_constraintTop_toBottomOf="@id/signup_contents" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/signup_agreea"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:checkable="true"
+        android:gravity="center_vertical"
+        android:text="서비스 이용 동의"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/signup_agreeb"
+        app:layout_constraintTop_toBottomOf="@id/signup_agreeall" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/signup_agreeb"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="18dp"
+        android:checkable="true"
+        android:gravity="center_vertical"
+        android:text="개인정보 이용 동의"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/signup_layout"
+        app:layout_constraintTop_toBottomOf="@id/signup_agreea" />
+
+    <LinearLayout
+        android:id="@+id/signup_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_contents">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="30">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_email_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress|textNoSuggestions" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="15">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="15">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_confirmpw_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirmpw"
+                android:importantForAutofill="no"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="10">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signup_name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/signname"
+                android:importantForAutofill="no"
+                android:inputType="textNoSuggestions" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/signup_signup_button"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="72dp"
+            android:layout_marginRight="18dp"
+            android:background="@drawable/btn_blank"
+            android:foreground="?selectableItemBackground"
+            android:text="@string/signup" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
