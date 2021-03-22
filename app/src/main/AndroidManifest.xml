@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.mapo.walkaholic.GuideActivity" />
         <activity android:name="com.mapo.walkaholic.MainActivity" />
         <activity android:name="com.mapo.walkaholic.LoginActivity" />
         <activity android:name="com.mapo.walkaholic.RegisterActivity" />

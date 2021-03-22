@@ -41,6 +41,10 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        binding.loginButtonTutorial.setOnClickListener {
+            startActivity(Intent(this, GuideActivity::class.java))
+            finish()
+        }
         binding.loginSignupButton.setOnClickListener {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.passwordEdittext.windowToken, 0)

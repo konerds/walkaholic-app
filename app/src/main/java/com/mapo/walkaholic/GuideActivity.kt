@@ -1,5 +1,6 @@
 package com.mapo.walkaholic
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,7 +11,9 @@ import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
+import kotlinx.android.synthetic.main.activity_guide.*
 import kotlinx.android.synthetic.main.activity_guide.view.*
+import kotlinx.android.synthetic.main.fragment_guide.view.*
 
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : AppCompatActivity() {
@@ -38,19 +41,28 @@ class GuideActivity : AppCompatActivity() {
                 val inflater = LayoutInflater.from(container.context)
                 val view = inflater.inflate(R.layout.fragment_guide, container, false)
 
-                view.ivSplashItem.setImageResource()
+                view.guide_ivItem.setImageResource(guideList[position])
 
-                return super.instantiateItem(container, position)
+                container.addView(view)
+                return view
             }
-            override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-                super.destroyItem(container, position, `object`)
+            override fun destroyItem(container: ViewGroup, position: Int, guide_pa_obj: Any) {
+                container.removeView(guide_pa_obj as View?)
             }
-            override fun isViewFromObject(view: View, `object`: Any): Boolean {
-
+            override fun isViewFromObject(view: View, guide_pa_obj: Any): Boolean {
+                return view == guide_pa_obj
             }
             override fun getCount(): Int {
-
+                return guideList.size
             }
         }
+        guide_mViewPager.adapter = adapter
+        guide_buttonSkip.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+    }
+    companion object {
+        val guideList = arrayOf(R.drawable.tutorial1, R.drawable.tutorial2, R.drawable.tutorial3)
     }
 }

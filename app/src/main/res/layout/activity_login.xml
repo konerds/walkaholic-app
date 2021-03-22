@@ -7,6 +7,20 @@
     android:fitsSystemWindows="true"
     tools:context="com.mapo.walkaholic.LoginActivity">
 
+    <com.google.android.material.chip.Chip
+        android:id="@+id/login_buttonTutorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginLeft="9dp"
+        android:theme="@style/Theme.MaterialComponents.Light"
+        app:chipSurfaceColor="@android:color/transparent"
+        app:chipBackgroundColor="@android:color/transparent"
+        android:text="@string/tutorial" />
+
     <ImageView
         android:id="@+id/login_imageView"
         android:layout_width="match_parent"
