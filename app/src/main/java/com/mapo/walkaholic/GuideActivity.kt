@@ -1,20 +1,19 @@
 package com.mapo.walkaholic
 
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.PagerAdapter
+import kotlinx.android.synthetic.main.activity_guide.view.*
 
 @RequiresApi(Build.VERSION_CODES.M)
-class SplashActivity : AppCompatActivity() {
-    private val SPLASH_DISPLAY_TIME = 3000
+class GuideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -31,23 +30,27 @@ class SplashActivity : AppCompatActivity() {
                 window.statusBarColor = Color.TRANSPARENT
             }
         }
-        val pref = this.getPreferences(0)
-        val first : Boolean = pref.getBoolean("isFirst", false)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splashscreen)
-        if(!first) {
-            val editor = pref.edit()
-            editor.putBoolean("isFirst", true)
-            editor.commit()
-            Handler().postDelayed({
-                startActivity(Intent(this, GuideActivity::class.java))
-                finish()
-            }, SPLASH_DISPLAY_TIME.toLong())
-        } else {
-            Handler().postDelayed({
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }, SPLASH_DISPLAY_TIME.toLong())
+        setContentView(R.layout.activity_guide)
+
+        val adapter: PagerAdapter = object:PagerAdapter() {
+            override fun instantiateItem(container: ViewGroup, position: Int): Any {
+                val inflater = LayoutInflater.from(container.context)
+                val view = inflater.inflate(R.layout.fragment_guide, container, false)
+
+                view.ivSplashItem.setImageResource()
+
+                return super.instantiateItem(container, position)
+            }
+            override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+                super.destroyItem(container, position, `object`)
+            }
+            override fun isViewFromObject(view: View, `object`: Any): Boolean {
+
+            }
+            override fun getCount(): Int {
+
+            }
         }
     }
 }
