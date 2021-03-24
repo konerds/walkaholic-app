@@ -28,6 +28,7 @@
         android:clickable="true"
         android:focusable="true"
         android:theme="@style/Theme.MaterialComponents.Light"
+        android:textColor="#FFFFFF"
         app:chipSurfaceColor="@android:color/transparent"
         app:chipBackgroundColor="@android:color/transparent"
         android:text="@string/skip" />

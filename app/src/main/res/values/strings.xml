@@ -29,10 +29,10 @@
     <string name="input_fail_null">입력해주세요</string>
     <string name="not_match_pw">비밀번호와 비밀번호 확인에 입력된 값이 일치하지 않습니다</string>
     <!-- 하단 내비게이션 바 -->
-    <string name="account">메인</string>
-    <string name="search">산책로</string>
+    <string name="main">메인</string>
+    <string name="path">산책로</string>
     <string name="community">커뮤니티</string>
-    <string name="favorite">챌린지</string>
+    <string name="challenge">챌린지</string>
     <string name="chat">채팅</string>
     <!-- 메인 -->
     <string name="post">Post</string>

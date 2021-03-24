@@ -24,47 +24,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.action_main -> {
                 var detailViewFragment = DetailViewFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content, detailViewFragment).commit()
-                Toast.makeText(
-                        applicationContext,
-                        getString(R.string.account),
-                        Toast.LENGTH_SHORT
-                ).show()
-                return true
-            }
-            R.id.action_search -> {
-                var mapFragment = MapFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, mapFragment).commit()
-                Toast.makeText(
-                        applicationContext,
-                        getString(R.string.search),
-                        Toast.LENGTH_SHORT
-                ).show()
                 return true
             }
             R.id.action_community -> {
-                Toast.makeText(
-                        applicationContext,
-                        getString(R.string.community),
-                        Toast.LENGTH_SHORT
-                ).show()
-                return true
-            }
-            R.id.action_favorite -> {
                 var userFragment = UserFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content, userFragment).commit()
-                Toast.makeText(
-                        applicationContext,
-                        getString(R.string.favorite),
-                        Toast.LENGTH_SHORT
-                ).show()
                 return true
             }
-            R.id.action_chat -> {
-                Toast.makeText(
-                        applicationContext,
-                        getString(R.string.chat),
-                        Toast.LENGTH_SHORT
-                ).show()
+            R.id.action_challenge -> {
+                return true
+            }
+            R.id.action_path -> {
+                var mapFragment = MapFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, mapFragment).commit()
                 return true
             }
         }

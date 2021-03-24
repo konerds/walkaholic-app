@@ -10,8 +10,8 @@
 
         <ImageView
             android:id="@+id/guide_ivItem"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:visibility="visible"
