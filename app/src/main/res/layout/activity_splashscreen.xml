@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="624dp"
         android:theme="@style/SplashTheme"
-        android:layout_marginTop="18dp"
-        android:layout_marginBottom="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_title" />
 </LinearLayout>

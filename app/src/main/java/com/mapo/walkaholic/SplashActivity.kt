@@ -1,8 +1,6 @@
 package com.mapo.walkaholic
 
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -17,8 +15,8 @@ class SplashActivity : AppCompatActivity() {
     private val SPLASH_DISPLAY_TIME = 3000
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         when (Build.VERSION.SDK_INT) {
             in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {
@@ -32,10 +30,10 @@ class SplashActivity : AppCompatActivity() {
             }
         }
         val pref = this.getPreferences(0)
-        val first : Boolean = pref.getBoolean("isFirst", false)
+        val first: Boolean = pref.getBoolean("isFirst", false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splashscreen)
-        if(!first) {
+        if (!first) {
             val editor = pref.edit()
             editor.putBoolean("isFirst", true)
             editor.commit()

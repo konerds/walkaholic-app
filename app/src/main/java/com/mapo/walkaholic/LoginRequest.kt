@@ -4,20 +4,19 @@ import android.util.Log
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import java.lang.reflect.Method
 
 class LoginRequest(
-        userEmail: String,
-        userPassword: String,
-        listener: Response.Listener<String?>?
+    userID: String,
+    userPassword: String,
+    listener: Response.Listener<String?>?
 ) :
-        StringRequest(
-                Method.POST,
-                URL,
-                listener,
-                Response.ErrorListener
-                { e -> Log.d("error", "[ + ${e.message}]") }
-        ) {
+    StringRequest(
+        Method.POST,
+        URL,
+        listener,
+        Response.ErrorListener
+        { e -> Log.d("error", "[ + ${e.message}]") }
+    ) {
     private val map: MutableMap<String, String>
 
     @Throws(AuthFailureError::class)
@@ -31,7 +30,7 @@ class LoginRequest(
 
     init {
         map = HashMap()
-        map["userEmail"] = userEmail
+        map["userID"] = userID
         map["userPassword"] = userPassword
     }
 }

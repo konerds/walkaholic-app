@@ -6,16 +6,29 @@
     <string name="skip">건너뛰기</string>
     <!-- 로그인 및 회원가입 -->
     <string name="tutorial"><u>튜토리얼</u></string>
-    <string name="email">이메일</string>
+    <string name="userid">아이디</string>
     <string name="password">비밀번호</string>
     <string name="confirmpw">비밀번호 확인</string>
     <string name="signname">이름</string>
+    <string name="signnick">닉네임</string>
+    <string name="signphone">휴대폰 번호</string>
+    <string name="signsmsauth">SMS 인증번호 받기</string>
+    <string name="signsmsrauth">SMS 인증번호</string>
+    <string name="signbirth">생년월일</string>
+    <string name="signgender">성별</string>
+    <string name="signgenmale">남자</string>
+    <string name="signgenfemale">여자</string>
+    <string name="signheight">키(cm)</string>
+    <string name="signweight">몸무게(kg)</string>
+    <string name="signauth">인증하기</string>
     <string name="kakao">카카오톡</string>
     <string name="google">구글</string>
     <string name="facebook">페이스북</string>
+    <string name="signupnext">다음</string>
     <string name="signup">회원가입</string>
     <string name="signin">로그인</string>
-    <string name="signin_email">이메일로 로그인</string>
+    <string name="signin_forgot">아이디 비밀번호 찾기</string>
+    <string name="signin_naver">네이버로 로그인</string>
     <string name="signin_kakao">카카오톡으로 로그인</string>
     <string name="signin_google">구글로 로그인</string>
     <string name="signin_facebook">페이스북으로 로그인</string>
@@ -23,10 +36,15 @@
     <string name="complete">성공</string>
     <string name="fail">실패</string>
     <string name="error">오류</string>
+    <string name="signup_allagree">전체 동의</string>
+    <string name="signup_servagree">서비스이용 동의</string>
+    <string name="signup_privagree">개인정보수집이용 동의</string>
     <!-- 안내 메시지 -->
-    <string name="signup_agree">서비스 이용 및 개인정보 수집에 동의하셨습니다</string>
+    <string name="signup_agree">서비스이용 및 개인정보수집이용에 동의하셨습니다</string>
+    <string name="sms_success_send">발송되었습니다</string>
     <!-- 오류 메시지 -->
     <string name="input_fail_null">입력해주세요</string>
+    <string name="input_fail_complete">완료해주세요</string>
     <string name="not_match_pw">비밀번호와 비밀번호 확인에 입력된 값이 일치하지 않습니다</string>
     <!-- 하단 내비게이션 바 -->
     <string name="main">메인</string>

@@ -4,20 +4,25 @@ import android.util.Log
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import java.lang.reflect.Method
 
 class RegisterRequest(
-        userEmail: String,
-        userPassword: String,
-        userName: String,
-        listener: Response.Listener<String?>?
+    userID: String,
+    userPassword: String,
+    userName: String,
+    userNick: String,
+    userPhone: String,
+    userBirth: String,
+    userGender: String,
+    userHeight: String,
+    userWeight: String,
+    listener: Response.Listener<String?>?
 ) :
-        StringRequest(
-                Method.POST,
-                URL,
-                listener,
-                Response.ErrorListener { e -> Log.d("error", "[${e.message}]") }
-        ) {
+    StringRequest(
+        Method.POST,
+        URL,
+        listener,
+        Response.ErrorListener { e -> Log.d("error", "[${e.message}]") }
+    ) {
     private val map: MutableMap<String, String>
 
     @Throws(AuthFailureError::class)
@@ -31,8 +36,14 @@ class RegisterRequest(
 
     init {
         map = HashMap()
-        map["userEmail"] = userEmail
+        map["userID"] = userID
         map["userPassword"] = userPassword
         map["userName"] = userName
+        map["userNick"] = userNick
+        map["userPhone"] = userPhone
+        map["userBirth"] = userBirth
+        map["userGender"] = userGender
+        map["userHeight"] = userHeight
+        map["userWeight"] = userWeight
     }
 }

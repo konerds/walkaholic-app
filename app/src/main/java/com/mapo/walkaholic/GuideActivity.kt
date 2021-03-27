@@ -12,15 +12,14 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import kotlinx.android.synthetic.main.activity_guide.*
-import kotlinx.android.synthetic.main.activity_guide.view.*
 import kotlinx.android.synthetic.main.fragment_guide.view.*
 
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         when (Build.VERSION.SDK_INT) {
             in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {
@@ -36,7 +35,7 @@ class GuideActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guide)
 
-        val adapter: PagerAdapter = object:PagerAdapter() {
+        val adapter: PagerAdapter = object : PagerAdapter() {
             override fun instantiateItem(container: ViewGroup, position: Int): Any {
                 val inflater = LayoutInflater.from(container.context)
                 val view = inflater.inflate(R.layout.fragment_guide, container, false)
@@ -46,12 +45,15 @@ class GuideActivity : AppCompatActivity() {
                 container.addView(view)
                 return view
             }
+
             override fun destroyItem(container: ViewGroup, position: Int, guide_pa_obj: Any) {
                 container.removeView(guide_pa_obj as View?)
             }
+
             override fun isViewFromObject(view: View, guide_pa_obj: Any): Boolean {
                 return view == guide_pa_obj
             }
+
             override fun getCount(): Int {
                 return guideList.size
             }
@@ -62,6 +64,7 @@ class GuideActivity : AppCompatActivity() {
             finish()
         }
     }
+
     companion object {
         val guideList = arrayOf(R.drawable.tutorial1, R.drawable.tutorial2, R.drawable.tutorial3)
     }

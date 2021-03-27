@@ -11,24 +11,24 @@
         android:id="@+id/login_buttonTutorial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="12dp"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginLeft="9dp"
+        android:text="@string/tutorial"
         android:theme="@style/Theme.MaterialComponents.Light"
-        app:chipSurfaceColor="@android:color/transparent"
         app:chipBackgroundColor="@android:color/transparent"
-        android:text="@string/tutorial" />
+        app:chipSurfaceColor="@android:color/transparent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/login_imageView"
         android:layout_width="match_parent"
         android:layout_height="145dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_title"
         app:layout_constraintBottom_toTopOf="@id/login_layout"
@@ -45,16 +45,16 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             app:counterEnabled="true"
             app:counterMaxLength="30">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email_edittext"
+                android:id="@+id/userid_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
+                android:hint="@string/userid"
                 android:inputType="textEmailAddress|textNoSuggestions"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -62,8 +62,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             app:counterEnabled="true"
             app:counterMaxLength="15">
 
@@ -76,25 +76,43 @@
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/email_login_button"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginRight="18dp"
-            android:background="@drawable/btn_blank"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/signin_email" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/email_login_button"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/btn_blank"
+                android:foreground="?selectableItemBackground"
+                android:text="@string/signin" />
+
+            <Button
+                android:id="@+id/forgot_login_button"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="12dp"
+                android:background="@drawable/btn_blank"
+                android:foreground="?selectableItemBackground"
+                android:text="@string/signin_forgot" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/login_signup_button"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginRight="18dp"
-            android:layout_marginBottom="9dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/btn_blank"
             android:foreground="?selectableItemBackground"
             android:text="@string/signup" />
@@ -109,11 +127,23 @@
         app:layout_constraintTop_toBottomOf="@id/login_layout">
 
         <Button
+            android:id="@+id/naver_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_signin_naver"
+            android:foreground="?selectableItemBackground"
+            android:text="@string/signin_naver"
+            android:textColor="@color/colorWhite" />
+
+        <Button
             android:id="@+id/kakao_login_button"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/btn_signin_kakao"
             android:foreground="?selectableItemBackground"
             android:text="@string/signin_kakao" />
@@ -122,9 +152,9 @@
             android:id="@+id/google_login_button"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/btn_signin_google"
             android:foreground="?selectableItemBackground"
             android:text="@string/signin_google"
@@ -134,9 +164,9 @@
             android:id="@+id/facebook_login_button"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/btn_signin_facebook"
             android:foreground="?selectableItemBackground"
             android:text="@string/signin_facebook"

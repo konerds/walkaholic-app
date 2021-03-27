@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mapo.walkaholic.databinding.ActivityMainBinding
-import com.mapo.walkaholic.navigation.DetailViewFragment
+import com.mapo.walkaholic.navigation.ChallengeFragment
+import com.mapo.walkaholic.navigation.CommunityFragment
 import com.mapo.walkaholic.navigation.MapFragment
-import com.mapo.walkaholic.navigation.UserFragment
+import com.mapo.walkaholic.navigation.MainDetailFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -22,21 +22,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_main -> {
-                var detailViewFragment = DetailViewFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, detailViewFragment).commit()
+                var mainDetailFragment = MainDetailFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_content, mainDetailFragment)
+                    .commit()
                 return true
             }
             R.id.action_community -> {
-                var userFragment = UserFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, userFragment).commit()
+                var communityFragment = CommunityFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_content, communityFragment).commit()
                 return true
             }
             R.id.action_challenge -> {
+                var challengeFragment = ChallengeFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_content, challengeFragment).commit()
                 return true
             }
             R.id.action_path -> {
                 var mapFragment = MapFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, mapFragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, mapFragment)
+                    .commit()
                 return true
             }
         }
@@ -45,8 +52,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         when (Build.VERSION.SDK_INT) {
             in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {
