@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.presentation.navigation
+package com.mapo.walkaholic.view.navigation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import com.mapo.walkaholic.R
 
 class ChallengeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_grid, container, false)
         return view
     }
 }

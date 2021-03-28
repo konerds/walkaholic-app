@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.presentation
+package com.mapo.walkaholic.view
 
 import android.content.Intent
 import android.graphics.Color
@@ -16,8 +16,8 @@ class SplashActivity : AppCompatActivity() {
     private val SPLASH_DISPLAY_TIME = 3000
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         when (Build.VERSION.SDK_INT) {
             in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {

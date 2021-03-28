@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.presentation.navigation
+package com.mapo.walkaholic.view.navigation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,9 @@ import com.mapo.walkaholic.R
 
 class MapFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_map, container, false)
         return view

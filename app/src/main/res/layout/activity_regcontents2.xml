@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.mapo.walkaholic.presentation.RegisterActivity">
+    tools:context="com.mapo.walkaholic.view.RegisterActivity">
 
     <ImageView
         android:id="@+id/signup_imageView"
