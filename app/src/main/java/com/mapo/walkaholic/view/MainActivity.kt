@@ -11,10 +11,10 @@ import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.databinding.ActivityMainBinding
-import com.mapo.walkaholic.view.navigation.ChallengeFragment
-import com.mapo.walkaholic.view.navigation.CommunityFragment
-import com.mapo.walkaholic.view.navigation.MapFragment
-import com.mapo.walkaholic.view.navigation.MainDetailFragment
+import com.mapo.walkaholic.view.navigation.challenge.ChallengeFragment
+import com.mapo.walkaholic.view.navigation.community.CommunityFragment
+import com.mapo.walkaholic.view.navigation.map.MapFragment
+import com.mapo.walkaholic.view.navigation.dashboard.MainDetailFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 @RequiresApi(Build.VERSION_CODES.M)

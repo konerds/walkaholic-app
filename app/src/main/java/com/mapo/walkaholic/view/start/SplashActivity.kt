@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.view
+package com.mapo.walkaholic.view.start
 
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +10,7 @@ import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.mapo.walkaholic.R
+import com.mapo.walkaholic.view.login.LoginActivity
 
 @RequiresApi(Build.VERSION_CODES.M)
 class SplashActivity : AppCompatActivity() {

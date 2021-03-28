@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.view
+package com.mapo.walkaholic.view.login
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,8 @@ import com.android.volley.toolbox.Volley
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.model.LoginRequest
 import com.mapo.walkaholic.databinding.ActivityLoginBinding
+import com.mapo.walkaholic.view.MainActivity
+import com.mapo.walkaholic.view.start.GuideActivity
 import org.json.JSONObject
 
 @RequiresApi(Build.VERSION_CODES.M)

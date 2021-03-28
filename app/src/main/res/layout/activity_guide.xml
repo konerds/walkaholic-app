@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.mapo.walkaholic.view.GuideActivity">
+    tools:context="com.mapo.walkaholic.view.start.GuideActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/guide_mViewPager"

@@ -6,23 +6,23 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 
 class RegisterRequest(
-    userID: String,
-    userPassword: String,
-    userName: String,
-    userNick: String,
-    userPhone: String,
-    userBirth: String,
-    userGender: String,
-    userHeight: String,
-    userWeight: String,
-    listener: Response.Listener<String?>?
+        userID: String,
+        userPassword: String,
+        userName: String,
+        userNick: String,
+        userPhone: String,
+        userBirth: String,
+        userGender: String,
+        userHeight: String,
+        userWeight: String,
+        listener: Response.Listener<String?>?
 ) :
-    StringRequest(
-        Method.POST,
-        URL,
-        listener,
-        Response.ErrorListener { e -> Log.d("error", "[${e.message}]") }
-    ) {
+        StringRequest(
+                Method.POST,
+                URL,
+                listener,
+                Response.ErrorListener { e -> Log.d("error", "[${e.message}]") }
+        ) {
     private val map: MutableMap<String, String>
 
     @Throws(AuthFailureError::class)

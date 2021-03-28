@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.view
+package com.mapo.walkaholic.view.login
 
 import android.app.DatePickerDialog
 import android.content.Context

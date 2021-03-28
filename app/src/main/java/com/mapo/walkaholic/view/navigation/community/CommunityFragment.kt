@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.view.navigation
+package com.mapo.walkaholic.view.navigation.community
 
 import android.os.Bundle
 import android.view.LayoutInflater

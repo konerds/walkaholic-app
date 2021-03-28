@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.mapo.walkaholic.view.LoginActivity">
+    tools:context="com.mapo.walkaholic.view.login.LoginActivity">
 
     <com.google.android.material.chip.Chip
         android:id="@+id/login_buttonTutorial"
