@@ -1,4 +1,4 @@
-package com.mapo.walkaholic
+package com.mapo.walkaholic.presentation
 
 import android.graphics.Color
 import android.os.Build
@@ -9,11 +9,12 @@ import android.view.View
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.databinding.ActivityMainBinding
-import com.mapo.walkaholic.navigation.ChallengeFragment
-import com.mapo.walkaholic.navigation.CommunityFragment
-import com.mapo.walkaholic.navigation.MapFragment
-import com.mapo.walkaholic.navigation.MainDetailFragment
+import com.mapo.walkaholic.presentation.navigation.ChallengeFragment
+import com.mapo.walkaholic.presentation.navigation.CommunityFragment
+import com.mapo.walkaholic.presentation.navigation.MapFragment
+import com.mapo.walkaholic.presentation.navigation.MainDetailFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 @RequiresApi(Build.VERSION_CODES.M)

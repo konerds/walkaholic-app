@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.mapo.walkaholic.SplashActivity"
+            android:name="com.mapo.walkaholic.presentation.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -20,10 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mapo.walkaholic.GuideActivity" />
-        <activity android:name="com.mapo.walkaholic.MainActivity" />
-        <activity android:name="com.mapo.walkaholic.LoginActivity" />
-        <activity android:name="com.mapo.walkaholic.RegisterActivity" />
+        <activity android:name="com.mapo.walkaholic.presentation.GuideActivity" />
+        <activity android:name="com.mapo.walkaholic.presentation.MainActivity" />
+        <activity android:name="com.mapo.walkaholic.presentation.LoginActivity" />
+        <activity android:name="com.mapo.walkaholic.presentation.RegisterActivity" />
     </application>
 
 </manifest>

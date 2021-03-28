@@ -1,4 +1,4 @@
-package com.mapo.walkaholic
+package com.mapo.walkaholic.presentation
 
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
+import com.mapo.walkaholic.R
 import kotlinx.android.synthetic.main.activity_guide.*
 import kotlinx.android.synthetic.main.fragment_guide.view.*
 

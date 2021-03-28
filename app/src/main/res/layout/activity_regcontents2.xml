@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.mapo.walkaholic.RegisterActivity">
+    tools:context="com.mapo.walkaholic.presentation.RegisterActivity">
 
     <ImageView
         android:id="@+id/signup_imageView"
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
-            app:counterMaxLength="30">
+            app:counterMaxLength="12">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_userid_edittext"
@@ -127,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
-            app:counterMaxLength="15">
+            app:counterMaxLength="12">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_password_edittext"
@@ -142,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
-            app:counterMaxLength="15">
+            app:counterMaxLength="12">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/signup_confirmpw_edittext"

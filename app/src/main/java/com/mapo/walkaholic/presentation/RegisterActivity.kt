@@ -1,4 +1,4 @@
-package com.mapo.walkaholic
+package com.mapo.walkaholic.presentation
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -22,6 +22,8 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
+import com.mapo.walkaholic.R
+import com.mapo.walkaholic.data.RegisterRequest
 import com.mapo.walkaholic.databinding.ActivityRegcontents1Binding
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -52,6 +54,8 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegcontents1Binding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        binding.signupContents.movementMethod = ScrollingMovementMethod.getInstance()
+        binding.signupContents2.movementMethod = ScrollingMovementMethod.getInstance()
         binding.signupBirthEdittext.setText(SimpleDateFormat("yyyyMMdd").format(Date()))
         binding.signupAgreea.setOnClickListener {
             if (binding.signupAgreea.isChecked && binding.signupAgreeb.isChecked) {
@@ -369,8 +373,6 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             }
-            binding.signupContents.movementMethod = ScrollingMovementMethod.getInstance()
-            binding.signupContents2.movementMethod = ScrollingMovementMethod.getInstance()
         }
     }
 

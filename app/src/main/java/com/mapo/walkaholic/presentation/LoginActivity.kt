@@ -1,4 +1,4 @@
-package com.mapo.walkaholic
+package com.mapo.walkaholic.presentation
 
 import android.content.Context
 import android.content.Intent
@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
+import com.mapo.walkaholic.R
+import com.mapo.walkaholic.data.LoginRequest
 import com.mapo.walkaholic.databinding.ActivityLoginBinding
 import org.json.JSONObject
 
