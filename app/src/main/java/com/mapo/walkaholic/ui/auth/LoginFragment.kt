@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui.auth
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.databinding.FragmentLoginBinding
@@ -23,7 +20,6 @@ import com.mapo.walkaholic.ui.enable
 import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import com.mapo.walkaholic.ui.visible
-import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -40,7 +36,7 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
             binding.loginEtUserPassword.clearFocus()
             findNavController().navigate(R.id.registerFragment)
         }
-        viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
+        viewModel.authResponse.observe(viewLifecycleOwner, Observer {
             binding.loginProgressBar.visible(false)
             when (it) {
                 is Resource.Success -> {

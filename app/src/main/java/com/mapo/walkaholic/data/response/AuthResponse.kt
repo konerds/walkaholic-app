@@ -1,5 +1,5 @@
 package com.mapo.walkaholic.data.response
 
-data class LoginResponse(
+data class AuthResponse(
     val user : User
 )

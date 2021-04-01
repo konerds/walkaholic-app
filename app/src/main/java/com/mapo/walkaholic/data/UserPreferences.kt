@@ -13,13 +13,9 @@ class UserPreferences(
     context: Context
 ) {
     private val applicationContext = context.applicationContext
-    private val dataStore: DataStore<Preferences>
-
-    init {
-        dataStore = applicationContext.createDataStore(
-            name = "my_data_store"
-        )
-    }
+    private val dataStore: DataStore<Preferences> = applicationContext.createDataStore(
+        name = "local_data_store"
+    )
 
     val authToken: Flow<String?>
         get() = dataStore.data.map { preferences ->
