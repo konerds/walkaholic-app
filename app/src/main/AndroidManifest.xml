@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.mapo.walkaholic.ui.GuideActivity" />
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.service.MainActivity" />
         <activity android:name="com.mapo.walkaholic.ui.auth.AuthActivity" />
     </application>
 

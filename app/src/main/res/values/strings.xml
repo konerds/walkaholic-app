@@ -6,28 +6,19 @@
     <string name="skip">건너뛰기</string>
     <!-- 로그인 및 회원가입 -->
     <string name="tutorial"><u>튜토리얼</u></string>
-    <string name="userid">아이디</string>
-    <string name="password">비밀번호</string>
-    <string name="password_confirm">비밀번호 확인</string>
     <string name="name">이름</string>
     <string name="nickname">닉네임</string>
-    <string name="phone_number">휴대폰 번호</string>
-    <string name="receive_sms_auth">SMS 인증번호 받기</string>
-    <string name="sms_auth">SMS 인증번호</string>
-    <string name="birth">생년월일</string>
     <string name="gender">성별</string>
     <string name="male">남자</string>
     <string name="female">여자</string>
     <string name="height">키(cm)</string>
     <string name="weight">몸무게(kg)</string>
-    <string name="auth">인증하기</string>
     <string name="kakao">카카오톡</string>
     <string name="google">구글</string>
     <string name="facebook">페이스북</string>
     <string name="next">다음</string>
-    <string name="register">회원가입</string>
     <string name="login">로그인</string>
-    <string name="login_forgot">아이디 비밀번호 찾기</string>
+    <string name="register">가입하기</string>
     <string name="login_naver">네이버로 로그인</string>
     <string name="login_kakao">카카오톡으로 로그인</string>
     <string name="login_google">구글로 로그인</string>
@@ -41,38 +32,16 @@
     <string name="agree_privacy">개인정보수집이용 동의</string>
     <!-- 안내 메시지 -->
     <string name="msg_register_agree">서비스이용 및 개인정보수집이용에 동의하셨습니다</string>
-    <string name="msg_sms_success_send">발송되었습니다</string>
     <!-- 오류 메시지 -->
     <string name="err_input">입력해주세요</string>
     <string name="err_complete">완료해주세요</string>
-    <string name="err_not_match_password">비밀번호와 비밀번호 확인에 입력된 값이 일치하지 않습니다</string>
     <!-- 하단 내비게이션 바 -->
     <string name="main">메인</string>
-    <string name="path">산책로</string>
-    <string name="community">커뮤니티</string>
+    <string name="path">산책하기</string>
+    <string name="theme">테마</string>
     <string name="challenge">챌린지</string>
-    <string name="chat">채팅</string>
-    <!-- 메인 -->
-    <string name="post">Post</string>
-    <string name="following">Following</string>
-    <string name="follower">Follower</string>
-    <string name="follow">Follow</string>
-    <string name="follow_cancel">Follow cancel</string>
-    <string name="profile">Profile</string>
-    <string name="count_0">0</string>
-    <!-- 알람 -->
-    <string name="alarm_favorite">Liked the press</string>
-    <string name="alarm_comment">left a message</string>
-    <string name="alarm_follow">has started to follow your account</string>
-    <!-- 댓글 -->
-    <string name="send">Send</string>
-    <!-- 커뮤니티 -->
-    <string name="upload_image">Photo Upload</string>
-    <string name="hint_image_content">Image description</string>
-    <string name="upload_success">Upload success</string>
-    <string name="upload_fail">Upload fail</string>
-    <!-- 상단 툴바 -->
-    <string name="back">Back</string>
+    <!-- SNS 공유 -->
+    <string name="share">공유하기</string>
     <!-- 기타 -->
     <item name="visible" type="id" />
     <item name="masked" type="id" />

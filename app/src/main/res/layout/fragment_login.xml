@@ -40,94 +40,8 @@
         android:layout_marginBottom="20dp"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_title"
-        app:layout_constraintBottom_toTopOf="@id/loginLayout"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/loginLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/loginLayoutSNS"
-        app:layout_constraintTop_toBottomOf="@+id/loginImgLogo">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:counterEnabled="true"
-            app:counterMaxLength="30">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/loginEtUserId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/userid"
-                android:inputType="textEmailAddress|textNoSuggestions"
-                android:singleLine="true" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            app:counterEnabled="true"
-            app:counterMaxLength="15">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/loginEtUserPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/loginBtnLogin"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_weight="1"
-                android:layout_marginRight="12dp"
-                android:background="@drawable/btn_default"
-                android:foreground="?selectableItemBackground"
-                android:text="@string/login" />
-
-            <Button
-                android:id="@+id/loginBtnForgot"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="12dp"
-                android:background="@drawable/btn_default"
-                android:foreground="?selectableItemBackground"
-                android:text="@string/login_forgot" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/loginBtnRegister"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/btn_default"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/register" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/loginLayoutSNS"
@@ -135,12 +49,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginLayout">
+        app:layout_constraintTop_toBottomOf="@id/loginImgLogo">
+
+        <Button
+            android:id="@+id/loginBtnKakao"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_login_kakao"
+            android:foreground="?selectableItemBackground"
+            android:text="@string/login_kakao" />
 
         <Button
             android:id="@+id/loginBtnNaver"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/btn_login_naver"
@@ -149,22 +74,11 @@
             android:textColor="@color/colorWhite" />
 
         <Button
-            android:id="@+id/loginBtnKakao"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_login_kakao"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/login_kakao" />
-
-        <Button
             android:id="@+id/loginBtnGoogle"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="12dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/btn_login_google"
             android:foreground="?selectableItemBackground"
@@ -174,9 +88,9 @@
         <Button
             android:id="@+id/loginBtnFacebook"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="12dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/btn_login_facebook"
             android:foreground="?selectableItemBackground"

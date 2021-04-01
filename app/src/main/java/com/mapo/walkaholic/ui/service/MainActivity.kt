@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main
+package com.mapo.walkaholic.ui.service
 
 import android.graphics.Color
 import android.os.Build
@@ -19,16 +19,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_main -> {
-                var mainDetailFragment = MainDetailFragment()
+                var dashboardFragment = DashboardFragment()
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_content, mainDetailFragment)
+                        .replace(R.id.main_content, dashboardFragment)
                         .commit()
                 return true
             }
-            R.id.action_community -> {
-                var communityFragment = CommunityFragment()
+            R.id.action_theme -> {
+                var themeFragment = ThemeFragment()
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_content, communityFragment).commit()
+                        .replace(R.id.main_content, themeFragment).commit()
                 return true
             }
             R.id.action_challenge -> {
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                         .replace(R.id.main_content, challengeFragment).commit()
                 return true
             }
-            R.id.action_path -> {
+            R.id.action_map -> {
                 var mapFragment = MapFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.main_content, mapFragment)
                         .commit()

@@ -13,8 +13,8 @@ import com.mapo.walkaholic.R
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         when (Build.VERSION.SDK_INT) {
             in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {
