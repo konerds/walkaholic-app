@@ -71,4 +71,7 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha02"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+
+    // OAuth2 Kakao Login
+    implementation "com.kakao.sdk:v2-user:2.4.2"
 }

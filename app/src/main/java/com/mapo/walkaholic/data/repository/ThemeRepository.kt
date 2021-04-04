@@ -1,8 +1,6 @@
 package com.mapo.walkaholic.data.repository
 
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.Api
-import com.mapo.walkaholic.data.network.AuthApi
 
 class ThemeRepository(
         private val api: Api,

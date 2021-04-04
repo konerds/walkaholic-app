@@ -2,7 +2,6 @@ package com.mapo.walkaholic.ui.service
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.mapo.walkaholic.data.network.Api
 import com.mapo.walkaholic.data.repository.MapRepository
 import com.mapo.walkaholic.databinding.FragmentMapBinding
 import com.mapo.walkaholic.ui.base.BaseFragment

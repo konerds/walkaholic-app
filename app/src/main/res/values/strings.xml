@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Walkaholic</string>
-    <string name="facebook_app_id">873009302900995</string>
-    <string name="fb_login_protocol_scheme">fb873009302900995</string>
+    <string name="kakao_app_key">0ee09f5022e88e6ca843a2bcf5949741</string>
     <!-- 튜토리얼 -->
     <string name="skip">건너뛰기</string>
     <!-- 로그인 및 회원가입 -->

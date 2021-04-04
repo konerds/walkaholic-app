@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.network.AuthApi
+import com.mapo.walkaholic.data.network.Api
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentRegisterBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
@@ -69,5 +69,5 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
     ) = FragmentRegisterBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-            AuthRepository(remoteDataSource.buildApi(AuthApi::class.java), userPreferences)
+            AuthRepository(remoteDataSource.buildApi(Api::class.java), userPreferences)
 }

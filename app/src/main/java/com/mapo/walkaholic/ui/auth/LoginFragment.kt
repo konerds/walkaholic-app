@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.mapo.walkaholic.databinding.FragmentLoginBinding
-import com.mapo.walkaholic.data.network.AuthApi
+import com.mapo.walkaholic.data.network.Api
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.GuideActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
@@ -21,10 +21,8 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
 
         binding.loginBtnKakao.setOnClickListener {
             binding.loginProgressBar.visible(true)
-            /*
-            @TODO OAuth Login Process
-            viewModel.login(userId, userPassword)
-             */
+            // @TODO OAuth Login Process
+            viewModel.login()
         }
     }
 
@@ -36,5 +34,5 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
     ) = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-            AuthRepository(remoteDataSource.buildApi(AuthApi::class.java), userPreferences)
+            AuthRepository(remoteDataSource.buildApi(Api::class.java), userPreferences)
 }

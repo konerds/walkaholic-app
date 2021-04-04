@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
+import com.kakao.sdk.common.KakaoSdk
 import com.mapo.walkaholic.R
 
 @RequiresApi(Build.VERSION_CODES.M)
