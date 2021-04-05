@@ -22,9 +22,7 @@ class AuthViewModel(
         get() = _loginResponse
 
     fun login() = viewModelScope.launch {
-        /* @TODO Auth Process
         _loginResponse.value = repository.login()
-         */
     }
 
     fun saveAuthToken(token: String) = viewModelScope.launch {
