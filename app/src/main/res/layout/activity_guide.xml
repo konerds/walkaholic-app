@@ -10,7 +10,7 @@
     tools:context=".ui.GuideActivity">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/guide_mViewPager"
+        android:id="@+id/guideVp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/guide_buttonSkip"
+        android:id="@+id/guideChipSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"

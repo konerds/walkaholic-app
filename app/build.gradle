@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.mapo.walkaholic"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -74,4 +74,7 @@ dependencies {
 
     // OAuth2 Kakao Login
     implementation "com.kakao.sdk:v2-user:2.4.2"
+
+    // Naver Map SDK
+    implementation("com.naver.maps:map-sdk:3.11.0")
 }

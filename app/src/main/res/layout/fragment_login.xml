@@ -60,42 +60,6 @@
             android:background="@drawable/btn_login_kakao"
             android:foreground="?selectableItemBackground"
             android:text="@string/login_kakao" />
-
-        <Button
-            android:id="@+id/loginBtnNaver"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_login_naver"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/login_naver"
-            android:textColor="@color/colorWhite" />
-
-        <Button
-            android:id="@+id/loginBtnGoogle"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_login_google"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/login_google"
-            android:textColor="@color/colorWhite" />
-
-        <Button
-            android:id="@+id/loginBtnFacebook"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_login_facebook"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/login_facebook"
-            android:textColor="@color/colorWhite" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

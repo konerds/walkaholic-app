@@ -42,7 +42,7 @@ class GuideActivity : AppCompatActivity() {
                 val inflater = LayoutInflater.from(container.context)
                 val view = inflater.inflate(R.layout.fragment_guide, container, false)
 
-                view.guide_ivItem.setImageResource(guideList[position])
+                view.guideIvItem.setImageResource(guideList[position])
 
                 container.addView(view)
                 return view
@@ -60,8 +60,8 @@ class GuideActivity : AppCompatActivity() {
                 return guideList.size
             }
         }
-        guide_mViewPager.adapter = adapter
-        guide_buttonSkip.setOnClickListener {
+        guideVp.adapter = adapter
+        guideChipSkip.setOnClickListener {
             //@TODO ACTIVITY ALIVE CHECK
             startActivity(Intent(this, AuthActivity::class.java))
             finish()

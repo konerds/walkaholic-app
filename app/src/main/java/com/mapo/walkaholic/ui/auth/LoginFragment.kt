@@ -8,6 +8,7 @@ import com.mapo.walkaholic.data.network.Api
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.GuideActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.service.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import com.mapo.walkaholic.ui.visible
 
@@ -22,7 +23,8 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
         binding.loginBtnKakao.setOnClickListener {
             binding.loginProgressBar.visible(true)
             // @TODO OAuth Login Process
-            viewModel.login()
+            //viewModel.login()
+            requireActivity().startNewActivity(MainActivity::class.java)
         }
     }
 

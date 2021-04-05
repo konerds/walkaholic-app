@@ -34,6 +34,9 @@
                     android:scheme="kakao{@string/kakao_app_key}" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="@string/naver_client_id" />
     </application>
 
 </manifest>

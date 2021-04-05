@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.data.repository
 
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.network.Api
 
 class ChallengeRepository(
         private val api: Api,
@@ -10,7 +11,7 @@ class ChallengeRepository(
             par1: String,
             par2: String
     ) = safeApiCall {
-        api.anyService(par1, par2)
+        api.anyService()
     }
 
     suspend fun saveAuthToken(token: String) {
