@@ -2,15 +2,18 @@ package com.mapo.walkaholic.ui.service
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.BaseRepository
+import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
         private val repository: BaseRepository
-) : ViewModel() {
+) : BaseViewModel() {
+    override fun init() {
+
+    }
 
     private val _anyResponse: MutableLiveData<Resource<Unit>> = MutableLiveData()
     val anyResponse: LiveData<Resource<Unit>>

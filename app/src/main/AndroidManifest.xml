@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.base.BaseActivity"></activity>
         <activity
-            android:name="com.mapo.walkaholic.ui.SplashActivity"
+            android:name=".ui.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -23,21 +24,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mapo.walkaholic.ui.GuideActivity" />
+        <activity android:name=".ui.GuideActivity" />
         <activity android:name=".ui.service.MainActivity" />
-        <activity android:name="com.mapo.walkaholic.ui.auth.AuthActivity" />
+        <activity android:name=".ui.auth.AuthActivity" />
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="oauth"
+
+                <data
+                    android:host="oauth"
                     android:scheme="kakao@string/kakao_app_key" />
             </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="@string/naver_client_id" />
     </application>
 
 </manifest>

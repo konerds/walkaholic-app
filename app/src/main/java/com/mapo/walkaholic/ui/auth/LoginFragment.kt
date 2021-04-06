@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.auth
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -19,6 +20,7 @@ import com.mapo.walkaholic.ui.startNewActivity
 import com.mapo.walkaholic.ui.visible
 
 class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
+    // @TODO Callback
     private val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             Log.e(ContentValues.TAG, "로그인 실패", error)
@@ -31,12 +33,14 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
         super.onActivityCreated(savedInstanceState)
         binding.loginProgressBar.visible(false)
         binding.loginBtnTutorial.setOnClickListener {
-            requireActivity().startNewActivity(GuideActivity::class.java)
+            val intent = Intent(activity, GuideActivity::class.java)
+            startActivity(intent)
         }
 
         binding.loginBtnKakao.setOnClickListener {
             binding.loginProgressBar.visible(true)
-            //viewModel.login()
+            /* @TODO Kakao Auth Process
+            viewModel.login()
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(GlobalApplication.getGlobalApplicationContext()))
             {
                 UserApiClient.instance.loginWithKakaoTalk(GlobalApplication.getGlobalApplicationContext(), callback = callback)
@@ -44,6 +48,7 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
             {
                 UserApiClient.instance.loginWithKakaoAccount(GlobalApplication.getGlobalApplicationContext(), callback = callback)
             }
+            */
             requireActivity().startNewActivity(MainActivity::class.java)
         }
     }

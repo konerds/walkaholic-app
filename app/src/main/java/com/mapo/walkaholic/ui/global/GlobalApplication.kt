@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.global
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -9,12 +10,14 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
+import com.naver.maps.map.NaverMapSdk
 import java.lang.IllegalArgumentException
 
 class GlobalApplication : Application() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var instance: GlobalApplication? = null
+        val activityList : ArrayList<Activity> = ArrayList<Activity>()
         fun getGlobalApplicationContext(): Context {
             checkNotNull(instance) { "Not inherited from GlobalApplication!" }
             return instance!!.applicationContext

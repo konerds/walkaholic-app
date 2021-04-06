@@ -9,15 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.ui.auth.AuthActivity
+import com.mapo.walkaholic.ui.base.BaseActivity
+import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.activity_guide.*
 import kotlinx.android.synthetic.main.fragment_guide.view.*
 
 @RequiresApi(Build.VERSION_CODES.M)
-class GuideActivity : AppCompatActivity() {
+class GuideActivity : BaseActivity() {
+    val guideList = arrayOf(R.drawable.tutorial1, R.drawable.tutorial2, R.drawable.tutorial3)
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -34,6 +36,7 @@ class GuideActivity : AppCompatActivity() {
                 window.statusBarColor = Color.TRANSPARENT
             }
         }
+        GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guide)
 
@@ -64,11 +67,19 @@ class GuideActivity : AppCompatActivity() {
         guideChipSkip.setOnClickListener {
             //@TODO ACTIVITY ALIVE CHECK
             startActivity(Intent(this, AuthActivity::class.java))
-            finish()
         }
     }
 
-    companion object {
-        val guideList = arrayOf(R.drawable.tutorial1, R.drawable.tutorial2, R.drawable.tutorial3)
+    override fun onDestroy() {
+        GlobalApplication.activityList.remove(this)
+        super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        if (guideVp.currentItem == 0) {
+            super.onBackPressed()
+        } else {
+            guideVp.currentItem = guideVp.currentItem - 1
+        }
     }
 }
