@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -21,45 +22,45 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
     private lateinit var binding: ActivityMainBinding
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val fm = supportFragmentManager
-        val transaction : FragmentTransaction = fm.beginTransaction()
+        val transaction: FragmentTransaction = fm.beginTransaction()
         when (item.itemId) {
             R.id.action_main -> {
                 binding.mainToolbar.visibility = View.VISIBLE
                 binding.mainBtnPrev.visibility = View.VISIBLE
-                fm.popBackStack("dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                fm.popBackStackImmediate("dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 var dashboardFragment = DashboardFragment()
-                transaction.replace(R.id.main_content, dashboardFragment).addToBackStack("dashboard")
+                transaction.replace(R.id.main_content, dashboardFragment, "dashboard").addToBackStack("dashboard")
             }
             R.id.action_theme -> {
                 binding.mainToolbar.visibility = View.VISIBLE
                 binding.mainBtnPrev.visibility = View.VISIBLE
-                fm.popBackStack("theme", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                fm.popBackStackImmediate("theme", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 var themeFragment = ThemeFragment()
-                transaction.replace(R.id.main_content, themeFragment).addToBackStack("theme")
+                transaction.replace(R.id.main_content, themeFragment, "theme").addToBackStack("theme")
             }
             R.id.action_challenge -> {
                 binding.mainToolbar.visibility = View.VISIBLE
                 binding.mainBtnPrev.visibility = View.VISIBLE
-                fm.popBackStack("challenge", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                fm.popBackStackImmediate("challenge", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 var challengeFragment = ChallengeFragment()
-                transaction.replace(R.id.main_content, challengeFragment).addToBackStack("challenge")
+                transaction.replace(R.id.main_content, challengeFragment, "challenge").addToBackStack("challenge")
             }
             R.id.action_map -> {
                 binding.mainToolbar.visibility = View.GONE
-                fm.popBackStack("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                fm.popBackStackImmediate("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 var mapFragment = MapFragment()
-                transaction.replace(R.id.main_content, mapFragment).addToBackStack("map")
+                transaction.replace(R.id.main_content, mapFragment, "map").addToBackStack("map")
             }
         }
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+        transaction.commit()
         transaction.isAddToBackStackAllowed
         return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
         when (Build.VERSION.SDK_INT) {
             in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {
@@ -78,24 +79,31 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
         val view = binding.root
         setContentView(view)
 
+        bottom_navigation.setOnNavigationItemSelectedListener(this)
+
+        val fm = supportFragmentManager
+        val transaction: FragmentTransaction = fm.beginTransaction()
         binding.mainToolbar.visibility = View.VISIBLE
         binding.mainBtnPrev.visibility = View.VISIBLE
-        var dashboardFragment = DashboardFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_content, dashboardFragment).addToBackStack(null)
-            .commit()
+        fm.popBackStackImmediate("dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        val dashboardFragment = DashboardFragment()
+        transaction.replace(R.id.main_content, dashboardFragment, "dashboard").addToBackStack("dashboard")
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+        transaction.isAddToBackStackAllowed
 
-        bottom_navigation.setOnNavigationItemSelectedListener(this)
         binding.mainBtnPrev.setOnClickListener {
             this.onBackPressed()
         }
     }
 
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount == 0) {
-
+        if (System.currentTimeMillis() - mBackWait >= 2000) {
+            if ((supportFragmentManager.backStackEntryCount == 0) && (GlobalApplication.activityList.size == 1)) {
+                Toast.makeText(this, "뒤로 갈 수 없습니다", Toast.LENGTH_SHORT).show()
+            } else {
+                super.onBackPressed()
+            }
         }
-        super.onBackPressed()
     }
 
     override fun onDestroy() {
