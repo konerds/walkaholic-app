@@ -9,7 +9,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (System.currentTimeMillis() - mBackWait >= 2000) {
-            if (GlobalApplication.activityList.size == 1) {
+            if ((supportFragmentManager.backStackEntryCount == 1) && (GlobalApplication.activityList.size == 1)) {
                 Toast.makeText(this, "뒤로 갈 수 없습니다", Toast.LENGTH_SHORT).show()
             } else {
                 super.onBackPressed()

@@ -33,21 +33,6 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                Toast.makeText(activity, "뒤로 갈 수 없습니다", Toast.LENGTH_SHORT).show()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        callback.remove()
-    }
-
     abstract fun getViewModel(): Class<VM>
     abstract fun getFragmentBinding(inflater: LayoutInflater, container: ViewGroup?): B
     abstract fun getFragmentRepository(): R
