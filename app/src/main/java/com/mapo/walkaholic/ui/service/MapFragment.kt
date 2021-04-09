@@ -117,7 +117,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        naverMap.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(LatLng(35.231574, 129.084433), 12.0)))
+        //naverMap.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(LatLng(35.231574, 129.084433), 12.0)))
         naverMap.locationTrackingMode = LocationTrackingMode.Follow
         naverMap.uiSettings.isLocationButtonEnabled = true
         naverMap.uiSettings.logoGravity = Gravity.TOP + Gravity.RIGHT

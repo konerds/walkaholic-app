@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.auth.LoginFragment">
 
     <ProgressBar
@@ -33,7 +32,7 @@
     <ImageView
         android:id="@+id/loginImgLogo"
         android:layout_width="match_parent"
-        android:layout_height="145dp"
+        android:layout_height="140dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"

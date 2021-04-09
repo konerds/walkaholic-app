@@ -18,21 +18,6 @@ import com.mapo.walkaholic.ui.service.MainActivity
 @RequiresApi(Build.VERSION_CODES.M)
 class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-        when (Build.VERSION.SDK_INT) {
-            in (Build.VERSION_CODES.KITKAT..(Build.VERSION_CODES.M) - 1) -> {
-                @Suppress("DEPRECATION")
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            }
-            in (Build.VERSION_CODES.M)..Build.VERSION_CODES.R -> {
-                @Suppress("DEPRECATION")
-                window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                window.statusBarColor = Color.TRANSPARENT
-            }
-        }
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splashscreen)
