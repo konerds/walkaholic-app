@@ -8,13 +8,23 @@ abstract class BaseActivity : AppCompatActivity() {
     var mBackWait: Long = 0
 
     override fun onBackPressed() {
-        if (System.currentTimeMillis() - mBackWait >= 2000) {
-            if ((supportFragmentManager.backStackEntryCount == 1) && (GlobalApplication.activityList.size == 1)) {
+        if(!isMultipleClicked()) {
+            if (((supportFragmentManager.backStackEntryCount == 0) || (supportFragmentManager.backStackEntryCount == 1)) && (GlobalApplication.activityList.size == 1)) {
                 Toast.makeText(this, "뒤로 갈 수 없습니다", Toast.LENGTH_SHORT).show()
             } else {
                 super.onBackPressed()
             }
+        } else {
+            Toast.makeText(this, "뒤로 갈 수 없습니다", Toast.LENGTH_SHORT).show()
         }
+        setBackWait()
+    }
+
+    fun isMultipleClicked(): Boolean {
+        return System.currentTimeMillis() - mBackWait < 2000
+    }
+
+    fun setBackWait(): Unit {
         mBackWait = System.currentTimeMillis()
     }
 }

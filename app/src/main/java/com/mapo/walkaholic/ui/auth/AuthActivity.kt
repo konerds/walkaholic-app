@@ -33,6 +33,7 @@ class AuthActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
     }
+
     override fun onDestroy() {
         GlobalApplication.activityList.remove(this)
         super.onDestroy()
