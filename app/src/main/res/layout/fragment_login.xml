@@ -32,7 +32,7 @@
     <ImageView
         android:id="@+id/loginImgLogo"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="76dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginImgLogo">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/loginBtnKakao"
             android:layout_width="match_parent"
             android:layout_height="40dp"

@@ -28,7 +28,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        NaverMapSdk.getInstance(GlobalApplication.getGlobalApplicationContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
         binding.mapView.getMapAsync(this)
         locationManager = activity?.getSystemService(LOCATION_SERVICE) as LocationManager
     }
@@ -90,9 +89,11 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
     }
 
     override fun onLocationChanged(location: Location) {
+        /*
         if (location == null) {
             return
         }
+         */
 
         mMap?.let {
             val coord = LatLng(location)
@@ -117,7 +118,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        //naverMap.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(LatLng(35.231574, 129.084433), 12.0)))
+        naverMap.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(LatLng(35.231574, 129.084433), 12.0)))
         naverMap.locationTrackingMode = LocationTrackingMode.Follow
         naverMap.uiSettings.isLocationButtonEnabled = true
         naverMap.uiSettings.logoGravity = Gravity.TOP + Gravity.RIGHT

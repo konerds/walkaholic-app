@@ -16,8 +16,10 @@ interface Api {
     suspend fun anyService(): Any
 
     @FormUrlEncoded
-    @POST("auth/kakao/login")
-    suspend fun login(): LoginResponse
+    @POST("auth/login")
+    suspend fun login(
+        @Field("id") id: Long
+    ): LoginResponse
 
     @FormUrlEncoded
     @POST("current")

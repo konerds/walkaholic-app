@@ -28,6 +28,7 @@ class GlobalApplication : Application() {
         super.onCreate()
         instance = this
         KakaoSdk.init(this, getString(R.string.kakao_app_key))
+        NaverMapSdk.getInstance(GlobalApplication.getGlobalApplicationContext()).client = NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
     }
 
     override fun onTerminate() {

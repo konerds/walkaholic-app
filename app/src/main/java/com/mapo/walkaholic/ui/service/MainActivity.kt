@@ -22,43 +22,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val fm = supportFragmentManager
-        val transaction: FragmentTransaction = fm.beginTransaction()
         when (item.itemId) {
             R.id.action_main -> {
-                binding.mainToolbar.visibility = View.VISIBLE
-                binding.mainBtnPrev.visibility = View.GONE
-                fm.popBackStackImmediate("dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                var dashboardFragment = DashboardFragment()
-                transaction.replace( R.id.main_content, dashboardFragment, "dashboard")
-                transaction.addToBackStack("dashboard")
+                replaceFragment(DashboardFragment(), "dashboard")
             }
             R.id.action_theme -> {
-                binding.mainToolbar.visibility = View.VISIBLE
-                binding.mainBtnPrev.visibility = View.VISIBLE
-                fm.popBackStackImmediate("theme", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                var themeFragment = ThemeFragment()
-                transaction.replace(R.id.main_content, themeFragment, "theme")
-                transaction.addToBackStack("theme")
+                replaceFragment(ThemeFragment(), "theme")
             }
             R.id.action_challenge -> {
-                binding.mainToolbar.visibility = View.VISIBLE
-                binding.mainBtnPrev.visibility = View.VISIBLE
-                fm.popBackStackImmediate("challenge", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                var challengeFragment = ChallengeFragment()
-                transaction.replace(R.id.main_content, challengeFragment, "challenge")
-                transaction.addToBackStack("challenge")
+                replaceFragment(ChallengeFragment(), "challenge")
             }
             R.id.action_map -> {
-                binding.mainToolbar.visibility = View.GONE
-                fm.popBackStackImmediate("map", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                var mapFragment = MapFragment()
-                transaction.replace(R.id.main_content, mapFragment, "map")
-                transaction.addToBackStack("map")
+                replaceFragment(MapFragment(), "map")
             }
         }
-        transaction.commit()
-        transaction.isAddToBackStackAllowed
         return true
     }
 
@@ -71,26 +48,23 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
 
         bottom_navigation.setOnNavigationItemSelectedListener(this)
 
-        val fm = supportFragmentManager
-        val transaction: FragmentTransaction = fm.beginTransaction()
-        binding.mainToolbar.visibility = View.VISIBLE
-        binding.mainBtnPrev.visibility = View.VISIBLE
-        fm.popBackStackImmediate("dashboard", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        val dashboardFragment = DashboardFragment()
-        transaction.replace(R.id.main_content, dashboardFragment, "dashboard")
-        transaction.addToBackStack("dashboard")
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
-        transaction.isAddToBackStackAllowed
-
-        binding.mainBtnPrev.setOnClickListener {
-            this.onBackPressed()
-        }
+        replaceFragment(DashboardFragment(), "dashboard")
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val bottomNavigationView = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
-        updateBottomNavigation(bottomNavigationView)
+    private fun replaceFragment(fragment: Fragment, tag: String) {
+        when (tag) {
+            "dashboard" -> binding.mainToolbar.visibility = View.VISIBLE
+            "theme" -> binding.mainToolbar.visibility = View.VISIBLE
+            "challenge" -> binding.mainToolbar.visibility = View.VISIBLE
+            "map" -> binding.mainToolbar.visibility = View.GONE
+        }
+        val fm = supportFragmentManager
+        val transaction: FragmentTransaction = fm.beginTransaction()
+        fm.popBackStackImmediate(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        transaction.replace(R.id.main_content, fragment, tag)
+        transaction.addToBackStack(tag)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+        transaction.isAddToBackStackAllowed
     }
 
     private fun updateBottomNavigation(navigation: BottomNavigationView) {
@@ -108,5 +82,11 @@ class MainActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelect
     override fun onDestroy() {
         GlobalApplication.activityList.remove(this)
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val bottomNavigationView = findViewById<View>(R.id.bottom_navigation) as BottomNavigationView
+        updateBottomNavigation(bottomNavigationView)
     }
 }

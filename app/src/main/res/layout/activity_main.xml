@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
     android:fitsSystemWindows="true"
-    tools:context="com.mapo.walkaholic.ui.service.MainActivity">
+    tools:context="ui.service.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/main_toolbar"
@@ -26,21 +24,11 @@
             android:layout_marginRight="20dp"
             android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/mainBtnPrev"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:visibility="visible"
-                android:src="@drawable/ic_arrow_back" />
-
             <TextView
                 android:id="@+id/mainTvToolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toRightOf="@id/mainBtnPrev"
+                android:layout_alignParentLeft="true"
                 android:text="@string/app_name"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -61,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        app:layout_constraintTop_toBottomOf="@id/main_toolbar"></FrameLayout>
+        app:layout_constraintTop_toBottomOf="@id/main_toolbar" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

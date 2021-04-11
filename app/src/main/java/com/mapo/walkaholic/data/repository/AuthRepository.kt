@@ -9,11 +9,11 @@ class AuthRepository(
         private val api: Api,
         private val preferences: UserPreferences
 ) : BaseRepository() {
-    suspend fun login() = safeApiCall {
-        api.login()
+    suspend fun login(id: Long) = safeApiCall {
+        api.login(id)
     }
 
-    suspend fun saveAuthToken(token: String) {
-        preferences.saveAuthToken(token)
+    suspend fun saveAuthToken(id: Long) {
+        preferences.saveAuthToken(id)
     }
 }

@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.base.BaseActivity"></activity>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="0ee09f5022e88e6ca843a2bcf5949741" />
+        <activity android:name=".ui.base.BaseActivity" />
         <activity
             android:name=".ui.SplashActivity"
             android:screenOrientation="portrait"
@@ -25,7 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.GuideActivity" />
+        <activity
+            android:name=".ui.GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/GuideTheme" />
         <activity android:name=".ui.service.MainActivity" />
         <activity android:name=".ui.auth.AuthActivity" />
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
@@ -37,7 +43,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="kakao@string/kakao_app_key" />
+                    android:scheme="kakao0ee09f5022e88e6ca843a2bcf5949741" />
             </intent-filter>
         </activity>
     </application>

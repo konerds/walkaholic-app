@@ -14,7 +14,7 @@ class DashboardRepository(
         api.anyService()
     }
 
-    suspend fun saveAuthToken(token: String) {
-        preferences.saveAuthToken(token)
+    suspend fun saveAuthToken(id: Long) {
+        preferences.saveAuthToken(id)
     }
 }
