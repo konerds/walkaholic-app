@@ -12,19 +12,45 @@ class RemoteDataSource {
     }
 
     fun <Api> buildApi(
-            api: Class<Api>
+        api: Class<Api>/*,
+        id: Long? = null*/
     ): Api {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(OkHttpClient.Builder().also { client ->
+            .baseUrl(BASE_URL)
+            .client(OkHttpClient.Builder()/*
+                .addInterceptor { chain ->
+                    chain.proceed(chain.request().newBuilder().also {
+                        it.addHeader("Authorization", "Bearer $id")
+                    }.build())
+                }*/.also { client ->
                     if (BuildConfig.DEBUG) {
                         val logging = HttpLoggingInterceptor()
                         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
                         client.addInterceptor(logging)
                     }
-                }.build())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(api)
+                }.build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
+    }
+
+    fun <Api> buildApiDirect(
+        api: Class<Api>,
+        directUrl: String
+    ): Api {
+        return Retrofit.Builder()
+            .baseUrl(directUrl)
+            .client(OkHttpClient.Builder().also { client ->
+                if (BuildConfig.DEBUG) {
+                    val logging = HttpLoggingInterceptor()
+                    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                    client.addInterceptor(logging)
+                }
+            }.build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
     }
 }

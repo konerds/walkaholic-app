@@ -10,10 +10,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository> : Fragment() {
     protected lateinit var userPreferences: UserPreferences
@@ -30,6 +33,9 @@ abstract class BaseFragment<VM : ViewModel, B : ViewBinding, R : BaseRepository>
         binding = getFragmentBinding(inflater, container)
         val factory = ViewModelFactory(getFragmentRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
+
+        lifecycleScope.launch { userPreferences.authToken.first() }
+
         return binding.root
     }
 

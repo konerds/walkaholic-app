@@ -40,11 +40,14 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             when(it) {
                 is Resource.Success -> {
-                    viewModel.saveAuthToken(it.value.user.id)
-                    requireActivity().startNewActivity(MainActivity::class.java)
+                    if (it.value.error == "false") {
+                        viewModel.saveAuthToken(it.value.user.id)
+                        requireActivity().startNewActivity(MainActivity::class.java)
+                    } else {
+                        requireView().findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+                    }
                 }
                 is Resource.Failure -> {
-                    requireView().findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
                 }
             }
         })

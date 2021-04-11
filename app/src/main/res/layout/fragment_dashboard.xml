@@ -12,6 +12,15 @@
         android:background="#F9F9F9"
         android:scrollbars="vertical">
 
+        <ProgressBar
+            android:id="@+id/dashProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/dashLayout1"
             android:layout_width="match_parent"
@@ -32,11 +41,12 @@
                 android:src="@drawable/img_character" />
 
             <TextView
+                android:id="@+id/dashTvIntro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
                 android:layout_marginTop="20dp"
-                android:text="파뿌리가 설아님을 기다렸어요!"
+                android:text=""
                 android:textSize="12sp"
                 android:textStyle="bold" />
 

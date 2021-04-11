@@ -4,17 +4,10 @@ import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.Api
 
 class DashboardRepository(
-        private val api: Api,
-        private val preferences: UserPreferences
+        private val api: Api
 ) : BaseRepository() {
-    suspend fun anyService(
-            par1: String,
-            par2: String
-    ) = safeApiCall {
-        api.anyService()
+    suspend fun getUser(id:Long) = safeApiCall {
+        api.getUser(id)
     }
 
-    suspend fun saveAuthToken(id: Long) {
-        preferences.saveAuthToken(id)
-    }
 }
