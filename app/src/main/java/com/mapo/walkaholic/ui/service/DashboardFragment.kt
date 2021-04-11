@@ -2,7 +2,11 @@ package com.mapo.walkaholic.ui.service
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +58,10 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
     private fun updateUI(user: User) {
         with(binding) {
             dashTvIntro.text = "파뿌리가 ${user.nickname}님을 기다렸어요!"
+            val spannableTvWalkToday = dashTvWalkToday.text as Spannable
+            spannableTvWalkToday.setSpan(
+                    ForegroundColorSpan(Color.parseColor("#F97413")), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
 
@@ -65,7 +73,7 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
     ) = FragmentDashboardBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() : DashboardRepository {
-        val id = runBlocking { userPreferences.authToken.first() }
+        //val id = runBlocking { userPreferences.authToken.first() }
         val api = remoteDataSource.buildApi(Api::class.java)
         return DashboardRepository(api)
     }

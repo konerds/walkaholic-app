@@ -21,14 +21,17 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(System.currentTimeMillis() - mBackWait >= 2000) {
+        if (System.currentTimeMillis() - mBackWait >= 2000) {
             if (((supportFragmentManager.backStackEntryCount == 0) || (supportFragmentManager.backStackEntryCount == 1)) && (GlobalApplication.activityList.size == 1)) {
                 Toast.makeText(this, getString(R.string.err_deny_prev), Toast.LENGTH_SHORT).show()
             } else {
                 super.onBackPressed()
             }
         } else {
-            Toast.makeText(this, getString(R.string.err_multiple_touch), Toast.LENGTH_SHORT).show()
+            if (System.currentTimeMillis() - mBackWait >= 1000) {
+                Toast.makeText(this, getString(R.string.err_multiple_touch), Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
         mBackWait = System.currentTimeMillis()
     }

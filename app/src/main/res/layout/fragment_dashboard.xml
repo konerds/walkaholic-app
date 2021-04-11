@@ -48,7 +48,8 @@
                 android:layout_marginTop="20dp"
                 android:text=""
                 android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="#FA9F00" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,12 +61,14 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/dashTvWalkToday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
                 android:layout_marginLeft="20dp"
                 android:text="@string/dash_walknum"
-                android:textSize="32sp" />
+                android:textSize="32sp"
+                android:bufferType="spannable"/>
 
             <RelativeLayout
                 android:id="@+id/dashLayoutRelative1"
@@ -131,21 +134,23 @@
                 android:orientation="horizontal"
                 android:weightSum="5">
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_wine_120dp"
-                    android:text="같이걷기"
-                    android:textColor="#FFFFFF"
+                    android:background="@drawable/btn_fa9f00_stroke_120dp"
+                    android:foreground="?selectableItemBackground"
+                    android:text="산책기록"
+                    android:textColor="#FA9F00"
                     android:textSize="20sp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_default_120dp"
+                    android:background="@drawable/btn_fa9f00_120dp"
+                    android:foreground="?selectableItemBackground"
                     android:text="같이걷기"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />

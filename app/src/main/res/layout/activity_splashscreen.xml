@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EB6100"
     android:fitsSystemWindows="true"
     tools:context=".ui.SplashActivity">
 
@@ -11,8 +12,9 @@
         android:id="@+id/splashIv"
         android:layout_width="match_parent"
         android:layout_height="76dp"
+        android:background="#EB6100"
         android:scaleType="fitCenter"
-        android:src="@drawable/logo_title"
+        android:src="@drawable/logo_splash"
         android:theme="@style/SplashTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
