@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.auth.LoginFragment">
 
-    <ProgressBar
-        android:id="@+id/loginProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.chip.Chip
         android:id="@+id/loginBtnTutorial"
         android:layout_width="wrap_content"
@@ -59,5 +50,14 @@
             android:background="@drawable/btn_login_kakao"
             android:foreground="?selectableItemBackground" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loginProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

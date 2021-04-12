@@ -20,6 +20,7 @@ import androidx.core.view.isNotEmpty
 import androidx.navigation.findNavController
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
+import com.google.gson.Gson
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.Api
@@ -29,6 +30,7 @@ import com.mapo.walkaholic.databinding.FragmentRegisterBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.service.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -116,17 +118,10 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
             androidx.lifecycle.Observer {
                 when (it) {
                     is Resource.Success -> {
-                        viewModel.saveAuthToken(it.value.id)
+                        viewModel.saveAuthToken()
                         requireActivity().startNewActivity(MainActivity::class.java)
                     }
-                    is Resource.Failure -> {
-                        val error = it.errorBody
-                        Toast.makeText(
-                            requireContext(),
-                            error.toString().trim(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    is Resource.Failure -> { }
                 }
             })
         binding.registerBtnRegister.setOnClickListener {
@@ -143,7 +138,10 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
             val userHeight: String = binding.registerEtHeight.text.toString().trim()
             val userWeight: String = binding.registerEtWeight.text.toString().trim()
             when {
-                userName.isEmpty() -> {
+                userName.isEmpty() || !Pattern.compile(
+                        "^[a-zA-Z가-힣]*$"
+                )
+                        .matcher(userName).matches() -> {
                     binding.registerEtName.error =
                         "${getString(R.string.name)}을 ${getString(R.string.err_input)}"
                     binding.registerEtName.isFocusableInTouchMode = true
@@ -151,7 +149,10 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
                     imm.showSoftInput(binding.registerEtName, 0)
                     imm.hideSoftInputFromWindow(binding.registerEtName.windowToken, 0)
                 }
-                userNick.isEmpty() -> {
+                userNick.isEmpty() ||  !Pattern.compile(
+                        "^[0-9a-zA-Z가-힣]*$"
+                )
+                        .matcher(userNick).matches() -> {
                     binding.registerEtNickname.error =
                         "${getString(R.string.nickname)}을 ${getString(R.string.err_input)}"
                     binding.registerEtNickname.isFocusableInTouchMode = true
@@ -177,7 +178,7 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                userHeight.isEmpty() -> {
+                userHeight.isEmpty() || (userHeight.toInt() <= 0) -> {
                     binding.registerEtHeight.error =
                         "${getString(R.string.height)}를 ${getString(R.string.err_input)}"
                     binding.registerEtHeight.isFocusableInTouchMode = true
@@ -185,7 +186,7 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
                     imm.showSoftInput(binding.registerEtHeight, 0)
                     imm.hideSoftInputFromWindow(binding.registerEtHeight.windowToken, 0)
                 }
-                userWeight.isEmpty() -> {
+                userWeight.isEmpty() || (userWeight.toInt() <= 0)-> {
                     binding.registerEtWeight.error =
                         "${getString(R.string.weight)}를 ${getString(R.string.err_input)}"
                     binding.registerEtWeight.isFocusableInTouchMode = true

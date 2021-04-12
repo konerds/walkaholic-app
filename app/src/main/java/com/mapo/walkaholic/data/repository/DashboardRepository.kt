@@ -9,5 +9,4 @@ class DashboardRepository(
     suspend fun getUser(id:Long) = safeApiCall {
         api.getUser(id)
     }
-
 }

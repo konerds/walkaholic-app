@@ -37,12 +37,14 @@
     <string name="dietweight">소모 칼로리</string>
     <!-- 안내 메시지 -->
     <string name="msg_register_agree">서비스이용 및 개인정보수집이용에 동의하셨습니다</string>
+    <string name="msg_success_auth">카카오톡 인증 정보 수신에 성공하였습니다</string>
     <!-- 오류 메시지 -->
     <string name="err_input">입력해주세요</string>
     <string name="err_complete">완료해주세요</string>
     <string name="err_deny_prev">뒤로 갈 수 없습니다</string>
     <string name="err_multiple_touch">좀 더 천천히 터치해주세요</string>
     <string name="err_auth">카카오톡 인증 정보 수신에 실패하였습니다</string>
+    <string name="err_user">사용자 정보를 확인할 수 없습니다</string>
     <!-- 하단 내비게이션 바 -->
     <string name="main">메인</string>
     <string name="path">산책하기</string>

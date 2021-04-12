@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.service
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,48 +12,56 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import com.kakao.sdk.user.UserApiClient
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.User
 import com.mapo.walkaholic.data.network.Api
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.DashboardRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
+import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.mapo.walkaholic.ui.startNewActivity
 import com.mapo.walkaholic.ui.visible
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.json.JSONObject
 
 class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.dashProgressBar.visible(false)
-
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Log.e(TAG, "토큰 정보 보기 실패", error)
-            }
-            else if (tokenInfo != null) {
-                Log.i(TAG, "토큰 정보 보기 성공" +
-                        "\n회원번호: ${tokenInfo.id}" +
-                        "\n만료시간: ${tokenInfo.expiresIn} 초")
-                viewModel.getUser(tokenInfo.id)
-                viewModel.user.observe(viewLifecycleOwner, Observer {
-                    when(it) {
-                        is Resource.Success -> {
-                            binding.dashProgressBar.visible(false)
-                            Log.e(TAG, "토큰 정보 보기 성공\n${it.value.user}")
-                            updateUI(it.value.user)
-                        }
-                        is Resource.Loading -> {
-                            binding.dashProgressBar.visible(true)
-                            Log.e(TAG, "토큰 정보 보기 실패\n${it}")
-                        }
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer {
+            binding.dashProgressBar.visible(true)
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        updateUI(it.value.user)
+                    } else {
+                        Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                        ).show()
+                        requireActivity().startNewActivity(AuthActivity::class.java)
                     }
-                })
+                }
+                is Resource.Loading -> { }
+                is Resource.Failure -> {
+                    Toast.makeText(
+                            requireContext(),
+                            getString(R.string.err_user),
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    requireActivity().startNewActivity(AuthActivity::class.java)
+                }
             }
-        }
+        })
+        binding.dashProgressBar.visible(false)
+        viewModel.getUser()
     }
 
     private fun updateUI(user: User) {
@@ -63,6 +72,7 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
                     ForegroundColorSpan(Color.parseColor("#F97413")), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
+        binding.dashProgressBar.visible(false)
     }
 
     override fun getViewModel() = DashboardViewModel::class.java
@@ -72,7 +82,7 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
             container: ViewGroup?
     ) = FragmentDashboardBinding.inflate(inflater, container, false)
 
-    override fun getFragmentRepository() : DashboardRepository {
+    override fun getFragmentRepository(): DashboardRepository {
         //val id = runBlocking { userPreferences.authToken.first() }
         val api = remoteDataSource.buildApi(Api::class.java)
         return DashboardRepository(api)

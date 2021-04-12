@@ -2,7 +2,7 @@ package com.mapo.walkaholic.data.model.response
 
 import com.mapo.walkaholic.data.model.User
 
-data class LoginResponse(
-    val error : String,
+data class UserResponse(
+    val error : Boolean,
     val user : User
 )
