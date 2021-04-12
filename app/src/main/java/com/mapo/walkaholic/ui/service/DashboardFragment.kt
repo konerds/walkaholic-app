@@ -39,7 +39,7 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
             when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
-                        updateUI(it.value.user)
+                        updateUI(it.value.user, null, null, null, null)
                     } else {
                         Toast.makeText(
                                 requireContext(),
@@ -64,9 +64,10 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
         viewModel.getUser()
     }
 
-    private fun updateUI(user: User) {
+    private fun updateUI(user: User?, userCharacter: Any?, walkingRecord: Any?, weather: Any?, theme: Any?) {
         with(binding) {
-            dashTvIntro.text = "파뿌리가 ${user.nickname}님을 기다렸어요!"
+            if(user != null)
+                dashTvIntro.text = "파뿌리가 ${user.nickname}님을 기다렸어요!"
             val spannableTvWalkToday = dashTvWalkToday.text as Spannable
             spannableTvWalkToday.setSpan(
                     ForegroundColorSpan(Color.parseColor("#F97413")), 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -85,6 +86,7 @@ class DashboardFragment : BaseFragment<DashboardViewModel, FragmentDashboardBind
     override fun getFragmentRepository(): DashboardRepository {
         //val id = runBlocking { userPreferences.authToken.first() }
         val api = remoteDataSource.buildApi(Api::class.java)
-        return DashboardRepository(api)
+        val apiWeather = remoteDataSource.buildApiDirect(Api::class.java, "http://WEATHER_REST")
+        return DashboardRepository(api, apiWeather)
     }
 }

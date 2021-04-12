@@ -6,14 +6,9 @@ import com.mapo.walkaholic.data.network.Api
 import retrofit2.http.Body
 
 class MapRepository(
-    private val api: Api,
-    private val preferences: UserPreferences
+    private val api: Api
 ) : BaseRepository() {
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
         api.getPoints(body)
-    }
-
-    suspend fun saveAuthToken(id: Long) {
-        preferences.saveAuthToken(id)
     }
 }

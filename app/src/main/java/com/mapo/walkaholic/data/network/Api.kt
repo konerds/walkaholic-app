@@ -36,7 +36,7 @@ interface Api {
     ): UserResponse
 
     @FormUrlEncoded
-    @POST("current")
+    @POST("map")
     suspend fun getPoints(
             @Body body: MapRequestBody
     ): MapResponse

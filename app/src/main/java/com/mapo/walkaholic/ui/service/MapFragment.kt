@@ -147,7 +147,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
     ) = FragmentMapBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-            MapRepository(remoteDataSource.buildApi(Api::class.java), userPreferences)
+            MapRepository(remoteDataSource.buildApi(Api::class.java))
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000

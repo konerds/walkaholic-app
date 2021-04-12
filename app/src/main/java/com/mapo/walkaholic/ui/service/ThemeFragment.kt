@@ -16,5 +16,5 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, ThemeRe
     ) = FragmentThemeBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-            ThemeRepository(remoteDataSource.buildApi(Api::class.java), userPreferences)
+            ThemeRepository(remoteDataSource.buildApi(Api::class.java))
 }

@@ -2,8 +2,10 @@ package com.mapo.walkaholic.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.repository.*
 import com.mapo.walkaholic.ui.auth.AuthViewModel
+import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.service.*
 import java.lang.IllegalArgumentException
 
@@ -18,7 +20,7 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as ThemeRepository) as T
             modelClass.isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(repository as ChallengeRepository) as T
             modelClass.isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MapRepository) as T
-            else -> throw IllegalArgumentException("ViewModel Class Not Found")
+            else -> throw IllegalArgumentException(GlobalApplication.getGlobalApplicationContext().getString(R.string.err_unexpected))
         }
     }
 }

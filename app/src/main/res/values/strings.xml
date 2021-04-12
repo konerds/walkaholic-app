@@ -45,6 +45,7 @@
     <string name="err_multiple_touch">좀 더 천천히 터치해주세요</string>
     <string name="err_auth">카카오톡 인증 정보 수신에 실패하였습니다</string>
     <string name="err_user">사용자 정보를 확인할 수 없습니다</string>
+    <string name="err_unexpected">예기치 않은 오류가 발생하였습니다</string>
     <!-- 하단 내비게이션 바 -->
     <string name="main">메인</string>
     <string name="path">산책하기</string>

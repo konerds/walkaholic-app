@@ -19,16 +19,16 @@ class UserPreferences(
 
     val authToken: Flow<Long?>
         get() = dataStore.data.map { preferences ->
-            preferences[KEY_AUTH]
+            preferences[AUTH_ID]
         }
 
     suspend fun saveAuthToken(id: Long) {
         dataStore.edit { preferences ->
-            preferences[KEY_AUTH] = id
+            preferences[AUTH_ID] = id
         }
     }
 
     companion object {
-        private val KEY_AUTH = preferencesKey<Long>("key_auth")
+        private val AUTH_ID = preferencesKey<Long>("auth_id")
     }
 }
