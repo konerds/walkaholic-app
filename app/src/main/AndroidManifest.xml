@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true">
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="0ee09f5022e88e6ca843a2bcf5949741" />
+            android:value="@string/kakao_app_key" />
         <activity android:name=".ui.base.BaseActivity" />
         <activity
             android:name=".ui.SplashActivity"

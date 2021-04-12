@@ -7,7 +7,9 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.PermissionChecker
@@ -19,26 +21,26 @@ import com.mapo.walkaholic.databinding.FragmentMapBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
+import com.naver.maps.map.util.FusedLocationSource
 
 class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository>(), OnMapReadyCallback, LocationListener {
     private lateinit var mapView: MapView
+    private lateinit var locationSource: FusedLocationSource
     private lateinit var mMap: NaverMap
-    private lateinit var locationManager: LocationManager
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.mapView.getMapAsync(this)
-        locationManager = activity?.getSystemService(LOCATION_SERVICE) as LocationManager
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (hasPermission()) {
-                if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10f, this)
+        if (locationSource.onRequestPermissionsResult(requestCode, permissions,
+                        grantResults)) {
+            if (!locationSource.isActivated) {
+                mMap.locationTrackingMode = LocationTrackingMode.None
             }
             return
         }
@@ -53,19 +55,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
 
     override fun onStart() {
         super.onStart()
-        if (hasPermission()) {
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return
-            }
-            locationManager?.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 1000, 10f, this)
-        } else {
-            activity?.let {
-                ActivityCompat.requestPermissions(
-                        it, PERMISSIONS, PERMISSION_REQUEST_CODE)
-            }
-        }
-        mapView.onStart()
     }
 
     override fun onResume() {
@@ -89,11 +78,9 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
     }
 
     override fun onLocationChanged(location: Location) {
-        /*
         if (location == null) {
             return
         }
-         */
 
         mMap?.let {
             val coord = LatLng(location)
@@ -123,20 +110,24 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
         naverMap.uiSettings.isLocationButtonEnabled = true
         naverMap.uiSettings.logoGravity = Gravity.TOP + Gravity.RIGHT
         naverMap.uiSettings.setLogoMargin(80, 80, 80, 80)
+        naverMap.minZoom = 5.0
+        naverMap.maxZoom = 18.0
+        naverMap.extent = LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0))
         mMap = naverMap
         viewModel.init(mMap)
-
         mMap.addOnCameraIdleListener {
             setupDataOnMap(mMap)
         }
-
         mMap.addOnCameraChangeListener { reason, animated ->
+        }
+        mMap.setOnMapClickListener { point, coord ->
+            Toast.makeText(requireContext(), "${coord.latitude}, ${coord.longitude}",
+                    Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupDataOnMap(naverMap: NaverMap) {
         val zoom = naverMap.cameraPosition.zoom
-
         viewModel.getMarkers(zoom).observe(this, Observer {
             if (!it.isNullOrEmpty()) {
                 for (i in it) {
@@ -158,17 +149,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
     override fun getFragmentRepository() =
             MapRepository(remoteDataSource.buildApi(Api::class.java), userPreferences)
 
-    private fun hasPermission(): Boolean {
-        return PermissionChecker.checkSelfPermission(requireContext(), PERMISSIONS[0]) ==
-                PermissionChecker.PERMISSION_GRANTED &&
-                PermissionChecker.checkSelfPermission(requireContext(), PERMISSIONS[1]) ==
-                PermissionChecker.PERMISSION_GRANTED
-    }
-
     companion object {
-        private const val PERMISSION_REQUEST_CODE = 100
-        private val PERMISSIONS = arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }
