@@ -24,12 +24,13 @@
             app:layout_constraintBottom_toTopOf="@id/dashLayout3"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <SurfaceView
+                android:id="@+id/dashSvCharacter"
+                android:layout_width="64dp"
+                android:layout_height="63dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/img_character" />
+                android:src="@drawable/img_character_dummy" />
 
             <TextView
                 android:id="@+id/dashTvIntro"
@@ -37,10 +38,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
                 android:layout_marginTop="20dp"
-                android:text=""
+                android:text="@{DashVM.}"
+                android:textColor="#FA9F00"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#FA9F00" />
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,9 +58,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
                 android:layout_marginLeft="20dp"
+                android:bufferType="spannable"
                 android:text="@string/dash_walknum"
-                android:textSize="32sp"
-                android:bufferType="spannable"/>
+                android:textSize="32sp" />
 
             <RelativeLayout
                 android:id="@+id/dashLayoutRelative1"
@@ -329,8 +330,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

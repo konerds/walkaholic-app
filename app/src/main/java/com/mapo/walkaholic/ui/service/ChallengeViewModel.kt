@@ -1,5 +1,7 @@
 package com.mapo.walkaholic.ui.service
 
+import android.content.Context
+import android.graphics.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
