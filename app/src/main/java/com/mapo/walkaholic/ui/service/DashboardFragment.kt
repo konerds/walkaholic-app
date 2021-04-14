@@ -88,8 +88,6 @@ class DashboardFragment :
             when (userCharacter?.type) {
                 0 -> {
                     animCharacter = Animation(
-                            requireContext(),
-                            R.drawable.img_character1,
                             63,
                             64,
                             10,
@@ -97,11 +95,12 @@ class DashboardFragment :
                             4,
                             binding.dashSvCharacter.holder
                     )
+                    animCharacter.setBitmapSheet(requireContext(),
+                            R.drawable.img_character1)
+                    animCharacter.startThread()
                 }
                 1 -> {
                     animCharacter = Animation(
-                            requireContext(),
-                            R.drawable.img_character2,
                             63,
                             64,
                             10,
@@ -109,11 +108,12 @@ class DashboardFragment :
                             4,
                             binding.dashSvCharacter.holder
                     )
+                    animCharacter.setBitmapSheet(requireContext(),
+                            R.drawable.img_character2)
+                    animCharacter.startThread()
                 }
                 2 -> {
                     animCharacter = Animation(
-                            requireContext(),
-                            R.drawable.img_character3,
                             63,
                             64,
                             10,
@@ -121,6 +121,9 @@ class DashboardFragment :
                             4,
                             binding.dashSvCharacter.holder
                     )
+                    animCharacter.setBitmapSheet(requireContext(),
+                            R.drawable.img_character3)
+                    animCharacter.startThread()
                 }
                 else -> {
                 }
@@ -139,11 +142,11 @@ class DashboardFragment :
         binding.dashProgressBar.visible(false)
     }
 
-    class Animation internal constructor(
-            context: Context?, bitmapResource: Int, frameHeight: Int, frameWidth: Int,
+    inner class Animation constructor(
+            frameHeight: Int, frameWidth: Int,
             animFps: Int, private val frameCount: Int, pixelsPerMetre: Int, holder: SurfaceHolder
     ) : Runnable {
-        private val animThread: Thread
+        private lateinit var animThread: Thread
         private val holder: SurfaceHolder = holder
         private lateinit var bitmapSheet: Bitmap
         private var charCanvas = Canvas()
@@ -163,8 +166,6 @@ class DashboardFragment :
                     currentFrame = 0
                 }
             }
-            //update the left and right values of the source of
-            //the next frame on the spritesheet
             sourceRect.left = currentFrame * this.frameWidth
             sourceRect.right = sourceRect.left + this.frameWidth
             return sourceRect
@@ -192,19 +193,28 @@ class DashboardFragment :
                         this.frameHeight,
                         false
                 )
-                if (animThread != null && animThread.isInterrupted) {
-                    animThread.join()
-                }
             }
         }
 
+        fun startThread() {
+            animThread = Thread(this)
+            if (animThread != null && animThread.isInterrupted) {
+                animThread.join()
+            } else {
+                animThread.start()
+            }
+            Log.i(
+                    ContentValues.TAG, "${animThread.id} starting"
+            )
+        }
+
+        fun interruptThread() {
+            animThread.interrupt()
+        }
+
         override fun run() {
-            try {
-                while (!this.holder.surfaceFrame.isEmpty) {
-                    animate()
-                }
-            } catch (e: Exception) {
-                animThread.interrupt()
+            while (!this.holder.surfaceFrame.isEmpty) {
+                animate()
             }
         }
 
@@ -213,9 +223,6 @@ class DashboardFragment :
             destRect = Rect(0, 0, this.frameWidth, this.frameHeight)
             framePeriod = 1000 / animFps
             frameTicker = 0L
-            setBitmapSheet(context, bitmapResource)
-            animThread = Thread(this)
-            animThread.start()
         }
     }
 
