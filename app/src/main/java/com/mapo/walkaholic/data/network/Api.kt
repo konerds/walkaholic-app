@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.data.network
 
 import com.mapo.walkaholic.data.model.request.MapRequestBody
-import com.mapo.walkaholic.data.model.response.CharacterResponse
 import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.model.response.MapResponse
 import com.mapo.walkaholic.data.model.response.StringResponse
@@ -35,12 +34,6 @@ interface Api {
     suspend fun getUser(
             @Field("id") id: Long
     ): UserResponse
-
-    @FormUrlEncoded
-    @POST("character")
-    suspend fun getCharacter(
-            @Field("id") _id: Long
-    ): CharacterResponse
 
     @FormUrlEncoded
     @POST("map")

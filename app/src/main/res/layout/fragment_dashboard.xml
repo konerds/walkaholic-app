@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
                 android:layout_marginTop="20dp"
-                android:text="@{DashVM.}"
+                android:text=""
                 android:textColor="#FA9F00"
                 android:textSize="12sp"
                 android:textStyle="bold" />

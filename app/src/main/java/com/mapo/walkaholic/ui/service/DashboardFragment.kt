@@ -33,7 +33,7 @@ import kotlin.properties.Delegates
 
 
 class DashboardFragment :
-    BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
+        BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
     private lateinit var animCharacter: Animation
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,12 +42,12 @@ class DashboardFragment :
             when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
-                        updateUI(it.value.user, null, null, null, null)
+                        updateUI(it.value.user, it.value.userCharacter, null, null, null)
                     } else {
                         Toast.makeText(
-                            requireContext(),
-                            getString(R.string.err_user),
-                            Toast.LENGTH_SHORT
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
                         ).show()
                         requireActivity().startNewActivity(AuthActivity::class.java)
                     }
@@ -56,96 +56,70 @@ class DashboardFragment :
                 }
                 is Resource.Failure -> {
                     Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_user),
-                        Toast.LENGTH_SHORT
+                            requireContext(),
+                            getString(R.string.err_user),
+                            Toast.LENGTH_SHORT
                     ).show()
                     requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
         })
-        viewModel.characterResponse.observe(viewLifecycleOwner, Observer {
-            binding.dashProgressBar.visible(true)
-            when (it) {
-                is Resource.Success -> {
-                    if (!it.value.error) {
-                        updateUI(null, it.value.userCharacter, null, null, null)
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.err_user),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-                is Resource.Loading -> {
-                }
-                is Resource.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_user),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        })
         binding.dashProgressBar.visible(false)
         viewModel.getUser()
-        viewModel.getCharacter()
     }
 
     private fun updateUI(
-        user: User?,
-        userCharacter: UserCharacter?,
-        walkingRecord: Any?,
-        weather: Any?,
-        theme: Any?
+            user: User?,
+            userCharacter: UserCharacter?,
+            walkingRecord: Any?,
+            weather: Any?,
+            theme: Any?
     ) {
         with(binding) {
             val characterIntro = StringBuilder()
             characterIntro.append(
-                when (userCharacter?.type) {
-                    0 -> "인간이 "
-                    1 -> "오크가 "
-                    2 -> "해골이 "
-                    else -> "[오류] "
-                }
+                    when (userCharacter?.type) {
+                        0 -> "인간이 "
+                        1 -> "오크가 "
+                        2 -> "해골이 "
+                        else -> "[오류] "
+                    }
             )
             when (userCharacter?.type) {
                 0 -> {
                     animCharacter = Animation(
-                        requireContext(),
-                        R.drawable.img_character1,
-                        63,
-                        64,
-                        10,
-                        7,
-                        4,
-                        binding.dashSvCharacter.holder
+                            requireContext(),
+                            R.drawable.img_character1,
+                            63,
+                            64,
+                            10,
+                            7,
+                            4,
+                            binding.dashSvCharacter.holder
                     )
                 }
                 1 -> {
                     animCharacter = Animation(
-                        requireContext(),
-                        R.drawable.img_character2,
-                        63,
-                        64,
-                        10,
-                        7,
-                        4,
-                        binding.dashSvCharacter.holder
+                            requireContext(),
+                            R.drawable.img_character2,
+                            63,
+                            64,
+                            10,
+                            7,
+                            4,
+                            binding.dashSvCharacter.holder
                     )
                 }
                 2 -> {
                     animCharacter = Animation(
-                        requireContext(),
-                        R.drawable.img_character3,
-                        63,
-                        64,
-                        10,
-                        7,
-                        4,
-                        binding.dashSvCharacter.holder
+                            requireContext(),
+                            R.drawable.img_character3,
+                            63,
+                            64,
+                            10,
+                            7,
+                            4,
+                            binding.dashSvCharacter.holder
                     )
                 }
                 else -> {
@@ -156,21 +130,21 @@ class DashboardFragment :
                 dashTvIntro.text = characterIntro.toString().trim()
             val spannableTvWalkToday = dashTvWalkToday.text as Spannable
             spannableTvWalkToday.setSpan(
-                ForegroundColorSpan(Color.parseColor("#F97413")),
-                0,
-                5,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    ForegroundColorSpan(Color.parseColor("#F97413")),
+                    0,
+                    5,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
         binding.dashProgressBar.visible(false)
     }
 
     class Animation internal constructor(
-        context: Context?, bitmapResource: Int, frameHeight: Int, frameWidth: Int,
-        animFps: Int, private val frameCount: Int, pixelsPerMetre: Int, holder: SurfaceHolder
+            context: Context?, bitmapResource: Int, frameHeight: Int, frameWidth: Int,
+            animFps: Int, private val frameCount: Int, pixelsPerMetre: Int, holder: SurfaceHolder
     ) : Runnable {
-        private val holder: SurfaceHolder = holder
         private val animThread: Thread
+        private val holder: SurfaceHolder = holder
         private lateinit var bitmapSheet: Bitmap
         private var charCanvas = Canvas()
         private val charPaint = Paint()
@@ -209,6 +183,21 @@ class DashboardFragment :
             }
         }
 
+        fun setBitmapSheet(context: Context?, bitmapResource: Int) {
+            if (context != null) {
+                this.bitmapSheet = BitmapFactory.decodeResource(context.resources, bitmapResource)
+                this.bitmapSheet = Bitmap.createScaledBitmap(
+                        bitmapSheet,
+                        (this.frameWidth * frameCount),
+                        this.frameHeight,
+                        false
+                )
+                if (animThread != null && animThread.isInterrupted) {
+                    animThread.join()
+                }
+            }
+        }
+
         override fun run() {
             try {
                 while (!this.holder.surfaceFrame.isEmpty) {
@@ -224,15 +213,7 @@ class DashboardFragment :
             destRect = Rect(0, 0, this.frameWidth, this.frameHeight)
             framePeriod = 1000 / animFps
             frameTicker = 0L
-            if (context != null) {
-                this.bitmapSheet = BitmapFactory.decodeResource(context.resources, bitmapResource)
-                this.bitmapSheet = Bitmap.createScaledBitmap(
-                    bitmapSheet,
-                    (this.frameWidth * frameCount),
-                    this.frameHeight,
-                    false
-                )
-            }
+            setBitmapSheet(context, bitmapResource)
             animThread = Thread(this)
             animThread.start()
         }
@@ -241,8 +222,8 @@ class DashboardFragment :
     override fun getViewModel() = DashboardViewModel::class.java
 
     override fun getFragmentBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+            inflater: LayoutInflater,
+            container: ViewGroup?
     ) = FragmentDashboardBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): DashboardRepository {
