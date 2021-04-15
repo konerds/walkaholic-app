@@ -24,13 +24,24 @@
             app:layout_constraintBottom_toTopOf="@id/dashLayout3"
             app:layout_constraintTop_toTopOf="parent">
 
-            <SurfaceView
-                android:id="@+id/dashSvCharacter"
-                android:layout_width="64dp"
-                android:layout_height="63dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/img_character_dummy" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <ImageView
+                    android:id="@+id/dashIvCharacter"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center|center_vertical"/>
+
+                <SurfaceView
+                    android:id="@+id/dashSvCharacter"
+                    android:layout_width="64dp"
+                    android:layout_height="63dp"
+                    android:layout_gravity="center|center_vertical" />
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/dashTvIntro"

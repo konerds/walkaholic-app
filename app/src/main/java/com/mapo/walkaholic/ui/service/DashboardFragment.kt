@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.mapo.walkaholic.R
@@ -93,10 +94,13 @@ class DashboardFragment :
                             10,
                             7,
                             4,
-                            binding.dashSvCharacter.holder
+                            binding.dashSvCharacter.holder,
+                            binding.dashIvCharacter,
+                            userCharacter.exp
                     )
                     animCharacter!!.setBitmapSheet(requireContext(),
                             R.drawable.img_character1)
+                    animCharacter!!.drawCharInfo()
                     animCharacter!!.startThread()
                 }
                 1 -> {
@@ -106,10 +110,13 @@ class DashboardFragment :
                             10,
                             7,
                             4,
-                            binding.dashSvCharacter.holder
+                            binding.dashSvCharacter.holder,
+                            binding.dashIvCharacter,
+                            userCharacter.exp
                     )
                     animCharacter!!.setBitmapSheet(requireContext(),
                             R.drawable.img_character2)
+                    animCharacter!!.drawCharInfo()
                     animCharacter!!.startThread()
                 }
                 2 -> {
@@ -119,10 +126,13 @@ class DashboardFragment :
                             10,
                             7,
                             4,
-                            binding.dashSvCharacter.holder
+                            binding.dashSvCharacter.holder,
+                            binding.dashIvCharacter,
+                            userCharacter.exp
                     )
                     animCharacter!!.setBitmapSheet(requireContext(),
                             R.drawable.img_character3)
+                    animCharacter!!.drawCharInfo()
                     animCharacter!!.startThread()
                 }
                 else -> {
@@ -144,15 +154,12 @@ class DashboardFragment :
 
     inner class Animation constructor(
             frameHeight: Int, frameWidth: Int,
-            animFps: Int, private val frameCount: Int, pixelsPerMetre: Int, holder: SurfaceHolder
+            animFps: Int, private val frameCount: Int, private val pixelsPerMetre: Int, private val holder: SurfaceHolder, private val infoView: ImageView, private val charExp: Long
     ) : Runnable {
         private lateinit var animThread: Thread
-        private val holder: SurfaceHolder = holder
         private lateinit var bitmapSheet: Bitmap
         private var charCanvas = Canvas()
         private val charPaint = Paint()
-        private val sourceRect: Rect
-        private val destRect: Rect
         private var currentFrame = 0
         private var frameTicker: Long
         private val framePeriod: Int
@@ -166,6 +173,11 @@ class DashboardFragment :
                     currentFrame = 0
                 }
             }
+            val sourceRect = Rect(
+                    Point(charCanvas.width / 2, charCanvas.height / 2).x - (this.frameWidth / 2),
+                    Point(charCanvas.width / 2, charCanvas.height / 2).y - (this.frameHeight / 2),
+                    Point(charCanvas.width / 2, charCanvas.height / 2).x + (this.frameWidth / 2),
+                    Point(charCanvas.width / 2, charCanvas.height / 2).y + (this.frameHeight / 2))
             sourceRect.left = currentFrame * this.frameWidth
             sourceRect.right = sourceRect.left + this.frameWidth
             return sourceRect
@@ -177,9 +189,12 @@ class DashboardFragment :
                     charCanvas = this.holder.lockCanvas()
                     charCanvas.drawColor(Color.argb(255, 26, 128, 182))
                     charPaint.color = Color.argb(255, 249, 129, 0)
-                    charPaint.textSize = 45F
-                    charCanvas.drawText("FPS : " + 1000, 20F, 40F, charPaint)
-                    getCurrentFrame(System.currentTimeMillis())
+                    val sourceRect = getCurrentFrame(System.currentTimeMillis())
+                    val destRect = Rect(
+                            Point(charCanvas.width / 2, charCanvas.height / 2).x - (this.frameWidth / 2),
+                            Point(charCanvas.width / 2, charCanvas.height / 2).y - (this.frameHeight / 2),
+                            Point(charCanvas.width / 2, charCanvas.height / 2).x + (this.frameWidth / 2),
+                            Point(charCanvas.width / 2, charCanvas.height / 2).y + (this.frameHeight / 2))
                     charCanvas.drawBitmap(bitmapSheet, sourceRect, destRect, charPaint)
                     this.holder.unlockCanvasAndPost(charCanvas)
                 }
@@ -198,6 +213,26 @@ class DashboardFragment :
                         false
                 )
             }
+        }
+
+        fun drawCharInfo() {
+            val bitmapInfoSheet = Bitmap.createBitmap(140 * pixelsPerMetre, 140 * pixelsPerMetre, Bitmap.Config.ARGB_8888)
+            val canvasInfo = Canvas(bitmapInfoSheet)
+            val radius = 60 * pixelsPerMetre
+            val startAngle = 135F
+            val sweepAngle = 270F
+            val paint = Paint()
+            paint.isAntiAlias = true
+            paint.color = Color.parseColor("#C9C9C9")
+            paint.style = Paint.Style.FILL
+            var oval = RectF(0.toFloat(), 0.toFloat(), canvasInfo.width.toFloat(), canvasInfo.height.toFloat())
+            canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
+            paint.color = Color.parseColor("#D46544")
+            canvasInfo.drawArc(oval, startAngle, 2.7F * charExp, true, paint)
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+            oval = RectF(((canvasInfo.width / 2) - radius).toFloat(), ((canvasInfo.height / 2) - radius).toFloat(), ((canvasInfo.width / 2) + radius).toFloat(), ((canvasInfo.height / 2) + radius).toFloat())
+            canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
+            infoView.setImageBitmap(bitmapInfoSheet)
         }
 
         fun startThread() {
@@ -223,8 +258,6 @@ class DashboardFragment :
         }
 
         init {
-            sourceRect = Rect(0, 0, this.frameWidth, this.frameHeight)
-            destRect = Rect(0, 0, this.frameWidth, this.frameHeight)
             framePeriod = 1000 / animFps
             frameTicker = 0L
         }
