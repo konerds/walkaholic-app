@@ -1,7 +1,7 @@
 package com.mapo.walkaholic.data.network
 
 import com.mapo.walkaholic.data.model.request.MapRequestBody
-import com.mapo.walkaholic.data.model.response.UserResponse
+import com.mapo.walkaholic.data.model.response.DashResponse
 import com.mapo.walkaholic.data.model.response.MapResponse
 import com.mapo.walkaholic.data.model.response.StringResponse
 import retrofit2.http.*
@@ -30,10 +30,10 @@ interface Api {
     ): StringResponse
 
     @FormUrlEncoded
-    @POST("auth/user")
-    suspend fun getUser(
+    @POST("auth/dash")
+    suspend fun getDash(
             @Field("id") id: Long
-    ): UserResponse
+    ): DashResponse
 
     @FormUrlEncoded
     @POST("map")

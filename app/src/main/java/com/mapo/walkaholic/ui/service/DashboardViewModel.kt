@@ -1,11 +1,10 @@
 package com.mapo.walkaholic.ui.service
 
-import android.graphics.*
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.response.UserResponse
+import com.mapo.walkaholic.data.model.response.DashResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.DashboardRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -15,15 +14,15 @@ class DashboardViewModel(
         private val repository: DashboardRepository
 ) : BaseViewModel() {
     override fun init() {}
-    private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
-    val userResponse: LiveData<Resource<UserResponse>>
-        get() = _userResponse
+    private val _dashResponse: MutableLiveData<Resource<DashResponse>> = MutableLiveData()
+    val dashResponse: LiveData<Resource<DashResponse>>
+        get() = _dashResponse
 
-    fun getUser() {
+    fun getDash() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             viewModelScope.launch {
                 if (error != null) {
-                } else _userResponse.value = tokenInfo?.id?.let { repository.getUser(it) }
+                } else _dashResponse.value = tokenInfo?.id?.let { repository.getDash(it) }
             }
         }
     }

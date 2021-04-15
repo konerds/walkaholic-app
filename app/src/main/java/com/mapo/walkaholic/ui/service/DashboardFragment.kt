@@ -1,6 +1,5 @@
 package com.mapo.walkaholic.ui.service
 
-import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.*
@@ -14,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.User
 import com.mapo.walkaholic.data.model.UserCharacter
@@ -24,20 +22,17 @@ import com.mapo.walkaholic.data.repository.DashboardRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.startNewActivity
 import com.mapo.walkaholic.ui.visible
-import java.lang.Exception
 import java.lang.StringBuilder
-import kotlin.properties.Delegates
 
 
 class DashboardFragment :
         BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
-    private lateinit var animCharacter: Animation
+    private var animCharacter: Animation? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer {
+        viewModel.dashResponse.observe(viewLifecycleOwner, Observer {
             binding.dashProgressBar.visible(true)
             when (it) {
                 is Resource.Success -> {
@@ -65,7 +60,12 @@ class DashboardFragment :
             }
         })
         binding.dashProgressBar.visible(false)
-        viewModel.getUser()
+        viewModel.getDash()
+    }
+
+    override fun onPause() {
+        animCharacter?.interruptThread()
+        super.onPause()
     }
 
     private fun updateUI(
@@ -95,9 +95,9 @@ class DashboardFragment :
                             4,
                             binding.dashSvCharacter.holder
                     )
-                    animCharacter.setBitmapSheet(requireContext(),
+                    animCharacter!!.setBitmapSheet(requireContext(),
                             R.drawable.img_character1)
-                    animCharacter.startThread()
+                    animCharacter!!.startThread()
                 }
                 1 -> {
                     animCharacter = Animation(
@@ -108,9 +108,9 @@ class DashboardFragment :
                             4,
                             binding.dashSvCharacter.holder
                     )
-                    animCharacter.setBitmapSheet(requireContext(),
+                    animCharacter!!.setBitmapSheet(requireContext(),
                             R.drawable.img_character2)
-                    animCharacter.startThread()
+                    animCharacter!!.startThread()
                 }
                 2 -> {
                     animCharacter = Animation(
@@ -121,9 +121,9 @@ class DashboardFragment :
                             4,
                             binding.dashSvCharacter.holder
                     )
-                    animCharacter.setBitmapSheet(requireContext(),
+                    animCharacter!!.setBitmapSheet(requireContext(),
                             R.drawable.img_character3)
-                    animCharacter.startThread()
+                    animCharacter!!.startThread()
                 }
                 else -> {
                 }

@@ -3,7 +3,6 @@ package com.mapo.walkaholic.ui.auth
 import androidx.lifecycle.*
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.model.response.StringResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
