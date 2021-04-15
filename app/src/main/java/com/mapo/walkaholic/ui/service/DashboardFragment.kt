@@ -172,15 +172,19 @@ class DashboardFragment :
         }
 
         private fun animate() {
-            if (this.holder.surface.isValid) {
-                charCanvas = this.holder.lockCanvas()
-                charCanvas.drawColor(Color.argb(255, 26, 128, 182))
-                charPaint.color = Color.argb(255, 249, 129, 0)
-                charPaint.textSize = 45F
-                charCanvas.drawText("FPS : " + 1000, 20F, 40F, charPaint)
-                getCurrentFrame(System.currentTimeMillis())
-                charCanvas.drawBitmap(bitmapSheet, sourceRect, destRect, charPaint)
-                this.holder.unlockCanvasAndPost(charCanvas)
+            try {
+                if (this.holder.surface.isValid) {
+                    charCanvas = this.holder.lockCanvas()
+                    charCanvas.drawColor(Color.argb(255, 26, 128, 182))
+                    charPaint.color = Color.argb(255, 249, 129, 0)
+                    charPaint.textSize = 45F
+                    charCanvas.drawText("FPS : " + 1000, 20F, 40F, charPaint)
+                    getCurrentFrame(System.currentTimeMillis())
+                    charCanvas.drawBitmap(bitmapSheet, sourceRect, destRect, charPaint)
+                    this.holder.unlockCanvasAndPost(charCanvas)
+                }
+            } catch (e: Exception) {
+                interruptThread()
             }
         }
 
