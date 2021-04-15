@@ -232,6 +232,8 @@ class DashboardFragment :
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             oval = RectF(((canvasInfo.width / 2) - radius).toFloat(), ((canvasInfo.height / 2) - radius).toFloat(), ((canvasInfo.width / 2) + radius).toFloat(), ((canvasInfo.height / 2) + radius).toFloat())
             canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
+            paint.textAlign = Paint.Align.RIGHT
+            canvasInfo.drawText("$charExp / 100", 0.toFloat(), 0.toFloat(), paint)
             infoView.setImageBitmap(bitmapInfoSheet)
         }
 
