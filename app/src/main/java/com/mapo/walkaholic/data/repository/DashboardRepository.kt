@@ -6,7 +6,10 @@ class DashboardRepository(
         private val api: Api,
         private val apiWeather: Api
 ) : BaseRepository() {
-    suspend fun getDash(id:Long) = safeApiCall {
-        api.getDash(id)
+    suspend fun getUser(id:Long) = safeApiCall {
+        api.getUser(id)
+    }
+    suspend fun getUserCharacter(id:Long) = safeApiCall {
+        api.getCharacter(id)
     }
 }

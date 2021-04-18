@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -20,6 +21,7 @@ import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.databinding.ActivityAuthBinding
 import com.mapo.walkaholic.ui.base.BaseActivity
+import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*

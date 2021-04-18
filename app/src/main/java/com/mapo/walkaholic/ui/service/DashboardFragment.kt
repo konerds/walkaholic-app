@@ -15,8 +15,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.User
-import com.mapo.walkaholic.data.model.UserCharacter
 import com.mapo.walkaholic.data.network.Api
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.DashboardRepository
@@ -24,8 +22,6 @@ import com.mapo.walkaholic.databinding.FragmentDashboardBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.startNewActivity
-import com.mapo.walkaholic.ui.visible
-import java.lang.StringBuilder
 
 
 class DashboardFragment :
@@ -33,12 +29,12 @@ class DashboardFragment :
     private var animCharacter: Animation? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.dashResponse.observe(viewLifecycleOwner, Observer {
-            binding.dashProgressBar.visible(true)
+        binding.viewModel = viewModel
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
-                        updateUI(it.value.user, it.value.userCharacter, null, null, null)
+                        binding.user = it.value.user
                     } else {
                         Toast.makeText(
                                 requireContext(),
@@ -60,96 +56,79 @@ class DashboardFragment :
                 }
             }
         })
-        binding.dashProgressBar.visible(false)
+        viewModel.userCharacterResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        binding.userCharacter = it.value.userCharacter
+
+                        with(binding) {
+                            binding.userCharacter?.let { userCharacter ->
+                                animCharacter = Animation(
+                                        63,
+                                        64,
+                                        10,
+                                        7,
+                                        4,
+                                        binding.dashSvCharacter.holder,
+                                        binding.dashIvCharacter,
+                                        userCharacter.exp
+                                )
+                                when (userCharacter.type) {
+                                    0 -> {
+                                        animCharacter!!.setBitmapSheet(requireContext(),
+                                                R.drawable.img_character1)
+                                    }
+                                    1 -> {
+                                        animCharacter!!.setBitmapSheet(requireContext(),
+                                                R.drawable.img_character2)
+                                    }
+                                    2 -> {
+                                        animCharacter!!.setBitmapSheet(requireContext(),
+                                                R.drawable.img_character3)
+                                    }
+                                    else -> {
+                                    }
+                                }
+                                animCharacter!!.drawCharInfo()
+                                animCharacter!!.startThread()
+                            }
+                            val spannableTvWalkToday = dashTvWalkToday.text as Spannable
+                            spannableTvWalkToday.setSpan(
+                                    ForegroundColorSpan(Color.parseColor("#F97413")),
+                                    0,
+                                    5,
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                        }
+
+                    } else {
+                        Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                        ).show()
+                        requireActivity().startNewActivity(AuthActivity::class.java)
+                    }
+                }
+                is Resource.Loading -> {
+                }
+                is Resource.Failure -> {
+                    Toast.makeText(
+                            requireContext(),
+                            getString(R.string.err_user),
+                            Toast.LENGTH_SHORT
+                    ).show()
+                    requireActivity().startNewActivity(AuthActivity::class.java)
+                }
+            }
+        })
         viewModel.getDash()
     }
 
     override fun onPause() {
         animCharacter?.interruptThread()
         super.onPause()
-    }
-
-    private fun updateUI(
-            user: User?,
-            userCharacter: UserCharacter?,
-            walkingRecord: Any?,
-            weather: Any?,
-            theme: Any?
-    ) {
-        with(binding) {
-            val characterIntro = StringBuilder()
-            characterIntro.append(
-                    when (userCharacter?.type) {
-                        0 -> "인간이 "
-                        1 -> "오크가 "
-                        2 -> "해골이 "
-                        else -> "[오류] "
-                    }
-            )
-            when (userCharacter?.type) {
-                0 -> {
-                    animCharacter = Animation(
-                            63,
-                            64,
-                            10,
-                            7,
-                            4,
-                            binding.dashSvCharacter.holder,
-                            binding.dashIvCharacter,
-                            userCharacter.exp
-                    )
-                    animCharacter!!.setBitmapSheet(requireContext(),
-                            R.drawable.img_character1)
-                    animCharacter!!.drawCharInfo()
-                    animCharacter!!.startThread()
-                }
-                1 -> {
-                    animCharacter = Animation(
-                            63,
-                            64,
-                            10,
-                            7,
-                            4,
-                            binding.dashSvCharacter.holder,
-                            binding.dashIvCharacter,
-                            userCharacter.exp
-                    )
-                    animCharacter!!.setBitmapSheet(requireContext(),
-                            R.drawable.img_character2)
-                    animCharacter!!.drawCharInfo()
-                    animCharacter!!.startThread()
-                }
-                2 -> {
-                    animCharacter = Animation(
-                            63,
-                            64,
-                            10,
-                            7,
-                            4,
-                            binding.dashSvCharacter.holder,
-                            binding.dashIvCharacter,
-                            userCharacter.exp
-                    )
-                    animCharacter!!.setBitmapSheet(requireContext(),
-                            R.drawable.img_character3)
-                    animCharacter!!.drawCharInfo()
-                    animCharacter!!.startThread()
-                }
-                else -> {
-                }
-            }
-            characterIntro.append("${user?.nickname}님을 기다렸어요!")
-            if (user != null)
-                dashTvIntro.text = characterIntro.toString().trim()
-            val spannableTvWalkToday = dashTvWalkToday.text as Spannable
-            spannableTvWalkToday.setSpan(
-                    ForegroundColorSpan(Color.parseColor("#F97413")),
-                    0,
-                    5,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
-        binding.dashProgressBar.visible(false)
     }
 
     inner class Animation constructor(
@@ -162,7 +141,7 @@ class DashboardFragment :
         private val charPaint = Paint()
         private var currentFrame = 0
         private var frameTicker: Long
-        private val framePeriod: Int
+        private val framePeriod: Int = 1000 / animFps
         private val frameWidth: Int = (frameWidth * pixelsPerMetre)
         private val frameHeight: Int = (frameHeight * pixelsPerMetre)
         private fun getCurrentFrame(time: Long): Rect {
@@ -260,7 +239,6 @@ class DashboardFragment :
         }
 
         init {
-            framePeriod = 1000 / animFps
             frameTicker = 0L
         }
     }

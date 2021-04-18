@@ -3,17 +3,10 @@ package com.mapo.walkaholic.ui.global
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
 import com.naver.maps.map.NaverMapSdk
-import java.lang.IllegalArgumentException
 
 class GlobalApplication : Application() {
     companion object {

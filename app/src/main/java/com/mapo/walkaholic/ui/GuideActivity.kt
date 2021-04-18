@@ -1,14 +1,11 @@
 package com.mapo.walkaholic.ui
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.viewpager.widget.PagerAdapter
 import com.mapo.walkaholic.R

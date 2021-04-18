@@ -13,14 +13,22 @@ import java.lang.IllegalArgumentException
 class ViewModelFactory(
         private val repository: BaseRepository
 ) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return when {
-            modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository as AuthRepository) as T
-            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(repository as DashboardRepository) as T
-            modelClass.isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as ThemeRepository) as T
-            modelClass.isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(repository as ChallengeRepository) as T
-            modelClass.isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MapRepository) as T
-            else -> throw IllegalArgumentException(GlobalApplication.getGlobalApplicationContext().getString(R.string.err_unexpected))
-        }
-    }
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+            with(modelClass) {
+                when {
+                    isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository as AuthRepository)
+                    isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(
+                            repository as DashboardRepository
+                    )
+                    isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as ThemeRepository)
+                    isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(
+                            repository as ChallengeRepository
+                    )
+                    isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MapRepository)
+                    else -> throw IllegalArgumentException(
+                            GlobalApplication.getGlobalApplicationContext()
+                                    .getString(R.string.err_unexpected)
+                    )
+                }
+            } as T
 }

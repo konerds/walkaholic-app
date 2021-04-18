@@ -11,12 +11,12 @@
         android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#FA9F00"
         android:layout_marginBottom="12dp"
+        android:background="#FA9F00"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible">
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,11 +30,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
+                android:gravity="center_vertical"
                 android:text="@string/app_name"
-                android:textSize="24sp"
-                android:textStyle="bold"
                 android:textColor="#FFFFFFFF"
-                android:gravity="center_vertical"/>
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/mainBtnHbg"

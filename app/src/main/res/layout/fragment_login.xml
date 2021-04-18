@@ -1,63 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.auth.LoginFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/loginBtnTutorial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:text="@string/tutorial"
-        android:theme="@style/Theme.MaterialComponents.Light"
-        app:chipBackgroundColor="@android:color/transparent"
-        app:chipSurfaceColor="@android:color/transparent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <ImageView
-        android:id="@+id/loginImgLogo"
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.mapo.walkaholic.ui.auth.AuthViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo_title"
-        app:layout_constraintBottom_toTopOf="@id/loginLayoutSNS"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        tools:context=".ui.auth.LoginFragment">
 
-    <LinearLayout
-        android:id="@+id/loginLayoutSNS"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginImgLogo">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/loginBtnTutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick='@{() -> viewModel.onClickEvent("loginToGuide")}'
+            android:text="@string/tutorial"
+            android:theme="@style/Theme.MaterialComponents.Light"
+            app:chipBackgroundColor="@android:color/transparent"
+            app:chipSurfaceColor="@android:color/transparent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/loginBtnKakao"
+        <ImageView
+            android:id="@+id/loginIvLogo"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="128dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/btn_login_kakao"
-            android:foreground="?selectableItemBackground" />
-    </LinearLayout>
+            android:layout_marginBottom="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_title"
+            app:layout_constraintBottom_toTopOf="@id/loginLayoutSNS"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/loginProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/loginLayoutSNS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loginIvLogo">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/loginBtnKakao"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/btn_login_kakao"
+                android:foreground="?selectableItemBackground" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

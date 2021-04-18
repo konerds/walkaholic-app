@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:clickable="true"
+    android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context=".ui.GuideActivity">
@@ -24,14 +24,14 @@
         android:id="@+id/guideChipSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
         android:focusable="true"
-        android:theme="@style/Theme.MaterialComponents.Light"
+        android:text="@string/skip"
         android:textColor="#FFFFFF"
-        app:chipSurfaceColor="@android:color/transparent"
+        android:theme="@style/Theme.MaterialComponents.Light"
         app:chipBackgroundColor="@android:color/transparent"
-        android:text="@string/skip" />
+        app:chipSurfaceColor="@android:color/transparent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

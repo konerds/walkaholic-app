@@ -1,11 +1,7 @@
 package com.mapo.walkaholic.ui.base
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mapo.walkaholic.R
@@ -30,7 +26,7 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             if (System.currentTimeMillis() - mBackWait >= 1000) {
                 Toast.makeText(this, getString(R.string.err_multiple_touch), Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
             }
         }
         mBackWait = System.currentTimeMillis()

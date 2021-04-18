@@ -1,250 +1,288 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_regLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.auth.RegisterFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/RegisterIvLogo"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.mapo.walkaholic.ui.auth.AuthViewModel" />
+
+        <variable
+            name="terms"
+            type="com.mapo.walkaholic.data.model.Terms" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root_regLayout"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/logo_title"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        tools:context=".ui.auth.RegisterFragment">
 
-    <LinearLayout
-        android:id="@+id/registerLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/RegisterIvLogo"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/registerTvService"
+        <ImageView
+            android:id="@+id/registerIvLogo"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="#000000"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarFadeDuration="0"
-            android:scrollbarSize="4dp"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbarThumbVertical="@color/colorAccent"
-            android:scrollbarTrackVertical="@color/colorPrimaryDark"
-            android:scrollbars="vertical"
-            android:text="서비스이용약관\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n약관 내용"
-            android:textColor="#FFFFFF" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/registerTvPrivacy"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="128dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:background="#000000"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarFadeDuration="0"
-            android:scrollbarSize="4dp"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbarThumbVertical="@color/colorAccent"
-            android:scrollbarTrackVertical="@color/colorPrimaryDark"
-            android:scrollbars="vertical"
-            android:text="개인정보수집이용약관\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n약관 내용"
-            android:textColor="#FFFFFF" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/registerChipAgreeAll"
-            style="@style/Widget.MaterialComponents.Chip.Action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:checkable="true"
-            android:gravity="center_vertical"
-            android:text="모두 동의"
-            android:theme="@style/Theme.MaterialComponents.Light" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/registerChipAgreeService"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:checkable="true"
-            android:gravity="center_vertical"
-            android:text="서비스 이용 동의"
-            android:theme="@style/Theme.MaterialComponents.Light" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/registerChipAgreePrivacy"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:gravity="center_vertical"
-            android:text="개인정보 이용 동의"
-            android:theme="@style/Theme.MaterialComponents.Light" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/registerLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/RegisterIvLogo"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:counterEnabled="true"
-            app:counterMaxLength="10">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/registerEtName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/name"
-                android:importantForAutofill="no"
-                android:inputType="textNoSuggestions" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:counterEnabled="true"
-            app:counterMaxLength="10">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/registerEtNickname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/nickname"
-                android:importantForAutofill="no"
-                android:inputType="textNoSuggestions" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:counterEnabled="true"
-            app:counterMaxLength="8">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/registerEtBirth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                android:hint="@string/birth"
-                android:importantForAutofill="no"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginRight="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_title"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/registerLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginRight="20dp"
-                android:gravity="center_vertical|center"
-                android:text="성별"
-                android:textSize="20dp"/>
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="0dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registerIvLogo">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/registerTvService"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="#FFFFFF"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarSize="4dp"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbarThumbVertical="@color/colorAccent"
+                android:scrollbarTrackVertical="@color/colorPrimaryDark"
+                android:scrollbars="vertical"
+                android:text="@{terms.svrterm}"
+                android:textColor="#000000" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/registerTvPrivacy"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp"
+                android:background="#FFFFFF"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarSize="4dp"
+                android:scrollbarStyle="outsideInset"
+                android:scrollbarThumbVertical="@color/colorAccent"
+                android:scrollbarTrackVertical="@color/colorPrimaryDark"
+                android:scrollbars="vertical"
+                android:text="@{terms.prvterm}"
+                android:textColor="#000000" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/registerChipAgreeAll"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                app:singleSelection="true"
-                app:selectionRequired="true">
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/registerChipMale"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    app:chipIcon="@drawable/ic_male"
-                    app:chipIconVisible="true"
-                    app:iconStartPadding="12dp"
-                    app:checkedIconVisible="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:checked="true"
-                    android:gravity="center_vertical"
-                    android:text="@string/male"
-                    android:theme="@style/Theme.MaterialComponents.Light" />
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/registerChipFemale"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    app:chipIcon="@drawable/ic_female"
-                    app:chipIconVisible="true"
-                    app:iconStartPadding="12dp"
-                    app:checkedIconVisible="false"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:gravity="center_vertical"
-                    android:text="@string/female"
-                    android:theme="@style/Theme.MaterialComponents.Light" />
-            </com.google.android.material.chip.ChipGroup>
+                android:layout_marginTop="20dp"
+                android:checkable="true"
+                android:gravity="center_vertical"
+                android:onClick='@{() -> viewModel.onClickEvent("agreeAll")}'
+                android:text="모두 동의"
+                android:theme="@style/Theme.MaterialComponents.Light" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/registerChipAgreeService"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:checkable="true"
+                android:gravity="center_vertical"
+                android:onClick='@{() -> viewModel.onClickEvent("agreeService")}'
+                android:text="서비스 이용 동의"
+                android:theme="@style/Theme.MaterialComponents.Light" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/registerChipAgreePrivacy"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:gravity="center_vertical"
+                android:onClick='@{() -> viewModel.onClickEvent("agreePrivacy")}'
+                android:text="개인정보 이용 동의"
+                android:theme="@style/Theme.MaterialComponents.Light" />
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+
+        <LinearLayout
+            android:id="@+id/registerLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            app:counterEnabled="true"
-            app:counterMaxLength="3">
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registerIvLogo">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/registerEtHeight"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/height"
-                android:importantForAutofill="no"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/registerEtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:importantForAutofill="no"
+                    android:inputType="textNoSuggestions" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/registerEtNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/nickname"
+                    android:importantForAutofill="no"
+                    android:inputType="textNoSuggestions" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="8">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/registerEtBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/birth"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:onClick='@{() -> viewModel.onClickEvent("setBirth")}' />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/registerLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|center"
+                    android:text="성별"
+                    android:textSize="20dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/registerChipMale"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:checked="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/male"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:checkedIconVisible="false"
+                        app:chipIcon="@drawable/ic_male"
+                        app:chipIconVisible="true"
+                        app:iconStartPadding="12dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/registerChipFemale"
+                        style="@style/Widget.MaterialComponents.Chip.Filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/female"
+                        android:theme="@style/Theme.MaterialComponents.Light"
+                        app:checkedIconVisible="false"
+                        app:chipIcon="@drawable/ic_female"
+                        app:chipIconVisible="true"
+                        app:iconStartPadding="12dp" />
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/registerEtHeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/height"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/registerEtWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/weight"
+                    android:importantForAutofill="no"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/registerBtnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/btn_default"
+                android:foreground="?selectableItemBackground"
+                android:onClick='@{() -> viewModel.onClickEvent("registerConfirm")}'
+                android:text="@string/register" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:counterEnabled="true"
-            app:counterMaxLength="4">
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/registerEtWeight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/weight"
-                android:importantForAutofill="no"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/registerBtnRegister"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/btn_default"
-            android:foreground="?selectableItemBackground"
-            android:text="@string/register" />
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
