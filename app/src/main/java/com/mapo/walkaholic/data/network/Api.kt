@@ -43,6 +43,12 @@ interface Api {
     ): UserCharacterResponse
 
     @FormUrlEncoded
+    @POST("info/exptable")
+    suspend fun getExpTable(
+            @Field("exp") exp: Long
+    ): ExpTableResponse
+
+    @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
             @Body body: MapRequestBody

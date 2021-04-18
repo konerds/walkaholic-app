@@ -61,47 +61,74 @@ class DashboardFragment :
                 is Resource.Success -> {
                     if (!it.value.error) {
                         binding.userCharacter = it.value.userCharacter
-
                         with(binding) {
-                            binding.userCharacter?.let { userCharacter ->
-                                animCharacter = Animation(
-                                        63,
-                                        64,
-                                        10,
-                                        7,
-                                        4,
-                                        binding.dashSvCharacter.holder,
-                                        binding.dashIvCharacter,
-                                        userCharacter.exp
-                                )
-                                when (userCharacter.type) {
-                                    0 -> {
-                                        animCharacter!!.setBitmapSheet(requireContext(),
-                                                R.drawable.img_character1)
+                            viewModel!!.getExpTable(it.value.userCharacter.exp)
+                            viewModel!!.expTableResponse.observe(viewLifecycleOwner, Observer { _exptable ->
+                                when (_exptable) {
+                                    is Resource.Success -> {
+                                        if (!_exptable.value.error) {
+                                            binding.expTable = _exptable.value.exptable
+                                            binding.userCharacter?.let { userCharacter ->
+                                                val charExp = (100.0 * userCharacter.exp.toFloat() / _exptable.value.exptable.requireexp.toFloat()).toLong()
+                                                animCharacter = Animation(
+                                                        63,
+                                                        64,
+                                                        10,
+                                                        7,
+                                                        (3.9).toLong(),
+                                                        binding.dashSvCharacter.holder,
+                                                        binding.dashIvCharacter,
+                                                        charExp
+                                                )
+                                                Log.i(
+                                                        ContentValues.TAG, "${charExp} ${userCharacter.exp} & ${_exptable.value.exptable.requireexp}"
+                                                )
+                                                when (userCharacter.type) {
+                                                    0 -> {
+                                                        animCharacter!!.setBitmapSheet(requireContext(),
+                                                                R.drawable.img_character1)
+                                                    }
+                                                    1 -> {
+                                                        animCharacter!!.setBitmapSheet(requireContext(),
+                                                                R.drawable.img_character2)
+                                                    }
+                                                    2 -> {
+                                                        animCharacter!!.setBitmapSheet(requireContext(),
+                                                                R.drawable.img_character3)
+                                                    }
+                                                    else -> {
+                                                    }
+                                                }
+                                                animCharacter!!.drawCharInfo()
+                                                animCharacter!!.startThread()
+                                            }
+                                            val spannableTvWalkToday = dashTvWalkToday.text as Spannable
+                                            spannableTvWalkToday.setSpan(
+                                                    ForegroundColorSpan(Color.parseColor("#F97413")),
+                                                    0,
+                                                    5,
+                                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                                            )
+                                        } else {
+                                            Toast.makeText(
+                                                    requireContext(),
+                                                    getString(R.string.err_user),
+                                                    Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                     }
-                                    1 -> {
-                                        animCharacter!!.setBitmapSheet(requireContext(),
-                                                R.drawable.img_character2)
+                                    is Resource.Loading -> {
                                     }
-                                    2 -> {
-                                        animCharacter!!.setBitmapSheet(requireContext(),
-                                                R.drawable.img_character3)
-                                    }
-                                    else -> {
+                                    is Resource.Failure -> {
+                                        Toast.makeText(
+                                                requireContext(),
+                                                getString(R.string.err_user),
+                                                Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
-                                animCharacter!!.drawCharInfo()
-                                animCharacter!!.startThread()
-                            }
-                            val spannableTvWalkToday = dashTvWalkToday.text as Spannable
-                            spannableTvWalkToday.setSpan(
-                                    ForegroundColorSpan(Color.parseColor("#F97413")),
-                                    0,
-                                    5,
-                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                            )
+                            })
                         }
-
                     } else {
                         Toast.makeText(
                                 requireContext(),
@@ -133,7 +160,7 @@ class DashboardFragment :
 
     inner class Animation constructor(
             frameHeight: Int, frameWidth: Int,
-            animFps: Int, private val frameCount: Int, private val pixelsPerMetre: Int, private val holder: SurfaceHolder, private val infoView: ImageView, private val charExp: Long
+            animFps: Int, private val frameCount: Int, private val pixelsPerMetre: Long, private val holder: SurfaceHolder, private val infoView: ImageView, private val charExp: Long
     ) : Runnable {
         private lateinit var animThread: Thread
         private lateinit var bitmapSheet: Bitmap
@@ -142,8 +169,8 @@ class DashboardFragment :
         private var currentFrame = 0
         private var frameTicker: Long
         private val framePeriod: Int = 1000 / animFps
-        private val frameWidth: Int = (frameWidth * pixelsPerMetre)
-        private val frameHeight: Int = (frameHeight * pixelsPerMetre)
+        private val frameWidth: Int = (frameWidth.toLong() * pixelsPerMetre).toInt()
+        private val frameHeight: Int = (frameHeight.toLong() * pixelsPerMetre).toInt()
         private fun getCurrentFrame(time: Long): Rect {
             if (time > frameTicker + framePeriod) {
                 frameTicker = time
@@ -166,8 +193,8 @@ class DashboardFragment :
             try {
                 if (this.holder.surface.isValid) {
                     charCanvas = this.holder.lockCanvas()
-                    charCanvas.drawColor(Color.argb(255, 26, 128, 182))
-                    charPaint.color = Color.argb(255, 249, 129, 0)
+                    charCanvas.drawColor(Color.parseColor("#FFFFFF"))
+                    charPaint.color = Color.parseColor("#FFFFFF")
                     val sourceRect = getCurrentFrame(System.currentTimeMillis())
                     val destRect = Rect(
                             Point(charCanvas.width / 2, charCanvas.height / 2).x - (this.frameWidth / 2),
@@ -195,7 +222,7 @@ class DashboardFragment :
         }
 
         fun drawCharInfo() {
-            val bitmapInfoSheet = Bitmap.createBitmap(140 * pixelsPerMetre, 140 * pixelsPerMetre, Bitmap.Config.ARGB_8888)
+            val bitmapInfoSheet = Bitmap.createBitmap((140 * pixelsPerMetre).toInt(), (140 * pixelsPerMetre).toInt(), Bitmap.Config.ARGB_8888)
             val canvasInfo = Canvas(bitmapInfoSheet)
             val radius = 60 * pixelsPerMetre
             val startAngle = 135F
@@ -211,9 +238,10 @@ class DashboardFragment :
             paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             oval = RectF(((canvasInfo.width / 2) - radius).toFloat(), ((canvasInfo.height / 2) - radius).toFloat(), ((canvasInfo.width / 2) + radius).toFloat(), ((canvasInfo.height / 2) + radius).toFloat())
             canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
-            paint.textAlign = Paint.Align.RIGHT
-            canvasInfo.drawText("$charExp / 100", 0.toFloat(), 0.toFloat(), paint)
             infoView.setImageBitmap(bitmapInfoSheet)
+            Log.i(
+                    ContentValues.TAG, "${charExp}"
+            )
         }
 
         fun startThread() {

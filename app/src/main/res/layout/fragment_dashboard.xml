@@ -18,6 +18,10 @@
         <variable
             name="userCharacter"
             type="com.mapo.walkaholic.data.model.UserCharacter" />
+
+        <variable
+            name="expTable"
+            type="com.mapo.walkaholic.data.model.ExpTable" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -44,6 +48,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <FrameLayout
+                    android:id="@+id/dashLayoutFrame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp">
@@ -59,8 +64,13 @@
                         android:layout_width="64dp"
                         android:layout_height="63dp"
                         android:layout_gravity="center|center_vertical" />
-
                 </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:text='@{"레벨 " + viewModel.toLongToString(expTable.level - 1) + " : 경험치 " + viewModel.toLongToString(userCharacter.exp) + " / " + viewModel.toLongToString(expTable.requireexp)}' />
 
                 <TextView
                     android:id="@+id/dashTvIntro"

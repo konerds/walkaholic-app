@@ -12,4 +12,7 @@ class DashboardRepository(
     suspend fun getUserCharacter(id:Long) = safeApiCall {
         api.getCharacter(id)
     }
+    suspend fun getExpTable(exp:Long) = safeApiCall {
+        api.getExpTable(exp)
+    }
 }
