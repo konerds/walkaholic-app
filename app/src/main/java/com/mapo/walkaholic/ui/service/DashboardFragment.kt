@@ -69,7 +69,7 @@ class DashboardFragment :
                                         if (!_exptable.value.error) {
                                             binding.expTable = _exptable.value.exptable
                                             binding.userCharacter?.let { userCharacter ->
-                                                val charExp = (100.0 * userCharacter.exp.toFloat() / _exptable.value.exptable.requireexp.toFloat()).toLong()
+                                                val charExp = (100.0 * (userCharacter.exp.toFloat()- _exptable.value.exptable.requireexp2.toFloat()) / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
                                                 animCharacter = Animation(
                                                         63,
                                                         64,
@@ -79,9 +79,6 @@ class DashboardFragment :
                                                         binding.dashSvCharacter.holder,
                                                         binding.dashIvCharacter,
                                                         charExp
-                                                )
-                                                Log.i(
-                                                        ContentValues.TAG, "${charExp} ${userCharacter.exp} & ${_exptable.value.exptable.requireexp}"
                                                 )
                                                 when (userCharacter.type) {
                                                     0 -> {

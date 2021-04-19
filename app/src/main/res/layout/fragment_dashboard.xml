@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|center_vertical"
-                    android:text='@{"레벨 " + viewModel.toLongToString(expTable.level - 1) + " : 경험치 " + viewModel.toLongToString(userCharacter.exp) + " / " + viewModel.toLongToString(expTable.requireexp)}' />
+                    android:text='@{"레벨 " + viewModel.toLongToString(expTable.level) + " : 경험치 " + viewModel.toLongToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toLongToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 <TextView
                     android:id="@+id/dashTvIntro"
