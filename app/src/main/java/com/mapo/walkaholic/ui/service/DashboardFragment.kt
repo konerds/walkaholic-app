@@ -21,6 +21,7 @@ import com.mapo.walkaholic.data.repository.DashboardRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.startNewActivity
 
 
@@ -69,12 +70,12 @@ class DashboardFragment :
                                         if (!_exptable.value.error) {
                                             binding.expTable = _exptable.value.exptable
                                             binding.userCharacter?.let { userCharacter ->
-                                                val charExp = (100.0 * (userCharacter.exp.toFloat()- _exptable.value.exptable.requireexp2.toFloat()) / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
+                                                val charExp = (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat()) / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
                                                 animCharacter = Animation(
                                                         63,
                                                         64,
-                                                        10,
-                                                        7,
+                                                        2,
+                                                        2,
                                                         (3.9).toLong(),
                                                         binding.dashSvCharacter.holder,
                                                         binding.dashIvCharacter,
@@ -114,8 +115,6 @@ class DashboardFragment :
                                             ).show()
                                         }
                                     }
-                                    is Resource.Loading -> {
-                                    }
                                     is Resource.Failure -> {
                                         Toast.makeText(
                                                 requireContext(),
@@ -147,7 +146,85 @@ class DashboardFragment :
                 }
             }
         })
+        viewModel.sgisAccessTokenResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        viewModel.getTmCoord(it.value.sgisAccessToken.accessToken, GlobalApplication.currentLng, GlobalApplication.currentLat)
+                    } else {
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    Log.i(
+                            ContentValues.TAG, "SGIS 인증 실패 : ${it.errorBody}"
+                    )
+                }
+            }
+        })
+        viewModel.tmCoordResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        viewModel.getNearMsrstn(it.value.tmCoord.posX, it.value.tmCoord.posY)
+                        Log.i(
+                                ContentValues.TAG, "TM 좌표 : ${it.value.tmCoord.posX} ${it.value.tmCoord.posY}"
+                        )
+                    } else {
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    Log.i(
+                            ContentValues.TAG, "TM 좌표 변환 실패 : ${it.errorBody}"
+                    )
+                }
+            }
+        })
+        viewModel.nearMsrstnResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        viewModel.getWeatherDust(it.value.nearMsrstn.sidoName)
+                        Log.i(
+                                ContentValues.TAG, "처리 결과 : ${it.value.nearMsrstn.sidoName} ${it.value.nearMsrstn.stationName}"
+                        )
+                        viewModel.weatherDustResponse.observe(viewLifecycleOwner, Observer { it2 ->
+                            when (it2) {
+                                is Resource.Success -> {
+                                    if (!it2.value.error) {
+                                        Log.i(
+                                                ContentValues.TAG, "처리 결과 : ${it2.value.weatherDust} ${it2.value.weatherDust.singleOrNull { it3 -> it3.stationName == it.value.nearMsrstn.stationName }}"
+                                        )
+                                        binding.weatherDust = it2.value.weatherDust.filter { it3 -> it3.stationName == it.value.nearMsrstn.stationName }.singleOrNull()
+                                                ?: it2.value.weatherDust.first()
+                                    } else {
+                                    }
+                                }
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Failure -> {
+                                }
+                            }
+                        })
+                    } else {
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+
+                }
+            }
+        })
         viewModel.getDash()
+        viewModel.getSGISAccessToken()
     }
 
     override fun onPause() {
@@ -155,7 +232,8 @@ class DashboardFragment :
         super.onPause()
     }
 
-    inner class Animation constructor(
+    // @TODO Move To VM
+    class Animation constructor(
             frameHeight: Int, frameWidth: Int,
             animFps: Int, private val frameCount: Int, private val pixelsPerMetre: Long, private val holder: SurfaceHolder, private val infoView: ImageView, private val charExp: Long
     ) : Runnable {
@@ -276,9 +354,10 @@ class DashboardFragment :
     ) = FragmentDashboardBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): DashboardRepository {
-        //val id = runBlocking { userPreferences.authToken.first() }
-        val api = remoteDataSource.buildApi(Api::class.java)
-        val apiWeather = remoteDataSource.buildApiDirect(Api::class.java, "http://WEATHER_REST")
-        return DashboardRepository(api, apiWeather)
+        //val accessToken = runBlocking { userPreferences.authToken.first() }
+        val api = remoteDataSource.buildRetrofitApi(Api::class.java)
+        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(Api::class.java)
+        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(Api::class.java)
+        return DashboardRepository(api, apiWeather, apiSGIS)
     }
 }

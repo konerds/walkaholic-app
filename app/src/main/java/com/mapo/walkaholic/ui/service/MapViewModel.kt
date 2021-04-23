@@ -75,11 +75,4 @@ class MapViewModel(
     fun getPoints() : LiveData<List<Point>> {
         return this.points
     }
-
-    fun anyService(
-        par1: String,
-        par2: String
-    ) = viewModelScope.launch {
-        // @TODO For Map Service
-    }
 }

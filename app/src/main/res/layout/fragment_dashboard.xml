@@ -22,6 +22,10 @@
         <variable
             name="expTable"
             type="com.mapo.walkaholic.data.model.ExpTable" />
+
+        <variable
+            name="weatherDust"
+            type="com.mapo.walkaholic.data.model.WeatherDust" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -70,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|center_vertical"
-                    android:text='@{"레벨 " + viewModel.toLongToString(expTable.level) + " : 경험치 " + viewModel.toLongToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toLongToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                    android:text='@{"레벨 " + viewModel.toAnyToString(expTable.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 <TextView
                     android:id="@+id/dashTvIntro"
@@ -89,7 +93,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
-                    android:text="오늘, 화요일"
+                    android:text="@{viewModel.showTodayString()}"
                     android:textSize="20sp" />
 
                 <TextView
@@ -220,7 +224,7 @@
                     <TableLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="12dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/layout_greybackground_btn"
@@ -234,8 +238,8 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="미세먼지"
-                                android:textSize="12sp" />
+                                android:text="자외선"
+                                android:textSize="@dimen/text_size_micro" />
                         </TableRow>
 
                         <TableRow>
@@ -246,15 +250,15 @@
                                 android:background="@drawable/layout_whitebackground_bottom"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="보통"
-                                android:textSize="12sp" />
+                                android:text="@{weatherDust.uvRay}"
+                                android:textSize="@dimen/text_size_micro" />
                         </TableRow>
                     </TableLayout>
 
                     <TableLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/layout_greybackground_btn"
@@ -269,7 +273,7 @@
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
                                 android:text="미세먼지"
-                                android:textSize="12sp" />
+                                android:textSize="@dimen/text_size_micro" />
                         </TableRow>
 
                         <TableRow>
@@ -280,17 +284,17 @@
                                 android:background="@drawable/layout_whitebackground_bottom"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="보통"
-                                android:textSize="12sp" />
+                                android:text="@{weatherDust.pmDust}"
+                                android:textSize="@dimen/text_size_micro" />
                         </TableRow>
                     </TableLayout>
 
                     <TableLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="20dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="12dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/layout_greybackground_btn"
                         android:gravity="center"
@@ -303,8 +307,8 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="미세먼지"
-                                android:textSize="12sp" />
+                                android:text="초미세먼지"
+                                android:textSize="@dimen/text_size_micro" />
                         </TableRow>
 
                         <TableRow>
@@ -315,8 +319,8 @@
                                 android:background="@drawable/layout_whitebackground_bottom"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="보통"
-                                android:textSize="12sp" />
+                                android:text="@{weatherDust.pmSuperDust}"
+                                android:textSize="@dimen/text_size_micro" />
                         </TableRow>
                     </TableLayout>
 
@@ -330,7 +334,7 @@
                     android:layout_marginBottom="20dp"
                     android:paddingHorizontal="20dp"
                     android:text="@string/dash_show_detail"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/text_size_micro" />
 
             </LinearLayout>
 

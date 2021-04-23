@@ -12,11 +12,13 @@ class GlobalApplication : Application() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var instance: GlobalApplication? = null
-        val activityList: ArrayList<Activity> = ArrayList<Activity>()
+        val activityList: ArrayList<Activity> = ArrayList()
         fun getGlobalApplicationContext(): Context {
             checkNotNull(instance) { "Not inherited from GlobalApplication!" }
             return instance!!.applicationContext
         }
+        var currentLng : String = "37.535938297705925"
+        var currentLat : String = "127.00464302761901"
     }
 
     override fun onCreate() {

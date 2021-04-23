@@ -9,18 +9,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RemoteDataSource {
     companion object {
         private const val BASE_URL = "http://49.50.166.31:8080/"
+        private const val BASE_URL_OPENAPI_APIS = "http://apis.data.go.kr/"
+        private const val BASE_URL_OPENAPI_SGIS = "https://sgisapi.kostat.go.kr/OpenAPI3/"
     }
 
-    fun <Api> buildApi(
+    /* @TODO for Header Authorization through JWT Token
+        fun <Api> buildApi(
             api: Class<Api>/*,
-        id: Long? = null*/
+        accessToken: String? = null*/
     ): Api {
         return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(OkHttpClient.Builder()/*
                 .addInterceptor { chain ->
                     chain.proceed(chain.request().newBuilder().also {
-                        it.addHeader("Authorization", "Bearer $id")
+                        it.addHeader("Authorization", "Bearer $accessToken")
                     }.build())
                 }*/.also { client ->
                     if (BuildConfig.DEBUG) {
@@ -33,14 +36,50 @@ class RemoteDataSource {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(api)
-    }
+     */
 
-    fun <Api> buildApiDirect(
-            api: Class<Api>,
-            directUrl: String
+    fun <Api> buildRetrofitApi(
+            api: Class<Api>
     ): Api {
         return Retrofit.Builder()
-                .baseUrl(directUrl)
+                .baseUrl(BASE_URL)
+                .client(OkHttpClient.Builder()
+                        .also { client ->
+                            if (BuildConfig.DEBUG) {
+                                val logging = HttpLoggingInterceptor()
+                                logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                                client.addInterceptor(logging)
+                            }
+                        }.build()
+                )
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(api)
+    }
+
+    fun <Api> buildRetrofitApiWeatherAPI(
+            api: Class<Api>
+    ): Api {
+        return Retrofit.Builder()
+                .baseUrl(BASE_URL_OPENAPI_APIS)
+                .client(OkHttpClient.Builder().also { client ->
+                    if (BuildConfig.DEBUG) {
+                        val logging = HttpLoggingInterceptor()
+                        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                        client.addInterceptor(logging)
+                    }
+                }.build()
+                )
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(api)
+    }
+
+    fun <Api> buildRetrofitApiSGISAPI(
+            api: Class<Api>
+    ): Api {
+        return Retrofit.Builder()
+                .baseUrl(BASE_URL_OPENAPI_SGIS)
                 .client(OkHttpClient.Builder().also { client ->
                     if (BuildConfig.DEBUG) {
                         val logging = HttpLoggingInterceptor()

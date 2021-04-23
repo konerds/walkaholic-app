@@ -57,7 +57,7 @@
                 android:scrollbarSize="4dp"
                 android:scrollbarStyle="outsideInset"
                 android:scrollbarThumbVertical="@color/colorAccent"
-                android:scrollbarTrackVertical="@color/colorPrimaryDark"
+                android:scrollbarTrackVertical="@color/colorSecondary"
                 android:scrollbars="vertical"
                 android:text="@{terms.svrterm}"
                 android:textColor="#000000" />
@@ -73,7 +73,7 @@
                 android:scrollbarSize="4dp"
                 android:scrollbarStyle="outsideInset"
                 android:scrollbarThumbVertical="@color/colorAccent"
-                android:scrollbarTrackVertical="@color/colorPrimaryDark"
+                android:scrollbarTrackVertical="@color/colorSecondary"
                 android:scrollbars="vertical"
                 android:text="@{terms.prvterm}"
                 android:textColor="#000000" />

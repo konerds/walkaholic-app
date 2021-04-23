@@ -42,7 +42,7 @@ class AuthRepository(
         api.register(id, name, nickname, birth, gender, height, weight)
     }
 
-    suspend fun saveAuthToken(id: Long) {
-        preferences.saveAuthToken(id)
+    suspend fun saveAuthToken(accessToken: String) {
+        preferences.saveAuthToken(accessToken)
     }
 }

@@ -91,7 +91,11 @@ class AuthViewModel(
                 viewModelScope.launch {
                     if (error != null) {
                     } else {
-                        tokenInfo?.id?.let { repository.saveAuthToken(it) }
+                        tokenInfo?.id?.toString()?.trim().let {
+                            if (it != null) {
+                                repository.saveAuthToken(it)
+                            }
+                        }
                     }
                     progressBarVisibility.set(false)
                 }

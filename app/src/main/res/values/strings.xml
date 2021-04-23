@@ -32,9 +32,9 @@
     <string name="agree_service">서비스이용 동의</string>
     <string name="agree_privacy">개인정보수집이용 동의</string>
     <!-- 캐릭터 -->
-    <string name="character_type0">인간</string>
-    <string name="character_type1">해골</string>
-    <string name="character_type2">오크</string>
+    <string name="character_type0">파뿌리</string>
+    <string name="character_type1">파뿌리</string>
+    <string name="character_type2">파뿌리</string>
     <!-- 서비스 -->
     <string name="dash_walk_distance"><b>8,000 걸음</b> 걸었어요!</string>
     <string name="dash_km_distance">이동거리</string>
@@ -55,7 +55,7 @@
     <string name="err_unexpected">예기치 않은 오류가 발생하였습니다</string>
     <!-- 하단 내비게이션 바 -->
     <string name="main">메인</string>
-    <string name="path">산책하기</string>
+    <string name="path">같이걷기</string>
     <string name="theme">테마</string>
     <string name="challenge">챌린지</string>
     <!-- SNS 공유 -->

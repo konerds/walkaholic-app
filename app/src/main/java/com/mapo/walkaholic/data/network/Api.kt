@@ -48,6 +48,37 @@ interface Api {
             @Field("exp") exp: Long
     ): ExpTableResponse
 
+    @GET("B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty")
+    suspend fun getWeatherDust(
+            @Query("serviceKey") serviceKey: String,
+            @Query("returnType") returnType: String,
+            @Query("sidoName") sidoName: String,
+            @Query("ver") ver: String
+    ): WeatherDustResponse
+
+    @GET("auth/authentication.json")
+    suspend fun getAccessTokenSGIS(
+            @Query("consumer_key") consumerKey: String,
+            @Query("consumer_secret") consumerSecret: String
+    ): SGISAccessTokenResponse
+
+    @GET("transformation/transcoord.json")
+    suspend fun getTmCoord(
+            @Query("accessToken") accessToken: String,
+            @Query("src") src: String,
+            @Query("dst") dst: String,
+            @Query("posX") posX: String,
+            @Query("posY") posY: String
+    ): TmCoordResponse
+
+    @GET("B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList")
+    suspend fun getNearMsrstn(
+            @Query("serviceKey") serviceKey: String,
+            @Query("returnType") returnType: String,
+            @Query("tmX") tmX: String,
+            @Query("tmY") tmY: String
+    ): NearMsrstnResponse
+
     @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(

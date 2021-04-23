@@ -16,5 +16,5 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
     ) = FragmentChallengeBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() =
-            ChallengeRepository(remoteDataSource.buildApi(Api::class.java))
+            ChallengeRepository(remoteDataSource.buildRetrofitApi(Api::class.java))
 }
