@@ -13,7 +13,7 @@ import androidx.navigation.findNavController
 import com.kakao.sdk.auth.model.OAuthToken
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.Api
+import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentLoginBinding
@@ -22,43 +22,41 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.service.MainActivity
+import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.json.JSONObject
+import kotlinx.coroutines.runBlocking
 
 class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.let { binding.viewModel = it }
         viewModel.onClickEvent.observe(
-                viewLifecycleOwner,
-                EventObserver(this@LoginFragment::moveActivity)
+            viewLifecycleOwner,
+            EventObserver(this@LoginFragment::moveActivity)
         )
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
-                        viewModel.saveAuthToken()
-                        requireActivity().startNewActivity(MainActivity::class.java)
+                        lifecycleScope.launch {
+                            viewModel.saveAuthToken()
+                            requireActivity().startNewActivity(MainActivity::class.java)
+                        }
                     } else {
                         Toast.makeText(
-                                requireContext(),
-                                it.value.message.trim(),
-                                Toast.LENGTH_SHORT
+                            requireContext(),
+                            it.value.message.trim(),
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
                 is Resource.Failure -> {
-                    val errJson = JSONObject(it.errorBody?.string())
-                    Toast.makeText(
-                            requireContext(),
-                            errJson.getString("message"),
-                            Toast.LENGTH_SHORT
-                    ).show()
+                    handleApiError(it) { viewModel.login() }
                     requireView().findNavController()
-                            .navigate(R.id.action_loginFragment_to_registerFragment)
+                        .navigate(R.id.action_loginFragment_to_registerFragment)
                 }
             }
         })
@@ -66,17 +64,17 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
                     Toast.makeText(
-                            GlobalApplication.getGlobalApplicationContext(),
-                            GlobalApplication.getGlobalApplicationContext()
-                                    .getString(R.string.err_auth),
-                            Toast.LENGTH_SHORT
+                        GlobalApplication.getGlobalApplicationContext(),
+                        GlobalApplication.getGlobalApplicationContext()
+                            .getString(R.string.err_auth),
+                        Toast.LENGTH_SHORT
                     ).show()
                 } else if (token != null) {
                     Toast.makeText(
-                            GlobalApplication.getGlobalApplicationContext(),
-                            GlobalApplication.getGlobalApplicationContext()
-                                    .getString(R.string.msg_success_auth),
-                            Toast.LENGTH_SHORT
+                        GlobalApplication.getGlobalApplicationContext(),
+                        GlobalApplication.getGlobalApplicationContext()
+                            .getString(R.string.msg_success_auth),
+                        Toast.LENGTH_SHORT
                     ).show()
                     viewModel.login()
                 }
@@ -96,9 +94,9 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         userPreferences = UserPreferences(requireContext())
         binding = getFragmentBinding(inflater, container)
@@ -109,7 +107,7 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
 
         viewModel = sharedViewModel
 
-        lifecycleScope.launch { userPreferences.authToken.first() }
+        lifecycleScope.launch { userPreferences.accessToken.first() }
 
         return binding.root
     }
@@ -117,10 +115,15 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
     override fun getViewModel() = AuthViewModel::class.java
 
     override fun getFragmentBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ) = FragmentLoginBinding.inflate(inflater, container, false)
 
-    override fun getFragmentRepository() =
-            AuthRepository.getInstance(remoteDataSource.buildRetrofitApi(Api::class.java), userPreferences)
+    override fun getFragmentRepository(): AuthRepository {
+        val accessToken = runBlocking { userPreferences.accessToken.first() }
+        return AuthRepository.getInstance(
+            remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken),
+            userPreferences
+        )
+    }
 }

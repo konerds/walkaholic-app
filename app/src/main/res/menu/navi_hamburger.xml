@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/actionHbgFavorite"
+        android:icon="@drawable/ic_main"
+        android:title="@string/favorite_path" />
+    <item
+        android:id="@+id/actionHbgDashCharacterInfo"
+        android:icon="@drawable/ic_main"
+        android:title="@string/character_info" />
+    <item
+        android:id="@+id/actionHbgDashCharacterShop"
+        android:icon="@drawable/ic_main"
+        android:title="@string/character_shop" />
+    <item
+        android:id="@+id/actionHbgTutorial"
+        android:icon="@drawable/ic_main"
+        android:title="@string/hamburger_tutorial" />
+    <item
+        android:id="@+id/actionHbgLogout"
+        android:icon="@drawable/ic_main"
+        android:title="@string/logout" />
+</menu>

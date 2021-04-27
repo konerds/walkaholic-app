@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.ui.global.GlobalApplication
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity: AppCompatActivity() {
     companion object {
         var mBackWait: Long = 0
     }

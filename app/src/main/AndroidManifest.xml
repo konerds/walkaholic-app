@@ -34,7 +34,7 @@
             android:name=".ui.GuideActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.GuideTheme" />
-        <activity android:name=".ui.service.MainActivity" />
+        <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.auth.AuthActivity" />
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>

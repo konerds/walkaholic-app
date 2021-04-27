@@ -1,17 +1,23 @@
 <resources>
     <!-- Base Screen Theme -->
     <style name="Theme.AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#F9A25B</item>
+        <item name="colorPrimaryVariant">@color/mdWhite1000</item>
+        <item name="colorSecondary">@color/mdWhite1000</item>
+        <item name="colorSecondaryVariant">@color/mdWhite1000</item>
+        <item name="android:colorBackground">@color/mdWhite1000</item>
+        <item name="colorSurface">@color/mdWhite1000</item>
+        <item name="colorError">@color/mdWhite1000</item>
+        <item name="colorOnPrimary">@color/mdWhite1000</item>
+        <item name="colorOnSecondary">@color/mdWhite1000</item>
+        <item name="colorOnBackground">@color/mdWhite1000</item>
+        <item name="colorOnSurface">@color/mdGrey200</item>
+        <item name="colorOnError">@color/mdWhite1000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
     <!-- Guide Screen Theme -->
-    <style name="Theme.GuideTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Theme.GuideTheme" parent="Theme.AppTheme">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowFullscreen">true</item>
@@ -19,15 +25,11 @@
         <item name="android:windowBackground">#FF000000</item>
     </style>
     <!-- Splash Screen Theme -->
-    <style name="Theme.SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Theme.SplashTheme" parent="Theme.AppTheme">
+        <item name="android:background">#F37520</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:background">#FFFFFFFF</item>
-        <item name="android:windowBackground">#FFFFFFFF</item>
     </style>
 </resources>

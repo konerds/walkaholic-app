@@ -20,11 +20,7 @@
     <string name="next">다음</string>
     <string name="login">로그인</string>
     <string name="register">가입하기</string>
-    <string name="login_naver">네이버로 로그인</string>
     <string name="login_kakao">카카오톡으로 로그인</string>
-    <string name="login_google">구글로 로그인</string>
-    <string name="login_facebook">페이스북으로 로그인</string>
-    <string name="logout">로그아웃</string>
     <string name="success">성공</string>
     <string name="fail">실패</string>
     <string name="error">오류</string>
@@ -58,6 +54,14 @@
     <string name="path">같이걷기</string>
     <string name="theme">테마</string>
     <string name="challenge">챌린지</string>
+    <!-- 햄버거 메뉴 -->
+    <string name="openDrawer">Open</string>
+    <string name="closeDrawer">Close</string>
+    <string name="favorite_path">찜한경로</string>
+    <string name="character_info">캐릭터 정보</string>
+    <string name="character_shop">아이템 상점</string>
+    <string name="hamburger_tutorial">튜토리얼</string>
+    <string name="logout">로그아웃</string>
     <!-- SNS 공유 -->
     <string name="share">공유하기</string>
     <!-- 기타 -->

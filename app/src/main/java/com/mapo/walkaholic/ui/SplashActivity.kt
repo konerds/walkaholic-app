@@ -10,7 +10,7 @@ import com.mapo.walkaholic.databinding.ActivitySplashscreenBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.service.MainActivity
+import com.mapo.walkaholic.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_splashscreen.*
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -26,7 +26,7 @@ class SplashActivity : BaseActivity() {
         splashIv.animate().setDuration(1500).alpha(1f).withEndAction {
             val userPreferences = UserPreferences(this)
             // @TODO First APP Launch Check ... below logic must be inside that
-            userPreferences.authToken.asLiveData().observe(this, Observer {
+            userPreferences.accessToken.asLiveData().observe(this, Observer {
                 if (it == null) {
                     startNewActivity(AuthActivity::class.java)
                 } else {

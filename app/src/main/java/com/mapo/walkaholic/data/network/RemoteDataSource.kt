@@ -1,6 +1,6 @@
 package com.mapo.walkaholic.data.network
 
-import com.mapo.walkaholic.BuildConfig
+import androidx.databinding.library.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,37 +13,17 @@ class RemoteDataSource {
         private const val BASE_URL_OPENAPI_SGIS = "https://sgisapi.kostat.go.kr/OpenAPI3/"
     }
 
-    /* @TODO for Header Authorization through JWT Token
-        fun <Api> buildApi(
-            api: Class<Api>/*,
-        accessToken: String? = null*/
+    fun <Api> buildRetrofitApi(
+            api: Class<Api>,
+            accessToken: String ?= null
     ): Api {
         return Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .client(OkHttpClient.Builder()/*
-                .addInterceptor { chain ->
+                .client(OkHttpClient.Builder().addInterceptor { chain ->
                     chain.proceed(chain.request().newBuilder().also {
                         it.addHeader("Authorization", "Bearer $accessToken")
                     }.build())
-                }*/.also { client ->
-                    if (BuildConfig.DEBUG) {
-                        val logging = HttpLoggingInterceptor()
-                        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-                        client.addInterceptor(logging)
-                    }
-                }.build()
-                )
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(api)
-     */
-
-    fun <Api> buildRetrofitApi(
-            api: Class<Api>
-    ): Api {
-        return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(OkHttpClient.Builder()
+                }
                         .also { client ->
                             if (BuildConfig.DEBUG) {
                                 val logging = HttpLoggingInterceptor()

@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navi_graph_main"
-    app:startDestination="@id/fragmentDash">
+    app:startDestination="@id/actionBnvDash">
 
     <fragment
-        android:id="@+id/fragmentDash"
-        android:name="com.mapo.walkaholic.ui.service.DashboardFragment"
+        android:id="@+id/actionBnvDash"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardFragment"
         tools:layout="@layout/fragment_dashboard">
     </fragment>
 
     <fragment
-        android:id="@+id/fragmentTheme"
-        android:name="com.mapo.walkaholic.ui.service.ThemeFragment"
+        android:id="@+id/actionBnvTheme"
+        android:name="com.mapo.walkaholic.ui.main.theme.ThemeFragment"
         tools:layout="@layout/fragment_theme">
     </fragment>
 
     <fragment
-        android:id="@+id/fragmentChallenge"
-        android:name="com.mapo.walkaholic.ui.service.ChallengeFragment"
+        android:id="@+id/actionBnvChallenge"
+        android:name="com.mapo.walkaholic.ui.main.challenge.ChallengeFragment"
         tools:layout="@layout/fragment_challenge">
     </fragment>
 
     <fragment
-        android:id="@+id/fragmentMap"
-        android:name="com.mapo.walkaholic.ui.service.MapFragment"
+        android:id="@+id/actionBnvMap"
+        android:name="com.mapo.walkaholic.ui.main.map.MapFragment"
         tools:layout="@layout/fragment_map">
     </fragment>
 

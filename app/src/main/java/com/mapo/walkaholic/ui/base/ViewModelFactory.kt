@@ -6,7 +6,10 @@ import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.repository.*
 import com.mapo.walkaholic.ui.auth.AuthViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.service.*
+import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
+import com.mapo.walkaholic.ui.main.dashboard.DashboardViewModel
+import com.mapo.walkaholic.ui.main.map.MapViewModel
+import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
 import java.lang.IllegalArgumentException
 
 @Suppress("UNCHECKED_CAST")
