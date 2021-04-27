@@ -251,6 +251,11 @@ class DashboardFragment :
                 }
             }
         })
+        viewModel.weatherResponse.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                
+            }
+        })
         viewModel.getDash()
         viewModel.getSGISAccessToken()
     }

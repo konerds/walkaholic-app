@@ -37,6 +37,9 @@ class DashboardViewModel(
     private val _nearMsrstnResponse: MutableLiveData<Resource<NearMsrstnResponse>> = MutableLiveData()
     val nearMsrstnResponse: LiveData<Resource<NearMsrstnResponse>>
         get() = _nearMsrstnResponse
+    private val _weatherResponse: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+    val weatherResponse: LiveData<Resource<WeatherResponse>>
+        get() = _weatherResponse
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -86,6 +89,12 @@ class DashboardViewModel(
     fun getNearMsrstn(currentTmX: String, currentTmY: String) {
         viewModelScope.launch {
             _nearMsrstnResponse.value = repository.getNearMsrstn(currentTmX, currentTmY)
+        }
+    }
+
+    fun getWeather(dX : String, dY : String) {
+        viewModelScope.launch {
+            _weatherResponse.value = repository.getWeather(dX, dY)
         }
     }
 

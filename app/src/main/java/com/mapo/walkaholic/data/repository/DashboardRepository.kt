@@ -5,6 +5,8 @@ import com.mapo.walkaholic.data.network.APISApi
 import com.mapo.walkaholic.data.network.SGISApi
 import com.mapo.walkaholic.data.network.InnerApi
 import java.net.URLDecoder
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DashboardRepository(
     private val api: InnerApi,
@@ -55,5 +57,15 @@ class DashboardRepository(
             currentTmX,
             currentTmY
         )
+    }
+
+    suspend fun getWeather(dX: String, dY: String) = safeApiCall {
+        val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.KOREAN)
+        val currentTimeZone = TimeZone.getTimeZone("Asia/Seoul")
+        val timeFormat = SimpleDateFormat("HHmm")
+        timeFormat.timeZone = currentTimeZone
+        val controlDate = Date()
+        controlDate.hours -= 1
+        apiWeather.getWeather(APIS_API_KEY, "json", dateFormat.format(controlDate), timeFormat.format(controlDate), dX, dY)
     }
 }

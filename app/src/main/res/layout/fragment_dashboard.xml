@@ -26,6 +26,10 @@
         <variable
             name="weatherDust"
             type="com.mapo.walkaholic.data.model.WeatherDust" />
+
+        <variable
+            name="weather"
+            type="com.mapo.walkaholic.data.model.Weather" />
     </data>
 
     <androidx.core.widget.NestedScrollView
