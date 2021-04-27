@@ -28,7 +28,7 @@
             type="com.mapo.walkaholic.data.model.WeatherDust" />
 
         <variable
-            name="weather"
+            name="todayWeather"
             type="com.mapo.walkaholic.data.model.Weather" />
     </data>
 
@@ -212,11 +212,69 @@
                 app:layout_constraintTop_toBottomOf="@id/dashLayout1"
                 tools:layout_editor_absoluteX="24dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/temp_weather" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text='@{todayWeather.temperatureCurrent + "ºC/" + todayWeather.weatherCode}'
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:gravity="start"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="left|bottom">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:src="@drawable/temp_weather" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="48dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, todayWeather.temperatureCurrent)}"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:layout_gravity="bottom"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/dashTvWeatherDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="end|bottom"
+                            android:paddingHorizontal="20dp"
+                            android:text="@string/dash_show_detail"
+                            android:textColor="@color/colorPrimaryGreen"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/text_size_micro" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/dashLayout4"
@@ -228,17 +286,17 @@
                     <TableLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/layout_greybackground_btn"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="?attr/colorOnSurface"
                         android:gravity="center"
                         android:padding="2dp">
 
-                        <TableRow>
+                        <TableRow
+                            android:gravity="center">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
@@ -246,14 +304,15 @@
                                 android:textSize="@dimen/text_size_micro" />
                         </TableRow>
 
-                        <TableRow>
+                        <TableRow
+                            android:gravity="center">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/layout_whitebackground_bottom"
-                                android:gravity="center"
+                                android:background="?attr/colorSurface"
                                 android:paddingHorizontal="24dp"
+                                android:gravity="center"
                                 android:text="@{weatherDust.uvRay}"
                                 android:textSize="@dimen/text_size_micro" />
                         </TableRow>
@@ -263,9 +322,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginTop="20dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/layout_greybackground_btn"
+                        android:background="?attr/colorOnSurface"
                         android:gravity="center"
                         android:padding="2dp">
 
@@ -285,7 +343,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/layout_whitebackground_bottom"
+                                android:background="?attr/colorSurface"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
                                 android:text="@{weatherDust.pmDust}"
@@ -297,10 +355,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="12dp"
+                        android:layout_marginRight="24dp"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/layout_greybackground_btn"
+                        android:background="?attr/colorOnSurface"
                         android:gravity="center"
                         android:padding="2dp">
 
@@ -320,7 +377,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/layout_whitebackground_bottom"
+                                android:background="?attr/colorSurface"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
                                 android:text="@{weatherDust.pmSuperDust}"
@@ -329,16 +386,6 @@
                     </TableLayout>
 
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/dashTvWeatherDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginBottom="20dp"
-                    android:paddingHorizontal="20dp"
-                    android:text="@string/dash_show_detail"
-                    android:textSize="@dimen/text_size_micro" />
 
             </LinearLayout>
 

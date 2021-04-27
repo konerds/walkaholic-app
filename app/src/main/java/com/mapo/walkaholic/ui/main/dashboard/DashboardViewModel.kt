@@ -37,9 +37,12 @@ class DashboardViewModel(
     private val _nearMsrstnResponse: MutableLiveData<Resource<NearMsrstnResponse>> = MutableLiveData()
     val nearMsrstnResponse: LiveData<Resource<NearMsrstnResponse>>
         get() = _nearMsrstnResponse
-    private val _weatherResponse: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
-    val weatherResponse: LiveData<Resource<WeatherResponse>>
-        get() = _weatherResponse
+    private val _todayWeatherResponse: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+    val todayWeatherResponse: LiveData<Resource<WeatherResponse>>
+        get() = _todayWeatherResponse
+    private val _yesterdayWeatherResponse: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
+    val yesterdayWeatherResponse: LiveData<Resource<WeatherResponse>>
+        get() = _yesterdayWeatherResponse
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -92,9 +95,17 @@ class DashboardViewModel(
         }
     }
 
-    fun getWeather(dX : String, dY : String) {
+    fun getTodayWeather(dX : String, dY : String) {
         viewModelScope.launch {
-            _weatherResponse.value = repository.getWeather(dX, dY)
+            _todayWeatherResponse.value = repository.getWeather(dX, dY, Date())
+        }
+    }
+
+    fun getYesterdayWeather(dX : String, dY : String) {
+        viewModelScope.launch {
+            val yesterdayDate = Date()
+            yesterdayDate.date -= 1
+            _todayWeatherResponse.value = repository.getWeather(dX, dY, yesterdayDate)
         }
     }
 
@@ -105,4 +116,21 @@ class DashboardViewModel(
                 2 -> "노랑 파뿌리"
                 else -> "[오류]"
             }
+
+    fun getDifferenceTemperature(todayTemperature : String?, yesterdayTemperature : String?) : String {
+        return if (todayTemperature == null || yesterdayTemperature == null) {
+            "오류"
+        } else {
+            val differenceTemperature = todayTemperature.toInt() - yesterdayTemperature.toInt()
+            if (differenceTemperature > 0) {
+                "어제보다 ${differenceTemperature}도 높아요"
+            } else if (differenceTemperature == 0) {
+                "어제같은 날씨에요"
+            } else if (differenceTemperature < 0) {
+                "어제보다 ${differenceTemperature}도 낮아요"
+            } else {
+                "오류"
+            }
+        }
+    }
 }

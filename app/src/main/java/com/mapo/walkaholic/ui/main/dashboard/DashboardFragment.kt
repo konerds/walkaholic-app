@@ -251,13 +251,56 @@ class DashboardFragment :
                 }
             }
         })
-        viewModel.weatherResponse.observe(viewLifecycleOwner, Observer {
+        viewModel.todayWeatherResponse.observe(viewLifecycleOwner, Observer {
             when(it) {
-                
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        binding.todayWeather = it.value.weather
+                        Log.i(
+                                ContentValues.TAG, "처리 결과 : ${it.value.weather}"
+                        )
+                        /*
+                        viewModel.getYesterdayWeather("55","127")
+                        viewModel.yesterdayWeatherResponse.observe(viewLifecycleOwner, Observer { it2 ->
+                            when(it2) {
+                                is Resource.Success -> {
+                                    if (!it2.value.error) {
+                                        Log.i(
+                                                ContentValues.TAG, "처리 결과 : ${it2.value.weather}"
+                                        )
+                                        binding.yesterdayWeather = it2.value.weather
+                                    } else {
+                                        Log.i(
+                                                ContentValues.TAG, "처리 결과 : ${it.value}"
+                                        )
+                                    }
+                                }
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(it2)
+                                }
+                            }
+                        })
+                        */
+                    } else {
+                        Log.i(
+                                ContentValues.TAG, "처리 결과 : ${it.value}"
+                        )
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    handleApiError(it)
+                }
             }
         })
         viewModel.getDash()
         viewModel.getSGISAccessToken()
+        viewModel.getTodayWeather("55","127")
     }
 
     override fun onPause() {

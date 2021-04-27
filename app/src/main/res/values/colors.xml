@@ -7,6 +7,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorDivision">#e0e0e0</color>
     <color name="colorNavIcon">#1d1d1d</color>
+    <color name="colorPrimaryGreen">#689F38</color>
     <!--reds-->
     <color name="mdRed50">#FFEBEE</color>
     <color name="mdRed100">#FFCDD2</color>

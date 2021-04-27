@@ -27,9 +27,10 @@ interface APISApi {
     @GET("1360000/VilageFcstInfoService/getUltraSrtFcst")
     suspend fun getWeather(
         @Query("serviceKey") serviceKey: String,
-        @Query("returnType") returnType: String,
+        @Query("dataType") returnType: String,
         @Query("base_date") baseDate : String,
         @Query("base_time") baseTime : String,
+        @Query("numOfRows") numOfRows : String,
         @Query("nx") nX : String,
         @Query("ny") nY : String
     ) : WeatherResponse
