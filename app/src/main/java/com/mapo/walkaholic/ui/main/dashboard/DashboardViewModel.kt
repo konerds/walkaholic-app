@@ -100,7 +100,7 @@ class DashboardViewModel(
         viewModelScope.launch {
             val todayDate = Date()
             todayDate.hours -= 1
-            _todayWeatherResponse.value = repository.getTodayWeather(nX, nY, Date())
+            _todayWeatherResponse.value = repository.getTodayWeather(nX, nY, todayDate)
         }
     }
 
