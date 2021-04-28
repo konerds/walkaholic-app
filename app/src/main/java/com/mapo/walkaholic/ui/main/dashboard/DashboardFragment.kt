@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.mapo.walkaholic.R
+import com.mapo.walkaholic.data.model.LatXLngY
 import com.mapo.walkaholic.data.network.APISApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SGISApi
@@ -288,8 +289,47 @@ class DashboardFragment :
         })
         viewModel.getDash()
         viewModel.getSGISAccessToken()
-        viewModel.getYesterdayWeather("55", "127")
-        viewModel.getTodayWeather("55", "127")
+        val tmp: LatXLngY = convertGRID_GPS(GlobalApplication.currentLat.toFloat().toDouble(), GlobalApplication.currentLng.toFloat().toDouble())
+        Log.e(">>", "x = " + tmp.x.toString() + ", y = " + tmp.y.toString())
+        viewModel.getYesterdayWeather(tmp.x.toString(),tmp.y.toString())
+        viewModel.getTodayWeather(tmp.x.toString(),tmp.y.toString())
+    }
+
+    // 위도 경도 X, Y 좌표 변경
+    private fun convertGRID_GPS(lat_X: Double, lng_Y: Double) : LatXLngY
+    {
+        val RE: Double = 6371.00877 // 지구 반경(km)
+        val GRID: Double = 5.0 // 격자 간격(km)
+        val SLAT1: Double = 30.0 // 투영 위도1(degree)
+        val SLAT2: Double = 60.0 // 투영 위도2(degree)
+        val OLON: Double = 126.0 // 기준점 경도(degree)
+        val OLAT: Double = 38.0 // 기준점 위도(degree)
+        val XO: Double = 43.0 // 기준점 X좌표(GRID)
+        val YO: Double = 136.0 // 기1준점 Y좌표(GRID)
+
+        val DEGRAD: Double = Math.PI / 180.0
+
+        val re: Double = RE / GRID
+        val slat1: Double = SLAT1 * DEGRAD
+        val slat2: Double = SLAT2 * DEGRAD
+        val olon: Double = OLON * DEGRAD
+        val olat: Double = OLAT * DEGRAD
+
+        var sn: Double = Math.tan(Math.PI * 0.25 + slat2 * 0.5) / Math.tan(Math.PI * 0.25 + slat1 * 0.5)
+        sn = Math.log(Math.cos(slat1) / Math.cos(slat2)) / Math.log(sn)
+        var sf: Double = Math.tan(Math.PI * 0.25 + slat1 * 0.5)
+        sf = Math.pow(sf, sn) * Math.cos(slat1) / sn
+        var ro: Double = Math.tan(Math.PI * 0.25 + olat * 0.5)
+        ro = re * sf / Math.pow(ro, sn)
+
+        var ra: Double = Math.tan(Math.PI * 0.25 + (lat_X) * DEGRAD * 0.5)
+        ra = re * sf / Math.pow(ra, sn)
+        var theta: Double = lng_Y * DEGRAD - olon
+        if (theta > Math.PI) theta -= 2.0 * Math.PI
+        if (theta < -Math.PI) theta += 2.0 * Math.PI
+        theta *= sn
+
+        return LatXLngY(Math.floor(ra * Math.sin(theta) + XO + 0.5), Math.floor(ro - ra * Math.cos(theta) + YO + 0.5))
     }
 
     override fun onPause() {
