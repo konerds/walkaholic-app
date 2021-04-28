@@ -423,6 +423,6 @@ class DashboardFragment :
         val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
-        return DashboardRepository(api, apiWeather, apiSGIS, userPreferences)
+        return DashboardRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
     }
 }

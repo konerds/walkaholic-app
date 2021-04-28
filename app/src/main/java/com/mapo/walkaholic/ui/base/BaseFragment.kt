@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
 import com.mapo.walkaholic.ui.auth.AuthActivity

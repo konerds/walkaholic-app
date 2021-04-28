@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="74dp"
-    android:layout_marginLeft="16dp">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/hamburgerHeaderTvIntro"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:gravity="bottom"
-        android:text="설아님,"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/hamburgerHeaderTvName"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/hamburgerHeaderTvName"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginBottom="18dp"
-        android:gravity="bottom"
-        android:text="좋은 하루 되세요!"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hamburgerHeaderTvIntro" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="viewModel"
+            type="com.mapo.walkaholic.ui.main.MainViewModel" />
+
+        <variable
+            name="user"
+            type="com.mapo.walkaholic.data.model.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp">
+
+        <TextView
+            android:id="@+id/hamburgerHeaderTvIntro"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:gravity="bottom"
+            android:text="좋은 하루 되세요,"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/hamburgerHeaderTvName"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/hamburgerHeaderTvName"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginBottom="18dp"
+            android:gravity="bottom"
+            app:full_text="@{@string/hbg_header_intro(user.nickname)}"
+            app:span_text="@{user.nickname}"
+            app:span_color="@{@color/colorPrimary}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hamburgerHeaderTvIntro" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

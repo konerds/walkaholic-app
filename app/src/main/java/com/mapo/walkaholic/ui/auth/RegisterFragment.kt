@@ -1,13 +1,11 @@
 package com.mapo.walkaholic.ui.auth
 
 import android.app.DatePickerDialog
-import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +18,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
-import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.InnerApi
@@ -40,7 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
-class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, AuthRepository>() {
+class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.let { binding.viewModel = it }
@@ -236,26 +233,7 @@ class RegisterFragment : BaseFragment<AuthViewModel, FragmentRegisterBinding, Au
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        userPreferences = UserPreferences(requireContext())
-        binding = getFragmentBinding(inflater, container)
-
-        val sharedViewModel by viewModels<AuthViewModel> {
-            ViewModelFactory(getFragmentRepository())
-        }
-
-        viewModel = sharedViewModel
-
-        lifecycleScope.launch { userPreferences.accessToken.first() }
-
-        return binding.root
-    }
-
-    override fun getViewModel() = AuthViewModel::class.java
+    override fun getViewModel() = RegisterViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,

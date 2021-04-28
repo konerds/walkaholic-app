@@ -61,6 +61,7 @@
                 app:menu="@menu/navi_bottom">
 
             </com.google.android.material.bottomnavigation.BottomNavigationView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView

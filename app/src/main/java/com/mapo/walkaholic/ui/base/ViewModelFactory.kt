@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.repository.*
-import com.mapo.walkaholic.ui.auth.AuthViewModel
+import com.mapo.walkaholic.ui.auth.LoginViewModel
+import com.mapo.walkaholic.ui.auth.RegisterViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.mapo.walkaholic.ui.main.MainViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
 import com.mapo.walkaholic.ui.main.dashboard.DashboardViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
@@ -19,7 +21,9 @@ class ViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             with(modelClass) {
                 when {
-                    isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository as AuthRepository)
+                    isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository as AuthRepository)
+                    isAssignableFrom(RegisterViewModel::class.java) -> RegisterViewModel(repository as AuthRepository)
+                    isAssignableFrom(MainViewModel::class.java) -> MainViewModel(repository as DashboardRepository)
                     isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(
                             repository as DashboardRepository
                     )

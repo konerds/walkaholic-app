@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepository>() {
+class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.let { binding.viewModel = it }
@@ -93,26 +93,7 @@ class LoginFragment : BaseFragment<AuthViewModel, FragmentLoginBinding, AuthRepo
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        userPreferences = UserPreferences(requireContext())
-        binding = getFragmentBinding(inflater, container)
-
-        val sharedViewModel by viewModels<AuthViewModel> {
-            ViewModelFactory(getFragmentRepository())
-        }
-
-        viewModel = sharedViewModel
-
-        lifecycleScope.launch { userPreferences.accessToken.first() }
-
-        return binding.root
-    }
-
-    override fun getViewModel() = AuthViewModel::class.java
+    override fun getViewModel() = LoginViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,

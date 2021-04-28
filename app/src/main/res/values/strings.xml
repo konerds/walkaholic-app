@@ -62,6 +62,7 @@
     <string name="character_shop">아이템 상점</string>
     <string name="hamburger_tutorial">튜토리얼</string>
     <string name="logout">로그아웃</string>
+    <string name="hbg_header_intro">%s님!</string>
     <!-- SNS 공유 -->
     <string name="share">공유하기</string>
     <!-- 기타 -->

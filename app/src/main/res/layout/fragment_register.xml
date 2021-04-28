@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.mapo.walkaholic.ui.auth.AuthViewModel" />
+            type="com.mapo.walkaholic.ui.auth.RegisterViewModel" />
 
         <variable
             name="terms"

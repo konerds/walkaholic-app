@@ -14,14 +14,25 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DashboardRepository(
-    private val api: InnerApi,
-    private val apiWeather: APISApi,
-    private val SGISApiSGIS: SGISApi,
-    preferences: UserPreferences
+        private val api: InnerApi,
+        private val apiWeather: APISApi,
+        private val SGISApiSGIS: SGISApi,
+        preferences: UserPreferences
 ) : BaseRepository(preferences) {
     companion object {
+        @Volatile
+        private var instance: DashboardRepository? = null
+        @JvmStatic
+        fun getInstance(api: InnerApi, apiWeather: APISApi, SGISApiSGIS: SGISApi, preferences: UserPreferences): DashboardRepository =
+                instance ?: synchronized(this) {
+                    instance
+                            ?: DashboardRepository(api, apiWeather, SGISApiSGIS, preferences).also {
+                                instance = it
+                            }
+                }
+
         private const val APIS_API_KEY =
-            "qJr%2BQI4XC6oql7dTNz2MAuqL%2BKyg2AEdr6pKt2bBbzm9Bsj9jXkbPR%2FiQq%2BHKXN90xmsL%2BLrN4woIelJo1Ul4g%3D%3D"
+                "qJr%2BQI4XC6oql7dTNz2MAuqL%2BKyg2AEdr6pKt2bBbzm9Bsj9jXkbPR%2FiQq%2BHKXN90xmsL%2BLrN4woIelJo1Ul4g%3D%3D"
         private const val APIS_WEATHER_NUM_OF_ROWS = "100"
         private const val APIS_RETURN_TYPE = "json"
         private const val APIS_ENCODE_TYPE = "utf-8"
@@ -53,8 +64,8 @@ class DashboardRepository(
 
     suspend fun getSGISAccessToken() = safeApiCall {
         SGISApiSGIS.getAccessTokenSGIS(
-            URLDecoder.decode(SGIS_API_CONSUMER_KEY),
-            URLDecoder.decode(SGIS_API_SECRET_KEY)
+                URLDecoder.decode(SGIS_API_CONSUMER_KEY),
+                URLDecoder.decode(SGIS_API_SECRET_KEY)
         )
     }
 
@@ -64,14 +75,14 @@ class DashboardRepository(
 
     suspend fun getNearMsrstn(currentTmX: String, currentTmY: String) = safeApiCall {
         apiWeather.getNearMsrstn(
-            URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
-            APIS_RETURN_TYPE,
-            currentTmX,
-            currentTmY
+                URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
+                APIS_RETURN_TYPE,
+                currentTmX,
+                currentTmY
         )
     }
 
-    suspend fun getTodayWeather(nX: String, nY: String, requireDate : Date): Resource<TodayWeatherResponse> {
+    suspend fun getTodayWeather(nX: String, nY: String, requireDate: Date): Resource<TodayWeatherResponse> {
         val currentTimeZone = TimeZone.getTimeZone(TIME_ZONE)
         val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
         val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT, Locale.KOREAN)
@@ -82,7 +93,7 @@ class DashboardRepository(
         }
     }
 
-    suspend fun getYesterdayWeather(nX: String, nY: String, requireDate : Date): Resource<YesterdayWeatherResponse> {
+    suspend fun getYesterdayWeather(nX: String, nY: String, requireDate: Date): Resource<YesterdayWeatherResponse> {
         val currentTimeZone = TimeZone.getTimeZone(TIME_ZONE)
         val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
         val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT, Locale.KOREAN)
