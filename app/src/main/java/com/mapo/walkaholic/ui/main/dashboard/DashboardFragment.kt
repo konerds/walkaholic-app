@@ -22,15 +22,12 @@ import com.mapo.walkaholic.data.network.SGISApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.DashboardRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
-import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 
 class DashboardFragment :
         BaseFragment<DashboardViewModel, FragmentDashboardBinding, DashboardRepository>() {
@@ -251,43 +248,34 @@ class DashboardFragment :
                 }
             }
         })
-        viewModel.todayWeatherResponse.observe(viewLifecycleOwner, Observer {
-            when(it) {
+        viewModel.yesterdayWeatherResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
-                        binding.todayWeather = it.value.weather
+                        binding.yesterdayWeather = it.value.yesterdayWeather
                         Log.i(
-                                ContentValues.TAG, "처리 결과 : ${it.value.weather}"
+                                ContentValues.TAG, "Yesterday Weather : ${it.value.yesterdayWeather}"
                         )
-                        /*
-                        viewModel.getYesterdayWeather("55","127")
-                        viewModel.yesterdayWeatherResponse.observe(viewLifecycleOwner, Observer { it2 ->
-                            when(it2) {
-                                is Resource.Success -> {
-                                    if (!it2.value.error) {
-                                        Log.i(
-                                                ContentValues.TAG, "처리 결과 : ${it2.value.weather}"
-                                        )
-                                        binding.yesterdayWeather = it2.value.weather
-                                    } else {
-                                        Log.i(
-                                                ContentValues.TAG, "처리 결과 : ${it.value}"
-                                        )
-                                    }
-                                }
-                                is Resource.Loading -> {
-
-                                }
-                                is Resource.Failure -> {
-                                    handleApiError(it2)
-                                }
-                            }
-                        })
-                        */
                     } else {
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    handleApiError(it)
+                }
+            }
+        })
+        viewModel.todayWeatherResponse.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is Resource.Success -> {
+                    if (!it.value.error) {
+                        binding.todayWeather = it.value.todayWeather
                         Log.i(
-                                ContentValues.TAG, "처리 결과 : ${it.value}"
+                                ContentValues.TAG, "Today Weather : ${it.value.todayWeather}"
                         )
+                    } else {
                     }
                 }
                 is Resource.Loading -> {
@@ -300,7 +288,8 @@ class DashboardFragment :
         })
         viewModel.getDash()
         viewModel.getSGISAccessToken()
-        viewModel.getTodayWeather("55","127")
+        viewModel.getYesterdayWeather("55", "127")
+        viewModel.getTodayWeather("55", "127")
     }
 
     override fun onPause() {

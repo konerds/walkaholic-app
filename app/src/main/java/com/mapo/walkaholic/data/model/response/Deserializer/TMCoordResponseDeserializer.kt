@@ -12,6 +12,10 @@ class TMCoordResponseDeserializer : JsonDeserializer<TmCoordResponse> {
         val deserializedJson = ((json?.asJsonObject
                 ?: throw NullPointerException("Response Json String is null"))["result"].asJsonObject
                 ?: throw NullPointerException("Response Json String is null"))
-        return TmCoordResponse(false, TmCoord(deserializedJson["posX"].asString.toString().trim(), deserializedJson["posY"].asString.toString().trim()))
+        if (deserializedJson["posX"].asString.toString().trim() == "null" || deserializedJson["posY"].asString.toString().trim() == "null") {
+            return TmCoordResponse(true, TmCoord(deserializedJson["posX"].asString.toString().trim(), deserializedJson["posY"].asString.toString().trim()))
+        } else {
+            return TmCoordResponse(false, TmCoord(deserializedJson["posX"].asString.toString().trim(), deserializedJson["posY"].asString.toString().trim()))
+        }
     }
 }

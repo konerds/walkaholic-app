@@ -11,6 +11,7 @@ import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.absoluteValue
 
 class DashboardViewModel(
         private val repository: DashboardRepository
@@ -37,11 +38,11 @@ class DashboardViewModel(
     private val _nearMsrstnResponse: MutableLiveData<Resource<NearMsrstnResponse>> = MutableLiveData()
     val nearMsrstnResponse: LiveData<Resource<NearMsrstnResponse>>
         get() = _nearMsrstnResponse
-    private val _todayWeatherResponse: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
-    val todayWeatherResponse: LiveData<Resource<WeatherResponse>>
+    private val _todayWeatherResponse: MutableLiveData<Resource<TodayWeatherResponse>> = MutableLiveData()
+    val todayWeatherResponse: LiveData<Resource<TodayWeatherResponse>>
         get() = _todayWeatherResponse
-    private val _yesterdayWeatherResponse: MutableLiveData<Resource<WeatherResponse>> = MutableLiveData()
-    val yesterdayWeatherResponse: LiveData<Resource<WeatherResponse>>
+    private val _yesterdayWeatherResponse: MutableLiveData<Resource<YesterdayWeatherResponse>> = MutableLiveData()
+    val yesterdayWeatherResponse: LiveData<Resource<YesterdayWeatherResponse>>
         get() = _yesterdayWeatherResponse
 
     fun getDash() {
@@ -95,17 +96,20 @@ class DashboardViewModel(
         }
     }
 
-    fun getTodayWeather(dX : String, dY : String) {
+    fun getTodayWeather(nX : String, nY : String) {
         viewModelScope.launch {
-            _todayWeatherResponse.value = repository.getWeather(dX, dY, Date())
+            val todayDate = Date()
+            todayDate.hours -= 1
+            _todayWeatherResponse.value = repository.getTodayWeather(nX, nY, Date())
         }
     }
 
-    fun getYesterdayWeather(dX : String, dY : String) {
+    fun getYesterdayWeather(nX : String, nY : String) {
         viewModelScope.launch {
             val yesterdayDate = Date()
             yesterdayDate.date -= 1
-            _todayWeatherResponse.value = repository.getWeather(dX, dY, yesterdayDate)
+            yesterdayDate.hours += 1
+            _yesterdayWeatherResponse.value = repository.getYesterdayWeather(nX, nY, yesterdayDate)
         }
     }
 
@@ -118,18 +122,18 @@ class DashboardViewModel(
             }
 
     fun getDifferenceTemperature(todayTemperature : String?, yesterdayTemperature : String?) : String {
-        return if (todayTemperature == null || yesterdayTemperature == null) {
-            "오류"
+        if (todayTemperature.isNullOrEmpty() || yesterdayTemperature.isNullOrEmpty()) {
+            return "오류"
         } else {
-            val differenceTemperature = todayTemperature.toInt() - yesterdayTemperature.toInt()
+            val differenceTemperature = (todayTemperature.toInt() - yesterdayTemperature.toInt())
             if (differenceTemperature > 0) {
-                "어제보다 ${differenceTemperature}도 높아요"
+                return "어제보다 ${differenceTemperature.absoluteValue}도 높아요"
             } else if (differenceTemperature == 0) {
-                "어제같은 날씨에요"
+                return "어제같은 날씨에요"
             } else if (differenceTemperature < 0) {
-                "어제보다 ${differenceTemperature}도 낮아요"
+                return "어제보다 ${differenceTemperature.absoluteValue}도 낮아요"
             } else {
-                "오류"
+                return "오류"
             }
         }
     }

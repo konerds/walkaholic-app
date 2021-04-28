@@ -3,9 +3,12 @@ package com.mapo.walkaholic.data.repository
 import android.content.ContentValues
 import android.util.Log
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
+import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import com.mapo.walkaholic.data.network.APISApi
 import com.mapo.walkaholic.data.network.SGISApi
 import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.Resource
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,12 +71,25 @@ class DashboardRepository(
         )
     }
 
-    suspend fun getWeather(dX: String, dY: String, requireDate : Date) = safeApiCall {
-        val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
+    suspend fun getTodayWeather(nX: String, nY: String, requireDate : Date): Resource<TodayWeatherResponse> {
         val currentTimeZone = TimeZone.getTimeZone(TIME_ZONE)
-        val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT)
+        val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
+        val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT, Locale.KOREAN)
+        dateFormat.timeZone = currentTimeZone
         timeFormat.timeZone = currentTimeZone
-        requireDate.hours -= 1
-        apiWeather.getWeather(APIS_API_KEY, APIS_RETURN_TYPE, dateFormat.format(requireDate), timeFormat.format(requireDate), APIS_WEATHER_NUM_OF_ROWS, dX, dY)
+        return safeApiCall {
+            apiWeather.getTodayWeather(URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE), APIS_RETURN_TYPE, dateFormat.format(requireDate), timeFormat.format(requireDate), APIS_WEATHER_NUM_OF_ROWS, nX, nY)
+        }
+    }
+
+    suspend fun getYesterdayWeather(nX: String, nY: String, requireDate : Date): Resource<YesterdayWeatherResponse> {
+        val currentTimeZone = TimeZone.getTimeZone(TIME_ZONE)
+        val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
+        val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT, Locale.KOREAN)
+        dateFormat.timeZone = currentTimeZone
+        timeFormat.timeZone = currentTimeZone
+        return safeApiCall {
+            apiWeather.getYesterdayWeather(URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE), APIS_RETURN_TYPE, dateFormat.format(requireDate), timeFormat.format(requireDate), APIS_WEATHER_NUM_OF_ROWS, nX, nY)
+        }
     }
 }

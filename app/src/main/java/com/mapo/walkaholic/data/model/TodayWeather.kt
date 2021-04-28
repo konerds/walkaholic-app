@@ -1,6 +1,6 @@
 package com.mapo.walkaholic.data.model
 
-data class Weather(
+data class TodayWeather(
     val temperatureCurrent : String,
     val weatherCode : String
 )

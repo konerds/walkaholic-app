@@ -16,6 +16,10 @@ class SGISAccessTokenResponseDeserializer : JsonDeserializer<SGISAccessTokenResp
         val deserializedJson = ((json?.asJsonObject
                 ?: throw NullPointerException("Response Json String is null"))["result"].asJsonObject
                 ?: throw NullPointerException("Response Json String is null"))
-        return SGISAccessTokenResponse(false, SGISAccessToken(deserializedJson["accessTimeout"].asString.toString().trim(), deserializedJson["accessToken"].asString.toString().trim()))
+        if (deserializedJson["accessTimeout"].asString.toString().trim() == "null" || deserializedJson["accessToken"].asString.toString().trim() == "null") {
+            return SGISAccessTokenResponse(true, SGISAccessToken(deserializedJson["accessTimeout"].asString.toString().trim(), deserializedJson["accessToken"].asString.toString().trim()))
+        } else {
+            return SGISAccessTokenResponse(false, SGISAccessToken(deserializedJson["accessTimeout"].asString.toString().trim(), deserializedJson["accessToken"].asString.toString().trim()))
+        }
     }
 }

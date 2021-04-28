@@ -29,7 +29,11 @@
 
         <variable
             name="todayWeather"
-            type="com.mapo.walkaholic.data.model.Weather" />
+            type="com.mapo.walkaholic.data.model.TodayWeather" />
+
+        <variable
+            name="yesterdayWeather"
+            type="com.mapo.walkaholic.data.model.YesterdayWeather" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -252,7 +256,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="48dp"
                                 android:layout_marginBottom="8dp"
-                                android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, todayWeather.temperatureCurrent)}"
+                                android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, yesterdayWeather.temperatureCurrent)}"
                                 android:textSize="16sp"
                                 android:textColor="@color/colorPrimary"
                                 android:layout_gravity="bottom"
