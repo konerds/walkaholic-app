@@ -23,15 +23,15 @@ class ViewModelFactory(
                 when {
                     isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository as AuthRepository)
                     isAssignableFrom(RegisterViewModel::class.java) -> RegisterViewModel(repository as AuthRepository)
-                    isAssignableFrom(MainViewModel::class.java) -> MainViewModel(repository as DashboardRepository)
+                    isAssignableFrom(MainViewModel::class.java) -> MainViewModel(repository as MainRepository)
                     isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(
-                            repository as DashboardRepository
+                            repository as MainRepository
                     )
-                    isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as ThemeRepository)
+                    isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as MainRepository)
                     isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(
-                            repository as ChallengeRepository
+                            repository as MainRepository
                     )
-                    isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MapRepository)
+                    isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MainRepository)
                     else -> throw IllegalArgumentException(
                             GlobalApplication.getGlobalApplicationContext()
                                     .getString(R.string.err_unexpected)

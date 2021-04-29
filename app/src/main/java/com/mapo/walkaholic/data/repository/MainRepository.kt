@@ -1,19 +1,20 @@
 package com.mapo.walkaholic.data.repository
 
-import android.content.ContentValues
-import android.util.Log
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import com.mapo.walkaholic.data.network.APISApi
 import com.mapo.walkaholic.data.network.SGISApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
+import com.naver.maps.map.NaverMap
+import retrofit2.http.Body
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DashboardRepository(
+class MainRepository(
         private val api: InnerApi,
         private val apiWeather: APISApi,
         private val SGISApiSGIS: SGISApi,
@@ -21,12 +22,12 @@ class DashboardRepository(
 ) : BaseRepository(preferences) {
     companion object {
         @Volatile
-        private var instance: DashboardRepository? = null
+        private var instance: MainRepository? = null
         @JvmStatic
-        fun getInstance(api: InnerApi, apiWeather: APISApi, SGISApiSGIS: SGISApi, preferences: UserPreferences): DashboardRepository =
+        fun getInstance(api: InnerApi, apiWeather: APISApi, SGISApiSGIS: SGISApi, preferences: UserPreferences): MainRepository =
                 instance ?: synchronized(this) {
                     instance
-                            ?: DashboardRepository(api, apiWeather, SGISApiSGIS, preferences).also {
+                            ?: MainRepository(api, apiWeather, SGISApiSGIS, preferences).also {
                                 instance = it
                             }
                 }
@@ -45,6 +46,13 @@ class DashboardRepository(
         private const val SGIS_EPSG_WGS = "4326"
         private const val SGIS_EPSG_BESSEL = "5181"
     }
+    private var mMap: NaverMap? = null
+
+    fun setNaverMap(mMap: NaverMap) {
+        this.mMap = mMap
+    }
+
+    fun getNaverMap() = this.mMap
 
     suspend fun getUser(id: Long) = safeApiCall {
         api.getUser(id)
@@ -102,5 +110,9 @@ class DashboardRepository(
         return safeApiCall {
             apiWeather.getYesterdayWeather(URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE), APIS_RETURN_TYPE, dateFormat.format(requireDate), timeFormat.format(requireDate), APIS_WEATHER_NUM_OF_ROWS, nX, nY)
         }
+    }
+
+    suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
+        api.getPoints(body)
     }
 }

@@ -7,14 +7,14 @@ import com.mapo.walkaholic.data.model.Point
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.MapResponse
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.data.repository.MapRepository
+import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
 import kotlinx.coroutines.launch
 
 class MapViewModel(
-    private val repository: MapRepository
+    private val repository: MainRepository
 ) : BaseViewModel(repository) {
     private var mMap: NaverMap? = null
     private val markers = MutableLiveData<List<Marker>>()

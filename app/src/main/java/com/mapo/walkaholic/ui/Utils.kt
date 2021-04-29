@@ -1,11 +1,13 @@
 package com.mapo.walkaholic.ui
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -44,6 +46,10 @@ fun Fragment.handleApiError(
     failure: Resource.Failure,
     retry: (() -> Unit) ?= null
 ) {
+    val error = failure.errorBody?.string().toString()
+    Log.i(
+            ContentValues.TAG, "Error : ${error}"
+    )
     when{
         failure.isNetworkError -> {
             //val errCode = JSONObject(failure.errorCode.toString())
@@ -58,7 +64,6 @@ fun Fragment.handleApiError(
             }
         }
         else -> {
-            val error = failure.errorBody?.string().toString()
             requireView().snackbar(error)
         }
     }

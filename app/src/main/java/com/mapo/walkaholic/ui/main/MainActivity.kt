@@ -1,13 +1,13 @@
 package com.mapo.walkaholic.ui.main
 
 import android.content.ContentValues
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
@@ -17,12 +17,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import com.google.android.gms.location.LocationListener
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.*
-import com.mapo.walkaholic.data.repository.BaseRepository
-import com.mapo.walkaholic.data.repository.DashboardRepository
-import com.mapo.walkaholic.data.repository.MapRepository
+import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.ActivityMainBinding
 import com.mapo.walkaholic.databinding.NaviHamburgerHeaderBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
@@ -30,11 +29,11 @@ import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.DashboardFragment
-import com.mapo.walkaholic.ui.main.dashboard.DashboardViewModel
-import com.mapo.walkaholic.ui.main.map.MapFragment
-import com.mapo.walkaholic.ui.main.map.MapViewModel
 import com.mapo.walkaholic.ui.startNewActivity
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -47,13 +46,14 @@ class MainActivity : BaseActivity(), LifecycleOwner {
     private val remoteDataSource = RemoteDataSource()
     private lateinit var bindingNavigationHeader : NaviHamburgerHeaderBinding
     private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userPreferences = UserPreferences(this)
-        val dashboardFactory = ViewModelFactory(getDashboardRepository())
+        val dashboardFactory = ViewModelFactory(getMainRepository())
         viewModel = ViewModelProvider(this, dashboardFactory).get(MainViewModel::class.java)
         bindingNavigationHeader = DataBindingUtil.inflate(layoutInflater, R.layout.navi_hamburger_header, binding.mainNvHamburger, true)
         bindingNavigationHeader.viewModel = viewModel
@@ -133,12 +133,12 @@ class MainActivity : BaseActivity(), LifecycleOwner {
     }
      */
 
-    fun getDashboardRepository(): DashboardRepository {
+    fun getMainRepository(): MainRepository {
         val accessToken = runBlocking { userPreferences.accessToken.first() }
         val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
-        return DashboardRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

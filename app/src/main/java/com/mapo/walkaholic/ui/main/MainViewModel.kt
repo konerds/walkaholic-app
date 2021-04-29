@@ -2,7 +2,6 @@ package com.mapo.walkaholic.ui.main
 
 import android.content.ContentValues
 import android.util.Log
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,17 +11,12 @@ import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.data.repository.DashboardRepository
-import com.mapo.walkaholic.data.repository.MapRepository
-import com.mapo.walkaholic.ui.base.BaseViewModel
+import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.Event
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.math.absoluteValue
 
 class MainViewModel(
-        private val dashRepository: DashboardRepository
+        private val dashRepository: MainRepository
 ) : ViewModel() {
     private val _onClickEvent = MutableLiveData<Event<String>>()
     val onClickEvent: LiveData<Event<String>>

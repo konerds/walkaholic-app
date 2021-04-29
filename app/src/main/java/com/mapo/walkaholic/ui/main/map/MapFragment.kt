@@ -1,8 +1,6 @@
 package com.mapo.walkaholic.ui.main.map
 
-import android.content.ContentValues
 import android.location.Location
-import android.location.LocationListener
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,16 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.google.android.gms.location.LocationListener
+import com.mapo.walkaholic.data.network.APISApi
 import com.mapo.walkaholic.data.network.InnerApi
-import com.mapo.walkaholic.data.repository.MapRepository
+import com.mapo.walkaholic.data.network.SGISApi
+import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentMapBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
-class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository>(), OnMapReadyCallback, LocationListener {
+class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepository>(), OnMapReadyCallback, LocationListener {
     private lateinit var mapView: MapView
     private lateinit var locationSource: FusedLocationSource
     private lateinit var mMap: NaverMap
@@ -80,8 +83,9 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
         mMap?.let {
             val coord = LatLng(location)
 
-            GlobalApplication.currentLng = coord.longitude.toString()
-            GlobalApplication.currentLat = coord.latitude.toString()
+            GlobalApplication.currentLng = coord.latitude.toString()
+            GlobalApplication.currentLat = coord.longitude.toString()
+            Log.e("현재 위치 : ", "${coord.longitude}, ${coord.latitude}")
 
             val locationOverlay = it.locationOverlay
             locationOverlay.isVisible = true
@@ -145,8 +149,13 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MapRepository
             container: ViewGroup?
     ) = FragmentMapBinding.inflate(inflater, container, false)
 
-    override fun getFragmentRepository() =
-            MapRepository(remoteDataSource.buildRetrofitApi(InnerApi::class.java), userPreferences)
+    override fun getFragmentRepository() : MainRepository {
+        val accessToken = runBlocking { userPreferences.accessToken.first() }
+        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
+        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
+        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+    }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
