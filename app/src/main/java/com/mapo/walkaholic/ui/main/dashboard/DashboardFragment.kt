@@ -62,7 +62,6 @@ class DashboardFragment :
                             getString(R.string.err_user),
                             Toast.LENGTH_SHORT
                     ).show()
-                    logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
@@ -110,7 +109,6 @@ class DashboardFragment :
                                                                 getString(R.string.err_user),
                                                                 Toast.LENGTH_SHORT
                                                         ).show()
-                                                        logout()
                                                     }
                                                 }
                                                 animCharacter!!.drawCharInfo()
@@ -129,7 +127,6 @@ class DashboardFragment :
                                                     getString(R.string.err_user),
                                                     Toast.LENGTH_SHORT
                                             ).show()
-                                            logout()
                                         }
                                     }
                                     is Resource.Failure -> {
@@ -139,7 +136,6 @@ class DashboardFragment :
                                                 getString(R.string.err_user),
                                                 Toast.LENGTH_SHORT
                                         ).show()
-                                        logout()
                                     }
                                 }
                             })
@@ -150,7 +146,6 @@ class DashboardFragment :
                                 getString(R.string.err_user),
                                 Toast.LENGTH_SHORT
                         ).show()
-                        logout()
                         //requireActivity().startNewActivity(AuthActivity::class.java)
                     }
                 }
@@ -163,7 +158,6 @@ class DashboardFragment :
                             getString(R.string.err_user),
                             Toast.LENGTH_SHORT
                     ).show()
-                    logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
