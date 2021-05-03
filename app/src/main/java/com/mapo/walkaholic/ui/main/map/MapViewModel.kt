@@ -14,8 +14,8 @@ import com.naver.maps.map.overlay.Marker
 import kotlinx.coroutines.launch
 
 class MapViewModel(
-    private val repository: MainRepository
-) : BaseViewModel(repository) {
+    private val mainRepository: MainRepository
+) : BaseViewModel(mainRepository) {
     private var mMap: NaverMap? = null
     private val markers = MutableLiveData<List<Marker>>()
     val points = MutableLiveData<List<Point>>()
@@ -50,7 +50,7 @@ class MapViewModel(
         liveDataMarkers: MutableLiveData<List<Marker>>?,
         zoom: Double?
     ) = viewModelScope.launch {
-        _mapResponse.value = repository.getPoints(
+        _mapResponse.value = mainRepository.getPoints(
             MapRequestBody(
 
                 // 카메라 경도, 위도

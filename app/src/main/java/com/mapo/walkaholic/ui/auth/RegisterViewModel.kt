@@ -30,20 +30,6 @@ class RegisterViewModel(
     val registerResponse: LiveData<Resource<StringResponse>>
         get() = _registerResponse
 
-    fun getAuth(callback: (OAuthToken?, Throwable?) -> Unit) = viewModelScope.launch {
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(GlobalApplication.getGlobalApplicationContext())) {
-            UserApiClient.instance.loginWithKakaoTalk(
-                GlobalApplication.getGlobalApplicationContext(),
-                callback = callback
-            )
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(
-                GlobalApplication.getGlobalApplicationContext(),
-                callback = callback
-            )
-        }
-    }
-
     fun getTerm() {
         progressBarVisibility.set(true)
         viewModelScope.launch {

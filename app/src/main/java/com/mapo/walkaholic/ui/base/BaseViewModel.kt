@@ -44,6 +44,14 @@ abstract class BaseViewModel(
         }
     }
 
+    suspend fun saveIsFirst() {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            repository.saveIsFirst(true)
+        }
+        progressBarVisibility.set(false)
+    }
+
     suspend fun saveAuthToken() {
         progressBarVisibility.set(true)
         if (AuthApiClient.instance.hasToken()) {
@@ -51,23 +59,29 @@ abstract class BaseViewModel(
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError()) {
                         logout()
-                    } else {
-                        logout()
-                    }
+                    } else { }
                 } else {
                     tokenInfo!!.id.toString().trim().let {
                         if (it != null) {
                             viewModelScope.launch {
                                 repository.saveAuthToken(it)
                             }
-                        } else {
-                            logout()
-                        }
+                        } else { }
                     }
                 }
             }
         } else {
-            logout()
+            AuthApiClient.instance.refreshAccessToken { token, error ->
+                if (error != null) {
+                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
+                        logout()
+                    } else { }
+                } else {
+                    viewModelScope.launch {
+                        repository.saveAuthToken(token!!.accessToken)
+                    }
+                }
+            }
         }
         progressBarVisibility.set(false)
     }

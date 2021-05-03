@@ -19,19 +19,37 @@ class UserPreferences(
             preferences[ACCESS_TOKEN]
         }
 
+    val isFirst: Flow<Boolean?>
+        get() = dataStore.data.map { preferences ->
+            preferences[IS_FIRST]
+        }
+
+    suspend fun saveIsFirst(isFirst: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[IS_FIRST] = isFirst
+        }
+    }
+
     suspend fun saveAuthToken(accessToken: String) {
         dataStore.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessToken
         }
     }
 
-    suspend fun clear() {
+    suspend fun removeIsFirst() {
         dataStore.edit { preferences ->
-            preferences.clear()
+            preferences.remove(IS_FIRST)
+        }
+    }
+
+    suspend fun removeAuthToken() {
+        dataStore.edit { preferences ->
+            preferences.remove(ACCESS_TOKEN)
         }
     }
 
     companion object {
+        private val IS_FIRST = preferencesKey<Boolean>("is_first")
         private val ACCESS_TOKEN = preferencesKey<String>("access_token")
     }
 }

@@ -10,18 +10,16 @@ class AuthRepository(
     companion object {
         @Volatile
         private var instance: AuthRepository? = null
-
         @JvmStatic
         fun getInstance(
-            api: InnerApi,
-            preferences: UserPreferences
+                api: InnerApi,
+                preferences: UserPreferences
         ): AuthRepository =
-            instance ?: synchronized(this) {
-                instance ?: AuthRepository(api, preferences).also {
-                    instance = it
+                instance ?: synchronized(this) {
+                    instance ?: AuthRepository(api, preferences).also {
+                        instance = it
+                    }
                 }
-            }
-
     }
 
     suspend fun getTerm() = safeApiCall {

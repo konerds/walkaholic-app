@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui.main
 
 import android.content.ContentValues
-import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,11 +16,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
-import com.google.android.gms.location.LocationListener
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.*
 import com.mapo.walkaholic.data.repository.MainRepository
+import com.mapo.walkaholic.data.repository.SplashRepository
 import com.mapo.walkaholic.databinding.ActivityMainBinding
 import com.mapo.walkaholic.databinding.NaviHamburgerHeaderBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
@@ -30,22 +29,14 @@ import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.startNewActivity
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
-class MainActivity : BaseActivity(), LifecycleOwner {
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var userPreferences: UserPreferences
-    private val remoteDataSource = RemoteDataSource()
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainRepository>(), LifecycleOwner {
     private lateinit var bindingNavigationHeader : NaviHamburgerHeaderBinding
-    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
@@ -53,8 +44,8 @@ class MainActivity : BaseActivity(), LifecycleOwner {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userPreferences = UserPreferences(this)
-        val dashboardFactory = ViewModelFactory(getMainRepository())
-        viewModel = ViewModelProvider(this, dashboardFactory).get(MainViewModel::class.java)
+        val mainFactory = ViewModelFactory(getMainRepository())
+        viewModel = ViewModelProvider(this, mainFactory).get(MainViewModel::class.java)
         bindingNavigationHeader = DataBindingUtil.inflate(layoutInflater, R.layout.navi_hamburger_header, binding.mainNvHamburger, true)
         bindingNavigationHeader.viewModel = viewModel
         setSupportActionBar(mainToolbar)
@@ -109,7 +100,7 @@ class MainActivity : BaseActivity(), LifecycleOwner {
 
     fun logout() = lifecycleScope.launch {
         viewModel.logout()
-        userPreferences.clear()
+        userPreferences.removeAuthToken()
         startNewActivity(AuthActivity::class.java)
     }
 
@@ -156,6 +147,7 @@ class MainActivity : BaseActivity(), LifecycleOwner {
                 return true
             }
             R.id.actionHbgLogout -> {
+                logout()
                 return true
             }
             else -> {
@@ -167,5 +159,15 @@ class MainActivity : BaseActivity(), LifecycleOwner {
     override fun onDestroy() {
         GlobalApplication.activityList.remove(this)
         super.onDestroy()
+    }
+
+    override fun getViewModel(): Class<MainViewModel> = MainViewModel::class.java
+
+    override fun getActivityRepository(): MainRepository {
+        val accessToken = runBlocking { userPreferences.accessToken.first() }
+        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        val apiAPIS = remoteDataSource.buildRetrofitApi(APISApi::class.java, accessToken)
+        val apiSGIS = remoteDataSource.buildRetrofitApi(SGISApi::class.java, accessToken)
+        return MainRepository.getInstance(api, apiAPIS, apiSGIS, userPreferences)
     }
 }

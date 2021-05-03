@@ -1,42 +1,50 @@
 package com.mapo.walkaholic.ui.auth
 
-import android.content.ContentValues
-import android.content.pm.PackageManager
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
-import android.util.Base64.NO_WRAP
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.LinearLayout
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isNotEmpty
-import androidx.navigation.findNavController
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
+import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.ActivityAuthBinding
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
-class AuthActivity : BaseActivity() {
-    private lateinit var binding: ActivityAuthBinding
+class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
+        userPreferences = UserPreferences(this)
+        val authFactory = ViewModelFactory(getAuthRepository())
+        viewModel = ViewModelProvider(this, authFactory).get(AuthViewModel::class.java)
+        userPreferences.accessToken.asLiveData().observe(this, Observer {
+            if (it == null) { } else {
+                startNewActivity(MainActivity::class.java as Class<Activity>)
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        })
         /*
         Log.i(
             ContentValues.TAG, "${getHashKey()}"
@@ -44,9 +52,10 @@ class AuthActivity : BaseActivity() {
          */
     }
 
-    override fun onDestroy() {
-        GlobalApplication.activityList.remove(this)
-        super.onDestroy()
+    fun getAuthRepository(): AuthRepository {
+        val accessToken = runBlocking { userPreferences.accessToken.first() }
+        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        return AuthRepository.getInstance(api, userPreferences)
     }
 
     override fun onBackPressed() {
@@ -78,6 +87,19 @@ class AuthActivity : BaseActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onDestroy() {
+        GlobalApplication.activityList.remove(this)
+        super.onDestroy()
+    }
+
+    override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java
+
+    override fun getActivityRepository(): AuthRepository {
+        val accessToken = runBlocking { userPreferences.accessToken.first() }
+        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        return AuthRepository.getInstance(api, userPreferences)
     }
 
     /*

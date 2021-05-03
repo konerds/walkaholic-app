@@ -37,4 +37,8 @@ abstract class BaseRepository(
     suspend fun saveAuthToken(accessToken: String) {
         preferences.saveAuthToken(accessToken)
     }
+
+    suspend fun saveIsFirst(isFirst: Boolean) {
+        preferences.saveIsFirst(isFirst)
+    }
 }

@@ -45,7 +45,6 @@ class LoginViewModel(
         viewModelScope.launch {
             UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                 viewModelScope.launch {
-
                     if (error != null) {
                     } else {
                         _loginResponse.value = tokenInfo?.id?.let { repository.login(it) }

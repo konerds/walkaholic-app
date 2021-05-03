@@ -1,9 +1,9 @@
 package com.mapo.walkaholic.ui.auth
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -33,6 +33,9 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.let { binding.viewModel = it }
+        lifecycleScope.launch {
+            viewModel.saveIsFirst()
+        }
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@LoginFragment::moveActivity)
@@ -43,7 +46,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                     if (!it.value.error) {
                         lifecycleScope.launch {
                             viewModel.saveAuthToken()
-                            requireActivity().startNewActivity(MainActivity::class.java)
+                            requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
                         }
                     } else {
                         Toast.makeText(

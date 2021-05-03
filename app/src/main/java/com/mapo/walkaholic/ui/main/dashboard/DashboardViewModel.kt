@@ -14,8 +14,8 @@ import java.util.*
 import kotlin.math.absoluteValue
 
 class DashboardViewModel(
-        private val repository: MainRepository
-) : BaseViewModel(repository) {
+        private val mainRepository: MainRepository
+) : BaseViewModel(mainRepository) {
     override fun init() {}
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
@@ -51,8 +51,8 @@ class DashboardViewModel(
             viewModelScope.launch {
                 if (error != null) {
                 } else {
-                    _userResponse.value = tokenInfo?.id?.let { repository.getUser(it) }
-                    _userCharacterResponse.value = tokenInfo?.id?.let { repository.getUserCharacter(it) }
+                    _userResponse.value = tokenInfo?.id?.let { mainRepository.getUser(it) }
+                    _userCharacterResponse.value = tokenInfo?.id?.let { mainRepository.getUserCharacter(it) }
                 }
                 progressBarVisibility.set(false)
             }
@@ -63,7 +63,7 @@ class DashboardViewModel(
 
     fun getExpTable(exp: Long) {
         viewModelScope.launch {
-            _expTableResponse.value = repository.getExpTable(exp)
+            _expTableResponse.value = mainRepository.getExpTable(exp)
         }
     }
 
@@ -74,25 +74,25 @@ class DashboardViewModel(
 
     fun getWeatherDust(sidoName: String) {
         viewModelScope.launch {
-            _weatherDustResponse.value = repository.getWeatherDust(sidoName)
+            _weatherDustResponse.value = mainRepository.getWeatherDust(sidoName)
         }
     }
 
     fun getSGISAccessToken() {
         viewModelScope.launch {
-            _sgisAccessTokenResponse.value = repository.getSGISAccessToken()
+            _sgisAccessTokenResponse.value = mainRepository.getSGISAccessToken()
         }
     }
 
     fun getTmCoord(accessToken: String, currentX: String, currentY: String) {
         viewModelScope.launch {
-            _tmCoordResponse.value = repository.getTmCoord(accessToken, currentX, currentY)
+            _tmCoordResponse.value = mainRepository.getTmCoord(accessToken, currentX, currentY)
         }
     }
 
     fun getNearMsrstn(currentTmX: String, currentTmY: String) {
         viewModelScope.launch {
-            _nearMsrstnResponse.value = repository.getNearMsrstn(currentTmX, currentTmY)
+            _nearMsrstnResponse.value = mainRepository.getNearMsrstn(currentTmX, currentTmY)
         }
     }
 
@@ -100,7 +100,7 @@ class DashboardViewModel(
         viewModelScope.launch {
             val todayDate = Date()
             todayDate.hours -= 1
-            _todayWeatherResponse.value = repository.getTodayWeather(nX, nY, todayDate)
+            _todayWeatherResponse.value = mainRepository.getTodayWeather(nX, nY, todayDate)
         }
     }
 
@@ -109,7 +109,7 @@ class DashboardViewModel(
             val yesterdayDate = Date()
             yesterdayDate.date -= 1
             yesterdayDate.hours += 1
-            _yesterdayWeatherResponse.value = repository.getYesterdayWeather(nX, nY, yesterdayDate)
+            _yesterdayWeatherResponse.value = mainRepository.getYesterdayWeather(nX, nY, yesterdayDate)
         }
     }
 

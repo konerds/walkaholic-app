@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.base
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,8 +41,8 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
 
     fun logout() = lifecycleScope.launch {
         viewModel.logout()
-        userPreferences.clear()
-        requireActivity().startNewActivity(AuthActivity::class.java)
+        userPreferences.removeAuthToken()
+        requireActivity().startNewActivity(AuthActivity::class.java as Class<Activity>)
     }
 
     abstract fun getViewModel(): Class<VM>

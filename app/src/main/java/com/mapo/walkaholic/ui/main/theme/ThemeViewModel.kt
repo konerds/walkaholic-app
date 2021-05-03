@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.data.repository.BaseRepository
+import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class ThemeViewModel(
-        private val repository: BaseRepository
-) : BaseViewModel(repository) {
+        private val mainRepository: MainRepository
+) : BaseViewModel(mainRepository) {
     override fun init() {
 
     }
