@@ -17,21 +17,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.auth.LoginFragment">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/loginBtnTutorial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick='@{() -> viewModel.onClickEvent("loginToGuide")}'
-            android:text="@string/tutorial"
-            android:theme="@style/Theme.MaterialComponents.Light"
-            app:chipBackgroundColor="@android:color/transparent"
-            app:chipSurfaceColor="@android:color/transparent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/loginIvLogo"
             android:layout_width="match_parent"
@@ -55,12 +40,33 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/loginBtnKakao"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_width="328dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center|center_vertical"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/btn_login_kakao"
                 android:foreground="?selectableItemBackground" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/loginBtnTutorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{() -> viewModel.onClickEvent("loginToGuide")}'
+                android:text="@string/tutorial"
+                android:textColor="#999283"
+                android:textSize="12sp"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                android:elevation="4dp"
+                app:chipIcon="@drawable/ic_tutorial_info"
+                app:chipIconSize="12dp"
+                app:chipBackgroundColor="@android:color/transparent"
+                app:chipSurfaceColor="@android:color/transparent"
+                android:layout_gravity="center|center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/loginBtnKakao" />
         </LinearLayout>
 
         <ProgressBar

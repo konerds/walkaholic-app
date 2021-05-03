@@ -1,5 +1,5 @@
 package com.mapo.walkaholic.ui.main.dashboard
-/*
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.User
 
-class DashboardRecyclerAdapter(
+class DashboardThemeRecyclerAdapter(
         var data: LiveData<ArrayList<User>>
-) : RecyclerView.Adapter<DashboardRecyclerAdapter.DashboardThemeViewHolder>() {
+) : RecyclerView.Adapter<DashboardThemeRecyclerAdapter.DashboardThemeViewHolder>() {
     inner class DashboardThemeViewHolder constructor(parent: ViewGroup) : RecyclerView.ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.themeList, parent, false)
     ) {
@@ -32,4 +32,3 @@ class DashboardRecyclerAdapter(
         return data.value!!.size
     }
 }
- */

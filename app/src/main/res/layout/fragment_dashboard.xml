@@ -413,8 +413,22 @@
                     android:layout_marginBottom="20dp"
                     android:paddingHorizontal="20dp"
                     android:text="테마에 따라 걸어보세요"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dashRLTheme"
+                        tools:listitem="@layout/item_dashboard_theme"
+                        />
+
+                </LinearLayout>
 
             </LinearLayout>
 
