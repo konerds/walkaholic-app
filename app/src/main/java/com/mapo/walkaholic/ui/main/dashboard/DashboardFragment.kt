@@ -297,6 +297,21 @@ class DashboardFragment :
                 }
             }
         })
+        viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Resource.Success -> {
+                    if(!it.value.error) {
+                        binding.themeEnum = it.value.themeEnum
+                    }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    handleApiError(it)
+                }
+            }
+        })
         viewModel.getDash()
         viewModel.getSGISAccessToken()
         val tmp: GRIDXY = convertGRID_GPS(GlobalApplication.currentLng.toDouble(), GlobalApplication.currentLat.toDouble())

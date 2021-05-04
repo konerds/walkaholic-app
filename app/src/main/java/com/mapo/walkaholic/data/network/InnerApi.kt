@@ -47,6 +47,9 @@ interface InnerApi {
             @Field("exp") exp: Long
     ): ExpTableResponse
 
+    @GET("info/themelist")
+    suspend fun getThemeEnum() : ThemeEnumResponse
+
     @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(

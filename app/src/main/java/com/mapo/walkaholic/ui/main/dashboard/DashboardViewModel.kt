@@ -44,6 +44,9 @@ class DashboardViewModel(
     private val _yesterdayWeatherResponse: MutableLiveData<Resource<YesterdayWeatherResponse>> = MutableLiveData()
     val yesterdayWeatherResponse: LiveData<Resource<YesterdayWeatherResponse>>
         get() = _yesterdayWeatherResponse
+    private val _themeEnumResponse: MutableLiveData<Resource<ThemeEnumResponse>> = MutableLiveData()
+    val themeEnumResponse: LiveData<Resource<ThemeEnumResponse>>
+        get() = _themeEnumResponse
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -113,6 +116,12 @@ class DashboardViewModel(
         }
     }
 
+    fun getThemeEnum() {
+        viewModelScope.launch {
+            _themeEnumResponse.value = mainRepository.getThemeEnum()
+        }
+    }
+
     fun getUserCharacterName(type: Int) =
             when (type) {
                 0 -> "주황 파뿌리"
@@ -135,6 +144,15 @@ class DashboardViewModel(
             } else {
                 return "오류"
             }
+        }
+    }
+
+    fun getThemeList(type: String) : String {
+        return when(type) {
+            "00" -> "힐링"
+            "01" -> "데이트"
+            "02" -> "운동"
+            else -> "오류"
         }
     }
 }

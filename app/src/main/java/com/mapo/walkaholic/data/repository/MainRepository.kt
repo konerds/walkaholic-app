@@ -112,6 +112,10 @@ class MainRepository(
         }
     }
 
+    suspend fun getThemeEnum() = safeApiCall {
+        api.getThemeEnum()
+    }
+
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
         api.getPoints(body)
     }

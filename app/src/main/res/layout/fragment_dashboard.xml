@@ -34,6 +34,10 @@
         <variable
             name="yesterdayWeather"
             type="com.mapo.walkaholic.data.model.YesterdayWeather" />
+
+        <variable
+            name="themeEnum"
+            type="com.mapo.walkaholic.data.model.ThemeEnum" />
     </data>
 
     <androidx.core.widget.NestedScrollView
