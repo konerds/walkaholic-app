@@ -15,6 +15,8 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.GRIDXY
 import com.mapo.walkaholic.data.network.APISApi
@@ -297,18 +299,25 @@ class DashboardFragment :
                 }
             }
         })
-        viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
-            when(it) {
-                is Resource.Success -> {
-                    if(!it.value.error) {
-                        binding.themeEnum = it.value.themeEnum
+        viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer { it2 ->
+            binding.dashRVTheme.also {
+                val linearLayoutManager = LinearLayoutManager(requireContext())
+                linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                it.layoutManager = linearLayoutManager
+                it.setHasFixedSize(true)
+                when (it2) {
+                    is Resource.Success -> {
+                        if (!it2.value.error) {
+                            it.adapter =
+                                it2.value.themeEnum?.let { it3 -> DashboardThemeAdapter(it3) }
+                        }
                     }
-                }
-                is Resource.Loading -> {
+                    is Resource.Loading -> {
 
-                }
-                is Resource.Failure -> {
-                    handleApiError(it)
+                    }
+                    is Resource.Failure -> {
+                        handleApiError(it2)
+                    }
                 }
             }
         })
@@ -318,6 +327,7 @@ class DashboardFragment :
         Log.e(">>", "x = " + tmp.x.toString() + ", y = " + tmp.y.toString())
         viewModel.getYesterdayWeather(tmp.x.toInt().toString(),tmp.y.toInt().toString())
         viewModel.getTodayWeather(tmp.x.toInt().toString(),tmp.y.toInt().toString())
+        viewModel.getThemeEnum()
     }
 
     // 위도 경도 X, Y 좌표 변경

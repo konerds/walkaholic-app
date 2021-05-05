@@ -34,10 +34,6 @@
         <variable
             name="yesterdayWeather"
             type="com.mapo.walkaholic.data.model.YesterdayWeather" />
-
-        <variable
-            name="themeEnum"
-            type="com.mapo.walkaholic.data.model.ThemeEnum" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -230,10 +226,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
+                        android:gravity="start"
                         android:text='@{todayWeather.temperatureCurrent + "ºC/" + todayWeather.weatherCode}'
                         android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:gravity="start"/>
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -246,8 +242,8 @@
                         <FrameLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="left|bottom">
+                            android:layout_gravity="left|bottom"
+                            android:layout_weight="1">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -258,12 +254,12 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
                                 android:layout_marginLeft="48dp"
+                                android:layout_marginTop="4dp"
                                 android:layout_marginBottom="8dp"
                                 android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, yesterdayWeather.temperatureCurrent)}"
-                                android:textSize="16sp"
                                 android:textColor="@color/colorPrimary"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </FrameLayout>
@@ -277,8 +273,8 @@
                             android:paddingHorizontal="20dp"
                             android:text="@string/dash_show_detail"
                             android:textColor="@color/colorPrimaryGreen"
-                            android:textStyle="bold"
-                            android:textSize="@dimen/text_size_micro" />
+                            android:textSize="@dimen/text_size_micro"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -300,8 +296,7 @@
                         android:gravity="center"
                         android:padding="2dp">
 
-                        <TableRow
-                            android:gravity="center">
+                        <TableRow android:gravity="center">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -312,15 +307,14 @@
                                 android:textSize="@dimen/text_size_micro" />
                         </TableRow>
 
-                        <TableRow
-                            android:gravity="center">
+                        <TableRow android:gravity="center">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="?attr/colorSurface"
-                                android:paddingHorizontal="24dp"
                                 android:gravity="center"
+                                android:paddingHorizontal="24dp"
                                 android:text="@{weatherDust.uvRay}"
                                 android:textSize="@dimen/text_size_micro" />
                         </TableRow>
@@ -420,19 +414,12 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dashRVTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/dashRLTheme"
-                        tools:listitem="@layout/item_dashboard_theme"
-                        />
-
-                </LinearLayout>
+                    android:paddingHorizontal="20dp"
+                    tools:listitem="@layout/item_dashboard_theme" />
 
             </LinearLayout>
 

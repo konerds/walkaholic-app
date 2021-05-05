@@ -116,12 +116,6 @@ class DashboardViewModel(
         }
     }
 
-    fun getThemeEnum() {
-        viewModelScope.launch {
-            _themeEnumResponse.value = mainRepository.getThemeEnum()
-        }
-    }
-
     fun getUserCharacterName(type: Int) =
             when (type) {
                 0 -> "주황 파뿌리"
@@ -147,12 +141,9 @@ class DashboardViewModel(
         }
     }
 
-    fun getThemeList(type: String) : String {
-        return when(type) {
-            "00" -> "힐링"
-            "01" -> "데이트"
-            "02" -> "운동"
-            else -> "오류"
+    fun getThemeEnum() {
+        viewModelScope.launch {
+            _themeEnumResponse.value = mainRepository.getThemeEnum()
         }
     }
 }
