@@ -9,11 +9,15 @@ import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.JsonObject
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.auth.LoginFragment
@@ -120,4 +124,22 @@ fun formatText(textView: TextView, full_text: String?, span_text: String?, span_
     val spannable = SpannableString(_full_text)
     spannable.setSpan(ForegroundColorSpan(span_color), firstMatchingIndex, lastMatchingIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
     textView.text = spannable
+}
+
+@BindingAdapter("app:theme_code")
+fun bindDashTheme(imageView:ImageView, theme_code: String) {
+    when(theme_code) {
+        "00" -> imageView.setImageResource(R.drawable.theme_healing)
+        "01" -> imageView.setImageResource(R.drawable.theme_date)
+        "02" -> imageView.setImageResource(R.drawable.theme_exercise)
+        else -> { }
+    }
+}
+
+@BindingAdapter("app:setImage")
+fun setImageUrl(view: ImageView, imageSrc: String) {
+    Glide.with(view.context)
+        .load(imageSrc)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(view)
 }

@@ -41,8 +41,8 @@ class MainRepository(
         private const val APIS_WEATHER_DATE_FORMAT = "yyyyMMdd"
         private const val APIS_WEATHER_TIME_FORMAT = "HHmm"
         private const val TIME_ZONE = "Asia/Seoul"
-        private const val SGIS_API_CONSUMER_KEY = "5a0b5bf4bb2f42daac3d"
-        private const val SGIS_API_SECRET_KEY = "70836f6824bb4bb88335"
+        private const val SGIS_API_CONSUMER_KEY = "67ad057e051144d2a09a"
+        private const val SGIS_API_SECRET_KEY = "5b4ac1c4c89c4ad8bc41"
         private const val SGIS_EPSG_WGS = "4326"
         private const val SGIS_EPSG_BESSEL = "5181"
     }
@@ -114,6 +114,14 @@ class MainRepository(
 
     suspend fun getThemeEnum() = safeApiCall {
         api.getThemeEnum()
+    }
+
+    suspend fun getThemeDetail(themeId: String) = safeApiCall {
+        api.getThemeDetail(themeId)
+    }
+
+    suspend fun getCharacterUriList(characterType:String) = safeApiCall {
+        api.getCharacterUriList(characterType)
     }
 
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {

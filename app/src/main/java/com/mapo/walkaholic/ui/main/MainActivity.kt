@@ -1,13 +1,16 @@
 package com.mapo.walkaholic.ui.main
 
 import android.content.ContentValues
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -37,7 +40,7 @@ import kotlinx.coroutines.runBlocking
 @RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainRepository>(), LifecycleOwner {
     private lateinit var bindingNavigationHeader : NaviHamburgerHeaderBinding
-
+    private lateinit var drawerToggle : ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
@@ -46,20 +49,22 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         userPreferences = UserPreferences(this)
         val mainFactory = ViewModelFactory(getMainRepository())
         viewModel = ViewModelProvider(this, mainFactory).get(MainViewModel::class.java)
+        binding.lifecycleOwner = this
         bindingNavigationHeader = DataBindingUtil.inflate(layoutInflater, R.layout.navi_hamburger_header, binding.mainNvHamburger, true)
         bindingNavigationHeader.viewModel = viewModel
-        setSupportActionBar(mainToolbar)
-        binding.lifecycleOwner = this
-        initNavigation()
-        val drawerToggle = ActionBarDrawerToggle(
+        setSupportActionBar(binding.mainToolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        drawerToggle = ActionBarDrawerToggle(
                 this,
                 binding.mainDrawerLayout,
                 binding.mainToolbar,
                 R.string.openDrawer,
                 R.string.closeDrawer
         )
-        binding.mainDrawerLayout.setDrawerListener(drawerToggle)
+        drawerToggle.isDrawerIndicatorEnabled = true
         drawerToggle.syncState()
+        binding.mainDrawerLayout.addDrawerListener(drawerToggle)
+        initNavigation()
         binding.mainToolbar.setNavigationOnClickListener {
             if (binding.mainDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
                 binding.mainDrawerLayout.closeDrawer(Gravity.LEFT)
@@ -98,38 +103,14 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         viewModel.getUser()
     }
 
-    fun logout() = lifecycleScope.launch {
-        viewModel.logout()
-        userPreferences.removeAuthToken()
-        startNewActivity(AuthActivity::class.java)
+    override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onPostCreate(savedInstanceState, persistentState)
+        drawerToggle.syncState()
     }
 
-    private fun initNavigation() {
-        val navController = Navigation.findNavController(this, R.id.mainFragmentHost)
-        NavigationUI.setupWithNavController(mainNvHamburger, navController)
-        NavigationUI.setupActionBarWithNavController(this, navController, mainDrawerLayout)
-        NavigationUI.setupWithNavController(mainBottomNavigation, navController)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(
-                Navigation.findNavController(this, R.id.mainFragmentHost),
-                mainDrawerLayout
-        )
-    }
-
-    /*
-    override fun getDrawerToggleDelegate(): ActionBarDrawerToggle.Delegate? {
-        return super.getDrawerToggleDelegate()
-    }
-     */
-
-    fun getMainRepository(): MainRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
-        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
-        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -154,6 +135,34 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 return super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    fun logout() = lifecycleScope.launch {
+        viewModel.logout()
+        userPreferences.removeAuthToken()
+        startNewActivity(AuthActivity::class.java)
+    }
+
+    private fun initNavigation() {
+        val navController = Navigation.findNavController(this, R.id.mainFragmentHost)
+        NavigationUI.setupWithNavController(mainNvHamburger, navController)
+        NavigationUI.setupActionBarWithNavController(this, navController, mainDrawerLayout)
+        NavigationUI.setupWithNavController(mainBottomNavigation, navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(
+                Navigation.findNavController(this, R.id.mainFragmentHost),
+                mainDrawerLayout
+        )
+    }
+
+    fun getMainRepository(): MainRepository {
+        val accessToken = runBlocking { userPreferences.accessToken.first() }
+        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
+        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
+        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
     }
 
     override fun onDestroy() {

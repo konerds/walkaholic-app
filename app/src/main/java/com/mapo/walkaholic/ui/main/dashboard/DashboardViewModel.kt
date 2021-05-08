@@ -1,5 +1,7 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
+import android.graphics.drawable.AnimationDrawable
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -47,6 +49,9 @@ class DashboardViewModel(
     private val _themeEnumResponse: MutableLiveData<Resource<ThemeEnumResponse>> = MutableLiveData()
     val themeEnumResponse: LiveData<Resource<ThemeEnumResponse>>
         get() = _themeEnumResponse
+    private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
+    val characterUriList: LiveData<Resource<CharacterUriResponse>>
+        get() = _characterUriList
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -144,6 +149,12 @@ class DashboardViewModel(
     fun getThemeEnum() {
         viewModelScope.launch {
             _themeEnumResponse.value = mainRepository.getThemeEnum()
+        }
+    }
+
+    fun getCharacterUriList(characterType: String) {
+        viewModelScope.launch {
+            _characterUriList.value = mainRepository.getCharacterUriList(characterType)
         }
     }
 }

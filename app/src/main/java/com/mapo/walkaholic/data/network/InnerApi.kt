@@ -51,8 +51,20 @@ interface InnerApi {
     suspend fun getThemeEnum() : ThemeEnumResponse
 
     @FormUrlEncoded
+    @POST("info/themedetail")
+    suspend fun getThemeDetail(
+        @Field("theme_id") themeId : String
+    ) : ThemeResponse
+
+    @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
             @Body body: MapRequestBody
     ): MapResponse
+
+    @FormUrlEncoded
+    @POST("info/characterResource")
+    suspend fun getCharacterUriList(
+        @Field("character_id") characterType : String
+    ) : CharacterUriResponse
 }

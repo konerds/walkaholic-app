@@ -66,15 +66,15 @@
                     android:layout_marginTop="20dp">
 
                     <ImageView
-                        android:id="@+id/dashIvCharacter"
+                        android:id="@+id/dashIvCharacterInfo"
                         android:layout_width="140dp"
                         android:layout_height="140dp"
                         android:layout_gravity="center|center_vertical" />
 
-                    <SurfaceView
-                        android:id="@+id/dashSvCharacter"
-                        android:layout_width="64dp"
-                        android:layout_height="63dp"
+                    <ImageView
+                        android:id="@+id/dashIvCharacter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical" />
                 </FrameLayout>
 
@@ -418,6 +418,7 @@
                     android:id="@+id/dashRVTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
                     android:paddingHorizontal="20dp"
                     tools:listitem="@layout/item_dashboard_theme" />
 

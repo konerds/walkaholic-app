@@ -47,13 +47,12 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/mainBottomNavigation"
-                style="@style/Widget.MaterialComponents.BottomNavigationView"
+                style="@style/Widget.App.BottomNavigationView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bottom_navigation_height"
                 android:background="@drawable/navi_bottom_custom"
                 app:elevation="@dimen/elevation_bottom_navigation"
                 app:labelVisibilityMode="selected"
-                app:layout_behavior="BottomNavigationBehavior"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
