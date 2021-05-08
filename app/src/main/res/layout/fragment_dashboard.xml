@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|center_vertical"
-                    android:text='@{"레벨 " + viewModel.toAnyToString(expTable.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                    android:text='@{"레벨 " + viewModel.toAnyToString(userCharacter.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 <TextView
                     android:id="@+id/dashTvIntro"

@@ -94,47 +94,27 @@ class DashboardFragment :
                                                 binding.expTable = _exptable.value.exptable
                                                 binding.userCharacter?.let { userCharacter ->
                                                     viewModel!!.getCharacterUriList(userCharacter.type.toString())
-                                                    viewModel!!.characterUriList.observe(
-                                                        viewLifecycleOwner,
-                                                        Observer { it2 ->
+                                                    viewModel!!.characterUriList.observe(viewLifecycleOwner, Observer { it2 ->
                                                             when (it2) {
                                                                 is Resource.Success -> {
                                                                     if (!it2.value.error) {
-                                                                        var animationDrawable =
-                                                                            AnimationDrawable()
-                                                                        animationDrawable.isOneShot =
-                                                                            false
+                                                                        var animationDrawable = AnimationDrawable()
+                                                                        animationDrawable.isOneShot = false
                                                                         it2.value.characterUri.forEachIndexed { index1, s ->
-                                                                            Glide.with(
-                                                                                requireContext()
-                                                                            )
-                                                                                .asBitmap()
-                                                                                .load(s.evolution_filename)
-                                                                                .diskCacheStrategy(
-                                                                                    DiskCacheStrategy.NONE
-                                                                                ).skipMemoryCache(
-                                                                                    true
-                                                                                )
+                                                                            Glide.with(requireContext()).asBitmap().load(s.evolution_filename)
+                                                                                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                                                                                 .into(object :
                                                                                     CustomTarget<Bitmap>() {
                                                                                     override fun onLoadCleared(
                                                                                         placeholder: Drawable?
-                                                                                    ) {
-
-                                                                                    }
+                                                                                    ) { }
 
                                                                                     override fun onResourceReady(
                                                                                         resource: Bitmap,
                                                                                         transition: Transition<in Bitmap>?
                                                                                     ) {
-                                                                                        val characterBitmap =
-                                                                                            BitmapDrawable(
-                                                                                                resource
-                                                                                            )
-                                                                                        animationDrawable.addFrame(
-                                                                                            characterBitmap,
-                                                                                            ANIMATION_DURATION
-                                                                                        )
+                                                                                        val characterBitmap = BitmapDrawable(resource)
+                                                                                        animationDrawable.addFrame(characterBitmap, ANIMATION_DURATION)
                                                                                         if (animationDrawable.numberOfFrames == it2.value.characterUri.size) {
                                                                                             val charExp =
                                                                                                 (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
