@@ -1,16 +1,11 @@
 package com.mapo.walkaholic.ui.auth
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.response.StringResponse
-import com.mapo.walkaholic.data.model.response.TermResponse
+import com.mapo.walkaholic.data.model.response.AuthResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -22,8 +17,8 @@ class LoginViewModel(
 ) : BaseViewModel(repository) {
     override fun init() {}
 
-    private val _loginResponse: MutableLiveData<Resource<StringResponse>> = MutableLiveData()
-    val loginResponse: LiveData<Resource<StringResponse>>
+    private val _loginResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
+    val loginResponse: LiveData<Resource<AuthResponse>>
         get() = _loginResponse
 
     fun getAuth(callback: (OAuthToken?, Throwable?) -> Unit) = viewModelScope.launch {
@@ -54,4 +49,13 @@ class LoginViewModel(
             }
         }
     }
+    /*
+    fun login(token: OAuthToken) {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            _loginResponse.value = repository.login(token)
+            progressBarVisibility.set(false)
+        }
+    }
+     */
 }

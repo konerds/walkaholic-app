@@ -17,7 +17,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.ActivityAuthBinding
 import com.mapo.walkaholic.ui.base.BaseActivity
@@ -26,7 +26,6 @@ import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -37,25 +36,21 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userPreferences = UserPreferences(this)
-        val authFactory = ViewModelFactory(getAuthRepository())
-        viewModel = ViewModelProvider(this, authFactory).get(AuthViewModel::class.java)
-        userPreferences.accessToken.asLiveData().observe(this, Observer {
+        val factory = ViewModelFactory(getActivityRepository())
+        viewModel = ViewModelProvider(this, factory).get(getViewModel())
+        /*
+        userPreferences.jwtToken.asLiveData().observe(this, Observer {
             if (it == null) { } else {
                 startNewActivity(MainActivity::class.java as Class<Activity>)
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         })
+         */
         /*
         Log.i(
             ContentValues.TAG, "${getHashKey()}"
         )
          */
-    }
-
-    fun getAuthRepository(): AuthRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
-        return AuthRepository.getInstance(api, userPreferences)
     }
 
     override fun onBackPressed() {
@@ -97,8 +92,7 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
     override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java
 
     override fun getActivityRepository(): AuthRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
         return AuthRepository.getInstance(api, userPreferences)
     }
 

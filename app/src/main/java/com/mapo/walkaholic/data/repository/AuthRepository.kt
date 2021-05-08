@@ -1,10 +1,10 @@
 package com.mapo.walkaholic.data.repository
 
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.GuestApi
 
 class AuthRepository(
-    private val api: InnerApi,
+    private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
     companion object {
@@ -12,8 +12,8 @@ class AuthRepository(
         private var instance: AuthRepository? = null
         @JvmStatic
         fun getInstance(
-                api: InnerApi,
-                preferences: UserPreferences
+            api: GuestApi,
+            preferences: UserPreferences
         ): AuthRepository =
                 instance ?: synchronized(this) {
                     instance ?: AuthRepository(api, preferences).also {
@@ -29,6 +29,12 @@ class AuthRepository(
     suspend fun login(id: Long) = safeApiCall {
         api.login(id)
     }
+
+    /*
+    suspend fun login(token:OAuthToken) = safeApiCall {
+        api.login(token.accessToken, token.accessTokenExpiresAt.toString(), token.refreshToken, token.refreshTokenExpiresAt.toString())
+    }
+     */
 
     suspend fun register(
         id: Long,

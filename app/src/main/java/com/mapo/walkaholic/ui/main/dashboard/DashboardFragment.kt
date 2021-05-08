@@ -21,11 +21,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.GRIDXY
-import com.mapo.walkaholic.data.network.APISApi
+import com.mapo.walkaholic.data.model.GridXy
+import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.data.network.SGISApi
+import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
@@ -48,7 +48,6 @@ class DashboardFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        lifecycleScope.launch { viewModel.saveAuthToken() }
         viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -60,7 +59,7 @@ class DashboardFragment :
                             getString(R.string.err_user),
                             Toast.LENGTH_SHORT
                         ).show()
-                        logout()
+                        //logout()
                         //requireActivity().startNewActivity(AuthActivity::class.java)
                     }
                 }
@@ -73,7 +72,7 @@ class DashboardFragment :
                         getString(R.string.err_user),
                         Toast.LENGTH_SHORT
                     ).show()
-                    logout()
+                    //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
@@ -178,7 +177,7 @@ class DashboardFragment :
                                                     getString(R.string.err_user),
                                                     Toast.LENGTH_SHORT
                                                 ).show()
-                                                logout()
+                                                //logout()
                                             }
                                         }
                                         is Resource.Failure -> {
@@ -188,7 +187,7 @@ class DashboardFragment :
                                                 getString(R.string.err_user),
                                                 Toast.LENGTH_SHORT
                                             ).show()
-                                            logout()
+                                            //logout()
                                         }
                                     }
                                 })
@@ -199,7 +198,7 @@ class DashboardFragment :
                             getString(R.string.err_user),
                             Toast.LENGTH_SHORT
                         ).show()
-                        logout()
+                        //logout()
                         //requireActivity().startNewActivity(AuthActivity::class.java)
                     }
                 }
@@ -212,7 +211,7 @@ class DashboardFragment :
                         getString(R.string.err_user),
                         Toast.LENGTH_SHORT
                     ).show()
-                    logout()
+                    //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
@@ -381,7 +380,7 @@ class DashboardFragment :
         })
         viewModel.getDash()
         viewModel.getSGISAccessToken()
-        val tmp: GRIDXY = convertGRID_GPS(
+        val tmp: GridXy = convertGRID_GPS(
             GlobalApplication.currentLng.toDouble(),
             GlobalApplication.currentLat.toDouble()
         )
@@ -392,7 +391,7 @@ class DashboardFragment :
     }
 
     // 위도 경도 X, Y 좌표 변경
-    private fun convertGRID_GPS(lat: Double, lng: Double): GRIDXY {
+    private fun convertGRID_GPS(lat: Double, lng: Double): GridXy {
         val RE = 6371.00877 // 지구 반경(km)
         val GRID = 5.0 // 격자 간격(km)
         val SLAT1 = 30.0 // 투영 위도1(degree)
@@ -427,7 +426,7 @@ class DashboardFragment :
         if (theta < -Math.PI) theta += 2.0 * Math.PI
         theta *= sn
 
-        return GRIDXY(floor(ra * sin(theta) + XO + 0.5), floor(ro - ra * cos(theta) + YO + 0.5))
+        return GridXy(floor(ra * sin(theta) + XO + 0.5), floor(ro - ra * cos(theta) + YO + 0.5))
     }
 
     /* @TODO? Not sure to use...
@@ -589,10 +588,10 @@ class DashboardFragment :
     ) = FragmentDashboardBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): MainRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
-        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
-        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
+        val jwtToken = runBlocking { userPreferences.jwtToken.first() }
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
+        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
+        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
     }
 }

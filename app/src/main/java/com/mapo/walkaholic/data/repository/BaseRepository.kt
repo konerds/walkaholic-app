@@ -1,11 +1,6 @@
 package com.mapo.walkaholic.data.repository
 
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.common.model.KakaoSdkError
-import com.kakao.sdk.user.UserApi
-import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -35,7 +30,7 @@ abstract class BaseRepository(
     }
 
     suspend fun saveAuthToken(accessToken: String) {
-        preferences.saveAuthToken(accessToken)
+        preferences.saveJwtToken(accessToken)
     }
 
     suspend fun saveIsFirst(isFirst: Boolean) {

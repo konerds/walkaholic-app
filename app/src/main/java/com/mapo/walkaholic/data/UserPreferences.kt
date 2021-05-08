@@ -14,9 +14,9 @@ class UserPreferences(
             name = "local_data_store"
     )
 
-    val accessToken: Flow<String?>
+    val jwtToken: Flow<String?>
         get() = dataStore.data.map { preferences ->
-            preferences[ACCESS_TOKEN]
+            preferences[JWT_TOKEN]
         }
 
     val isFirst: Flow<Boolean?>
@@ -30,9 +30,9 @@ class UserPreferences(
         }
     }
 
-    suspend fun saveAuthToken(accessToken: String) {
+    suspend fun saveJwtToken(jwtToken: String) {
         dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = accessToken
+            preferences[JWT_TOKEN] = jwtToken
         }
     }
 
@@ -42,14 +42,14 @@ class UserPreferences(
         }
     }
 
-    suspend fun removeAuthToken() {
+    suspend fun removeJwtToken() {
         dataStore.edit { preferences ->
-            preferences.remove(ACCESS_TOKEN)
+            preferences.remove(JWT_TOKEN)
         }
     }
 
     companion object {
         private val IS_FIRST = preferencesKey<Boolean>("is_first")
-        private val ACCESS_TOKEN = preferencesKey<String>("access_token")
+        private val JWT_TOKEN = preferencesKey<String>("jwt_token")
     }
 }

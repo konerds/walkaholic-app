@@ -66,7 +66,7 @@ fun Fragment.handleApiError(
             if(this is LoginFragment) {
                 requireView().snackbar("로그인할 수 없습니다")
             } else {
-                (this as BaseFragment<*, *, *>).logout()
+                //(this as BaseFragment<*, *, *>).logout()
             }
         }
         else -> {
@@ -89,7 +89,7 @@ fun Activity.handleApiError(
             if(true) {
 
             } else {
-                (this as BaseFragment<*, *, *>).logout()
+                //(this as BaseFragment<*, *, *>).logout()
             }
         }
         else -> {

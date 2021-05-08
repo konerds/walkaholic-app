@@ -1,15 +1,14 @@
 package com.mapo.walkaholic.data.network
 
-import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.*
 import retrofit2.http.*
 
-interface SGISApi {
+interface SgisApi {
     @GET("auth/authentication.json")
     suspend fun getAccessTokenSGIS(
             @Query("consumer_key") consumerKey: String,
             @Query("consumer_secret") consumerSecret: String
-    ): SGISAccessTokenResponse
+    ): SgisAccessTokenResponse
 
     @GET("transformation/transcoord.json")
     suspend fun getTmCoord(

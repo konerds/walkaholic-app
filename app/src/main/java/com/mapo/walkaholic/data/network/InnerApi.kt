@@ -6,26 +6,6 @@ import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface InnerApi {
-    @FormUrlEncoded
-    @POST("auth/create")
-    suspend fun register(
-            @Field("id") id: Long,
-            @Field("nickname") nickname: String,
-            @Field("birth") birth: Int,
-            @Field("gender") gender: Int,
-            @Field("height") height: Int,
-            @Field("weight") weight: Int
-    ): StringResponse
-
-    @GET("auth/term")
-    suspend fun getTerm(): TermResponse
-
-    @FormUrlEncoded
-    @POST("auth/login")
-    suspend fun login(
-            @Field("id") id: Long
-    ): StringResponse
-
     @GET("auth/logout")
     suspend fun logout(): ResponseBody
 

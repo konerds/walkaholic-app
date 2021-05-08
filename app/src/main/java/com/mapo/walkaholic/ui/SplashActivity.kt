@@ -5,16 +5,17 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.repository.SplashRepository
 import com.mapo.walkaholic.databinding.ActivitySplashscreenBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
+import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.activity_splashscreen.*
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -24,9 +25,11 @@ class SplashActivity: BaseActivity<SplashViewModel, ActivitySplashscreenBinding,
         super.onCreate(savedInstanceState)
         binding = ActivitySplashscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        userPreferences = UserPreferences(this)
+        val factory = ViewModelFactory(getActivityRepository())
+        viewModel = ViewModelProvider(this, factory).get(getViewModel())
         splashIv.alpha = 0f
         splashIv.animate().setDuration(1500).alpha(1f).withEndAction {
-            val userPreferences = UserPreferences(this)
             // @TODO First APP Launch Check ... below logic must be inside that
             userPreferences.isFirst.asLiveData().observe(this, Observer {
                 if(it == null) {
@@ -47,8 +50,7 @@ class SplashActivity: BaseActivity<SplashViewModel, ActivitySplashscreenBinding,
     override fun getViewModel(): Class<SplashViewModel> = SplashViewModel::class.java
 
     override fun getActivityRepository(): SplashRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
         return SplashRepository.getInstance(api, userPreferences)
     }
 }

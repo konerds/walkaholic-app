@@ -23,18 +23,6 @@ class ThemeDetailViewModel(
     val themeResponse: LiveData<Resource<ThemeResponse>>
         get() = _themeResponse
 
-    fun convertTimeToHour(time: String): String {
-        val stringBuilder = StringBuilder()
-        if (time[0].toString() == "0") {
-            stringBuilder.append(time[1])
-        } else {
-            stringBuilder.append(time.substring(0, 2))
-        }
-        stringBuilder.append(".")
-        stringBuilder.append(time.substring(3, 5))
-        return stringBuilder.toString()
-    }
-
     fun getThemeDetail(themeId: String) {
         viewModelScope.launch {
             _themeResponse.value = mainRepository.getThemeDetail(themeId)

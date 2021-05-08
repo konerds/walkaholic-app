@@ -10,7 +10,6 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -23,7 +22,6 @@ import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.*
 import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.data.repository.SplashRepository
 import com.mapo.walkaholic.databinding.ActivityMainBinding
 import com.mapo.walkaholic.databinding.NaviHamburgerHeaderBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
@@ -47,8 +45,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userPreferences = UserPreferences(this)
-        val mainFactory = ViewModelFactory(getMainRepository())
-        viewModel = ViewModelProvider(this, mainFactory).get(MainViewModel::class.java)
+        val factory = ViewModelFactory(getActivityRepository())
+        viewModel = ViewModelProvider(this, factory).get(getViewModel())
         binding.lifecycleOwner = this
         bindingNavigationHeader = DataBindingUtil.inflate(layoutInflater, R.layout.navi_hamburger_header, binding.mainNvHamburger, true)
         bindingNavigationHeader.viewModel = viewModel
@@ -80,6 +78,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 is Resource.Success -> {
                     if (!it.value.error) {
                         bindingNavigationHeader.user = it.value.user
+                        lifecycleScope.launch {
+                            viewModel.saveJwtToken(it.value.jwtToken)
+                        }
                         Log.i(
                                 ContentValues.TAG, "${it.value.user}"
                         )
@@ -89,7 +90,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                                 getString(R.string.err_user),
                                 Toast.LENGTH_SHORT
                         ).show()
-                        logout()
+                        //logout()
                     }
                 }
                 is Resource.Loading -> {
@@ -139,7 +140,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
 
     fun logout() = lifecycleScope.launch {
         viewModel.logout()
-        userPreferences.removeAuthToken()
+        userPreferences.removeJwtToken()
         startNewActivity(AuthActivity::class.java)
     }
 
@@ -157,14 +158,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         )
     }
 
-    fun getMainRepository(): MainRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
-        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
-        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
-    }
-
     override fun onDestroy() {
         GlobalApplication.activityList.remove(this)
         super.onDestroy()
@@ -173,10 +166,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
     override fun getViewModel(): Class<MainViewModel> = MainViewModel::class.java
 
     override fun getActivityRepository(): MainRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
-        val apiAPIS = remoteDataSource.buildRetrofitApi(APISApi::class.java, accessToken)
-        val apiSGIS = remoteDataSource.buildRetrofitApi(SGISApi::class.java, accessToken)
+        val jwtToken = runBlocking { userPreferences.jwtToken.first() }
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
+        val apiAPIS = remoteDataSource.buildRetrofitInnerApi(ApisApi::class.java, jwtToken)
+        val apiSGIS = remoteDataSource.buildRetrofitInnerApi(SgisApi::class.java, jwtToken)
         return MainRepository.getInstance(api, apiAPIS, apiSGIS, userPreferences)
     }
 }

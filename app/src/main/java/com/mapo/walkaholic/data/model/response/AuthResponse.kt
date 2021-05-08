@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.data.model.response
 
-data class StringResponse(
+data class AuthResponse(
         val error: Boolean,
         val message: String,
+        val jwtToken: String
 )

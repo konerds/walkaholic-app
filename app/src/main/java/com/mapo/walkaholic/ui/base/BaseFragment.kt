@@ -34,14 +34,14 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
         val factory = ViewModelFactory(getFragmentRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
 
-        lifecycleScope.launch { userPreferences.accessToken.first() }
+        lifecycleScope.launch { userPreferences.jwtToken.first() }
 
         return binding.root
     }
 
     fun logout() = lifecycleScope.launch {
         viewModel.logout()
-        userPreferences.removeAuthToken()
+        userPreferences.removeJwtToken()
         requireActivity().startNewActivity(AuthActivity::class.java as Class<Activity>)
     }
 

@@ -7,7 +7,7 @@ import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface APISApi {
+interface ApisApi {
     @GET("B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty")
     suspend fun getWeatherDust(
             @Query("serviceKey") serviceKey: String,

@@ -11,22 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.PagerAdapter
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.network.APISApi
-import com.mapo.walkaholic.data.network.InnerApi
-import com.mapo.walkaholic.data.network.RemoteDataSource
-import com.mapo.walkaholic.data.network.SGISApi
+import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.repository.GuideRepository
-import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.data.repository.SplashRepository
 import com.mapo.walkaholic.databinding.ActivityGuideBinding
-import com.mapo.walkaholic.databinding.ActivitySplashscreenBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.activity_guide.*
 import kotlinx.android.synthetic.main.fragment_guide.view.*
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -37,6 +30,9 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
         super.onCreate(savedInstanceState)
         binding = ActivityGuideBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        userPreferences = UserPreferences(this)
+        val factory = ViewModelFactory(getActivityRepository())
+        viewModel = ViewModelProvider(this, factory).get(getViewModel())
         val adapter: PagerAdapter = object : PagerAdapter() {
             override fun instantiateItem(container: ViewGroup, position: Int): Any {
                 val inflater = LayoutInflater.from(container.context)
@@ -83,8 +79,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
     override fun getViewModel(): Class<GuideViewModel> = GuideViewModel::class.java
 
     override fun getActivityRepository(): GuideRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
+        val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
         return GuideRepository.getInstance(api, userPreferences)
     }
 }

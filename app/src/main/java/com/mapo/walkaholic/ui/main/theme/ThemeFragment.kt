@@ -10,10 +10,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.data.model.ThemeEnum
-import com.mapo.walkaholic.data.network.APISApi
+import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.data.network.SGISApi
+import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentThemeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
@@ -78,10 +78,10 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
     ) = FragmentThemeBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): MainRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
-        val api = remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken)
-        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(APISApi::class.java)
-        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SGISApi::class.java)
+        val jwtToken = runBlocking { userPreferences.jwtToken.first() }
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
+        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
+        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
     }
 }

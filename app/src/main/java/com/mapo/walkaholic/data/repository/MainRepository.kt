@@ -4,8 +4,8 @@ import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
-import com.mapo.walkaholic.data.network.APISApi
-import com.mapo.walkaholic.data.network.SGISApi
+import com.mapo.walkaholic.data.network.ApisApi
+import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.naver.maps.map.NaverMap
@@ -15,19 +15,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainRepository(
-        private val api: InnerApi,
-        private val apiWeather: APISApi,
-        private val SGISApiSGIS: SGISApi,
-        preferences: UserPreferences
+    private val api: InnerApi,
+    private val apiWeather: ApisApi,
+    private val SGISApiSgis: SgisApi,
+    preferences: UserPreferences
 ) : BaseRepository(preferences) {
     companion object {
         @Volatile
         private var instance: MainRepository? = null
         @JvmStatic
-        fun getInstance(api: InnerApi, apiWeather: APISApi, SGISApiSGIS: SGISApi, preferences: UserPreferences): MainRepository =
+        fun getInstance(api: InnerApi, apiWeather: ApisApi, SGISApiSgis: SgisApi, preferences: UserPreferences): MainRepository =
                 instance ?: synchronized(this) {
                     instance
-                            ?: MainRepository(api, apiWeather, SGISApiSGIS, preferences).also {
+                            ?: MainRepository(api, apiWeather, SGISApiSgis, preferences).also {
                                 instance = it
                             }
                 }
@@ -71,14 +71,14 @@ class MainRepository(
     }
 
     suspend fun getSGISAccessToken() = safeApiCall {
-        SGISApiSGIS.getAccessTokenSGIS(
+        SGISApiSgis.getAccessTokenSGIS(
                 URLDecoder.decode(SGIS_API_CONSUMER_KEY),
                 URLDecoder.decode(SGIS_API_SECRET_KEY)
         )
     }
 
     suspend fun getTmCoord(accessToken: String, currentX: String, currentY: String) = safeApiCall {
-        SGISApiSGIS.getTmCoord(accessToken, SGIS_EPSG_WGS, SGIS_EPSG_BESSEL, currentX, currentY)
+        SGISApiSgis.getTmCoord(accessToken, SGIS_EPSG_WGS, SGIS_EPSG_BESSEL, currentX, currentY)
     }
 
     suspend fun getNearMsrstn(currentTmX: String, currentTmY: String) = safeApiCall {

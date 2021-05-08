@@ -52,36 +52,10 @@ abstract class BaseViewModel(
         progressBarVisibility.set(false)
     }
 
-    suspend fun saveAuthToken() {
+    suspend fun saveJwtToken(jwtToken: String) {
         progressBarVisibility.set(true)
-        if (AuthApiClient.instance.hasToken()) {
-            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-                if (error != null) {
-                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                        logout()
-                    } else { }
-                } else {
-                    tokenInfo!!.id.toString().trim().let {
-                        if (it != null) {
-                            viewModelScope.launch {
-                                repository.saveAuthToken(it)
-                            }
-                        } else { }
-                    }
-                }
-            }
-        } else {
-            AuthApiClient.instance.refreshAccessToken { token, error ->
-                if (error != null) {
-                    if (error is KakaoSdkError && error.isInvalidTokenError()) {
-                        logout()
-                    } else { }
-                } else {
-                    viewModelScope.launch {
-                        repository.saveAuthToken(token!!.accessToken)
-                    }
-                }
-            }
+        viewModelScope.launch {
+            repository.saveAuthToken(jwtToken)
         }
         progressBarVisibility.set(false)
     }

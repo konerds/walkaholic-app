@@ -1,7 +1,5 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
-import android.graphics.drawable.AnimationDrawable
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -31,8 +29,8 @@ class DashboardViewModel(
     private val _weatherDustResponse: MutableLiveData<Resource<WeatherDustResponse>> = MutableLiveData()
     val weatherDustResponse: LiveData<Resource<WeatherDustResponse>>
         get() = _weatherDustResponse
-    private val _sgisAccessTokenResponse: MutableLiveData<Resource<SGISAccessTokenResponse>> = MutableLiveData()
-    val sgisAccessTokenResponse: LiveData<Resource<SGISAccessTokenResponse>>
+    private val _sgisAccessTokenResponse: MutableLiveData<Resource<SgisAccessTokenResponse>> = MutableLiveData()
+    val sgisAccessTokenResponse: LiveData<Resource<SgisAccessTokenResponse>>
         get() = _sgisAccessTokenResponse
     private val _tmCoordResponse: MutableLiveData<Resource<TmCoordResponse>> = MutableLiveData()
     val tmCoordResponse: LiveData<Resource<TmCoordResponse>>

@@ -1,20 +1,14 @@
 package com.mapo.walkaholic.ui.auth
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.kakao.sdk.auth.AuthApiClient
-import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.response.StringResponse
+import com.mapo.walkaholic.data.model.response.AuthResponse
 import com.mapo.walkaholic.data.model.response.TermResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
-import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
@@ -26,8 +20,8 @@ class RegisterViewModel(
     val termResponse: LiveData<Resource<TermResponse>>
         get() = _termResponse
 
-    private val _registerResponse: MutableLiveData<Resource<StringResponse>> = MutableLiveData()
-    val registerResponse: LiveData<Resource<StringResponse>>
+    private val _registerResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
+    val registerResponse: LiveData<Resource<AuthResponse>>
         get() = _registerResponse
 
     fun getTerm() {

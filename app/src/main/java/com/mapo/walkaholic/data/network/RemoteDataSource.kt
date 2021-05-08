@@ -13,15 +13,33 @@ class RemoteDataSource {
         private const val BASE_URL_OPENAPI_SGIS = "https://sgisapi.kostat.go.kr/OpenAPI3/"
     }
 
-    fun <Api> buildRetrofitApi(
-            api: Class<Api>,
-            accessToken: String ?= null
+    fun <Api> buildRetrofitGuestApi(
+        api: Class<Api>
+    ): Api {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(OkHttpClient.Builder().also { client ->
+                    if (BuildConfig.DEBUG) {
+                        val logging = HttpLoggingInterceptor()
+                        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                        client.addInterceptor(logging)
+                    }
+                }.build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
+    }
+
+    fun <Api> buildRetrofitInnerApi(
+        api: Class<Api>,
+        jwtToken: String ?= null
     ): Api {
         return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(OkHttpClient.Builder().addInterceptor { chain ->
                     chain.proceed(chain.request().newBuilder().also {
-                        it.addHeader("Authorization", "Bearer $accessToken")
+                        it.addHeader("Authorization", "Bearer $jwtToken")
                     }.build())
                 }
                         .also { client ->

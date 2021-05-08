@@ -18,7 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentRegisterBinding
@@ -27,9 +27,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -71,7 +69,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                 when (it) {
                     is Resource.Success -> {
                         lifecycleScope.launch {
-                            viewModel.saveAuthToken()
+                            viewModel.saveJwtToken(it.value.jwtToken)
                             requireActivity().startNewActivity(MainActivity::class.java)
                         }
                     }
@@ -238,9 +236,8 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
     ) = FragmentRegisterBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository {
-        val accessToken = runBlocking { userPreferences.accessToken.first() }
         return AuthRepository.getInstance(
-            remoteDataSource.buildRetrofitApi(InnerApi::class.java, accessToken),
+            remoteDataSource.buildRetrofitInnerApi(GuestApi::class.java),
             userPreferences
         )
     }
