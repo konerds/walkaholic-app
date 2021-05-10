@@ -164,14 +164,6 @@ class DashboardFragment :
                                                             }
                                                         })
                                                 }
-                                                val spannableTvWalkToday =
-                                                    dashTvWalkToday.text as Spannable
-                                                spannableTvWalkToday.setSpan(
-                                                    ForegroundColorSpan(Color.parseColor("#F97413")),
-                                                    0,
-                                                    5,
-                                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                                                )
                                             } else {
                                                 Toast.makeText(
                                                     requireContext(),

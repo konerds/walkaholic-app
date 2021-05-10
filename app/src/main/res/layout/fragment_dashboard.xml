@@ -47,17 +47,68 @@
             android:background="#F9F9F9"
             android:scrollbars="vertical">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dashLayout1Head"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/box_dashboard_uppercorner_F37520"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:layout_constraintBottom_toTopOf="@id/dashLayout1Space"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/dashTvCharacterName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@{viewModel.getUserCharacterName(userCharacter.type)}"
+                    android:textColor="@color/mdWhite1000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/dashIvSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_setting"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/dashLayout1Space"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="#ECECEC"
+                android:elevation="4dp"
+                app:layout_constraintBottom_toTopOf="@id/dashLayout1"
+                app:layout_constraintTop_toBottomOf="@id/dashLayout1Head" />
+
             <LinearLayout
                 android:id="@+id/dashLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/layout_whitebackground"
+                android:background="@drawable/box_dashboard_lowercorner_white"
+                android:elevation="4dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashLayout3"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/dashLayout1Space">
 
                 <FrameLayout
                     android:id="@+id/dashLayoutFrame"
@@ -76,43 +127,106 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical" />
-                </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|center_vertical"
-                    android:text='@{"레벨 " + viewModel.toAnyToString(userCharacter.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:gravity="center|center_vertical"
+                        android:text='@{"레벨 " + viewModel.toAnyToString(userCharacter.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/dashTvIntro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|center_vertical"
+                    android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:text='@{viewModel.getUserCharacterName(userCharacter.type) + " 친구가 " + user.nickname + " 님을 기다렸어요!"}'
-                    android:textColor="#FA9F00"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:background="@drawable/box_dashboard_corner_skincolor"
+                    android:gravity="center|center_vertical"
+                    android:minWidth="220dp"
+                    android:minHeight="32dp"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:full_text='@{viewModel.getUserCharacterName(userCharacter.type) + "가 " + user.nickname + "님을 기다렸어요!"}'
+                    app:span_color="@{@color/colorPrimary}"
+                    app:span_text="@{viewModel.getUserCharacterName(userCharacter.type)}" />
 
-                <TextView
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center|center_vertical"
+                        android:text="@{viewModel.showTodayString()}"
+                        android:textSize="20sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_calendar" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|center_vertical"
+                            android:text="@string/dash_walk_record"
+                            android:textColor="#FCC9A3"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    android:text="@{viewModel.showTodayString()}"
-                    android:textSize="20sp" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/dashTvWalkToday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:layout_marginLeft="20dp"
-                    android:bufferType="spannable"
-                    android:text="@string/dash_walk_distance"
-                    android:textSize="32sp" />
+                    <TextView
+                        android:id="@+id/dashTvWalkAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_vertical"
+                        android:gravity="left"
+                        android:text="8,000"
+                        android:textColor="#F37520"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/dashTvWalkToday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_vertical"
+                        android:text=" 걸음 걸었어요!"
+                        android:textColor="#689F38"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/dashLayoutRelative1"
@@ -179,25 +293,16 @@
                     android:weightSum="5">
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="120dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_fa9f00_stroke_120dp"
+                        android:background="@drawable/box_dashboard_corner_orange"
                         android:foreground="?selectableItemBackground"
-                        android:text="@string/dash_walk_record"
-                        android:textColor="#FA9F00"
-                        android:textSize="20sp" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_fa9f00_120dp"
-                        android:foreground="?selectableItemBackground"
+                        android:minWidth="272dp"
+                        android:minHeight="52dp"
                         android:text="@string/dash_walk_play"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
+                        android:textColor="@color/mdWhite1000"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -209,7 +314,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/layout_whitebackground"
+                android:background="@drawable/box_dashboard_uppercorner_white"
                 android:gravity="center|center_vertical"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashLayout5"
@@ -222,61 +327,72 @@
                     android:layout_marginTop="20dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:gravity="start"
-                        android:text='@{todayWeather.temperatureCurrent + "ºC/" + todayWeather.weatherCode}'
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="start"
+                            android:text='@{todayWeather.temperatureCurrent + "ºC / " + todayWeather.weatherCode}'
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/dashIvWeather"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp" />
+
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="20dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|bottom"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:id="@+id/dashIvWeather"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="48dp"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="8dp"
-                                android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, yesterdayWeather.temperatureCurrent)}"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                        </FrameLayout>
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/dashTvWeatherDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, yesterdayWeather.temperatureCurrent)}"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/dashTvDustStation"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="end|bottom"
-                            android:paddingHorizontal="20dp"
-                            android:text="@string/dash_show_detail"
-                            android:textColor="@color/colorPrimaryGreen"
+                            android:layout_marginRight="4dp"
+                            android:text='@{weatherDust.sidoName + " " + weatherDust.stationName}'
                             android:textSize="@dimen/text_size_micro"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toLeftOf="@id/dashIvDustStation"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/dashIvDustStation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:src="@drawable/ic_station" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
 
@@ -389,6 +505,12 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:background="@drawable/box_dashboard_lowercorner_grey"
+                    android:text="@string/dash_show_detail"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -398,7 +520,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/layout_whitebackground"
+                android:background="@drawable/box_dashboard_uppercorner_white"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashEndSpace"
                 app:layout_constraintTop_toBottomOf="@id/dashLayout3">

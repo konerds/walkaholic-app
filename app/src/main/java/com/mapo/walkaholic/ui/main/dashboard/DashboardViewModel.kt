@@ -121,9 +121,9 @@ class DashboardViewModel(
 
     fun getUserCharacterName(type: Int) =
             when (type) {
-                0 -> "주황 파뿌리"
-                1 -> "파랑 파뿌리"
-                2 -> "노랑 파뿌리"
+                0 -> "비타씨"
+                1 -> "파랑 비타씨"
+                2 -> "노랑 비타씨"
                 else -> "[오류]"
             }
 

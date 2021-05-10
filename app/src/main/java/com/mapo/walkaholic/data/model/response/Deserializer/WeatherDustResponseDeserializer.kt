@@ -45,7 +45,7 @@ class WeatherDustResponseDeserializer : JsonDeserializer<WeatherDustResponse> {
                     4 -> "매우 나쁨"
                     else -> "오류"
                 }
-                weatherDustList.add(WeatherDust(i.asJsonObject["stationName"].asString.toString().trim(), uvRay, pmDust, pmSuperDust))
+                weatherDustList.add(WeatherDust(i.asJsonObject["stationName"].asString.toString().trim(), uvRay, pmDust, pmSuperDust, i.asJsonObject["sidoName"].asString))
         }
         return WeatherDustResponse(false, weatherDustList)
     }

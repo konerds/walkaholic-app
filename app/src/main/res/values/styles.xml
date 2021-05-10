@@ -5,7 +5,7 @@
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
         <item name="colorSecondaryVariant">@color/mdWhite1000</item>
-        <item name="android:colorBackground">@color/mdWhite1000</item>
+        <item name="android:colorBackground">@color/colorActivityBackground</item>
         <item name="colorSurface">@color/mdWhite1000</item>
         <item name="colorError">@color/mdWhite1000</item>
         <item name="colorOnPrimary">@color/mdWhite1000</item>
@@ -15,6 +15,10 @@
         <item name="colorOnError">@color/mdWhite1000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <!-- Auth Screen Theme -->
+    <style name="Theme.AuthTheme" parent="Theme.AppTheme">
+        <item name="android:colorBackground">@color/mdWhite1000</item>
     </style>
     <!-- Guide Screen Theme -->
     <style name="Theme.GuideTheme" parent="Theme.AppTheme">
@@ -26,7 +30,7 @@
     </style>
     <!-- Splash Screen Theme -->
     <style name="Theme.SplashTheme" parent="Theme.AppTheme">
-        <item name="android:background">#F37520</item>
+        <item name="android:background">@color/mdWhite1000</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowFullscreen">true</item>

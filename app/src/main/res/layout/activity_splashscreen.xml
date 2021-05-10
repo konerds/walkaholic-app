@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/splashIv"
-            android:layout_width="match_parent"
-            android:layout_height="76dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
