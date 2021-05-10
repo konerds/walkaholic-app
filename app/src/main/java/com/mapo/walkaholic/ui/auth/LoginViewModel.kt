@@ -17,6 +17,10 @@ class LoginViewModel(
 ) : BaseViewModel(repository) {
     override fun init() {}
 
+    private val _filenameLogoTitle = MutableLiveData("logo_title.png")
+    val filenameLogoTitle: LiveData<String>
+        get() = _filenameLogoTitle
+
     private val _loginResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
     val loginResponse: LiveData<Resource<AuthResponse>>
         get() = _loginResponse
@@ -49,6 +53,11 @@ class LoginViewModel(
             }
         }
     }
+
+    fun getFilenameTitleLogo() = viewModelScope.launch {
+        _filenameLogoTitle.value = "logo_title.png"
+    }
+
     /*
     fun login(token: OAuthToken) {
         progressBarVisibility.set(true)

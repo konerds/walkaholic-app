@@ -23,6 +23,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
+import com.mapo.walkaholic.ui.setImageUrl
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,9 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
         lifecycleScope.launch {
             viewModel.saveIsFirst()
         }
+        viewModel.filenameLogoTitle.observe(viewLifecycleOwner, Observer {
+            setImageUrl(binding.loginIvLogo, it)
+        })
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@LoginFragment::moveActivity)
@@ -86,6 +90,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                     //viewModel.login(token)
                 }
             }
+            viewModel.getFilenameTitleLogo()
             viewModel.getAuth(callback)
         }
     }

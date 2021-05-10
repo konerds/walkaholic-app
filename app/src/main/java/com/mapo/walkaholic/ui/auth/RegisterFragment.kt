@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isNotEmpty
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
@@ -26,6 +27,7 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
+import com.mapo.walkaholic.ui.setImageUrl
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -40,7 +42,10 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
         binding.registerTvService.movementMethod = ScrollingMovementMethod.getInstance()
         binding.registerTvPrivacy.movementMethod = ScrollingMovementMethod.getInstance()
         binding.registerEtBirth.setText(SimpleDateFormat("yyyyMMdd").format(Date()))
-        viewModel.termResponse.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.filenameLogoTitle.observe(viewLifecycleOwner, Observer {
+            setImageUrl(binding.registerIvLogo, it)
+        })
+        viewModel.termResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
@@ -65,7 +70,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
         )
         viewModel.registerResponse.observe(
             viewLifecycleOwner,
-            androidx.lifecycle.Observer {
+            Observer {
                 when (it) {
                     is Resource.Success -> {
                         lifecycleScope.launch {
@@ -78,6 +83,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                     }
                 }
             })
+        viewModel.getFilenameTitleLogo()
         viewModel.getTerm()
     }
 

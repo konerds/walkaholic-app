@@ -24,13 +24,14 @@
 
         <ImageView
             android:id="@+id/registerIvLogo"
-            android:layout_width="match_parent"
-            android:layout_height="128dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/logo_title"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout

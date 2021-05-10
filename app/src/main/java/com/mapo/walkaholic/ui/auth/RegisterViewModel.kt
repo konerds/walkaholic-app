@@ -16,6 +16,10 @@ class RegisterViewModel(
 ) : BaseViewModel(repository) {
     override fun init() {}
 
+    private val _filenameLogoTitle = MutableLiveData("logo_title.png")
+    val filenameLogoTitle: LiveData<String>
+        get() = _filenameLogoTitle
+
     private val _termResponse: MutableLiveData<Resource<TermResponse>> = MutableLiveData()
     val termResponse: LiveData<Resource<TermResponse>>
         get() = _termResponse
@@ -23,6 +27,10 @@ class RegisterViewModel(
     private val _registerResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
     val registerResponse: LiveData<Resource<AuthResponse>>
         get() = _registerResponse
+
+    fun getFilenameTitleLogo() = viewModelScope.launch {
+        _filenameLogoTitle.value = "logo_title.png"
+    }
 
     fun getTerm() {
         progressBarVisibility.set(true)
