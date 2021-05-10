@@ -134,22 +134,13 @@ fun formatText(textView: TextView, full_text: String?, span_text: String?, span_
 fun bindDashTheme(view: ImageView, theme_code: String) {
     when (theme_code) {
         "00" -> {
-            Glide.with(view.context)
-                .load("${RESOURCE_BASE_URL}theme_healing.png")
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view)
+            setImageUrl(view, "theme_healing.png")
         }
         "01" -> {
-            Glide.with(view.context)
-                .load("${RESOURCE_BASE_URL}theme_date.png")
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view)
+            setImageUrl(view, "theme_date.png")
         }
         "02" -> {
-            Glide.with(view.context)
-                .load("${RESOURCE_BASE_URL}theme_exercise.png")
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(view)
+            setImageUrl(view, "theme_exercise.png")
         }
         else -> {
         }
@@ -164,10 +155,8 @@ fun setImageUrl(view: ImageView, imageSrc: String) {
         .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
         .into(object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                /*
-                view.minimumWidth = resource.minimumWidth
-                view.minimumHeight = resource.minimumHeight
-                 */
+                view.minimumWidth = resource.minimumWidth * PIXELS_PER_METRE
+                view.minimumHeight = resource.minimumHeight * PIXELS_PER_METRE
                 view.setImageDrawable(resource)
                 Log.d(TAG, "${resource.minimumWidth} ${resource.minimumHeight}")
             }

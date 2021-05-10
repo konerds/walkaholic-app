@@ -31,6 +31,7 @@ import com.mapo.walkaholic.databinding.FragmentDashboardBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.setImageUrl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -342,6 +343,16 @@ class DashboardFragment :
                 is Resource.Success -> {
                     if (!it.value.error) {
                         binding.todayWeather = it.value.todayWeather
+                        setImageUrl(binding.dashIvWeather, when(it.value.todayWeather.weatherCode) {
+                            "맑음" -> "weather_sunny.png"
+                            "구름" -> "weather_cloudy.png"
+                            "흐림" -> "weather_partly_cloudy.png"
+                            "비" -> "weather_rainy.png"
+                            "진눈개비" -> "weather_sleeting.png"
+                            "눈" -> "weather_snowy.png"
+                            "오류" -> "weather_error.png"
+                            else -> "weather_error.png"
+                        })
                         Log.i(
                             ContentValues.TAG, "Today Weather : ${it.value.todayWeather}"
                         )
