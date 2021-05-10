@@ -44,6 +44,10 @@ abstract class BaseViewModel(
         }
     }
 
+    fun getPixelsPerMetre() = repository.getPixelsPerMetre()
+
+    fun getResourceBaseUri() = repository.getResourceBaseUri()
+
     suspend fun saveIsFirst() {
         progressBarVisibility.set(true)
         viewModelScope.launch {

@@ -101,7 +101,7 @@ class DashboardFragment :
                                                                         var animationDrawable = AnimationDrawable()
                                                                         animationDrawable.isOneShot = false
                                                                         it2.value.characterUri.forEachIndexed { index1, s ->
-                                                                            Glide.with(requireContext()).asBitmap().load(s.evolution_filename)
+                                                                            Glide.with(requireContext()).asBitmap().load("${viewModel!!.getResourceBaseUri()}${s.evolution_filename}")
                                                                                 .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                                                                                 .into(object :
                                                                                     CustomTarget<Bitmap>() {

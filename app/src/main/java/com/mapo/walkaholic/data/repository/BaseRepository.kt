@@ -9,6 +9,10 @@ import retrofit2.HttpException
 abstract class BaseRepository(
     private val preferences: UserPreferences
 ) {
+    companion object {
+        private const val RESOURCE_BASE_URL = "http://49.50.166.31:80/resource/global/"
+        private const val PIXELS_PER_METRE = 4
+    }
 
     suspend fun <T> safeApiCall(
             apiCall: suspend () -> T
@@ -28,6 +32,10 @@ abstract class BaseRepository(
             }
         }
     }
+
+    fun getPixelsPerMetre() = PIXELS_PER_METRE
+
+    fun getResourceBaseUri() = RESOURCE_BASE_URL
 
     suspend fun saveAuthToken(accessToken: String) {
         preferences.saveJwtToken(accessToken)
