@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.PagerAdapter
 import com.mapo.walkaholic.R
@@ -24,7 +25,7 @@ import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
-    val guideList = arrayOf(R.drawable.tutorial1, R.drawable.tutorial2, R.drawable.tutorial3)
+    private lateinit var guideList : ArrayList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
@@ -33,34 +34,36 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
         userPreferences = UserPreferences(this)
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
-        val adapter: PagerAdapter = object : PagerAdapter() {
-            override fun instantiateItem(container: ViewGroup, position: Int): Any {
-                val inflater = LayoutInflater.from(container.context)
-                val view = inflater.inflate(R.layout.fragment_guide, container, false)
+        viewModel.filenameListGuide.observe(this, Observer {
+            guideList = it
+            val adapter: PagerAdapter = object : PagerAdapter() {
+                override fun instantiateItem(container: ViewGroup, position: Int): Any {
+                    val inflater = LayoutInflater.from(container.context)
+                    val view = inflater.inflate(R.layout.fragment_guide, container, false)
+                    setImageUrl(view.guideIvItem, guideList[position])
+                    container.addView(view)
+                    return view
+                }
 
-                view.guideIvItem.setImageResource(guideList[position])
+                override fun destroyItem(container: ViewGroup, position: Int, guide_pa_obj: Any) {
+                    container.removeView(guide_pa_obj as View?)
+                }
 
-                container.addView(view)
-                return view
+                override fun isViewFromObject(view: View, guide_pa_obj: Any): Boolean {
+                    return view == guide_pa_obj
+                }
+
+                override fun getCount(): Int {
+                    return guideList.size
+                }
             }
-
-            override fun destroyItem(container: ViewGroup, position: Int, guide_pa_obj: Any) {
-                container.removeView(guide_pa_obj as View?)
+            guideVp.adapter = adapter
+            guideChipSkip.setOnClickListener {
+                //@TODO ACTIVITY ALIVE CHECK
+                startActivity(Intent(this, AuthActivity::class.java))
             }
-
-            override fun isViewFromObject(view: View, guide_pa_obj: Any): Boolean {
-                return view == guide_pa_obj
-            }
-
-            override fun getCount(): Int {
-                return guideList.size
-            }
-        }
-        guideVp.adapter = adapter
-        guideChipSkip.setOnClickListener {
-            //@TODO ACTIVITY ALIVE CHECK
-            startActivity(Intent(this, AuthActivity::class.java))
-        }
+        })
+        viewModel.getFilenameListGuide()
     }
 
     override fun onBackPressed() {

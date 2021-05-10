@@ -2,10 +2,11 @@ package com.mapo.walkaholic.ui
 
 import android.app.Activity
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
@@ -15,17 +16,15 @@ import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.JsonObject
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.auth.LoginFragment
-import com.mapo.walkaholic.ui.base.BaseActivity
-import com.mapo.walkaholic.ui.base.BaseFragment
-import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
+
+private const val RESOURCE_BASE_URL = "http://49.50.166.31:80/resource/global/"
+private const val PIXELS_PER_METRE = 4
 
 fun <A : Activity> Activity.startNewActivity(activity: Class<A>) {
     Intent(this, activity).also {
@@ -50,20 +49,20 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
 
 fun Fragment.handleApiError(
     failure: Resource.Failure,
-    retry: (() -> Unit) ?= null
+    retry: (() -> Unit)? = null
 ) {
     val error = failure.errorBody?.string().toString()
     Log.i(
-            ContentValues.TAG, "Error : ${error}"
+        ContentValues.TAG, "Error : ${error}"
     )
-    when{
+    when {
         failure.isNetworkError -> {
             //val errCode = JSONObject(failure.errorCode.toString())
             //val errBody = JSONObject(failure.errorBody?.string())
             requireView().snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
         }
         failure.errorCode == 401 -> {
-            if(this is LoginFragment) {
+            if (this is LoginFragment) {
                 requireView().snackbar("로그인할 수 없습니다")
             } else {
                 //(this as BaseFragment<*, *, *>).logout()
@@ -76,17 +75,17 @@ fun Fragment.handleApiError(
 }
 
 fun Activity.handleApiError(
-        failure: Resource.Failure,
-        retry: (() -> Unit) ?= null
+    failure: Resource.Failure,
+    retry: (() -> Unit)? = null
 ) {
-    when{
+    when {
         failure.isNetworkError -> {
             //val errCode = JSONObject(failure.errorCode.toString())
             //val errBody = JSONObject(failure.errorBody?.string())
             window.decorView.snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
         }
         failure.errorCode == 401 -> {
-            if(true) {
+            if (true) {
 
             } else {
                 //(this as BaseFragment<*, *, *>).logout()
@@ -103,43 +102,76 @@ fun Activity.handleApiError(
 fun formatText(textView: TextView, full_text: String?, span_text: String?, span_color: Int) {
     val _full_text: String
     val _span_text: String
-    if(span_text.isNullOrEmpty() || span_text == "null") {
+    if (span_text.isNullOrEmpty() || span_text == "null") {
         _span_text = "오류"
     } else {
         _span_text = span_text
     }
-    if(full_text.isNullOrEmpty() || full_text == "null") {
+    if (full_text.isNullOrEmpty() || full_text == "null") {
         _full_text = "오류"
     } else {
         _full_text = full_text
     }
-    val firstMatchingIndex = when(_full_text.indexOf(_span_text)) {
+    val firstMatchingIndex = when (_full_text.indexOf(_span_text)) {
         -1 -> 0
         else -> _full_text.indexOf(_span_text)
     }
-    val lastMatchingIndex = when(firstMatchingIndex + _span_text.length) {
+    val lastMatchingIndex = when (firstMatchingIndex + _span_text.length) {
         -1 -> 1
         else -> firstMatchingIndex + _span_text.length
     }
     val spannable = SpannableString(_full_text)
-    spannable.setSpan(ForegroundColorSpan(span_color), firstMatchingIndex, lastMatchingIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+    spannable.setSpan(
+        ForegroundColorSpan(span_color),
+        firstMatchingIndex,
+        lastMatchingIndex,
+        Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+    )
     textView.text = spannable
 }
 
 @BindingAdapter("app:theme_code")
-fun bindDashTheme(imageView:ImageView, theme_code: String) {
-    when(theme_code) {
-        "00" -> imageView.setImageResource(R.drawable.theme_healing)
-        "01" -> imageView.setImageResource(R.drawable.theme_date)
-        "02" -> imageView.setImageResource(R.drawable.theme_exercise)
-        else -> { }
+fun bindDashTheme(view: ImageView, theme_code: String) {
+    when (theme_code) {
+        "00" -> {
+            Glide.with(view.context)
+                .load("${RESOURCE_BASE_URL}theme_healing.png")
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(view)
+        }
+        "01" -> {
+            Glide.with(view.context)
+                .load("${RESOURCE_BASE_URL}theme_date.png")
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(view)
+        }
+        "02" -> {
+            Glide.with(view.context)
+                .load("${RESOURCE_BASE_URL}theme_exercise.png")
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(view)
+        }
+        else -> {
+        }
     }
 }
 
 @BindingAdapter("app:setImage")
 fun setImageUrl(view: ImageView, imageSrc: String) {
     Glide.with(view.context)
-        .load(imageSrc)
+        .load("${RESOURCE_BASE_URL}${imageSrc}")
         .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(view)
+        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+        .into(object : CustomTarget<Drawable>() {
+            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                /*
+                view.minimumWidth = resource.minimumWidth
+                view.minimumHeight = resource.minimumHeight
+                 */
+                view.setImageDrawable(resource)
+                Log.d(TAG, "${resource.minimumWidth} ${resource.minimumHeight}")
+            }
+            override fun onLoadCleared(placeholder: Drawable?) {}
+
+        })
 }

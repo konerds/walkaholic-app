@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.repository.SplashRepository
@@ -28,6 +29,10 @@ class SplashActivity: BaseActivity<SplashViewModel, ActivitySplashscreenBinding,
         userPreferences = UserPreferences(this)
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
+        viewModel.filenameLogoSplash.observe(this, Observer {
+            setImageUrl(binding.splashIv, it)
+        })
+        viewModel.getFilenameSplashLogo()
         splashIv.alpha = 0f
         splashIv.animate().setDuration(1500).alpha(1f).withEndAction {
             // @TODO First APP Launch Check ... below logic must be inside that

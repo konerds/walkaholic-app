@@ -25,10 +25,6 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
-    companion object {
-        fun newInstance() : ThemeFragment = ThemeFragment()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.themeTL

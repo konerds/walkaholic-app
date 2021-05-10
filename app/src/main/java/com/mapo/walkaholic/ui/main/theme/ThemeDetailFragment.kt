@@ -21,16 +21,10 @@ import kotlinx.coroutines.runBlocking
 class ThemeDetailFragment(
     private val position: Int
 ) : BaseFragment<ThemeDetailViewModel, FragmentDetailThemeBinding, MainRepository>() {
-    companion object {
-        fun newInstance(position: Int): ThemeDetailFragment =
-            ThemeDetailFragment(position)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.themeResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.themeRVTheme.also {
-                val linearLayoutManager = LinearLayoutManager(requireContext())
                 it.layoutManager = LinearLayoutManager(requireContext())
                 it.setHasFixedSize(true)
                 when (it2) {
