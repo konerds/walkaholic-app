@@ -304,7 +304,8 @@
                         android:text="@string/dash_walk_play"
                         android:textColor="@color/mdWhite1000"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:onClick='@{()->viewModel.onClickEvent("walk_start")}'/>
 
                 </LinearLayout>
             </LinearLayout>

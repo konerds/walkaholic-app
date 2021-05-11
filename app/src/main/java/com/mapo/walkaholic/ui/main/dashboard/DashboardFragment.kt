@@ -449,6 +449,9 @@ class DashboardFragment :
             "walk_record" -> {
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvDashWalkRecord()
             }
+            "walk_start" -> {
+                DashboardFragmentDirections.actionActionBnvDashToActionBnvMap()
+            }
             else -> { null }
         }
         if(navDirection != null) {
