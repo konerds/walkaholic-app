@@ -16,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -442,11 +444,15 @@ class DashboardFragment :
     }
 
     private fun onClickEvent(name: String) {
+        val navDirection : NavDirections? =
         when (name) {
             "walk_record" -> {
-
+                DashboardFragmentDirections.actionActionBnvDashToActionBnvDashWalkRecord()
             }
-            else -> { }
+            else -> { null }
+        }
+        if(navDirection != null) {
+            findNavController().navigate(navDirection)
         }
     }
 

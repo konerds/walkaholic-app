@@ -9,6 +9,19 @@
         android:id="@+id/actionBnvDash"
         android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardFragment"
         tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_actionBnvDash_to_actionBnvDashWalkRecord"
+            app:destination="@id/actionBnvDashWalkRecord"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/actionBnvDashWalkRecord"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarFragment"
+        tools:layout="@layout/fragment_dashboard_calendar">
     </fragment>
 
     <fragment
@@ -19,8 +32,8 @@
 
     <fragment
         android:id="@+id/actionBnvChallenge"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarFragment"
-        tools:layout="@layout/fragment_dashboard_calendar">
+        android:name="com.mapo.walkaholic.ui.main.challenge.ChallengeFragment"
+        tools:layout="@layout/fragment_challenge">
     </fragment>
 
     <fragment
