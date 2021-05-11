@@ -1,9 +1,10 @@
 package com.mapo.walkaholic.ui
 
-import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,8 @@ import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_guide.*
 import kotlinx.android.synthetic.main.fragment_guide.view.*
-import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
@@ -52,12 +51,12 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                     return view
                 }
 
-                override fun destroyItem(container: ViewGroup, position: Int, guide_pa_obj: Any) {
-                    container.removeView(guide_pa_obj as View?)
+                override fun destroyItem(container: ViewGroup, position: Int, pageAdapterGuideObj: Any) {
+                    container.removeView(pageAdapterGuideObj as View?)
                 }
 
-                override fun isViewFromObject(view: View, guide_pa_obj: Any): Boolean {
-                    return view == guide_pa_obj
+                override fun isViewFromObject(view: View, pageAdapterGuideObj: Any): Boolean {
+                    return view == pageAdapterGuideObj
                 }
 
                 override fun getCount(): Int {
@@ -70,8 +69,9 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
     }
 
     private fun onClickEvent(name: String) {
+        Log.e(TAG, name)
         when (name) {
-            "tutorialskip" -> {
+            "tutorial_skip" -> {
                 val intent = Intent(this, AuthActivity::class.java)
                 startActivity(intent)
             }

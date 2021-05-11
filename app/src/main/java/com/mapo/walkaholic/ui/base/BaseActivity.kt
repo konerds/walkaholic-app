@@ -1,7 +1,11 @@
 package com.mapo.walkaholic.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.AttributeSet
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +13,7 @@ import androidx.viewbinding.ViewBinding
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
+import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -24,6 +29,39 @@ abstract class BaseActivity<VM: BaseViewModel, B: ViewBinding, R:BaseRepository>
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
+        viewModel.showToastEvent.observe(
+            this,
+            EventObserver(this@BaseActivity::showToastEvent)
+        )
+
+        viewModel.showSnackbarEvent.observe(
+            this,
+            EventObserver(this@BaseActivity::showSnackbarEvent)
+        )
+    }
+
+    private fun showToastEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                Toast.makeText(
+                    this,
+                    contents,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showSnackbarEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                 binding.root.snackbar(contents)
+            }
+        }
     }
 
     override fun onBackPressed() {

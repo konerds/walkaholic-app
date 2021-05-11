@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -13,36 +12,35 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
         android:fitsSystemWindows="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         tools:context=".ui.GuideActivity">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/guideVp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/guideVp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="false"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideChipSkip"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/guideChipSkip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/skip"
-            android:textColor="#FFFFFF"
-            android:theme="@style/Theme.MaterialComponents.Light"
-            android:onClick='@{() -> viewModel.onClickEvent("tutorialskip")}'
-            app:chipBackgroundColor="@android:color/transparent"
-            app:chipSurfaceColor="@android:color/transparent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/guideChipSkip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{() -> viewModel.onClickEvent("tutorial_skip")}'
+                android:text="@string/skip"
+                android:textColor="#FFFFFF"
+                android:theme="@style/Theme.MaterialComponents.Light"
+                app:chipBackgroundColor="@android:color/transparent"
+                app:chipSurfaceColor="@android:color/transparent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
