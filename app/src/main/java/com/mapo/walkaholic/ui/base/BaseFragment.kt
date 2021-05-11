@@ -1,19 +1,25 @@
 package com.mapo.walkaholic.ui.base
 
 import android.app.Activity
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
 import com.mapo.walkaholic.ui.auth.AuthActivity
+import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.mapo.walkaholic.ui.snackbar
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -36,7 +42,41 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
 
         lifecycleScope.launch { userPreferences.jwtToken.first() }
 
+        viewModel.showToastEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@BaseFragment::showToastEvent)
+        )
+
+        viewModel.showSnackbarEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@BaseFragment::showSnackbarEvent)
+        )
+
         return binding.root
+    }
+
+    private fun showToastEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                Toast.makeText(
+                    requireContext(),
+                    contents,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showSnackbarEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                requireView().snackbar(contents)
+            }
+        }
     }
 
     fun logout() = lifecycleScope.launch {

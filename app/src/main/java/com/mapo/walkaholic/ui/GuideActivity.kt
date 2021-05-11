@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,8 +18,10 @@ import com.mapo.walkaholic.data.repository.GuideRepository
 import com.mapo.walkaholic.databinding.ActivityGuideBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
+import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.mapo.walkaholic.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_guide.*
 import kotlinx.android.synthetic.main.fragment_guide.view.*
 import kotlinx.coroutines.runBlocking
@@ -34,6 +37,10 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
         userPreferences = UserPreferences(this)
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
+        viewModel.onClickEvent.observe(
+            this,
+            EventObserver(this@GuideActivity::onClickEvent)
+        )
         viewModel.filenameListGuide.observe(this, Observer {
             guideList = it
             val adapter: PagerAdapter = object : PagerAdapter() {
@@ -58,12 +65,18 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                 }
             }
             guideVp.adapter = adapter
-            guideChipSkip.setOnClickListener {
-                //@TODO ACTIVITY ALIVE CHECK
-                startActivity(Intent(this, AuthActivity::class.java))
-            }
         })
         viewModel.getFilenameListGuide()
+    }
+
+    private fun onClickEvent(name: String) {
+        when (name) {
+            "tutorialskip" -> {
+                val intent = Intent(this, AuthActivity::class.java)
+                startActivity(intent)
+            }
+            else -> { }
+        }
     }
 
     override fun onBackPressed() {

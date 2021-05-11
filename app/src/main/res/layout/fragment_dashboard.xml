@@ -54,7 +54,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/box_dashboard_uppercorner_F37520"
+                android:background="@drawable/box_dashboard_uppercorner_f37520"
                 android:elevation="4dp"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"

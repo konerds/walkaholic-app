@@ -28,6 +28,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.setImageUrl
+import com.mapo.walkaholic.ui.snackbar
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat

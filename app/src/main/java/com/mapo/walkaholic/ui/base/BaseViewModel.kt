@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.base
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.databinding.ObservableBoolean
@@ -18,14 +19,37 @@ abstract class BaseViewModel(
     private val repository: BaseRepository
 ) : ViewModel() {
     val progressBarVisibility = ObservableBoolean(false)
+
     private val _onClickEvent = MutableLiveData<Event<String>>()
     val onClickEvent: LiveData<Event<String>>
         get() = _onClickEvent
+    private val _showToastEvent = MutableLiveData<Event<String>>()
+    val showToastEvent : LiveData<Event<String>>
+        get() = _showToastEvent
+    private val _showSnackbarEvent = MutableLiveData<Event<String>>()
+    val showSnackbarEvent : LiveData<Event<String>>
+        get() = _showSnackbarEvent
 
     fun onClickEvent(name: String) {
         progressBarVisibility.set(true)
         viewModelScope.launch {
             _onClickEvent.value = Event(name)
+            progressBarVisibility.set(false)
+        }
+    }
+
+    fun showToastEvent(contents: String) {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            _showToastEvent.value = Event(contents)
+            progressBarVisibility.set(false)
+        }
+    }
+
+    fun showSnackbarEvent(contents: String) {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            _showSnackbarEvent.value = Event(contents)
             progressBarVisibility.set(false)
         }
     }

@@ -17,14 +17,11 @@ import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentLoginBinding
-import com.mapo.walkaholic.ui.GuideActivity
+import com.mapo.walkaholic.ui.*
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
-import com.mapo.walkaholic.ui.setImageUrl
-import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRepository>() {
@@ -39,7 +36,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
         })
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@LoginFragment::moveActivity)
+            EventObserver(this@LoginFragment::onClickEvent)
         )
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -70,38 +67,29 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                 }
             }
         })
-        binding.loginBtnKakao.setOnClickListener {
-            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-                if (error != null) {
-                    Toast.makeText(
-                        GlobalApplication.getGlobalApplicationContext(),
-                        GlobalApplication.getGlobalApplicationContext()
-                            .getString(R.string.err_auth),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else if (token != null) {
-                    Toast.makeText(
-                        GlobalApplication.getGlobalApplicationContext(),
-                        GlobalApplication.getGlobalApplicationContext()
-                            .getString(R.string.msg_success_auth),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    viewModel.login()
-                    //viewModel.login(token)
-                }
-            }
-            viewModel.getFilenameTitleLogo()
-            viewModel.getAuth(callback)
-        }
     }
 
-    private fun moveActivity(name: String) {
+    private fun onClickEvent(name: String) {
         when (name) {
-            "loginToGuide" -> {
-                val intent = Intent(activity, GuideActivity::class.java)
-                startActivity(intent)
+            "kakao_login" -> {
+                val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+                    if (error != null) {
+                        viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
+                            .getString(R.string.err_auth))
+                    } else if (token != null) {
+                        viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
+                            .getString(R.string.msg_success_auth))
+                        viewModel.login()
+                        //viewModel.login(token)
+                    }
+                }
+                viewModel.getFilenameTitleLogo()
+                viewModel.getAuth(callback)
             }
-            else -> null
+            "tutorial" -> {
+                requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
+            }
+            else -> { }
         }
     }
 
