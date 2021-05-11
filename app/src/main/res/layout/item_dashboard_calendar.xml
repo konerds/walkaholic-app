@@ -90,7 +90,7 @@
                     android:text="@string/dash_calendar_distance"
                     android:textColor="#9B9790"
                     android:textSize="10sp"
-                    android:layout_marginTop="12dp"/>
+                    android:layout_marginTop="8dp"/>
 
             </LinearLayout>
 
@@ -107,9 +107,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{recordItem.walk_date}"
+                    android:text="7000"
                     android:textColor="#57534A"
                     android:textSize="20sp"/>
+                <!--android:text="@{recordItem.walk_amount}"-->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,7 +119,7 @@
                     android:text="@string/dash_calendar_step_count"
                     android:textColor="#9B9790"
                     android:textSize="10sp"
-                    android:layout_marginTop="12dp"/>
+                    android:layout_marginTop="8dp"/>
 
             </LinearLayout>
 
@@ -146,7 +147,7 @@
                     android:text="@string/dash_calendar_kcal"
                     android:textColor="#9B9790"
                     android:textSize="10sp"
-                    android:layout_marginTop="12dp"/>
+                    android:layout_marginTop="8dp"/>
 
             </LinearLayout>
 
@@ -156,7 +157,7 @@
                 android:layout_height="match_parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="16dp">
 
                 <ImageView

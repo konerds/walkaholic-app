@@ -1,7 +1,9 @@
 package com.mapo.walkaholic.ui.main.dashboard.calendar
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
@@ -16,5 +18,6 @@ class TodayDecorator : DayViewDecorator {
 
     override fun decorate(view: DayViewFacade?) {
         view?.addSpan(StyleSpan(Typeface.BOLD))
+        view?.addSpan(ForegroundColorSpan(Color.parseColor("#F37520")))
     }
 }

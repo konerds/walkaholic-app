@@ -86,13 +86,15 @@ class DashboardCalendarFragment :
                                         if(!it2.value.error) {
                                             if(CalendarDay.today().date == date.date) {
                                                 binding.dashCalendarTvIntroDate.text = "오늘의 총 산책기록이에요"
+                                                binding.dashCalendarTvDetailRecord.text = "오늘의 세부 산책기록이에요"
                                             } else {
-                                                binding.dashCalendarTvIntroDate.text = SimpleDateFormat("yyyy.MM.dd EE요일", Locale.KOREAN).format(date.date)
+                                                binding.dashCalendarTvIntroDate.text = SimpleDateFormat("yyyy.MM.dd EE요일", Locale.KOREAN).format(date.date) + "의 총 산책기록이에요"
+                                                binding.dashCalendarTvDetailRecord.text = SimpleDateFormat("yyyy.MM.dd EE요일", Locale.KOREAN).format(date.date) + "의 세부 산책기록이에요"
                                             }
                                             it3.adapter = it2.value.walkRecord?.let { it4 ->
                                                 DashboardCalendarAdapter(it4)
                                             }
-                                            binding.dashCalendarTvTotalDate.text = SimpleDateFormat("yyyy.MM.dd EE요일", Locale.KOREAN).format(date.date)
+                                            binding.dashCalendarTvTotalDate.text = SimpleDateFormat("yyyy.MM.dd EE요일,", Locale.KOREAN).format(date.date)
                                             var totalTime = 0
                                             var totalDistance = 0
                                             var totalCalorie = 0

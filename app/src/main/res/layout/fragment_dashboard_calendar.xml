@@ -99,7 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="2020.11.17 월요일"
+                            android:text="2020.11.17 월요일,"
                             android:textColor="#666258"
                             android:textSize="12sp"
                             android:layout_marginLeft="16dp" />
@@ -112,7 +112,7 @@
                             android:text="총 3시간 20분"
                             android:textColor="#443F35"
                             android:textSize="12sp"
-                            android:layout_marginLeft="16dp"/>
+                            android:layout_marginLeft="3dp"/>
 
                         <View
                             android:layout_width="0dp"
@@ -143,7 +143,7 @@
                             android:layout_height="match_parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:orientation="vertical"
-                            android:layout_marginLeft="28dp"
+                            android:layout_marginLeft="32dp"
                             android:layout_marginTop="12dp">
 
                             <TextView
@@ -153,7 +153,7 @@
                                 android:layout_gravity="center"
                                 android:text="4.3"
                                 android:textColor="#57534A"
-                                android:textSize="20sp"/>
+                                android:textSize="28sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -162,7 +162,7 @@
                                 android:text="@string/dash_calendar_distance"
                                 android:textColor="#9B9790"
                                 android:textSize="10sp"
-                                android:layout_marginTop="12dp"/>
+                                android:layout_marginTop="4dp"/>
 
                         </LinearLayout>
 
@@ -182,7 +182,7 @@
                                 android:layout_gravity="center"
                                 android:text="200"
                                 android:textColor="#57534A"
-                                android:textSize="20sp"/>
+                                android:textSize="28sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -191,7 +191,7 @@
                                 android:text="@string/dash_calendar_kcal"
                                 android:textColor="#9B9790"
                                 android:textSize="10sp"
-                                android:layout_marginTop="12dp"/>
+                                android:layout_marginTop="4dp"/>
 
                         </LinearLayout>
 
@@ -201,7 +201,7 @@
                             android:layout_height="match_parent"
                             app:layout_constraintRight_toRightOf="parent"
                             android:orientation="vertical"
-                            android:layout_marginRight="28dp"
+                            android:layout_marginRight="32dp"
                             android:layout_marginTop="12dp">
 
                             <TextView
@@ -211,7 +211,7 @@
                                 android:layout_gravity="center"
                                 android:text="8000"
                                 android:textColor="#689F38"
-                                android:textSize="20sp"/>
+                                android:textSize="28sp"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -220,7 +220,7 @@
                                 android:text="@string/dash_calendar_step_count"
                                 android:textColor="#F37520"
                                 android:textSize="10sp"
-                                android:layout_marginTop="12dp"/>
+                                android:layout_marginTop="4dp"/>
 
                         </LinearLayout>
 
@@ -241,6 +241,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/dashCalendarTvDetailRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="오늘의 세부 산책기록이에요"
