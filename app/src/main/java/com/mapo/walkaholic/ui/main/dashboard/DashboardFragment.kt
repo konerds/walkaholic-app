@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
+import android.app.Activity
 import android.content.ContentValues
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.kakao.sdk.auth.model.OAuthToken
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.GridXy
 import com.mapo.walkaholic.data.network.ApisApi
@@ -28,10 +30,13 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
+import com.mapo.walkaholic.ui.GuideActivity
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.setImageUrl
+import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -49,6 +54,10 @@ class DashboardFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        viewModel.onClickEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@DashboardFragment::onClickEvent)
+        )
         viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -430,6 +439,15 @@ class DashboardFragment :
         theta *= sn
 
         return GridXy(floor(ra * sin(theta) + XO + 0.5), floor(ro - ra * cos(theta) + YO + 0.5))
+    }
+
+    private fun onClickEvent(name: String) {
+        when (name) {
+            "walk_record" -> {
+
+            }
+            else -> { }
+        }
     }
 
     override fun getViewModel() = DashboardViewModel::class.java

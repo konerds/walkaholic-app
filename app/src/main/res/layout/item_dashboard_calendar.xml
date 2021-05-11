@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="recordItem"
+            type="com.mapo.walkaholic.data.model.WalkRecord" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@drawable/box_dashboard_uppercorner_grey"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@{recordItem.walk_date}"
+                android:textColor="#443F35"
+                android:textSize="12sp"
+                android:layout_marginLeft="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@{recordItem.walk_time}"
+                android:textColor="#9B9790"
+                android:textSize="12sp"
+                android:layout_marginLeft="3dp"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/share"
+                android:textColor="#443F35"
+                android:textSize="12sp"
+                android:layout_marginRight="16dp" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:background="@drawable/box_dashboard_lowercorner_white"
+            android:layout_gravity="center_vertical">
+
+            <LinearLayout
+                android:id="@+id/recordCalendarRLDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{recordItem.walk_distance}"
+                    android:textColor="#57534A"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/dash_calendar_distance"
+                    android:textColor="#9B9790"
+                    android:textSize="10sp"
+                    android:layout_marginTop="12dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recordCalendarRLWalkAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/recordCalendarRLDistance"
+                app:layout_constraintRight_toLeftOf="@id/recordCalendarRLCalorie"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{recordItem.walk_date}"
+                    android:textColor="#57534A"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/dash_calendar_step_count"
+                    android:textColor="#9B9790"
+                    android:textSize="10sp"
+                    android:layout_marginTop="12dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recordCalendarRLCalorie"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/recordCalendarRLWalkAmount"
+                app:layout_constraintRight_toLeftOf="@id/recordCalendarRLMap"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{recordItem.walk_calorie}"
+                    android:textColor="#57534A"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/dash_calendar_kcal"
+                    android:textColor="#9B9790"
+                    android:textSize="10sp"
+                    android:layout_marginTop="12dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recordCalendarRLMap"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</layout>

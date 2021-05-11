@@ -49,7 +49,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 Toast.LENGTH_SHORT
                             ).show()
                             viewModel.saveJwtToken(it.value.jwtToken)
-                            Log.d(TAG, it.value.jwtToken)
+                            // Log.d(TAG, it.value.jwtToken)
                             requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
                         }
                     } else {

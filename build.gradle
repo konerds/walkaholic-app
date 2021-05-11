@@ -24,6 +24,8 @@ allprojects {
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
         // Setting Naver MAP SDK Artifact
         maven { url "https://naver.jfrog.io/artifactory/maven/" }
+        // Setting jitpack
+        maven { url "https://jitpack.io"}
     }
 }
 

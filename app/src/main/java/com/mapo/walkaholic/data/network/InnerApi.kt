@@ -47,4 +47,11 @@ interface InnerApi {
     suspend fun getCharacterUriList(
         @Field("character_id") characterType : String
     ) : CharacterUriResponse
+
+    @FormUrlEncoded
+    @POST("info/calendar")
+    suspend fun getCalendar(
+        @Field("user_id") userId : Long,
+        @Field("walk_date") walkDate : String
+    ) : WalkRecordResponse
 }

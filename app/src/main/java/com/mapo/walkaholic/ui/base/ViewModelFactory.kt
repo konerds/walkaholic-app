@@ -12,6 +12,7 @@ import com.mapo.walkaholic.ui.auth.RegisterViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
+import com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarViewModel
 import com.mapo.walkaholic.ui.main.dashboard.DashboardViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
 import com.mapo.walkaholic.ui.main.theme.ThemeDetailViewModel
@@ -33,6 +34,9 @@ class ViewModelFactory(
                     isAssignableFrom(MainViewModel::class.java) -> MainViewModel(repository as MainRepository)
                     isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(
                             repository as MainRepository
+                    )
+                    isAssignableFrom(DashboardCalendarViewModel::class.java) -> DashboardCalendarViewModel(
+                        repository as MainRepository
                     )
                     isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as MainRepository)
                     isAssignableFrom(ThemeDetailViewModel::class.java) -> ThemeDetailViewModel(repository as MainRepository)

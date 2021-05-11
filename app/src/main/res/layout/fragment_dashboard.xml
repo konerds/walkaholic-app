@@ -172,10 +172,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
+                        android:id="@+id/dashLayoutWalkRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
+                        android:onClick='@{()->viewModel.onClickEvent("walk_record")}'
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 

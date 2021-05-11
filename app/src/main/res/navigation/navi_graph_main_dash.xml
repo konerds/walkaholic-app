@@ -12,21 +12,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/actionBnvTheme"
-        android:name="com.mapo.walkaholic.ui.main.theme.ThemeFragment"
-        tools:layout="@layout/fragment_theme">
-    </fragment>
-
-    <fragment
-        android:id="@+id/actionBnvChallenge"
+        android:id="@+id/actionBnvDashWalkRecord"
         android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarFragment"
         tools:layout="@layout/fragment_dashboard_calendar">
-    </fragment>
-
-    <fragment
-        android:id="@+id/actionBnvMap"
-        android:name="com.mapo.walkaholic.ui.main.map.MapFragment"
-        tools:layout="@layout/fragment_map">
     </fragment>
 
 </navigation>

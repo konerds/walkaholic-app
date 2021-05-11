@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarViewModel" />
+
+        <variable
+            name="user"
+            type="com.mapo.walkaholic.data.model.User" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F8F7F7"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/box_dashboard_corner_white">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="28dp"
+                    android:layout_marginTop="58dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mcv_showOtherDates="defaults"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/dashCalendarTvIntroDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오늘의 총 산책기록이에요"
+                        android:layout_marginTop="31dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:background="@drawable/box_dashboard_uppercorner_f9a25b"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/dashCalendarTvTotalDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="2020.11.17 월요일"
+                            android:textColor="#666258"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="16dp" />
+
+                        <TextView
+                            android:id="@+id/dashCalendarTvTotalTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="총 3시간 20분"
+                            android:textColor="#443F35"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="16dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="공유하기"
+                            android:textColor="#443F35"
+                            android:textSize="12sp"
+                            android:layout_marginRight="16dp" />
+
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/box_dashboard_lowercorner_white"
+                        android:layout_gravity="center_vertical">
+
+                        <LinearLayout
+                            android:id="@+id/dashCalendarRLDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="28dp"
+                            android:layout_marginTop="12dp">
+
+                            <TextView
+                                android:id="@+id/dashCalendarTvTotalDistance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="4.3"
+                                android:textColor="#57534A"
+                                android:textSize="20sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/dash_calendar_distance"
+                                android:textColor="#9B9790"
+                                android:textSize="10sp"
+                                android:layout_marginTop="12dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/dashCalendarRLCalorie"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:layout_constraintLeft_toRightOf="@id/dashCalendarRLDistance"
+                            app:layout_constraintRight_toLeftOf="@id/dashCalendarRLWalkAmount"
+                            android:orientation="vertical"
+                            android:layout_marginTop="12dp">
+
+                            <TextView
+                                android:id="@+id/dashCalendarTvCalorie"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="200"
+                                android:textColor="#57534A"
+                                android:textSize="20sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/dash_calendar_kcal"
+                                android:textColor="#9B9790"
+                                android:textSize="10sp"
+                                android:layout_marginTop="12dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/dashCalendarRLWalkAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:orientation="vertical"
+                            android:layout_marginRight="28dp"
+                            android:layout_marginTop="12dp">
+
+                            <TextView
+                                android:id="@+id/dashCalendarTvWalkAmount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="8000"
+                                android:textColor="#689F38"
+                                android:textSize="20sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/dash_calendar_step_count"
+                                android:textColor="#F37520"
+                                android:textSize="10sp"
+                                android:layout_marginTop="12dp"/>
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오늘의 세부 산책기록이에요"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dashCalendarRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        tools:listitem="@layout/item_dashboard_calendar"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
