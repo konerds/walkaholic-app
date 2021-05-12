@@ -36,6 +36,10 @@
         <item name="android:windowFullscreen">true</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <!-- Character Item Shop Theme -->
+    <style name="Theme.CharacterShopTheme" parent="Theme.AppTheme">
+        <item name="colorPrimary">#689F38</item>
+    </style>
     <!-- Bottom Navigation Style -->
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>

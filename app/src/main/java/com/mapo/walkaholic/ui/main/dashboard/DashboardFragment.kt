@@ -49,6 +49,8 @@ class DashboardFragment :
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
+        private const val CHARACTER_SMALL_WIDTH = 69
+        private const val CHARACTER_SMALL_HEIGHT = 86
         private const val CHARACTER_BETWEEN_CIRCLE_PADDING = PIXELS_PER_METRE * 30
         private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
     }
@@ -127,6 +129,7 @@ class DashboardFragment :
                                                                                         val characterBitmap = BitmapDrawable(resource)
                                                                                         animationDrawable.addFrame(characterBitmap, ANIMATION_DURATION)
                                                                                         if (animationDrawable.numberOfFrames == it2.value.characterUri.size) {
+                                                                                            /*
                                                                                             val charExp =
                                                                                                 (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
                                                                                                         / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
@@ -154,6 +157,41 @@ class DashboardFragment :
                                                                                                     ((canvasInfo.height / 2) - radius).toFloat(),
                                                                                                     ((canvasInfo.width / 2) + radius).toFloat(),
                                                                                                     ((canvasInfo.height / 2) + radius).toFloat())
+                                                                                            canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
+                                                                                            binding.dashIvCharacterInfo.setImageBitmap(bitmapInfoSheet)
+                                                                                            binding.dashIvCharacter.minimumWidth = resource.width * PIXELS_PER_METRE
+                                                                                            binding.dashIvCharacter.minimumHeight = resource.height * PIXELS_PER_METRE
+                                                                                            binding.dashIvCharacter.setImageDrawable(animationDrawable)
+                                                                                            animationDrawable = binding.dashIvCharacter.drawable as AnimationDrawable
+                                                                                            animationDrawable.start()
+                                                                                             */
+                                                                                            val charExp =
+                                                                                                (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
+                                                                                                        / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
+                                                                                            val radius =
+                                                                                                CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
+                                                                                            val bitmapInfoSheet =
+                                                                                                Bitmap.createBitmap(
+                                                                                                    (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
+                                                                                                    (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
+                                                                                                    Bitmap.Config.ARGB_8888
+                                                                                                )
+                                                                                            val canvasInfo = Canvas(bitmapInfoSheet)
+                                                                                            val startAngle = 135F
+                                                                                            val sweepAngle = 270F
+                                                                                            val paint = Paint()
+                                                                                            paint.isAntiAlias = true
+                                                                                            paint.color = Color.parseColor("#C9C9C9")
+                                                                                            paint.style = Paint.Style.FILL
+                                                                                            var oval = RectF(0.toFloat(), 0.toFloat(), canvasInfo.width.toFloat(), canvasInfo.height.toFloat())
+                                                                                            canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
+                                                                                            paint.color = Color.parseColor("#D46544")
+                                                                                            canvasInfo.drawArc(oval, startAngle, 2.7F * charExp, true, paint)
+                                                                                            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                                                                                            oval = RectF(((canvasInfo.width / 2) - radius).toFloat(),
+                                                                                                ((canvasInfo.height / 2) - radius).toFloat(),
+                                                                                                ((canvasInfo.width / 2) + radius).toFloat(),
+                                                                                                ((canvasInfo.height / 2) + radius).toFloat())
                                                                                             canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
                                                                                             binding.dashIvCharacterInfo.setImageBitmap(bitmapInfoSheet)
                                                                                             binding.dashIvCharacter.minimumWidth = resource.width * PIXELS_PER_METRE
@@ -451,6 +489,9 @@ class DashboardFragment :
             }
             "walk_start" -> {
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvMap()
+            }
+            "character_info" -> {
+                null
             }
             "profile" -> {
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvDashProfile()

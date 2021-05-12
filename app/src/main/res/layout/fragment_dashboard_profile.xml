@@ -78,9 +78,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="닉네임"
-                        android:text="@{user.nickname}"
                         android:importantForAutofill="no"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:text="@{user.nickname}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -100,12 +100,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
+                    android:gravity="center_vertical|center_horizontal"
                     android:orientation="horizontal"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileGenderInfo">
 
                     <com.google.android.material.chip.ChipGroup
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:selectionRequired="true"
                         app:singleSelection="true">
@@ -115,14 +116,21 @@
                             style="@style/Widget.MaterialComponents.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="138dp"
                             android:checkable="true"
                             android:checked="true"
                             android:gravity="center_vertical"
+                            android:layoutDirection="rtl"
                             android:text="@string/male"
+                            android:textColor="#6C6B67"
+                            android:textStyle="bold"
                             android:theme="@style/Theme.MaterialComponents.Light"
-                            app:checkedIconVisible="false"
-                            app:chipIcon="@drawable/ic_male"
+                            app:checkedIcon="@drawable/ic_checked"
+                            app:checkedIconVisible="true"
+                            app:chipBackgroundColor="@android:color/transparent"
+                            app:chipIcon="@drawable/ic_unchecked"
                             app:chipIconVisible="true"
+                            app:closeIcon="@drawable/ic_unchecked"
                             app:iconStartPadding="12dp" />
 
                         <com.google.android.material.chip.Chip
@@ -131,11 +139,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checkable="true"
+                            android:checked="true"
                             android:gravity="center_vertical"
+                            android:layoutDirection="rtl"
                             android:text="@string/female"
+                            android:textColor="#6C6B67"
+                            android:textStyle="bold"
                             android:theme="@style/Theme.MaterialComponents.Light"
-                            app:checkedIconVisible="false"
-                            app:chipIcon="@drawable/ic_female"
+                            app:checkedIcon="@drawable/ic_checked"
+                            app:checkedIconVisible="true"
+                            app:chipBackgroundColor="@android:color/transparent"
+                            app:chipIcon="@drawable/ic_unchecked"
                             app:chipIconVisible="true"
                             app:iconStartPadding="12dp" />
                     </com.google.android.material.chip.ChipGroup>
@@ -155,6 +169,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dashProfileTILHeight"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -163,14 +178,16 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileHeightInfo">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <AutoCompleteTextView
                         android:id="@+id/dashProfileEtHeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:completionThreshold="0"
                         android:hint="cm"
-                        android:text="@{viewModel.toAnyToString(user.height)}"
                         android:importantForAutofill="no"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:overScrollMode="always"
+                        android:text="@{viewModel.toAnyToString(user.height)}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -187,6 +204,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dashProfileTILWeight"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -196,14 +214,16 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileWeightInfo">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <AutoCompleteTextView
                         android:id="@+id/dashProfileEtWeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:completionThreshold="0"
                         android:hint="kg"
-                        android:text="@{viewModel.toAnyToString(user.weight)}"
                         android:importantForAutofill="no"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:overScrollMode="always"
+                        android:text="@{viewModel.toAnyToString(user.weight)}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -214,6 +234,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:background="@drawable/box_dashboard_corner_peach"
+                android:onClick='@{()->viewModel.onClickEvent("profile_completed")}'
                 android:text="완료"
                 android:textColor="@color/mdWhite1000"
                 android:textSize="16sp"
