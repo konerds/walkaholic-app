@@ -81,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_setting"
+                    android:onClick='@{()->viewModel.onClickEvent("character_info")}'
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -149,6 +150,7 @@
                     android:minHeight="32dp"
                     android:textSize="14sp"
                     android:textStyle="bold"
+                    android:onClick='@{()->viewModel.onClickEvent("profile")}'
                     app:full_text='@{viewModel.getUserCharacterName(userCharacter.type) + "가 " + user.nickname + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
                     app:span_text="@{viewModel.getUserCharacterName(userCharacter.type)}" />
@@ -304,7 +306,8 @@
                         android:text="@string/dash_walk_play"
                         android:textColor="@color/mdWhite1000"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:onClick='@{()->viewModel.onClickEvent("walk_start")}'/>
 
                 </LinearLayout>
             </LinearLayout>

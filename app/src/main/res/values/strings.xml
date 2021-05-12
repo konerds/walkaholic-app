@@ -40,7 +40,7 @@
     <string name="dash_calendar_prev">Previous</string>
     <string name="dash_calendar_next">Next</string>
     <string name="dash_diet_weight">소모 칼로리</string>
-    <string name="dash_walk_record">산책기록</string>
+    <string name="dash_walk_record">산책 기록</string>
     <string name="dash_walk_play">걷기시작</string>
     <string name="dash_show_detail">자세히 보기 ▶</string>
     <!-- 안내 메시지 -->
@@ -62,9 +62,10 @@
     <!-- 햄버거 메뉴 -->
     <string name="openDrawer">Open</string>
     <string name="closeDrawer">Close</string>
-    <string name="favorite_path">찜한경로</string>
-    <string name="character_info">캐릭터 정보</string>
+    <string name="profile_setting">프로필 설정</string>
+    <string name="character_setting">캐릭터 설정</string>
     <string name="character_shop">아이템 상점</string>
+    <string name="favorite_path">찜한 경로</string>
     <string name="hamburger_tutorial">튜토리얼</string>
     <string name="logout">로그아웃</string>
     <string name="hbg_header_intro">%s님!</string>

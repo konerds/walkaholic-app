@@ -16,9 +16,9 @@ import java.util.*
 import kotlin.math.log
 
 class EventDayDecorator(context: Context, var dates: Collection<CalendarDay?>) : DayViewDecorator {
-    var drawable: Drawable = context.resources.getDrawable(R.drawable.event_dash_calendar)
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
+        Log.e("date", dates.toString())
         return dates.contains(day)
     }
 

@@ -1,6 +1,8 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +31,7 @@ import kotlin.collections.ArrayList
 
 
 class DashboardCalendarFragment :
-        BaseFragment<DashboardCalendarViewModel, FragmentDashboardCalendarBinding, MainRepository>() {
+    BaseFragment<DashboardCalendarViewModel, FragmentDashboardCalendarBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
@@ -49,29 +51,29 @@ class DashboardCalendarFragment :
         var currentTime = Calendar.getInstance().getTime()
         binding.textView.setText(SimpleDateFormat("MM월dd일, EE요일", Locale.KOREAN).format(currentTime))
 
-        /*// 기록 날짜 표시
+        // 기록 날짜 표시
         var calendarDays = arrayListOf<CalendarDay?>()
         viewModel.calendarResponse.observe(viewLifecycleOwner,Observer { it5 ->
             when(it5) {
                 is Resource.Success -> {
+                    var calendarDays = arrayListOf<CalendarDay?>()
                     it5.value.walkRecord.forEachIndexed { index, walkRecord ->
+                        Log.e(TAG, walkRecord.toString())
                         var year: Int = (walkRecord.walk_date?.substring(0,4))?.toInt() ?: -1
                         var month: Int = (walkRecord.walk_date?.substring(4,6))?.toInt() ?: -1
                         var dayy: Int = (walkRecord.walk_date?.substring(6,8))?.toInt() ?: -1
-
                         calendarDays.add(CalendarDay.from(year, month-1, dayy))
                     }
                 }
                 is Resource.Loading -> {
-
                 }
                 is Resource.Failure -> {
                     handleApiError(it5)
                 }
             }
-        })*/
+        })
 
-        var testDays = arrayListOf<String?>("20210510", "20210501", "20210512")
+/*        var testDays = arrayListOf<String?>("20210510", "20210501", "20210512")
         var calendarDays = arrayListOf<CalendarDay?>()
         testDays.forEachIndexed{ index, testDays ->
             var year: Int = (testDays?.substring(0,4))?.toInt() ?: -1
@@ -79,7 +81,7 @@ class DashboardCalendarFragment :
             var dayy: Int = (testDays?.substring(6,8))?.toInt() ?: -1
 
             calendarDays.add(CalendarDay.from(year, month-1, dayy))
-        }
+        }*/
 
         // 달력 범위 지정
         binding.calendarView.state().edit()
@@ -173,8 +175,8 @@ class DashboardCalendarFragment :
     override fun getViewModel() = DashboardCalendarViewModel::class.java
 
     override fun getFragmentBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
+        inflater: LayoutInflater,
+        container: ViewGroup?
     ) = FragmentDashboardCalendarBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): MainRepository {
