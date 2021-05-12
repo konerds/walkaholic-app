@@ -89,7 +89,7 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="28dp"
                         android:background="@drawable/box_dashboard_uppercorner_f9a25b"
                         android:layout_gravity="center_vertical"
                         android:orientation="horizontal">
@@ -132,7 +132,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
+                        android:layout_height="72dp"
                         android:orientation="horizontal"
                         android:background="@drawable/box_dashboard_lowercorner_white"
                         android:layout_gravity="center_vertical">
@@ -144,7 +144,7 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:orientation="vertical"
                             android:layout_marginLeft="32dp"
-                            android:layout_marginTop="12dp">
+                            android:layout_marginTop="4dp">
 
                             <TextView
                                 android:id="@+id/dashCalendarTvTotalDistance"
@@ -173,7 +173,7 @@
                             app:layout_constraintLeft_toRightOf="@id/dashCalendarRLDistance"
                             app:layout_constraintRight_toLeftOf="@id/dashCalendarRLWalkAmount"
                             android:orientation="vertical"
-                            android:layout_marginTop="12dp">
+                            android:layout_marginTop="4dp">
 
                             <TextView
                                 android:id="@+id/dashCalendarTvCalorie"
@@ -202,7 +202,7 @@
                             app:layout_constraintRight_toRightOf="parent"
                             android:orientation="vertical"
                             android:layout_marginRight="32dp"
-                            android:layout_marginTop="12dp">
+                            android:layout_marginTop="4dp">
 
                             <TextView
                                 android:id="@+id/dashCalendarTvWalkAmount"
