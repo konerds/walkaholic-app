@@ -20,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:visibility="visible"
+                android:layoutDirection="rtl"
                 app:buttonGravity="center_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +68,7 @@
             android:id="@+id/mainNvHamburger"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="left"
+            android:layout_gravity="right"
             app:headerLayout="@layout/navi_hamburger_header"
             app:itemIconSize="24dp"
             app:menu="@menu/navi_hamburger" />

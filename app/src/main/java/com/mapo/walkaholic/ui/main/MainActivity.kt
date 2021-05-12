@@ -51,7 +51,38 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         bindingNavigationHeader = DataBindingUtil.inflate(layoutInflater, R.layout.navi_hamburger_header, binding.mainNvHamburger, true)
         bindingNavigationHeader.viewModel = viewModel
         setSupportActionBar(binding.mainToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
+        binding.mainNvHamburger.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.actionHbgProfile -> {
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.actionHbgDashCharacterProfile -> {
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.actionHbgDashCharacterShop -> {
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.actionHbgWalkRecord -> {
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.actionHbgFavorite -> {
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.actionHbgTutorial -> {
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.actionHbgLogout -> {
+                    logout()
+                    return@setNavigationItemSelectedListener true
+                }
+                else -> {
+                    return@setNavigationItemSelectedListener false
+                }
+            }
+        }
         drawerToggle = ActionBarDrawerToggle(
                 this,
                 binding.mainDrawerLayout,
@@ -64,10 +95,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         binding.mainDrawerLayout.addDrawerListener(drawerToggle)
         initNavigation()
         binding.mainToolbar.setNavigationOnClickListener {
-            if (binding.mainDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                binding.mainDrawerLayout.closeDrawer(Gravity.LEFT)
+            if (binding.mainDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                binding.mainDrawerLayout.closeDrawer(Gravity.RIGHT)
             } else {
-                binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
+                binding.mainDrawerLayout.openDrawer(Gravity.RIGHT)
             }
         }
         viewModel.userResponse.observe(this, Observer {
@@ -119,7 +150,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
             R.id.actionHbgFavorite -> {
                 return true
             }
-            R.id.actionHbgDashCharacterInfo -> {
+            R.id.actionHbgDashCharacterProfile -> {
                 return true
             }
             R.id.actionHbgDashCharacterShop -> {
@@ -132,10 +163,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 logout()
                 return true
             }
-            else -> {
-                return super.onOptionsItemSelected(item)
-            }
+            else -> { }
         }
+        return super.onOptionsItemSelected(item)
     }
 
     fun logout() = lifecycleScope.launch {

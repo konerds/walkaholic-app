@@ -149,6 +149,7 @@
                     android:minHeight="32dp"
                     android:textSize="14sp"
                     android:textStyle="bold"
+                    android:onClick='@{()->viewModel.onClickEvent("profile")}'
                     app:full_text='@{viewModel.getUserCharacterName(userCharacter.type) + "가 " + user.nickname + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
                     app:span_text="@{viewModel.getUserCharacterName(userCharacter.type)}" />

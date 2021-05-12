@@ -452,6 +452,9 @@ class DashboardFragment :
             "walk_start" -> {
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvMap()
             }
+            "profile" -> {
+                DashboardFragmentDirections.actionActionBnvDashToActionBnvDashProfile()
+            }
             else -> { null }
         }
         if(navDirection != null) {
