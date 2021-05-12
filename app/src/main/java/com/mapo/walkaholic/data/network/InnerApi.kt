@@ -49,9 +49,16 @@ interface InnerApi {
     ) : CharacterUriResponse
 
     @FormUrlEncoded
-    @POST("info/calendar")
-    suspend fun getCalendar(
+    @POST("info/calendarDate")
+    suspend fun getCalendarDate(
         @Field("user_id") userId : Long,
         @Field("walk_date") walkDate : String
     ) : WalkRecordResponse
+
+    @FormUrlEncoded
+    @POST("info/calendarMonth")
+    suspend fun getCalendarMonth(
+        @Field("user_id") userId : Long,
+        @Field("walk_month") walkMonth : String
+    ) : WalkRecordExistInMonthResponse
 }

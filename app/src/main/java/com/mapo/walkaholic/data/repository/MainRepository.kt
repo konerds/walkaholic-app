@@ -124,8 +124,12 @@ class MainRepository(
         api.getCharacterUriList(characterType)
     }
 
-    suspend fun getCalendar(userId:Long,walkDate:String) = safeApiCall {
-        api.getCalendar(userId, walkDate)
+    suspend fun getCalendarDate(userId:Long, walkDate:String) = safeApiCall {
+        api.getCalendarDate(userId, walkDate)
+    }
+
+    suspend fun getCalendarMonth(userId:Long, walkMonth:String) = safeApiCall {
+        api.getCalendarMonth(userId, walkMonth)
     }
 
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
