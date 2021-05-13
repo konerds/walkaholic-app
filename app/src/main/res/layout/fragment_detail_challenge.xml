@@ -1,42 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/challengeLayoutMission"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/challengeRVMission"
+            <TextView
+                android:id="@+id/challengeTvIntro1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                tools:listitem="@layout/item_challenge_mission" />
-        </LinearLayout>
+                android:textColor="#666258"
+                android:textSize="20sp"
+                android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/challengeLayoutRanking"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/challengeRVRanking"
+            <TextView
+                android:id="@+id/challengeTvIntro2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                tools:listitem="@layout/item_challenge_ranking" />
+                android:textColor="#9B9790"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/challengeLayoutMission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/challengeRVMission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    tools:listitem="@layout/item_challenge_mission" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/challengeLayoutRankingIntro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/challengeRankingTvIntro1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="유니님, 월별랭킹"
+                    android:textColor="#666258"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/challengeRankingTvIntro2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="30sp"
+                    android:text="1위를 기록 했어요!" />
+
+                <TextView
+                    android:id="@+id/challengeRankingTvIntro3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="월별랭킹은 매월 1일 자정에 갱신되어요"
+                    android:textColor="#B4B2AE"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/challengeLayoutRanking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/challengeRankingTL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabIndicatorHeight="5dp" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/challengeRankingVP"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</layout>

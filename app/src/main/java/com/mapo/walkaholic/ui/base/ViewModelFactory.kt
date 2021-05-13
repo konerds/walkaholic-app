@@ -11,6 +11,7 @@ import com.mapo.walkaholic.ui.auth.LoginViewModel
 import com.mapo.walkaholic.ui.auth.RegisterViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainViewModel
+import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailRankingViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
 import com.mapo.walkaholic.ui.main.dashboard.*
@@ -53,6 +54,9 @@ class ViewModelFactory(
                             repository as MainRepository
                     )
                     isAssignableFrom(ChallengeDetailViewModel::class.java) -> ChallengeDetailViewModel(
+                        repository as MainRepository
+                    )
+                    isAssignableFrom(ChallengeDetailRankingViewModel::class.java) -> ChallengeDetailRankingViewModel(
                         repository as MainRepository
                     )
                     isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MainRepository)
