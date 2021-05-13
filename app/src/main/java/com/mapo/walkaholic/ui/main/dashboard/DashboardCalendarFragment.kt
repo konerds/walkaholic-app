@@ -57,7 +57,7 @@ class DashboardCalendarFragment :
             ).format(currentTime)
         )
 
-        // 기록 날짜 표시
+        /*// 기록 날짜 표시
         var calendarDays = arrayListOf<CalendarDay?>()
         viewModel.calendarMonthResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -84,9 +84,9 @@ class DashboardCalendarFragment :
                     handleApiError(it)
                 }
             }
-        })
+        })*/
 
-/*        var testDays = arrayListOf<String?>("20210510", "20210501", "20210512")
+        var testDays = arrayListOf<String?>("20210510", "20210501", "20210512")
         var calendarDays = arrayListOf<CalendarDay?>()
         testDays.forEachIndexed{ index, testDays ->
             var year: Int = (testDays?.substring(0,4))?.toInt() ?: -1
@@ -94,7 +94,7 @@ class DashboardCalendarFragment :
             var dayy: Int = (testDays?.substring(6,8))?.toInt() ?: -1
 
             calendarDays.add(CalendarDay.from(year, month-1, dayy))
-        }*/
+        }
 
         // 달력 범위 지정
         binding.calendarView.state().edit()
