@@ -9,21 +9,34 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/challengeRVMission"
+        <LinearLayout
+            android:id="@+id/challengeLayoutMission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            tools:listitem="@layout/item_challenge_mission" />
+            android:visibility="gone">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/challengeRVRanking"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/challengeRVMission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:listitem="@layout/item_challenge_mission" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/challengeLayoutRanking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            tools:listitem="@layout/item_challenge_ranking" />
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/challengeRVRanking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:listitem="@layout/item_challenge_ranking" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

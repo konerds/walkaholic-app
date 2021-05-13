@@ -28,8 +28,8 @@ class ChallengeDetailFragment(
                 val dummyArrayList : ArrayList<Theme> = ArrayList()
                 dummyArrayList.add(dummyMission1)
                 dummyArrayList.add(dummyMission2)
-                binding.challengeRVRanking.visibility = View.GONE
-                binding.challengeRVMission.visibility = View.VISIBLE
+                binding.challengeLayoutRanking.visibility = View.GONE
+                binding.challengeLayoutMission.visibility = View.VISIBLE
                 binding.challengeRVMission.layoutManager = LinearLayoutManager(requireContext())
                 binding.challengeRVMission.setHasFixedSize(true)
                 binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
@@ -40,8 +40,8 @@ class ChallengeDetailFragment(
                 val dummyArrayList : ArrayList<Theme> = ArrayList()
                 dummyArrayList.add(dummyRanking1)
                 dummyArrayList.add(dummyRanking2)
-                binding.challengeRVMission.visibility = View.GONE
-                binding.challengeRVRanking.visibility = View.VISIBLE
+                binding.challengeLayoutMission.visibility = View.GONE
+                binding.challengeLayoutRanking.visibility = View.VISIBLE
                 binding.challengeRVRanking.layoutManager = LinearLayoutManager(requireContext())
                 binding.challengeRVRanking.setHasFixedSize(true)
                 binding.challengeRVRanking.adapter = ChallengeDetailRankingAdapter(dummyArrayList)
