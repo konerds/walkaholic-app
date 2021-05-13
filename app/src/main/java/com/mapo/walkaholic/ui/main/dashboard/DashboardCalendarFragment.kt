@@ -23,6 +23,7 @@ import com.mapo.walkaholic.ui.main.dashboard.calendar.SeletedDayDecorator
 import com.mapo.walkaholic.ui.main.dashboard.calendar.TodayDecorator
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.selects.select
@@ -120,6 +121,12 @@ class DashboardCalendarFragment :
         // 달에 따라 4, 5, 6주 변동 처리
         binding.calendarView.setDynamicHeightEnabled(true)
 
+        // 타이틀 일자 형식
+        binding.calendarView.setTitleFormatter(TitleFormatter {
+            val simpleDateFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
+            simpleDateFormat.format(startTimeCalendar.getTime())
+        })
+
         viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
@@ -161,23 +168,6 @@ class DashboardCalendarFragment :
                             when (it2) {
                                 is Resource.Success -> {
                                     if (!it2.value.error) {
-                                        if (CalendarDay.today().date == currentDate) {
-                                            binding.dashCalendarTvIntroDate.text =
-                                                "오늘의 총 산책기록이에요"
-                                            binding.dashCalendarTvDetailRecord.text =
-                                                "오늘의 세부 산책기록이에요"
-                                        } else {
-                                            binding.dashCalendarTvIntroDate.text =
-                                                SimpleDateFormat(
-                                                    "yyyy.MM.dd EE요일",
-                                                    Locale.KOREAN
-                                                ).format(currentDate) + "의 총 산책기록이에요"
-                                            binding.dashCalendarTvDetailRecord.text =
-                                                SimpleDateFormat(
-                                                    "yyyy.MM.dd EE요일",
-                                                    Locale.KOREAN
-                                                ).format(currentDate) + "의 세부 산책기록이에요"
-                                        }
                                         it3.adapter = it2.value.walkRecord?.let { it4 ->
                                             DashboardCalendarAdapter(it4)
                                         }

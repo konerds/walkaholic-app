@@ -15,6 +15,7 @@
         <item name="colorOnError">@color/mdWhite1000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">@font/app_font</item>
     </style>
     <!-- Auth Screen Theme -->
     <style name="Theme.AuthTheme" parent="Theme.AppTheme">

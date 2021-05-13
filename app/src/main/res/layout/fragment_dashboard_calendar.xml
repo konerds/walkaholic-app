@@ -37,6 +37,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:elevation="2dp"
                 android:background="@drawable/box_dashboard_corner_white">
 
                 <TextView
@@ -52,10 +53,12 @@
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:mcv_showOtherDates="defaults"
                     android:layout_marginTop="9dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"/>
+                    android:layout_marginRight="8dp"
+                    app:mcv_showOtherDates="defaults"
+                    app:mcv_rightArrowMask="@drawable/ic_btn_calendar_arrow_right"
+                    app:mcv_leftArrowMask="@drawable/ic_btn_calendar_arrow_left"/>
             </LinearLayout>
 
             <LinearLayout
@@ -72,7 +75,7 @@
                         android:id="@+id/dashCalendarTvIntroDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="오늘의 총 산책기록이에요"
+                        android:text="@string/total_walk"
                         android:layout_marginTop="31dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="8dp"
@@ -85,7 +88,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:elevation="3dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -123,7 +127,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="공유하기"
+                            android:text="@string/share"
                             android:textColor="#443F35"
                             android:textSize="12sp"
                             android:layout_marginRight="16dp" />
@@ -241,7 +245,7 @@
                         android:id="@+id/dashCalendarTvDetailRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="오늘의 세부 산책기록이에요"
+                        android:text="@string/detail_walk"
                         android:layout_marginTop="16dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="8dp"

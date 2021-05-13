@@ -71,5 +71,10 @@
     <string name="hbg_header_intro">%s님!</string>
     <!-- SNS 공유 -->
     <string name="share">공유하기</string>
+    <!-- 산책 기록 -->
+    <string name="total_walk">총 산책기록</string>
+    <string name="detail_walk">세부 산책기록</string>
     <!-- 기타 -->
+
+
 </resources>
