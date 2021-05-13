@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
@@ -24,6 +25,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.selects.select
+import okhttp3.internal.wait
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,6 +47,7 @@ class DashboardCalendarFragment :
 
         // 오늘 날짜 선택된 상태로
         binding.calendarView.selectedDate = CalendarDay.today()
+        binding.calendarView.currentDate = CalendarDay.today()
 
         var currentTime = Calendar.getInstance().getTime()
         binding.textView.setText(
@@ -119,6 +123,10 @@ class DashboardCalendarFragment :
         viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
+                    viewModel.getCalendarDate(
+                        it.value.user.id,
+                        SimpleDateFormat("yyyyMMdd", Locale.KOREAN).format(CalendarDay.today().date)
+                    )
                     // 월 선택 리스너
                     binding.calendarView.setOnMonthChangedListener { widget, date ->
                         currentMonth = date.month
@@ -130,7 +138,6 @@ class DashboardCalendarFragment :
                     }
                     // 날짜 선택 리스너
                     binding.calendarView.setOnDateChangedListener { widget, date, selected ->
-                        Log.e(TAG, date.date.toString())
                         binding.textView.text = SimpleDateFormat(
                             "MM월dd일, EE요일",
                             Locale.KOREAN

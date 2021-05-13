@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterInfoViewModel" />
+
+        <variable
+            name="user"
+            type="com.mapo.walkaholic.data.model.User" />
+
+        <variable
+            name="userCharacter"
+            type="com.mapo.walkaholic.data.model.UserCharacter" />
+
+        <variable
+            name="expTable"
+            type="com.mapo.walkaholic.data.model.ExpTable" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F9F9F9"
+            android:scrollbars="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dashCharacterInfoLayout1Head"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/box_dashboard_uppercorner_f37520"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout1Space"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/dashCharacterInfoTvCharacterName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@{viewModel.getUserCharacterName(userCharacter.type)}"
+                    android:textColor="@color/mdWhite1000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/dashCharacterInfoIvShop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:onClick='@{()->viewModel.onClickEvent("shop")}'
+                    android:src="@drawable/ic_character_shop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/dashCharacterInfoLayout1Space"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#ECECEC"
+                android:elevation="4dp"
+                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout1"
+                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1Head" />
+
+            <LinearLayout
+                android:id="@+id/dashCharacterInfoLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/box_dashboard_lowercorner_white"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout2"
+                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1Space">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16sp"
+                    android:layout_marginTop="14sp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="보유 포인트"
+                        android:textColor="#9B9790"
+                        android:textSize="10sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/dashCharacterInfoTvPoint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5000"
+                            android:textColor="#689F38"
+                            android:textSize="28sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" 포인트"
+                            android:textColor="#443F35"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/dashCharacterInfoTvIntro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/box_dashboard_corner_skincolor"
+                    android:gravity="center|center_vertical"
+                    android:minWidth="220dp"
+                    android:minHeight="32dp"
+                    android:onClick='@{()->viewModel.onClickEvent("shop")}'
+                    android:text="상점에서 아이템을 구매하세요!"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:id="@+id/dashCharacterInfoLayoutFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp">
+
+                    <ImageView
+                        android:id="@+id/dashCharacterInfoIvCharacter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_vertical" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:gravity="center|center_vertical"
+                        android:text='@{"레벨 " + viewModel.toAnyToString(userCharacter.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dashCharacterInfoLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/box_dashboard_corner_white"
+                android:elevation="4dp"
+                android:gravity="center|center_vertical"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout2"
+                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1"
+                tools:layout_editor_absoluteX="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/dashCharacterInfoTL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tabIndicatorFullWidth="false"
+                        app:tabIndicatorHeight="5dp" />
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/dashCharacterInfoVP"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoTL" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Space
+                android:id="@+id/dashCharacterInfoEndSpace"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout2" />
+
+            <ProgressBar
+                android:id="@+id/dashCharacterInfoProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
