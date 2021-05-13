@@ -8,6 +8,7 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -35,10 +36,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+
 @RequiresApi(Build.VERSION_CODES.M)
-class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainRepository>(), LifecycleOwner {
-    private lateinit var bindingNavigationHeader : NaviHamburgerHeaderBinding
-    private lateinit var drawerToggle : ActionBarDrawerToggle
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainRepository>(),
+    LifecycleOwner {
+    private lateinit var bindingNavigationHeader: NaviHamburgerHeaderBinding
+    private lateinit var drawerToggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
@@ -48,12 +51,46 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
         binding.lifecycleOwner = this
-        bindingNavigationHeader = DataBindingUtil.inflate(layoutInflater, R.layout.navi_hamburger_header, binding.mainNvHamburger, true)
+        bindingNavigationHeader = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.navi_hamburger_header,
+            binding.mainNvHamburger,
+            true
+        )
         bindingNavigationHeader.viewModel = viewModel
         setSupportActionBar(binding.mainToolbar)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
+        drawerToggle = ActionBarDrawerToggle(
+            this,
+            binding.mainDrawerLayout,
+            binding.mainToolbar,
+            R.string.openDrawer,
+            R.string.closeDrawer
+        )
+        drawerToggle.isDrawerSlideAnimationEnabled = false
+        drawerToggle.isDrawerIndicatorEnabled = false
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        binding.mainDrawerLayout.addDrawerListener(drawerToggle)
+        //drawerToggle.syncState()
+        binding.mainToolbar.setNavigationOnClickListener {
+            if (binding.mainDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                binding.mainDrawerLayout.closeDrawer(Gravity.RIGHT)
+            } else {
+                binding.mainDrawerLayout.openDrawer(Gravity.RIGHT)
+            }
+        }
+        supportFragmentManager.addOnBackStackChangedListener {
+            //show hamburger
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            //drawerToggle.syncState()
+            binding.mainToolbar.setNavigationOnClickListener {
+                if (binding.mainDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                    binding.mainDrawerLayout.closeDrawer(Gravity.RIGHT)
+                } else {
+                    binding.mainDrawerLayout.openDrawer(Gravity.RIGHT)
+                }
+            }
+        }
+        initNavigation()
         binding.mainNvHamburger.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.actionHbgProfile -> {
@@ -83,29 +120,11 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 }
             }
         }
-        drawerToggle = ActionBarDrawerToggle(
-                this,
-                binding.mainDrawerLayout,
-                binding.mainToolbar,
-                R.string.openDrawer,
-                R.string.closeDrawer
-        )
-        drawerToggle.isDrawerIndicatorEnabled = true
-        drawerToggle.syncState()
-        binding.mainDrawerLayout.addDrawerListener(drawerToggle)
-        initNavigation()
-        binding.mainToolbar.setNavigationOnClickListener {
-            if (binding.mainDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                binding.mainDrawerLayout.closeDrawer(Gravity.RIGHT)
-            } else {
-                binding.mainDrawerLayout.openDrawer(Gravity.RIGHT)
-            }
-        }
         viewModel.userResponse.observe(this, Observer {
             Log.i(
-                    ContentValues.TAG, "Observing... ${it}"
+                ContentValues.TAG, "Observing... ${it}"
             )
-            when(it) {
+            when (it) {
                 is Resource.Success -> {
                     if (!it.value.error) {
                         bindingNavigationHeader.user = it.value.user
@@ -113,13 +132,13 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                             viewModel.saveJwtToken(it.value.jwtToken)
                         }
                         Log.i(
-                                ContentValues.TAG, "${it.value.user}"
+                            ContentValues.TAG, "${it.value.user}"
                         )
                     } else {
                         Toast.makeText(
-                                this,
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
+                            this,
+                            getString(R.string.err_user),
+                            Toast.LENGTH_SHORT
                         ).show()
                         //logout()
                     }
@@ -163,7 +182,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 logout()
                 return true
             }
-            else -> { }
+            else -> {
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -183,8 +203,8 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(
-                Navigation.findNavController(this, R.id.mainFragmentHost),
-                mainDrawerLayout
+            Navigation.findNavController(this, R.id.mainFragmentHost),
+            mainDrawerLayout
         )
     }
 

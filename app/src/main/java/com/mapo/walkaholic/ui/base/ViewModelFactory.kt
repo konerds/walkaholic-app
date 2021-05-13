@@ -11,6 +11,7 @@ import com.mapo.walkaholic.ui.auth.LoginViewModel
 import com.mapo.walkaholic.ui.auth.RegisterViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainViewModel
+import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
 import com.mapo.walkaholic.ui.main.dashboard.*
 import com.mapo.walkaholic.ui.main.map.MapViewModel
@@ -50,6 +51,9 @@ class ViewModelFactory(
                     isAssignableFrom(ThemeDetailViewModel::class.java) -> ThemeDetailViewModel(repository as MainRepository)
                     isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(
                             repository as MainRepository
+                    )
+                    isAssignableFrom(ChallengeDetailViewModel::class.java) -> ChallengeDetailViewModel(
+                        repository as MainRepository
                     )
                     isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MainRepository)
                     else -> throw IllegalArgumentException(
