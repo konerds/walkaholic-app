@@ -1,7 +1,12 @@
 package com.mapo.walkaholic.ui.main.challenge
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
@@ -12,6 +17,37 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>() {
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        tabLayout = binding.challengeTL
+        viewPager = binding.challengeVP
+        val adapter = ChallengeViewPagerAdapter(this, 3)
+        viewPager.adapter = adapter
+        val tabName : ArrayList<String> = arrayListOf()
+        tabName.add("일일미션")
+        tabName.add("주간미션")
+        tabName.add("랭킹")
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabName?.get(position)
+        }.attach()
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                viewPager.currentItem = tab!!.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+    }
+
     override fun getViewModel() = ChallengeViewModel::class.java
 
     override fun getFragmentBinding(

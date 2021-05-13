@@ -47,7 +47,6 @@ class DashboardCalendarFragment :
 
         // 오늘 날짜 선택된 상태로
         binding.calendarView.selectedDate = CalendarDay.today()
-        binding.calendarView.currentDate = CalendarDay.today()
 
         var currentTime = Calendar.getInstance().getTime()
         binding.textView.setText(
