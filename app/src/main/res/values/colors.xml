@@ -9,6 +9,11 @@
     <color name="colorNavIcon">#1d1d1d</color>
     <color name="colorPrimaryGreen">#689F38</color>
     <color name="colorActivityBackground">#F8F7F7</color>
+
+    <!--util-->
+    <color name="color689f38">#689F38</color>
+    <color name="colorb4b2ae">#B4B2AE</color>
+
     <!--reds-->
     <color name="mdRed50">#FFEBEE</color>
     <color name="mdRed100">#FFCDD2</color>
