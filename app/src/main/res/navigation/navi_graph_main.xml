@@ -30,6 +30,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_actionBnvDash_to_actionBnvDashCharacterInfo"
+            app:destination="@id/actionBnvDashCharacterInfo"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -43,6 +50,25 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/actionBnvDashCharacterInfo"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterInfoFragment"
+        tools:layout="@layout/fragment_dashboard_character_info">
+        <action
+            android:id="@+id/action_actionBnvDashCharacterInfo_to_actionBnvDashCharacterShop"
+            app:destination="@id/actionBnvDashCharacterShop"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/actionBnvDashCharacterShop"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterShopFragment"
+        tools:layout="@layout/fragment_dashboard_character_shop">
     </fragment>
 
     <fragment
