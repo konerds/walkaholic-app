@@ -15,6 +15,11 @@ interface InnerApi {
             @Field("id") id: Long
     ): UserResponse
 
+    @GET("info/characterItem")
+    suspend fun getCharacterItem(
+        @Query("id") id: String
+    ) : CharacterItemResponse
+
     @FormUrlEncoded
     @POST("info/character")
     suspend fun getCharacter(

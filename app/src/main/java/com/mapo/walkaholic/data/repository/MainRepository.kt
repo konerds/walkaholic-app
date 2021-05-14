@@ -58,6 +58,10 @@ class MainRepository(
         api.getUser(id)
     }
 
+    suspend fun getCharacterItem(id: String) = safeApiCall {
+        api.getCharacterItem(id)
+    }
+
     suspend fun getUserCharacter(id: Long) = safeApiCall {
         api.getCharacter(id)
     }
