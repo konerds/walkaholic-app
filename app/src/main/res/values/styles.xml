@@ -40,10 +40,16 @@
     <style name="Theme.CharacterShopTheme" parent="Theme.AppTheme">
         <item name="colorPrimary">#689F38</item>
     </style>
-    <!-- Bottom Navigation Style -->
+    <!-- Challenge Screen Theme -->
+    <style name="Theme.ChallegeTheme" parent="Theme.AppTheme">
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+    </style>
+    Bottom Navigation Style
+
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
     </style>
+
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
         <item name="colorPrimary">#A79F8F</item>
         <item name="colorOnSurface">#E3E0DB</item>

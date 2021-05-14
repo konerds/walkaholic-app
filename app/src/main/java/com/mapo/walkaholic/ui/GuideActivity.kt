@@ -12,9 +12,11 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.PagerAdapter
+import com.google.gson.JsonArray
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.GuestApi
+import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.GuideRepository
 import com.mapo.walkaholic.databinding.ActivityGuideBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
@@ -27,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_guide.view.*
 
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
-    private lateinit var guideList : ArrayList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         GlobalApplication.activityList.add(this)
         super.onCreate(savedInstanceState)
@@ -41,29 +42,43 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
             EventObserver(this@GuideActivity::onClickEvent)
         )
         viewModel.filenameListGuide.observe(this, Observer {
-            guideList = it
-            val adapter: PagerAdapter = object : PagerAdapter() {
-                override fun instantiateItem(container: ViewGroup, position: Int): Any {
-                    val inflater = LayoutInflater.from(container.context)
-                    val view = inflater.inflate(R.layout.fragment_guide, container, false)
-                    setImageUrl(view.guideIvItem, guideList[position])
-                    container.addView(view)
-                    return view
-                }
+            when(it) {
+                is Resource.Success -> {
+                   if(!it.value.error) {
+                       Log.e(TAG, it.value.guideInformation.toString())
+                       val guideList = it.value.guideInformation
+                       val adapter: PagerAdapter = object : PagerAdapter() {
+                           override fun instantiateItem(container: ViewGroup, position: Int): Any {
+                               val inflater = LayoutInflater.from(container.context)
+                               val view = inflater.inflate(R.layout.fragment_guide, container, false)
+                               setImageUrl(view.guideIvItem, guideList[position].tutorial_filename)
+                               container.addView(view)
+                               return view
+                           }
 
-                override fun destroyItem(container: ViewGroup, position: Int, pageAdapterGuideObj: Any) {
-                    container.removeView(pageAdapterGuideObj as View?)
-                }
+                           override fun destroyItem(container: ViewGroup, position: Int, pageAdapterGuideObj: Any) {
+                               container.removeView(pageAdapterGuideObj as View?)
+                           }
 
-                override fun isViewFromObject(view: View, pageAdapterGuideObj: Any): Boolean {
-                    return view == pageAdapterGuideObj
-                }
+                           override fun isViewFromObject(view: View, pageAdapterGuideObj: Any): Boolean {
+                               return view == pageAdapterGuideObj
+                           }
 
-                override fun getCount(): Int {
-                    return guideList.size
+                           override fun getCount(): Int {
+                               return guideList.size
+                           }
+                       }
+                       binding.guideVp.adapter = adapter
+                   }
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    handleApiError(it)
+                    Log.e(TAG, it.toString())
                 }
             }
-            guideVp.adapter = adapter
         })
         viewModel.getFilenameListGuide()
     }
