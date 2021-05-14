@@ -23,4 +23,8 @@ class GuideRepository(
             }
 
     }
+
+    suspend fun getTutorialFilenames() = safeApiCall {
+        api.getTutorialFilenames()
+    }
 }
