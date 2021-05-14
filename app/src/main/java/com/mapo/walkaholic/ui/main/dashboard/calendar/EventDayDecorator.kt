@@ -23,6 +23,6 @@ class EventDayDecorator(context: Context, var dates: Collection<CalendarDay?>) :
     }
 
     override fun decorate(view: DayViewFacade?) {
-        view?.addSpan(DotSpan(6f, Color.parseColor("#F9A25B")))
+        view?.addSpan(DotSpan(8f, Color.parseColor("#F9A25B")))
     }
 }
