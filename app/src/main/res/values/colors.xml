@@ -307,4 +307,14 @@
     <color name="mdBlueGrey700">#455A64</color>
     <color name="mdBlueGrey800">#37474F</color>
     <color name="mdBlueGrey900">#263238</color>
+
+    <!--challenge-->
+    <color name="h689F38">#689F38</color>
+
+    <!--text color-->
+    <color name="h1">#443F35</color>
+    <color name="h2">#666258</color>
+    <color name="h3">#6C6B67</color>
+    <color name="h4">#9B9790</color>
+    <color name="h5">#B4B2AE</color>
 </resources>
