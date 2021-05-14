@@ -155,9 +155,9 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:onClick='@{()->viewModel.onClickEvent("profile")}'
-                    app:full_text='@{viewModel.getUserCharacterName(userCharacter.type) + "가 " + user.nickname + "님을 기다렸어요!"}'
+                    app:full_text='@{viewModel.getUserCharacterItem(user.character_id) + "가 " + user.user_nick_name + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
-                    app:span_text="@{viewModel.getUserCharacterName(userCharacter.type)}" />
+                    app:span_text="@{viewModel.getUserCharacterItem(user.character_id)}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
