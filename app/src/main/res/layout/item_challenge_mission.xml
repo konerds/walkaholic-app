@@ -21,41 +21,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="328dp"
-                android:layout_height="114dp"
-                android:layout_gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="미션" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="328dp"
+                    android:layout_height="114dp"
+                    android:layout_gravity="center_horizontal" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text='@{missionItem.course_title}'
-                    android:textColor="@color/mdWhite1000"
-                    android:textSize="16sp" />
+                    android:text="미션" />
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text='@{missionItem.course_name}'
-                    android:textColor="@color/mdWhite1000"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text='@{missionItem.course_title}'
+                        android:textColor="#C9C3B9"
+                        android:textSize="24sp"
+                        android:textStyle="bold"/>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text='@{missionItem.course_name}'
+                        android:textColor="#6C6B67"
+                        android:textSize="10sp"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
         </FrameLayout>
 
     </androidx.cardview.widget.CardView>
