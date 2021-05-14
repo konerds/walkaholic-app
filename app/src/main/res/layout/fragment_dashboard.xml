@@ -16,6 +16,10 @@
             type="com.mapo.walkaholic.data.model.User" />
 
         <variable
+            name="userCharacterItem"
+            type="com.mapo.walkaholic.data.model.CharacterItem" />
+
+        <variable
             name="userCharacter"
             type="com.mapo.walkaholic.data.model.UserCharacter" />
 
@@ -67,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{viewModel.getUserCharacterName(userCharacter.type)}"
+                    android:text="@{userCharacterItem.pet_name}"
                     android:textColor="@color/mdWhite1000"
                     android:textSize="16sp"
                     android:textStyle="bold"

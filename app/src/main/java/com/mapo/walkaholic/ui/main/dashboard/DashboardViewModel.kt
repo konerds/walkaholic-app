@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
+import com.mapo.walkaholic.data.model.User
 import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -20,6 +21,9 @@ class DashboardViewModel(
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
+    private val _characterItemResponse: MutableLiveData<Resource<CharacterItemResponse>> = MutableLiveData()
+    val characterItemResponse: LiveData<Resource<CharacterItemResponse>>
+        get() = _characterItemResponse
     private val _userCharacterResponse: MutableLiveData<Resource<UserCharacterResponse>> = MutableLiveData()
     val userCharacterResponse: LiveData<Resource<UserCharacterResponse>>
         get() = _userCharacterResponse
@@ -119,13 +123,11 @@ class DashboardViewModel(
         }
     }
 
-    fun getUserCharacterName(type: Int) =
-            when (type) {
-                0 -> "비타씨"
-                1 -> "파랑 비타씨"
-                2 -> "노랑 비타씨"
-                else -> "[오류]"
-            }
+    fun getUserCharacterItem(id: String) {
+        viewModelScope.launch {
+            _characterItemResponse.value = mainRepository.getCharacterItem(id)
+        }
+    }
 
     fun getDifferenceTemperature(todayTemperature : String?, yesterdayTemperature : String?) : String {
         if (todayTemperature.isNullOrEmpty() || yesterdayTemperature.isNullOrEmpty()) {
