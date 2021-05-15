@@ -18,6 +18,7 @@ import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.GuideRepository
 import com.mapo.walkaholic.databinding.ActivityGuideBinding
+import com.mapo.walkaholic.databinding.ItemGuideBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.EventObserver
@@ -29,69 +30,101 @@ import kotlinx.android.synthetic.main.item_guide.view.*
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // For Manage Activity Lifecycle
         GlobalApplication.activityList.add(this)
+        // Call Parent Function
         super.onCreate(savedInstanceState)
+        /*
+            View Binding
+         */
         binding = ActivityGuideBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Shared Preference
         userPreferences = UserPreferences(this)
+        /*
+            Set ViewModel
+         */
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
+        /*
+            For 2-Way Binding With XML
+         */
         binding.viewModel = viewModel
+        /*
+            Observe Click Event
+         */
         viewModel.onClickEvent.observe(
             this,
+            // Delegate Click Event To onClickEvent Function
             EventObserver(this@GuideActivity::onClickEvent)
         )
-        viewModel.filenameListGuide.observe(this, Observer {
-            when(it) {
+        /*
+            Observe Resource of Tutorial Filename
+         */
+        viewModel.filenameListGuide.observe(this, Observer { responseGuide ->
+            when (responseGuide) {
                 is Resource.Success -> {
-                   if(!it.value.error) {
-                       val guideList = it.value.guideInformation
-                       val adapter = object : RecyclerView.Adapter<ViewHolder>() {
-                           inner class GuideViewHolder(itemView: View) : ViewHolder(itemView) {
+                    if (!responseGuide.value.error) {
+                        val guideList = responseGuide.value.guideInformation
+                        val adapter = object : RecyclerView.Adapter<ViewHolder>() {
+                            inner class GuideViewHolder(itemView: View) : ViewHolder(itemView) {
+                                private val binding = ItemGuideBinding.inflate(layoutInflater)
+                            }
 
-                           }
-                           override fun onCreateViewHolder(
-                               parent: ViewGroup,
-                               position: Int
-                           ): ViewHolder {
-                               val inflater = LayoutInflater.from(parent.context)
-                               val view = inflater.inflate(R.layout.item_guide, parent, false)
-                               return GuideViewHolder(view)
-                           }
+                            override fun onCreateViewHolder(
+                                parent: ViewGroup,
+                                position: Int
+                            ): ViewHolder {
+                                val inflater = LayoutInflater.from(parent.context)
+                                val view = inflater.inflate(R.layout.item_guide, parent, false)
+                                return GuideViewHolder(view)
+                            }
 
-                           override fun onBindViewHolder(
-                               holder: ViewHolder,
-                               position: Int
-                           ) {
-                               setImageUrl(holder.itemView.guideIvItem, guideList[position].tutorial_filename)
-                           }
+                            override fun onBindViewHolder(
+                                holder: ViewHolder,
+                                position: Int
+                            ) {
+                                setImageUrl(
+                                    holder.itemView.guideIvItem,
+                                    guideList[position].tutorial_filename
+                                )
+                            }
 
-                           override fun getItemCount(): Int = guideList.size
-                       }
-                       binding.guideVp.adapter = adapter
-                   }
+                            override fun getItemCount(): Int = guideList.size
+                        }
+                        binding.guideVp.adapter = adapter
+                    }
                 }
                 is Resource.Loading -> {
 
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(responseGuide)
                 }
             }
         })
+        /*
+            Call Rest Function in ViewModel
+         */
         viewModel.getFilenameListGuide()
     }
 
+    /*
+        Funtion For Handle Click Event
+     */
     private fun onClickEvent(name: String) {
-        Log.e(TAG, name)
         when (name) {
             "tutorial_skip" -> {
                 startNewActivity(AuthActivity::class.java)
             }
-            else -> { }
+            else -> {
+            }
         }
     }
 
+    /*
+        Handle Back Press Action
+     */
     override fun onBackPressed() {
         if (guideVp.currentItem == 0) {
             super.onBackPressed()
@@ -101,6 +134,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
     }
 
     override fun onDestroy() {
+        // For Manage Activity Lifecycle
         GlobalApplication.activityList.remove(this)
         super.onDestroy()
     }

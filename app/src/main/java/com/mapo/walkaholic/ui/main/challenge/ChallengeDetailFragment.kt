@@ -14,8 +14,9 @@ import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
-import com.mapo.walkaholic.databinding.FragmentDetailThemeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
+import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 

@@ -1,10 +1,9 @@
-package com.mapo.walkaholic.ui.main.dashboard
+package com.mapo.walkaholic.ui.main.dashboard.calendar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.WalkRecordExistInMonth
 import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository

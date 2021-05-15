@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.challenge
+package com.mapo.walkaholic.ui.main.challenge.ranking
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.databinding.ItemChallengeRankingBinding
-import com.mapo.walkaholic.databinding.ItemThemeBinding
 
 class ChallengeDetailRankingAdapter(
     private val rankings: ArrayList<Theme>

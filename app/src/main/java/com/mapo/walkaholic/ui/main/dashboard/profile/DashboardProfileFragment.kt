@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard
+package com.mapo.walkaholic.ui.main.dashboard.profile
 
 import android.graphics.*
 import android.os.Bundle
@@ -96,7 +96,7 @@ class DashboardProfileFragment :
         val navDirection : NavDirections? =
         when (name) {
             "profile_completed" -> {
-                DashboardProfileFragmentDirections.actionActionBnvDashProfileToActionBnvDash()
+                com.mapo.walkaholic.ui.main.dashboard.DashboardProfileFragmentDirections.actionActionBnvDashProfileToActionBnvDash()
             }
             else -> { null }
         }

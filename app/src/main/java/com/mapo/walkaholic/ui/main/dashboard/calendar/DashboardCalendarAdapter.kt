@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard
+package com.mapo.walkaholic.ui.main.dashboard.calendar
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.WalkRecord
 import com.mapo.walkaholic.databinding.ItemDashboardCalendarBinding
-import com.mapo.walkaholic.databinding.ItemDashboardThemeBinding
 
 class DashboardCalendarAdapter(
     private val walkRecords: ArrayList<WalkRecord>

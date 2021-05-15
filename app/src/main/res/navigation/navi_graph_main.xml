@@ -41,7 +41,7 @@
 
     <fragment
         android:id="@+id/actionBnvDashProfile"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardProfileFragment"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.profile.DashboardProfileFragment"
         tools:layout="@layout/fragment_dashboard_profile">
         <action
             android:id="@+id/action_actionBnvDashProfile_to_actionBnvDash"
@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/actionBnvDashCharacterInfo"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterInfoFragment"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.character_info.DashboardCharacterInfoFragment"
         tools:layout="@layout/fragment_dashboard_character_info">
         <action
             android:id="@+id/action_actionBnvDashCharacterInfo_to_actionBnvDashCharacterShop"
@@ -67,13 +67,13 @@
 
     <fragment
         android:id="@+id/actionBnvDashCharacterShop"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterShopFragment"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopFragment"
         tools:layout="@layout/fragment_dashboard_character_shop">
     </fragment>
 
     <fragment
         android:id="@+id/actionBnvDashWalkRecord"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarFragment"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.calendar.DashboardCalendarFragment"
         tools:layout="@layout/fragment_dashboard_calendar">
     </fragment>
 

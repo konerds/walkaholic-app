@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard
+package com.mapo.walkaholic.ui.main.dashboard.character_info
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

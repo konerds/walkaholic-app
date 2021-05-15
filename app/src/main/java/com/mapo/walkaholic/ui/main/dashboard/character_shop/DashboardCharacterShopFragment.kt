@@ -1,54 +1,36 @@
-package com.mapo.walkaholic.ui.main.dashboard
+package com.mapo.walkaholic.ui.main.dashboard.character_shop
 
-import android.app.Activity
-import android.content.ContentValues
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Spannable
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayout
-import com.kakao.sdk.auth.model.OAuthToken
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.GridXy
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.databinding.FragmentDashboardBinding
-import com.mapo.walkaholic.databinding.FragmentDashboardCharacterInfoBinding
-import com.mapo.walkaholic.ui.GuideActivity
+import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
-import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.setImageUrl
-import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
-class DashboardCharacterInfoFragment :
-    BaseFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>() {
+class DashboardCharacterShopFragment :
+    BaseFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>() {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -64,11 +46,11 @@ class DashboardCharacterInfoFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        tabLayout = binding.dashCharacterInfoTL
-        viewPager = binding.dashCharacterInfoVP
+        tabLayout = binding.dashCharacterShopTL
+        viewPager = binding.dashCharacterShopVP
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoFragment::onClickEvent)
+            EventObserver(this@DashboardCharacterShopFragment::onClickEvent)
         )
         viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -76,21 +58,23 @@ class DashboardCharacterInfoFragment :
                     if (!it.value.error) {
                         binding.user = it.value.user
                         viewModel.getUserCharacterItem(it.value.user.character_id.toString())
-                        viewModel.characterItemResponse.observe(viewLifecycleOwner, Observer { it2 ->
-                            when(it2) {
-                                is Resource.Success -> {
-                                    if(!it2.value.error) {
-                                        binding.userCharacterItem = it2.value.characterItem
+                        viewModel.characterItemResponse.observe(
+                            viewLifecycleOwner,
+                            Observer { it2 ->
+                                when (it2) {
+                                    is Resource.Success -> {
+                                        if (!it2.value.error) {
+                                            binding.userCharacterItem = it2.value.characterItem
+                                        }
+                                    }
+                                    is Resource.Loading -> {
+
+                                    }
+                                    is Resource.Failure -> {
+                                        handleApiError(it2)
                                     }
                                 }
-                                is Resource.Loading -> {
-
-                                }
-                                is Resource.Failure -> {
-                                    handleApiError(it2)
-                                }
-                            }
-                        })
+                            })
                         with(binding) {
                             viewModel!!.getExpTable(it.value.user.user_current_exp)
                             viewModel!!.expTableResponse.observe(
@@ -103,15 +87,15 @@ class DashboardCharacterInfoFragment :
                                                 viewModel!!.getCharacterUriList(it.value.user.character_id.toString())
                                                 viewModel!!.characterUriList.observe(
                                                     viewLifecycleOwner,
-                                                    Observer { it3 ->
-                                                        when (it3) {
+                                                    Observer { it2 ->
+                                                        when (it2) {
                                                             is Resource.Success -> {
-                                                                if (!it3.value.error) {
+                                                                if (!it2.value.error) {
                                                                     var animationDrawable =
                                                                         AnimationDrawable()
                                                                     animationDrawable.isOneShot =
                                                                         false
-                                                                    it3.value.characterUri.forEachIndexed { index1, s ->
+                                                                    it2.value.characterUri.forEachIndexed { index1, s ->
                                                                         Glide.with(requireContext())
                                                                             .asBitmap()
                                                                             .load("${viewModel!!.getResourceBaseUri()}${s.evolution_filename}")
@@ -137,7 +121,7 @@ class DashboardCharacterInfoFragment :
                                                                                         characterBitmap,
                                                                                         ANIMATION_DURATION
                                                                                     )
-                                                                                    if (animationDrawable.numberOfFrames == it3.value.characterUri.size) {
+                                                                                    if (animationDrawable.numberOfFrames == it2.value.characterUri.size) {
                                                                                         /*
                                                                                         val charExp =
                                                                                             (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
@@ -177,15 +161,15 @@ class DashboardCharacterInfoFragment :
                                                                                         val charExp =
                                                                                             (100.0 * (it.value.user.user_current_exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
                                                                                                     / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
-                                                                                        binding.dashCharacterInfoIvCharacter.minimumWidth =
+                                                                                        binding.dashCharacterShopIvCharacter.minimumWidth =
                                                                                             resource.width * PIXELS_PER_METRE
-                                                                                        binding.dashCharacterInfoIvCharacter.minimumHeight =
+                                                                                        binding.dashCharacterShopIvCharacter.minimumHeight =
                                                                                             resource.height * PIXELS_PER_METRE
-                                                                                        binding.dashCharacterInfoIvCharacter.setImageDrawable(
+                                                                                        binding.dashCharacterShopIvCharacter.setImageDrawable(
                                                                                             animationDrawable
                                                                                         )
                                                                                         animationDrawable =
-                                                                                            binding.dashCharacterInfoIvCharacter.drawable as AnimationDrawable
+                                                                                            binding.dashCharacterShopIvCharacter.drawable as AnimationDrawable
                                                                                         animationDrawable.start()
                                                                                     }
                                                                                 }
@@ -196,7 +180,7 @@ class DashboardCharacterInfoFragment :
                                                             is Resource.Loading -> {
                                                             }
                                                             is Resource.Failure -> {
-                                                                handleApiError(it3)
+                                                                handleApiError(it2)
                                                             }
                                                         }
                                                     })
@@ -252,7 +236,7 @@ class DashboardCharacterInfoFragment :
         val navDirection: NavDirections? =
             when (name) {
                 "shop" -> {
-                    DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDashCharacterShop()
+                    null
                 }
                 else -> {
                     null
@@ -263,12 +247,12 @@ class DashboardCharacterInfoFragment :
         }
     }
 
-    override fun getViewModel() = DashboardCharacterInfoViewModel::class.java
+    override fun getViewModel() = DashboardCharacterShopViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentDashboardCharacterInfoBinding.inflate(inflater, container, false)
+    ) = FragmentDashboardCharacterShopBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }
