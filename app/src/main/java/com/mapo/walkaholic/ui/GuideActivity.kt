@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +10,8 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.PagerAdapter
-import com.google.gson.JsonArray
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.GuestApi
@@ -25,7 +24,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.activity_guide.*
-import kotlinx.android.synthetic.main.fragment_guide.view.*
+import kotlinx.android.synthetic.main.item_guide.view.*
 
 @RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
@@ -37,6 +36,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
         userPreferences = UserPreferences(this)
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
+        binding.viewModel = viewModel
         viewModel.onClickEvent.observe(
             this,
             EventObserver(this@GuideActivity::onClickEvent)
@@ -45,28 +45,28 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
             when(it) {
                 is Resource.Success -> {
                    if(!it.value.error) {
-                       Log.e(TAG, it.value.guideInformation.toString())
                        val guideList = it.value.guideInformation
-                       val adapter: PagerAdapter = object : PagerAdapter() {
-                           override fun instantiateItem(container: ViewGroup, position: Int): Any {
-                               val inflater = LayoutInflater.from(container.context)
-                               val view = inflater.inflate(R.layout.fragment_guide, container, false)
-                               setImageUrl(view.guideIvItem, guideList[position].tutorial_filename)
-                               container.addView(view)
-                               return view
+                       val adapter = object : RecyclerView.Adapter<ViewHolder>() {
+                           inner class GuideViewHolder(itemView: View) : ViewHolder(itemView) {
+
+                           }
+                           override fun onCreateViewHolder(
+                               parent: ViewGroup,
+                               position: Int
+                           ): ViewHolder {
+                               val inflater = LayoutInflater.from(parent.context)
+                               val view = inflater.inflate(R.layout.item_guide, parent, false)
+                               return GuideViewHolder(view)
                            }
 
-                           override fun destroyItem(container: ViewGroup, position: Int, pageAdapterGuideObj: Any) {
-                               container.removeView(pageAdapterGuideObj as View?)
+                           override fun onBindViewHolder(
+                               holder: ViewHolder,
+                               position: Int
+                           ) {
+                               setImageUrl(holder.itemView.guideIvItem, guideList[position].tutorial_filename)
                            }
 
-                           override fun isViewFromObject(view: View, pageAdapterGuideObj: Any): Boolean {
-                               return view == pageAdapterGuideObj
-                           }
-
-                           override fun getCount(): Int {
-                               return guideList.size
-                           }
+                           override fun getItemCount(): Int = guideList.size
                        }
                        binding.guideVp.adapter = adapter
                    }
@@ -76,7 +76,6 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                 }
                 is Resource.Failure -> {
                     handleApiError(it)
-                    Log.e(TAG, it.toString())
                 }
             }
         })
@@ -87,8 +86,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
         Log.e(TAG, name)
         when (name) {
             "tutorial_skip" -> {
-                val intent = Intent(this, AuthActivity::class.java)
-                startActivity(intent)
+                startNewActivity(AuthActivity::class.java)
             }
             else -> { }
         }
