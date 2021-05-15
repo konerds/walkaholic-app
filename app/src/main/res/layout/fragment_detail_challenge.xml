@@ -38,8 +38,9 @@
 
             <LinearLayout
                 android:id="@+id/challengeLayoutMission"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="328dp"
+                android:layout_height="526dp"
+                android:background="@drawable/box_dashboard_corner_white"
                 android:visibility="gone">
 
                 <androidx.recyclerview.widget.RecyclerView
