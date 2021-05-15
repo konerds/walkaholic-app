@@ -48,8 +48,10 @@ class DashboardProfileFragment :
                         binding.user = it.value.user
                         if(it.value.user.user_gender == "0") {
                             binding.dashProfileChipMale.isChecked = true
+                            binding.dashProfileChipFemale.isChecked = false
                         } else {
                             binding.dashProfileChipFemale.isChecked = true
+                            binding.dashProfileChipMale.isChecked = false
                         }
                     } else {
                         Toast.makeText(
