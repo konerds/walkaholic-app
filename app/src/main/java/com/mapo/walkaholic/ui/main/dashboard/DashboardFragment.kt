@@ -68,21 +68,23 @@ class DashboardFragment :
                     if (!it.value.error) {
                         binding.user = it.value.user
                         viewModel.getUserCharacterItem(it.value.user.character_id.toString())
-                        viewModel.characterItemResponse.observe(viewLifecycleOwner, Observer { it2 ->
-                            when(it2) {
-                                is Resource.Success -> {
-                                    if(!it2.value.error) {
-                                        binding.userCharacterItem = it2.value.characterItem
+                        viewModel.characterItemResponse.observe(
+                            viewLifecycleOwner,
+                            Observer { it2 ->
+                                when (it2) {
+                                    is Resource.Success -> {
+                                        if (!it2.value.error) {
+                                            binding.userCharacterItem = it2.value.characterItem
+                                        }
+                                    }
+                                    is Resource.Loading -> {
+
+                                    }
+                                    is Resource.Failure -> {
+                                        handleApiError(it2)
                                     }
                                 }
-                                is Resource.Loading -> {
-
-                                }
-                                is Resource.Failure -> {
-                                    handleApiError(it2)
-                                }
-                            }
-                        })
+                            })
                         with(binding) {
                             viewModel!!.getExpTable(it.value.user.user_current_exp)
                             viewModel!!.expTableResponse.observe(
@@ -92,29 +94,43 @@ class DashboardFragment :
                                         is Resource.Success -> {
                                             if (!_exptable.value.error) {
                                                 binding.expTable = _exptable.value.exptable
-                                                binding.userCharacter?.let { userCharacter ->
-                                                    viewModel!!.getCharacterUriList(userCharacter.type.toString())
-                                                    viewModel!!.characterUriList.observe(viewLifecycleOwner, Observer { it2 ->
+                                                viewModel!!.getCharacterUriList(it.value.user.character_id.toString())
+                                                viewModel!!.characterUriList.observe(
+                                                    viewLifecycleOwner,
+                                                    Observer { it2 ->
                                                         when (it2) {
                                                             is Resource.Success -> {
                                                                 if (!it2.value.error) {
-                                                                    var animationDrawable = AnimationDrawable()
-                                                                    animationDrawable.isOneShot = false
+                                                                    var animationDrawable =
+                                                                        AnimationDrawable()
+                                                                    animationDrawable.isOneShot =
+                                                                        false
                                                                     it2.value.characterUri.forEachIndexed { index1, s ->
-                                                                        Glide.with(requireContext()).asBitmap().load("${viewModel!!.getResourceBaseUri()}${s.evolution_filename}")
-                                                                            .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                                                                        Glide.with(requireContext())
+                                                                            .asBitmap()
+                                                                            .load("${viewModel!!.getResourceBaseUri()}${s.evolution_filename}")
+                                                                            .diskCacheStrategy(
+                                                                                DiskCacheStrategy.NONE
+                                                                            ).skipMemoryCache(true)
                                                                             .into(object :
                                                                                 CustomTarget<Bitmap>() {
                                                                                 override fun onLoadCleared(
                                                                                     placeholder: Drawable?
-                                                                                ) { }
+                                                                                ) {
+                                                                                }
 
                                                                                 override fun onResourceReady(
                                                                                     resource: Bitmap,
                                                                                     transition: Transition<in Bitmap>?
                                                                                 ) {
-                                                                                    val characterBitmap = BitmapDrawable(resource)
-                                                                                    animationDrawable.addFrame(characterBitmap, ANIMATION_DURATION)
+                                                                                    val characterBitmap =
+                                                                                        BitmapDrawable(
+                                                                                            resource
+                                                                                        )
+                                                                                    animationDrawable.addFrame(
+                                                                                        characterBitmap,
+                                                                                        ANIMATION_DURATION
+                                                                                    )
                                                                                     if (animationDrawable.numberOfFrames == it2.value.characterUri.size) {
                                                                                         /*
                                                                                         val charExp =
@@ -153,7 +169,7 @@ class DashboardFragment :
                                                                                         animationDrawable.start()
                                                                                          */
                                                                                         val charExp =
-                                                                                            (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
+                                                                                            (100.0 * (it.value.user.user_current_exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
                                                                                                     / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
                                                                                         val radius =
                                                                                             CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
@@ -163,28 +179,79 @@ class DashboardFragment :
                                                                                                 (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
                                                                                                 Bitmap.Config.ARGB_8888
                                                                                             )
-                                                                                        val canvasInfo = Canvas(bitmapInfoSheet)
-                                                                                        val startAngle = 135F
-                                                                                        val sweepAngle = 270F
-                                                                                        val paint = Paint()
-                                                                                        paint.isAntiAlias = true
-                                                                                        paint.color = Color.parseColor("#C9C9C9")
-                                                                                        paint.style = Paint.Style.FILL
-                                                                                        var oval = RectF(0.toFloat(), 0.toFloat(), canvasInfo.width.toFloat(), canvasInfo.height.toFloat())
-                                                                                        canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
-                                                                                        paint.color = Color.parseColor("#D46544")
-                                                                                        canvasInfo.drawArc(oval, startAngle, 2.7F * charExp, true, paint)
-                                                                                        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-                                                                                        oval = RectF(((canvasInfo.width / 2) - radius).toFloat(),
-                                                                                            ((canvasInfo.height / 2) - radius).toFloat(),
-                                                                                            ((canvasInfo.width / 2) + radius).toFloat(),
-                                                                                            ((canvasInfo.height / 2) + radius).toFloat())
-                                                                                        canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
-                                                                                        binding.dashIvCharacterInfo.setImageBitmap(bitmapInfoSheet)
-                                                                                        binding.dashIvCharacter.minimumWidth = resource.width * PIXELS_PER_METRE
-                                                                                        binding.dashIvCharacter.minimumHeight = resource.height * PIXELS_PER_METRE
-                                                                                        binding.dashIvCharacter.setImageDrawable(animationDrawable)
-                                                                                        animationDrawable = binding.dashIvCharacter.drawable as AnimationDrawable
+                                                                                        val canvasInfo =
+                                                                                            Canvas(
+                                                                                                bitmapInfoSheet
+                                                                                            )
+                                                                                        val startAngle =
+                                                                                            135F
+                                                                                        val sweepAngle =
+                                                                                            270F
+                                                                                        val paint =
+                                                                                            Paint()
+                                                                                        paint.isAntiAlias =
+                                                                                            true
+                                                                                        paint.color =
+                                                                                            Color.parseColor(
+                                                                                                "#C9C9C9"
+                                                                                            )
+                                                                                        paint.style =
+                                                                                            Paint.Style.FILL
+                                                                                        var oval =
+                                                                                            RectF(
+                                                                                                0.toFloat(),
+                                                                                                0.toFloat(),
+                                                                                                canvasInfo.width.toFloat(),
+                                                                                                canvasInfo.height.toFloat()
+                                                                                            )
+                                                                                        canvasInfo.drawArc(
+                                                                                            oval,
+                                                                                            startAngle,
+                                                                                            sweepAngle,
+                                                                                            true,
+                                                                                            paint
+                                                                                        )
+                                                                                        paint.color =
+                                                                                            Color.parseColor(
+                                                                                                "#D46544"
+                                                                                            )
+                                                                                        canvasInfo.drawArc(
+                                                                                            oval,
+                                                                                            startAngle,
+                                                                                            2.7F * charExp,
+                                                                                            true,
+                                                                                            paint
+                                                                                        )
+                                                                                        paint.xfermode =
+                                                                                            PorterDuffXfermode(
+                                                                                                PorterDuff.Mode.CLEAR
+                                                                                            )
+                                                                                        oval =
+                                                                                            RectF(
+                                                                                                ((canvasInfo.width / 2) - radius).toFloat(),
+                                                                                                ((canvasInfo.height / 2) - radius).toFloat(),
+                                                                                                ((canvasInfo.width / 2) + radius).toFloat(),
+                                                                                                ((canvasInfo.height / 2) + radius).toFloat()
+                                                                                            )
+                                                                                        canvasInfo.drawArc(
+                                                                                            oval,
+                                                                                            startAngle,
+                                                                                            sweepAngle,
+                                                                                            true,
+                                                                                            paint
+                                                                                        )
+                                                                                        binding.dashIvCharacterInfo.setImageBitmap(
+                                                                                            bitmapInfoSheet
+                                                                                        )
+                                                                                        binding.dashIvCharacter.minimumWidth =
+                                                                                            resource.width * PIXELS_PER_METRE
+                                                                                        binding.dashIvCharacter.minimumHeight =
+                                                                                            resource.height * PIXELS_PER_METRE
+                                                                                        binding.dashIvCharacter.setImageDrawable(
+                                                                                            animationDrawable
+                                                                                        )
+                                                                                        animationDrawable =
+                                                                                            binding.dashIvCharacter.drawable as AnimationDrawable
                                                                                         animationDrawable.start()
                                                                                     }
                                                                                 }
@@ -199,7 +266,7 @@ class DashboardFragment :
                                                             }
                                                         }
                                                     })
-                                                }
+
                                             } else {
                                                 Toast.makeText(
                                                     requireContext(),
@@ -221,35 +288,6 @@ class DashboardFragment :
                                     }
                                 })
                         }
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.err_user),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        //logout()
-                        //requireActivity().startNewActivity(AuthActivity::class.java)
-                    }
-                }
-                is Resource.Loading -> {
-                }
-                is Resource.Failure -> {
-                    handleApiError(it)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_user),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    //logout()
-                    //requireActivity().startNewActivity(AuthActivity::class.java)
-                }
-            }
-        })
-        viewModel.userCharacterResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    if (!it.value.error) {
-                        binding.userCharacter = it.value.userCharacter
                     } else {
                         Toast.makeText(
                             requireContext(),
@@ -400,16 +438,18 @@ class DashboardFragment :
                 is Resource.Success -> {
                     if (!it.value.error) {
                         binding.todayWeather = it.value.todayWeather
-                        setImageUrl(binding.dashIvWeather, when(it.value.todayWeather.weatherCode) {
-                            "맑음" -> "weather_sunny.png"
-                            "구름" -> "weather_cloudy.png"
-                            "흐림" -> "weather_partly_cloudy.png"
-                            "비" -> "weather_rainy.png"
-                            "진눈개비" -> "weather_sleeting.png"
-                            "눈" -> "weather_snowy.png"
-                            "오류" -> "weather_error.png"
-                            else -> "weather_error.png"
-                        })
+                        setImageUrl(
+                            binding.dashIvWeather, when (it.value.todayWeather.weatherCode) {
+                                "맑음" -> "weather_sunny.png"
+                                "구름" -> "weather_cloudy.png"
+                                "흐림" -> "weather_partly_cloudy.png"
+                                "비" -> "weather_rainy.png"
+                                "진눈개비" -> "weather_sleeting.png"
+                                "눈" -> "weather_snowy.png"
+                                "오류" -> "weather_error.png"
+                                else -> "weather_error.png"
+                            }
+                        )
                         Log.i(
                             ContentValues.TAG, "Today Weather : ${it.value.todayWeather}"
                         )
@@ -498,23 +538,25 @@ class DashboardFragment :
     }
 
     private fun onClickEvent(name: String) {
-        val navDirection : NavDirections? =
-        when (name) {
-            "walk_record" -> {
-                DashboardFragmentDirections.actionActionBnvDashToActionBnvDashWalkRecord()
+        val navDirection: NavDirections? =
+            when (name) {
+                "walk_record" -> {
+                    DashboardFragmentDirections.actionActionBnvDashToActionBnvDashWalkRecord()
+                }
+                "walk_start" -> {
+                    DashboardFragmentDirections.actionActionBnvDashToActionBnvMap()
+                }
+                "character_info" -> {
+                    DashboardFragmentDirections.actionActionBnvDashToActionBnvDashCharacterInfo()
+                }
+                "profile" -> {
+                    DashboardFragmentDirections.actionActionBnvDashToActionBnvDashProfile()
+                }
+                else -> {
+                    null
+                }
             }
-            "walk_start" -> {
-                DashboardFragmentDirections.actionActionBnvDashToActionBnvMap()
-            }
-            "character_info" -> {
-                DashboardFragmentDirections.actionActionBnvDashToActionBnvDashCharacterInfo()
-            }
-            "profile" -> {
-                DashboardFragmentDirections.actionActionBnvDashToActionBnvDashProfile()
-            }
-            else -> { null }
-        }
-        if(navDirection != null) {
+        if (navDirection != null) {
             findNavController().navigate(navDirection)
         }
     }

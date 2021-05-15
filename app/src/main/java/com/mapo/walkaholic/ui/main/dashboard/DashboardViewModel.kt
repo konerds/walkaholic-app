@@ -62,7 +62,6 @@ class DashboardViewModel(
                 if (error != null) {
                 } else {
                     _userResponse.value = tokenInfo?.id?.let { mainRepository.getUser(it) }
-                    _userCharacterResponse.value = tokenInfo?.id?.let { mainRepository.getUserCharacter(it) }
                 }
                 progressBarVisibility.set(false)
             }

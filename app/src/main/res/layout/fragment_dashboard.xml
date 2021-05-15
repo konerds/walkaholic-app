@@ -20,10 +20,6 @@
             type="com.mapo.walkaholic.data.model.CharacterItem" />
 
         <variable
-            name="userCharacter"
-            type="com.mapo.walkaholic.data.model.UserCharacter" />
-
-        <variable
             name="expTable"
             type="com.mapo.walkaholic.data.model.ExpTable" />
 
@@ -138,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
                         android:gravity="center|center_vertical"
-                        android:text='@{"레벨 " + viewModel.toAnyToString(userCharacter.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                        android:text='@{"레벨 " + viewModel.toAnyToString(user.level_id) + " : 경험치 " + viewModel.toAnyToString(user.user_current_exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 </FrameLayout>
 
@@ -155,9 +151,9 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:onClick='@{()->viewModel.onClickEvent("profile")}'
-                    app:full_text='@{viewModel.getUserCharacterItem(user.character_id) + "가 " + user.user_nick_name + "님을 기다렸어요!"}'
+                    app:full_text='@{userCharacterItem.pet_name + "가 " + user.user_nick_name + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
-                    app:span_text="@{viewModel.getUserCharacterItem(user.character_id)}" />
+                    app:span_text="@{userCharacterItem.pet_name}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
