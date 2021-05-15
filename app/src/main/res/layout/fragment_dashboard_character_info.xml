@@ -16,8 +16,8 @@
             type="com.mapo.walkaholic.data.model.User" />
 
         <variable
-            name="userCharacter"
-            type="com.mapo.walkaholic.data.model.UserCharacter" />
+            name="userCharacterItem"
+            type="com.mapo.walkaholic.data.model.CharacterItem" />
 
         <variable
             name="expTable"
@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{viewModel.getUserCharacterName(userCharacter.type)}"
+                    android:text="@{userCharacterItem.pet_name}"
                     android:textColor="@color/mdWhite1000"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -170,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
                         android:gravity="center|center_vertical"
-                        android:text='@{"레벨 " + viewModel.toAnyToString(userCharacter.level) + " : 경험치 " + viewModel.toAnyToString(userCharacter.exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                        android:text='@{"레벨 " + viewModel.toAnyToString(user.level_id) + " : 경험치 " + viewModel.toAnyToString(user.user_current_exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 </FrameLayout>
 

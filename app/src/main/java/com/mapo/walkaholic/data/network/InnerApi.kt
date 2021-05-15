@@ -12,58 +12,53 @@ interface InnerApi {
     @FormUrlEncoded
     @POST("info/user")
     suspend fun getUser(
-            @Field("id") id: Long
+        @Field("id") id: Long
     ): UserResponse
 
-    @GET("info/characterItem")
-    suspend fun getCharacterItem(
-        @Query("id") id: String
-    ) : CharacterItemResponse
-
     @FormUrlEncoded
-    @POST("info/character")
-    suspend fun getCharacter(
-            @Field("id") id: Long
-    ): UserCharacterResponse
+    @POST("info/characterItem")
+    suspend fun getCharacterItem(
+        @Field("id") id: String
+    ): CharacterItemResponse
 
     @FormUrlEncoded
     @POST("info/exptable")
     suspend fun getExpTable(
-            @Field("exp") exp: Long
+        @Field("exp") exp: Long
     ): ExpTableResponse
 
     @GET("info/themelist")
-    suspend fun getThemeEnum() : ThemeEnumResponse
+    suspend fun getThemeEnum(): ThemeEnumResponse
 
     @FormUrlEncoded
     @POST("info/themedetail")
     suspend fun getThemeDetail(
-        @Field("theme_id") themeId : String
-    ) : ThemeResponse
+        @Field("theme_id") themeId: String
+    ): ThemeResponse
 
     @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
-            @Body body: MapRequestBody
+        @Body body: MapRequestBody
     ): MapResponse
 
     @FormUrlEncoded
     @POST("info/characterResource")
     suspend fun getCharacterUriList(
-        @Field("character_id") characterType : String
-    ) : CharacterUriResponse
+        @Field("character_id") characterType: String
+    ): CharacterUriResponse
 
     @FormUrlEncoded
     @POST("info/calendarDate")
     suspend fun getCalendarDate(
-        @Field("user_id") userId : Long,
-        @Field("walk_date") walkDate : String
-    ) : WalkRecordResponse
+        @Field("user_id") userId: Long,
+        @Field("walk_date") walkDate: String
+    ): WalkRecordResponse
 
     @FormUrlEncoded
     @POST("info/calendarMonth")
     suspend fun getCalendarMonth(
-        @Field("user_id") userId : Long,
-        @Field("walk_month") walkMonth : String
-    ) : WalkRecordExistInMonthResponse
+        @Field("user_id") userId: Long,
+        @Field("walk_month") walkMonth: String
+    ): WalkRecordExistInMonthResponse
 }

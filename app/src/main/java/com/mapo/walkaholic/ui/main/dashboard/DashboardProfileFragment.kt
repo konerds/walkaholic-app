@@ -46,6 +46,11 @@ class DashboardProfileFragment :
                 is Resource.Success -> {
                     if (!it.value.error) {
                         binding.user = it.value.user
+                        if(it.value.user.user_gender == "0") {
+                            binding.dashProfileChipMale.isChecked = true
+                        } else {
+                            binding.dashProfileChipFemale.isChecked = true
+                        }
                     } else {
                         Toast.makeText(
                             requireContext(),
