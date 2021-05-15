@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.challenge
+package com.mapo.walkaholic.ui.main.challenge.ranking
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

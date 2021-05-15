@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.mapo.walkaholic.ui.main.dashboard.DashboardCalendarViewModel" />
+            type="com.mapo.walkaholic.ui.main.dashboard.calendar.DashboardCalendarViewModel" />
 
         <variable
             name="user"

@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard
+package com.mapo.walkaholic.ui.main.dashboard.calendar
 
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
@@ -17,20 +16,17 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCalendarBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.calendar.CalendarDayDecorator
-import com.mapo.walkaholic.ui.main.dashboard.calendar.EventDayDecorator
-import com.mapo.walkaholic.ui.main.dashboard.calendar.SeletedDayDecorator
-import com.mapo.walkaholic.ui.main.dashboard.calendar.TodayDecorator
+import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.CalendarDayDecorator
+import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.EventDayDecorator
+import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.SeletedDayDecorator
+import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.TodayDecorator
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.selects.select
-import okhttp3.internal.wait
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class DashboardCalendarFragment :

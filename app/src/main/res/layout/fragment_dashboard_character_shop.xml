@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterShopViewModel" />
+            type="com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopViewModel" />
 
         <variable
             name="user"

@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.calendar
+package com.mapo.walkaholic.ui.main.dashboard.calendar.decorator
 
 import android.app.Activity
 import android.content.Context

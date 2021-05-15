@@ -1,18 +1,14 @@
-package com.mapo.walkaholic.ui.main.challenge
+package com.mapo.walkaholic.ui.main.challenge.ranking
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeRankingBinding
-import com.mapo.walkaholic.databinding.FragmentDetailThemeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

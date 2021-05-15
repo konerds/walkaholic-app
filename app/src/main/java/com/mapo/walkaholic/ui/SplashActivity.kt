@@ -1,13 +1,10 @@
 package com.mapo.walkaholic.ui
 
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.repository.SplashRepository
@@ -17,29 +14,54 @@ import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.activity_splashscreen.*
-import kotlinx.coroutines.runBlocking
 
-@RequiresApi(Build.VERSION_CODES.M)
-class SplashActivity: BaseActivity<SplashViewModel, ActivitySplashscreenBinding, SplashRepository>() {
+class SplashActivity :
+    BaseActivity<SplashViewModel, ActivitySplashscreenBinding, SplashRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // For Manage Activity Lifecycle
         GlobalApplication.activityList.add(this)
+        // Call Parent Function
         super.onCreate(savedInstanceState)
+        /*
+            View Binding
+         */
         binding = ActivitySplashscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // Shared Preference
         userPreferences = UserPreferences(this)
+        /*
+            Set ViewModel
+         */
         val factory = ViewModelFactory(getActivityRepository())
         viewModel = ViewModelProvider(this, factory).get(getViewModel())
-        viewModel.filenameLogoSplash.observe(this, Observer {
-            setImageUrl(binding.splashIv, it)
+        /*
+            For 2-Way Binding With XML
+         */
+        binding.viewModel = viewModel
+        /*
+            Observe Resource of Splash Logo Filename
+         */
+        viewModel.filenameLogoSplash.observe(this, Observer { responseSplash ->
+            binding.filenameSplash = responseSplash
         })
+        /*
+            Call Rest Function in ViewModel
+         */
         viewModel.getFilenameSplashLogo()
+        /*
+            Splash Logo Animation
+         */
         splashIv.alpha = 0f
         splashIv.animate().setDuration(1500).alpha(1f).withEndAction {
-            // @TODO First APP Launch Check ... below logic must be inside that
-            userPreferences.isFirst.asLiveData().observe(this, Observer {
-                if(it == null) {
+            /*
+                Check Is Launched First
+             */
+            userPreferences.isFirst.asLiveData().observe(this, Observer { isFirst ->
+                if (isFirst == null) {
+                    // If First, Move Activity To Tutorial Activity
                     startNewActivity(GuideActivity::class.java as Class<Activity>)
                 } else {
+                    // If Not First, Move Activity To Auth Activity
                     startNewActivity(AuthActivity::class.java as Class<Activity>)
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -48,6 +70,7 @@ class SplashActivity: BaseActivity<SplashViewModel, ActivitySplashscreenBinding,
     }
 
     override fun onDestroy() {
+        // For Manage Activity Lifecycle
         GlobalApplication.activityList.remove(this)
         super.onDestroy()
     }

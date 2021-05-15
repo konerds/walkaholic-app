@@ -11,10 +11,14 @@ import com.mapo.walkaholic.ui.auth.LoginViewModel
 import com.mapo.walkaholic.ui.auth.RegisterViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainViewModel
-import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailRankingViewModel
+import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
 import com.mapo.walkaholic.ui.main.dashboard.*
+import com.mapo.walkaholic.ui.main.dashboard.calendar.DashboardCalendarViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character_info.DashboardCharacterInfoViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopViewModel
+import com.mapo.walkaholic.ui.main.dashboard.profile.DashboardProfileViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
 import com.mapo.walkaholic.ui.main.theme.ThemeDetailViewModel
 import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
