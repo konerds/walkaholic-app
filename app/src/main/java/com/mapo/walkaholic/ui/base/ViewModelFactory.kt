@@ -16,8 +16,10 @@ import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
 import com.mapo.walkaholic.ui.main.dashboard.*
 import com.mapo.walkaholic.ui.main.dashboard.calendar.DashboardCalendarViewModel
-import com.mapo.walkaholic.ui.main.dashboard.character_info.DashboardCharacterInfoViewModel
-import com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoDetailViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopDetailViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopViewModel
 import com.mapo.walkaholic.ui.main.dashboard.profile.DashboardProfileViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
 import com.mapo.walkaholic.ui.main.theme.ThemeDetailViewModel
@@ -46,7 +48,13 @@ class ViewModelFactory(
                     isAssignableFrom(DashboardCharacterInfoViewModel::class.java) -> DashboardCharacterInfoViewModel(
                         repository as MainRepository
                     )
+                    isAssignableFrom(DashboardCharacterInfoDetailViewModel::class.java) -> DashboardCharacterInfoDetailViewModel(
+                        repository as MainRepository
+                    )
                     isAssignableFrom(DashboardCharacterShopViewModel::class.java) -> DashboardCharacterShopViewModel(
+                        repository as MainRepository
+                    )
+                    isAssignableFrom(DashboardCharacterShopDetailViewModel::class.java) -> DashboardCharacterShopDetailViewModel(
                         repository as MainRepository
                     )
                     isAssignableFrom(DashboardCalendarViewModel::class.java) -> DashboardCalendarViewModel(

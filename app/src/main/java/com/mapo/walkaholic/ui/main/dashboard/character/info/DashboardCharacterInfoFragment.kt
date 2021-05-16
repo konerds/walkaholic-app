@@ -1,7 +1,8 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_info
+package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +12,11 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -40,14 +42,20 @@ class DashboardCharacterInfoFragment :
         private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
     }
 
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager2
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        tabLayout = binding.dashCharacterInfoTL
-        viewPager = binding.dashCharacterInfoVP
+        val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
+        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(0))
+        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(1))
+        binding.dashCharacterInfoVP.adapter = pagerAdapter
+        TabLayoutMediator(binding.dashCharacterInfoTL, binding.dashCharacterInfoVP) { tab, position ->
+            tab.text = when(position) {
+                0 -> "얼굴"
+                1 -> "머리"
+                else -> ""
+            }
+        }.attach()
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@DashboardCharacterInfoFragment::onClickEvent)
@@ -58,21 +66,23 @@ class DashboardCharacterInfoFragment :
                     if (!it.value.error) {
                         binding.user = it.value.user
                         viewModel.getUserCharacterItem(it.value.user.character_id.toString())
-                        viewModel.characterItemResponse.observe(viewLifecycleOwner, Observer { it2 ->
-                            when(it2) {
-                                is Resource.Success -> {
-                                    if(!it2.value.error) {
-                                        binding.userCharacterItem = it2.value.characterItem
+                        viewModel.characterItemResponse.observe(
+                            viewLifecycleOwner,
+                            Observer { it2 ->
+                                when (it2) {
+                                    is Resource.Success -> {
+                                        if (!it2.value.error) {
+                                            binding.userCharacterItem = it2.value.characterItem
+                                        }
+                                    }
+                                    is Resource.Loading -> {
+
+                                    }
+                                    is Resource.Failure -> {
+                                        handleApiError(it2)
                                     }
                                 }
-                                is Resource.Loading -> {
-
-                                }
-                                is Resource.Failure -> {
-                                    handleApiError(it2)
-                                }
-                            }
-                        })
+                            })
                         with(binding) {
                             viewModel!!.getExpTable(it.value.user.user_current_exp)
                             viewModel!!.expTableResponse.observe(
@@ -234,7 +244,7 @@ class DashboardCharacterInfoFragment :
         val navDirection: NavDirections? =
             when (name) {
                 "shop" -> {
-                    com.mapo.walkaholic.ui.main.dashboard.DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDashCharacterShop()
+                    DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDashCharacterShop()
                 }
                 else -> {
                     null

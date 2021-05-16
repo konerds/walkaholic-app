@@ -48,7 +48,6 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/mainBottomNavigation"
-                style="@style/Widget.App.BottomNavigationView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bottom_navigation_height"
                 android:background="@drawable/navi_bottom_custom"
@@ -72,6 +71,7 @@
             android:layout_gravity="right"
             app:headerLayout="@layout/navi_hamburger_header"
             app:itemIconSize="24dp"
+            app:itemTextColor="#6C6B67"
             app:menu="@menu/navi_hamburger" />
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

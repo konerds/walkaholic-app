@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="themeItem"
+            name="themeEnumItem"
             type="com.mapo.walkaholic.data.model.ThemeEnum" />
     </data>
 
@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:theme_code="@{themeItem.id}" />
+            app:theme_code="@{themeEnumItem.id}" />
 
     </androidx.cardview.widget.CardView>
 </layout>

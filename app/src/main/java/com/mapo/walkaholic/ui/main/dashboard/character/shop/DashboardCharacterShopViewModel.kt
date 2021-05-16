@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_shop
+package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,16 +10,16 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class DashboardCharacterShopDetailViewModel(
+class DashboardCharacterShopViewModel(
         private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
-    /*
-        @TODO SHOP DATA RESPONSE
-     */
     override fun init() {}
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
+    private val _characterItemResponse: MutableLiveData<Resource<CharacterItemResponse>> = MutableLiveData()
+    val characterItemResponse: LiveData<Resource<CharacterItemResponse>>
+        get() = _characterItemResponse
     private val _expTableResponse: MutableLiveData<Resource<ExpTableResponse>> = MutableLiveData()
     val expTableResponse: LiveData<Resource<ExpTableResponse>>
         get() = _expTableResponse
@@ -40,6 +40,12 @@ class DashboardCharacterShopDetailViewModel(
         }
     }
 
+    fun getUserCharacterItem(id: String) {
+        viewModelScope.launch {
+            _characterItemResponse.value = mainRepository.getCharacterItem(id)
+        }
+    }
+
     fun toAnyToString(any: Any) = any.toString().trim()
 
     fun getExpTable(exp: Long) {
@@ -47,14 +53,6 @@ class DashboardCharacterShopDetailViewModel(
             _expTableResponse.value = mainRepository.getExpTable(exp)
         }
     }
-
-    fun getUserCharacterName(type: Int) =
-            when (type) {
-                0 -> "비타씨"
-                1 -> "파랑 비타씨"
-                2 -> "노랑 비타씨"
-                else -> "[오류]"
-            }
 
     fun getCharacterUriList(characterType: String) {
         viewModelScope.launch {

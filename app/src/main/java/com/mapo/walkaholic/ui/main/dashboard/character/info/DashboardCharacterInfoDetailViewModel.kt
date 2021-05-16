@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_info
+package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +26,6 @@ class DashboardCharacterInfoDetailViewModel(
     private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
     val characterUriList: LiveData<Resource<CharacterUriResponse>>
         get() = _characterUriList
-
     fun getDash() {
         progressBarVisibility.set(true)
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
@@ -47,14 +46,6 @@ class DashboardCharacterInfoDetailViewModel(
             _expTableResponse.value = mainRepository.getExpTable(exp)
         }
     }
-
-    fun getUserCharacterName(type: Int) =
-            when (type) {
-                0 -> "비타씨"
-                1 -> "파랑 비타씨"
-                2 -> "노랑 비타씨"
-                else -> "[오류]"
-            }
 
     fun getCharacterUriList(characterType: String) {
         viewModelScope.launch {

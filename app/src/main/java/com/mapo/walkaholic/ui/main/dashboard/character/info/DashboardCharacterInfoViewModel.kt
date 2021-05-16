@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_shop
+package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class DashboardCharacterShopViewModel(
+class DashboardCharacterInfoViewModel(
         private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {}

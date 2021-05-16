@@ -39,7 +39,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:theme="@style/Theme.CustomTabBackgroundTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_setting"
+                    android:src="@drawable/ic_dashboard_profile_setting"
                     android:onClick='@{()->viewModel.onClickEvent("character_info")}'
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -134,9 +135,18 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
                         android:gravity="center|center_vertical"
-                        android:text='@{"레벨 " + viewModel.toAnyToString(user.level_id) + " : 경험치 " + viewModel.toAnyToString(user.user_current_exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                        android:text='@{"LV." + viewModel.toAnyToString(user.level_id)}'
+                        android:textColor="#F37520"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
 
                 </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text='@{"경험치 " + viewModel.toAnyToString(user.user_current_exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 <TextView
                     android:id="@+id/dashTvIntro"
@@ -144,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/box_dashboard_corner_skincolor"
+                    android:background="@drawable/box_dashboard_corner_feeadb"
                     android:gravity="center|center_vertical"
                     android:minWidth="220dp"
                     android:minHeight="32dp"
@@ -299,7 +309,7 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/box_dashboard_corner_orange"
+                        android:background="@drawable/box_dashboard_corner_f37520"
                         android:foreground="?selectableItemBackground"
                         android:minWidth="272dp"
                         android:minHeight="52dp"
@@ -395,7 +405,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            android:src="@drawable/ic_station" />
+                            android:src="@drawable/ic_dashboard_station" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -62,7 +62,7 @@
                 android:textColor="#999283"
                 android:textSize="12sp"
                 android:theme="@style/Theme.MaterialComponents.Light"
-                app:chipIcon="@drawable/ic_tutorial_info"
+                app:chipIcon="@drawable/ic_login_tutorial"
                 app:chipIconSize="12dp"
                 app:chipBackgroundColor="@android:color/transparent"
                 app:chipSurfaceColor="@android:color/transparent"

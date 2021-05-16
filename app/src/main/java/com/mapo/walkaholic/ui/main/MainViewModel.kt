@@ -11,7 +11,7 @@ import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-        private val mainRepository: MainRepository
+    private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>

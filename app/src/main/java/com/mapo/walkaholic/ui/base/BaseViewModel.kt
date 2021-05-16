@@ -54,6 +54,8 @@ abstract class BaseViewModel(
         }
     }
 
+    fun toLongToInt(valueLong: Long) = valueLong.toFloat().toInt()
+
     fun logout() {
         progressBarVisibility.set(true)
         viewModelScope.launch {

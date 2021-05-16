@@ -54,7 +54,7 @@
 
     <fragment
         android:id="@+id/actionBnvDashCharacterInfo"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.character_info.DashboardCharacterInfoFragment"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragment"
         tools:layout="@layout/fragment_dashboard_character_info">
         <action
             android:id="@+id/action_actionBnvDashCharacterInfo_to_actionBnvDashCharacterShop"
@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/actionBnvDashCharacterShop"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopFragment"
+        android:name="com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragment"
         tools:layout="@layout/fragment_dashboard_character_shop">
     </fragment>
 
