@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.challenge
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,8 +25,12 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChallengeDetailFragment(
     private val position: Int
@@ -36,7 +41,7 @@ class ChallengeDetailFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val dummyMission1 =
-            MissionCondition("00", "01", "3000 걸음", "3000", "100")
+            MissionCondition("00", "01", "3,000 걸음", "3000", "100")
         val dummyMission2 =
             MissionCondition("00", "02", "5,000 걸음", "5000", "200")
         val dummyMission3 =
@@ -47,15 +52,18 @@ class ChallengeDetailFragment(
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
 
+        viewModel.getMissionCondition(when (position) {0 -> "00" 1 -> "01" else -> "" })
         viewModel.missionConditionResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.challengeRVMission.also {
                 it.layoutManager = LinearLayoutManager(requireContext())
                 //동일한 크기의 아이템 항목을 사용자에게 리스트로 보여주기 위해 크기가 변경되지 않음을 명시
                 it.setHasFixedSize(true)
-                when(it2) {
+                when (it2) {
                     is Resource.Success -> {
-                        if(!it2.value.error) {
-                            it.adapter = it2.value.missionCondition?.let { it3 -> ChallengeDetailMissionAdapter(dummyArrayList) }
+                        if (!it2.value.error) {
+                            it.adapter = it2.value.missionCondition?.let { it3 ->
+                                ChallengeDetailMissionAdapter(dummyArrayList)
+                            }
                         }
                         Log.e("missionCondition", it2.value.missionCondition.toString())
                     }
@@ -69,7 +77,28 @@ class ChallengeDetailFragment(
                 }
             }
         })
-        viewModel.getMissionCondition(when(position) { 0 -> "00" 1 -> "01" else -> ""})
+
+/*        viewModel.userResponse.observe(viewLifecycleOwner, Observer { it2 ->
+            binding.challengeRVMission.also {
+                it.layoutManager = LinearLayoutManager(requireContext())
+                it.setHasFixedSize(true)
+                when (it2) {
+                    is Resource.Success -> {
+                        if (!it2.value.error) {
+                            *//*it.adapter = it2.value.user?.let { it3 ->
+                                ChallengeDetailMissionAdapter(it3)
+                            }*//*
+                        }
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Failure -> {
+                        handleApiError(it2)
+                    }
+                }
+            }
+        })*/
 
         when (position) {
             0 -> {
@@ -80,7 +109,7 @@ class ChallengeDetailFragment(
                 binding.challengeLayoutRanking.visibility = View.GONE
                 binding.challengeLayoutRankingIntro.visibility = View.GONE
                 binding.challengeLayoutMission.visibility = View.VISIBLE
-                //binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
+                binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
             }
             1 -> {
                 binding.challengeTvIntro1.text = "주간미션을 완료하고\n포인트를 받으세요!"
@@ -90,7 +119,7 @@ class ChallengeDetailFragment(
                 binding.challengeLayoutRanking.visibility = View.GONE
                 binding.challengeLayoutRankingIntro.visibility = View.GONE
                 binding.challengeLayoutMission.visibility = View.VISIBLE
-                //binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
+                binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
             }
             2 -> {
                 binding.challengeTvIntro1.visibility = View.GONE
@@ -101,7 +130,7 @@ class ChallengeDetailFragment(
                 viewPager = binding.challengeRankingVP
                 val adapter = ChallengeRankingViewPagerAdapter(this, 2)
                 viewPager.adapter = adapter
-                val tabName : ArrayList<String> = arrayListOf()
+                val tabName: ArrayList<String> = arrayListOf()
                 tabName.add("월별포인트")
                 tabName.add("누적포인트")
                 TabLayoutMediator(tabLayout, viewPager) { tab, position ->

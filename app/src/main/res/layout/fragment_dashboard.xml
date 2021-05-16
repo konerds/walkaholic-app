@@ -64,14 +64,13 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashTvCharacterName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@{userCharacterItem.pet_name}"
                     android:textColor="@color/mdWhite1000"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -149,6 +148,7 @@
                     android:text='@{"경험치 " + viewModel.toAnyToString(user.user_current_exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
 
                 <TextView
+                    style="@style/font_medium_14_one"
                     android:id="@+id/dashTvIntro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -158,8 +158,6 @@
                     android:gravity="center|center_vertical"
                     android:minWidth="220dp"
                     android:minHeight="32dp"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
                     android:onClick='@{()->viewModel.onClickEvent("profile")}'
                     app:full_text='@{userCharacterItem.pet_name + "가 " + user.user_nick_name + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
@@ -174,12 +172,12 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/font_semi_bold_20_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:gravity="center|center_vertical"
                         android:text="@{viewModel.showTodayString()}"
-                        android:textSize="20sp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -199,12 +197,12 @@
                             android:src="@drawable/ic_calendar" />
 
                         <TextView
+                            style="@style/font_medium_12_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center|center_vertical"
                             android:text="@string/dash_walk_record"
                             android:textColor="#FCC9A3"
-                            android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -220,25 +218,23 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/font_black_30_one"
                         android:id="@+id/dashTvWalkAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
                         android:gravity="left"
                         android:text="8,000"
-                        android:textColor="#F37520"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
+                        android:textColor="#F37520" />
 
                     <TextView
+                        style="@style/font_semi_bold_24_one"
                         android:id="@+id/dashTvWalkToday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
                         android:text=" 걸음 걸었어요!"
-                        android:textColor="#689F38"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textColor="#689F38" />
 
                 </LinearLayout>
 
@@ -250,22 +246,23 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/font_semi_bold_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginLeft="20dp"
                         android:text="@string/dash_km_distance"
-                        android:textSize="16sp" />
+                        android:textColor="@color/h5"/>
 
                     <TextView
+                        style="@style/font_black_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="20dp"
-                        android:text="4.7KM"
-                        android:textSize="16sp" />
+                        android:text="4.7KM" />
 
                 </RelativeLayout>
 
@@ -277,22 +274,23 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/font_semi_bold_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginLeft="20dp"
                         android:text="@string/dash_diet_weight"
-                        android:textSize="16sp" />
+                        android:textColor="@color/h5" />
 
                     <TextView
+                        style="@style/font_black_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="20dp"
-                        android:text="122CAL"
-                        android:textSize="16sp" />
+                        android:text="122CAL" />
 
                 </RelativeLayout>
 
@@ -307,6 +305,7 @@
                     android:weightSum="5">
 
                     <androidx.appcompat.widget.AppCompatButton
+                        style="@style/font_semi_bold_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_dashboard_corner_f37520"
@@ -315,8 +314,6 @@
                         android:minHeight="52dp"
                         android:text="@string/dash_walk_play"
                         android:textColor="@color/mdWhite1000"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
                         android:onClick='@{()->viewModel.onClickEvent("walk_start")}'/>
 
                 </LinearLayout>
@@ -348,13 +345,12 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/font_semi_bold_20_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:gravity="start"
-                            android:text='@{todayWeather.temperatureCurrent + "ºC / " + todayWeather.weatherCode}'
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                            android:text='@{todayWeather.temperatureCurrent + "ºC / " + todayWeather.weatherCode}' />
 
                         <ImageView
                             android:id="@+id/dashIvWeather"
@@ -372,6 +368,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/font_semi_bold_16_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
@@ -379,20 +376,17 @@
                             android:layout_marginBottom="8dp"
                             android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, yesterdayWeather.temperatureCurrent)}"
                             android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            style="@style/font_medium_12_one"
                             android:id="@+id/dashTvDustStation"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="4dp"
                             android:text='@{weatherDust.sidoName + " " + weatherDust.stationName}'
-                            android:textSize="@dimen/text_size_micro"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toLeftOf="@id/dashIvDustStation"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -430,24 +424,24 @@
                         <TableRow android:gravity="center">
 
                             <TextView
+                                style="@style/font_semi_bold_10_one"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="자외선"
-                                android:textSize="@dimen/text_size_micro" />
+                                android:text="자외선" />
                         </TableRow>
 
                         <TableRow android:gravity="center">
 
                             <TextView
+                                style="@style/font_semi_bold_10_one"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="?attr/colorSurface"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="@{weatherDust.uvRay}"
-                                android:textSize="@dimen/text_size_micro" />
+                                android:text="@{weatherDust.uvRay}" />
                         </TableRow>
                     </TableLayout>
 
@@ -463,24 +457,24 @@
                         <TableRow>
 
                             <TextView
+                                style="@style/font_semi_bold_10_one"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="미세먼지"
-                                android:textSize="@dimen/text_size_micro" />
+                                android:text="미세먼지" />
                         </TableRow>
 
                         <TableRow>
 
                             <TextView
+                                style="@style/font_semi_bold_10_one"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="?attr/colorSurface"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="@{weatherDust.pmDust}"
-                                android:textSize="@dimen/text_size_micro" />
+                                android:text="@{weatherDust.pmDust}" />
                         </TableRow>
                     </TableLayout>
 
@@ -497,30 +491,31 @@
                         <TableRow>
 
                             <TextView
+                                style="@style/font_semi_bold_10_one"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="초미세먼지"
-                                android:textSize="@dimen/text_size_micro" />
+                                android:text="초미세먼지" />
                         </TableRow>
 
                         <TableRow>
 
                             <TextView
+                                style="@style/font_semi_bold_10_one"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="?attr/colorSurface"
                                 android:gravity="center"
                                 android:paddingHorizontal="24dp"
-                                android:text="@{weatherDust.pmSuperDust}"
-                                android:textSize="@dimen/text_size_micro" />
+                                android:text="@{weatherDust.pmSuperDust}" />
                         </TableRow>
                     </TableLayout>
 
                 </LinearLayout>
 
                 <TextView
+                    style="@style/font_semi_bold_10_one"
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:background="@drawable/box_dashboard_lowercorner_grey"
@@ -541,15 +536,14 @@
                 app:layout_constraintTop_toBottomOf="@id/dashLayout3">
 
                 <TextView
+                    style="@style/font_semi_bold_20_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="20dp"
                     android:paddingHorizontal="20dp"
-                    android:text="테마에 따라 걸어보세요"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:text="테마에 따라 걸어보세요" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/dashRVTheme"

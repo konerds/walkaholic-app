@@ -39,18 +39,18 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/font_semi_bold_20_two"
                     android:id="@+id/dashProfileIntro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="내 프로필을 설정하고\n정확한 정보를 받아보세요!"
-                    android:textColor="#443F35"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:textColor="@color/h1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashProfileNicknameInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,8 +58,6 @@
                     android:layout_marginTop="32dp"
                     android:text="닉네임"
                     android:textColor="#F9A25B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileIntro" />
 
@@ -74,6 +72,7 @@
                     app:layout_constraintTop_toBottomOf="@id/dashProfileNicknameInfo">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        style="@style/font_medium_16_one"
                         android:id="@+id/dashProfileEtNickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -84,14 +83,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashProfileGenderInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="성별"
                     android:textColor="#F9A25B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileTILNickname" />
 
@@ -156,14 +154,13 @@
                 </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashProfileHeightInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="키"
                     android:textColor="#F9A25B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileLayoutGender" />
 
@@ -191,6 +188,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashProfileWeightInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -229,6 +227,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
+                style="@style/font_semi_bold_16_one"
                 android:id="@+id/dashProfileBtnComplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -237,8 +236,6 @@
                 android:onClick='@{()->viewModel.onClickEvent("profile_completed")}'
                 android:text="완료"
                 android:textColor="@color/mdWhite1000"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/dashProfileLayout" />
 
             <Space

@@ -4,26 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="user"
+            type="com.mapo.walkaholic.data.model.User" />
 
         <variable
             name="missionItem"
             type="com.mapo.walkaholic.data.model.MissionCondition" />
+
+        <variable
+            name="missionProgress"
+            type="com.mapo.walkaholic.data.model.MissionProgress" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         app:cardElevation="0dp">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="121dp"
+            android:layout_height="124dp"
             android:orientation="vertical"
             android:layout_gravity="center_horizontal">
-
 
             <LinearLayout
                 android:id="@+id/challenge_mission_bar"
@@ -35,39 +40,54 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="16dp">
-
-                <TextView
-                    style="@style/font_semi_bold_24_one"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text='@{missionItem.mission_title}'
-                    android:textColor="@color/color443f35" />
+                    android:orientation="vertical">
 
-                <TextView
-                    style="@style/font_black_10_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text='현재 3,000걸음 걸었어요!'
-                    android:textColor="@color/h3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/challenge_mission_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatButton
+                    <TextView
+                        style="@style/font_semi_bold_24_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{missionItem.reward + "P 받기"}'/>
+                        android:text='@{missionItem.mission_title}'
+                        android:textColor="@color/color443f35" />
+
+                    <TextView
+                        style="@style/font_black_10_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text='@{"현재 " + user.user_walk_count + "걸음 걸었어요!"}'
+                        android:textColor="@color/h3" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    style="@style/font_semi_bold_16_one"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/button_challenge_corner_f9a25b"
+                    android:text='@{missionItem.reward + "P 받기"}'
+                    android:textColor="@color/colorf9af00"
+                    android:layout_gravity="center_vertical"
+                    />
 
             </LinearLayout>
 
         </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="24dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/box_challenge_c9c3b9"/>
 
     </androidx.cardview.widget.CardView>
 </layout>

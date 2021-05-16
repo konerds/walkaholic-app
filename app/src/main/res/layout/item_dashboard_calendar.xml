@@ -27,21 +27,21 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/font_semi_bold_12_one"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@{recordItem.walk_date}"
-                android:textColor="#443F35"
-                android:textSize="12sp"
+                android:textColor="@color/h1"
                 android:layout_marginLeft="16dp" />
 
             <TextView
+                style="@style/font_semi_bold_12_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@{recordItem.walk_time}"
-                android:textColor="#9B9790"
-                android:textSize="12sp"
+                android:textColor="@color/h4"
                 android:layout_marginLeft="3dp"/>
 
             <View
@@ -50,12 +50,12 @@
                 android:layout_weight="1"/>
 
             <TextView
+                style="@style/font_semi_bold_10_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/share"
-                android:textColor="#443F35"
-                android:textSize="12sp"
+                android:textColor="@color/h1"
                 android:layout_marginRight="16dp" />
 
         </LinearLayout>
@@ -77,20 +77,19 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    style="@style/font_black_20_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{recordItem.walk_distance}"
-                    android:textColor="#57534A"
-                    android:textSize="20sp"/>
+                    android:text="@{recordItem.walk_distance}" />
 
                 <TextView
+                    style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/dash_calendar_distance"
-                    android:textColor="#9B9790"
-                    android:textSize="10sp"
+                    android:textColor="@color/h4"
                     android:layout_marginTop="8dp"/>
 
             </LinearLayout>
@@ -105,21 +104,20 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    style="@style/font_black_20_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="7000"
-                    android:textColor="#57534A"
-                    android:textSize="20sp"/>
+                    android:text="7000" />
                 <!--android:text="@{recordItem.walk_amount}"-->
 
                 <TextView
+                    style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/dash_calendar_step_count"
-                    android:textColor="#9B9790"
-                    android:textSize="10sp"
+                    android:textColor="@color/h4"
                     android:layout_marginTop="8dp"/>
 
             </LinearLayout>
@@ -134,20 +132,19 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    style="@style/font_black_20_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{recordItem.walk_calorie}"
-                    android:textColor="#57534A"
-                    android:textSize="20sp"/>
+                    android:text="@{recordItem.walk_calorie}" />
 
                 <TextView
+                    style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/dash_calendar_kcal"
-                    android:textColor="#9B9790"
-                    android:textSize="10sp"
+                    android:textColor="@color/h4"
                     android:layout_marginTop="8dp"/>
 
             </LinearLayout>

@@ -140,6 +140,10 @@ class MainRepository(
         api.getMissionCondition(missionID)
     }
 
+    suspend fun getMissionProgress(missionID:String, conditionId:String) = safeApiCall {
+        api.getMissionProgress(missionID, conditionId)
+    }
+
 /*    suspend fun getMissionDaily(missionID:String) = safeApiCall {
         api.getMissionDaily(missionID)
     }

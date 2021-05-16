@@ -43,14 +43,13 @@
             android:background="@drawable/selector_dashboard_character_shop_lowercorner" />
 
         <TextView
+            style="@style/font_semi_bold_12_one"
             android:layout_width="match_parent"
             android:layout_height="28dp"
             android:layout_gravity="bottom"
             android:gravity="center|center_vertical"
             android:text='@{itemInfo.itemName + " / " + itemInfo.itemPrice + "P"}'
-            android:textColor="@color/mdWhite1000"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textColor="@color/mdWhite1000" />
 
     </FrameLayout>
 </layout>

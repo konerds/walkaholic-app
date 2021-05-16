@@ -17,13 +17,12 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/font_semi_bold_20_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="아이템 목록"
-                android:textColor="#666258"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textColor="#666258" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,6 +39,7 @@
                     android:src="@drawable/ic_character_info_init" />
 
                 <TextView
+                    style="@style/font_semi_bold_12_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"

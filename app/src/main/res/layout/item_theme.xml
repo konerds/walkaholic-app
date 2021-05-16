@@ -34,29 +34,28 @@
                 android:orientation="vertical">
 
                 <TextView
+                    style="@style/font_semi_bold_14_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text='@{themeItem.course_title}'
-                    android:textColor="@color/mdWhite1000"
-                    android:textSize="16sp" />
+                    android:textColor="@color/mdWhite1000" />
 
                 <TextView
+                    style="@style/font_black_20_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text='@{themeItem.course_name}'
-                    android:textColor="@color/mdWhite1000"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/mdWhite1000" />
 
                 <TextView
+                    style="@style/font_black_10_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text='@{themeItem.course_address + " | 걷는거리 " + themeItem.course_distance + "KM | 소요시간 " + themeItem.course_time}'
-                    android:textColor="@color/mdWhite1000"
-                    android:textSize="12sp" />
+                    android:textColor="@color/mdWhite1000" />
 
             </LinearLayout>
 

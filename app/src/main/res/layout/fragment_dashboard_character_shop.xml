@@ -52,14 +52,13 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashCharacterShopTvCharacterName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@{userCharacterItem.pet_name}"
                     android:textColor="@color/mdWhite1000"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -108,11 +107,11 @@
                     android:orientation="vertical">
 
                     <TextView
+                        style="@style/font_semi_bold_10_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="보유 포인트"
-                        android:textColor="#9B9790"
-                        android:textSize="10sp" />
+                        android:textColor="@color/h4" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -120,19 +119,19 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/font_black_28_one"
                             android:id="@+id/dashCharacterShopTvPoint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.toAnyToString(user.user_point)}"
-                            android:textColor="#689F38"
-                            android:textSize="28sp" />
+                            android:textColor="#689F38" />
 
                         <TextView
+                            style="@style/font_black_20_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=" 포인트"
-                            android:textColor="#443F35"
-                            android:textSize="10sp" />
+                            android:textColor="@color/h1" />
 
                     </LinearLayout>
 
@@ -150,6 +149,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -158,6 +158,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        style="@style/font_medium_16_one"
                         android:id="@+id/dashCharacterShopTvIntro1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -166,6 +167,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -174,16 +176,17 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        style="@style/font_black_16_one"
                         android:id="@+id/dashCharacterShopTvIntro2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical"
                         android:textColor="#F37520"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
 
                     <TextView
+                        style="@style/font_black_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -194,6 +197,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        style="@style/font_medium_16_one"
                         android:id="@+id/dashCharacterShopTvIntro3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -218,15 +222,14 @@
                         android:layout_gravity="center|center_vertical" />
 
                     <TextView
+                        style="@style/font_black_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|bottom"
                         android:layout_marginLeft="16dp"
                         android:gravity="center|center_vertical"
                         android:text='@{"LV." + viewModel.toAnyToString(user.level_id)}'
-                        android:textColor="#6C6B67"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textColor="#6C6B67" />
 
                 </FrameLayout>
 
