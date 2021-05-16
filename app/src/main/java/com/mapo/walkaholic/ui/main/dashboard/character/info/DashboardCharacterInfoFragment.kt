@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_shop
+package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
@@ -23,17 +23,16 @@ import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
+import com.mapo.walkaholic.databinding.FragmentDashboardCharacterInfoBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character_info.DashboardCharacterInfoViewPagerAdapter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
-class DashboardCharacterShopFragment :
-    BaseFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>() {
+class DashboardCharacterInfoFragment :
+    BaseFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>() {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -47,10 +46,10 @@ class DashboardCharacterShopFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
-        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0))
-        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(1))
-        binding.dashCharacterShopVP.adapter = pagerAdapter
-        TabLayoutMediator(binding.dashCharacterShopTL, binding.dashCharacterShopVP) { tab, position ->
+        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(0))
+        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(1))
+        binding.dashCharacterInfoVP.adapter = pagerAdapter
+        TabLayoutMediator(binding.dashCharacterInfoTL, binding.dashCharacterInfoVP) { tab, position ->
             tab.text = when(position) {
                 0 -> "얼굴"
                 1 -> "머리"
@@ -59,7 +58,7 @@ class DashboardCharacterShopFragment :
         }.attach()
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterShopFragment::onClickEvent)
+            EventObserver(this@DashboardCharacterInfoFragment::onClickEvent)
         )
         viewModel.userResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -96,15 +95,15 @@ class DashboardCharacterShopFragment :
                                                 viewModel!!.getCharacterUriList(it.value.user.character_id.toString())
                                                 viewModel!!.characterUriList.observe(
                                                     viewLifecycleOwner,
-                                                    Observer { it2 ->
-                                                        when (it2) {
+                                                    Observer { it3 ->
+                                                        when (it3) {
                                                             is Resource.Success -> {
-                                                                if (!it2.value.error) {
+                                                                if (!it3.value.error) {
                                                                     var animationDrawable =
                                                                         AnimationDrawable()
                                                                     animationDrawable.isOneShot =
                                                                         false
-                                                                    it2.value.characterUri.forEachIndexed { index1, s ->
+                                                                    it3.value.characterUri.forEachIndexed { index1, s ->
                                                                         Glide.with(requireContext())
                                                                             .asBitmap()
                                                                             .load("${viewModel!!.getResourceBaseUri()}${s.evolution_filename}")
@@ -130,7 +129,7 @@ class DashboardCharacterShopFragment :
                                                                                         characterBitmap,
                                                                                         ANIMATION_DURATION
                                                                                     )
-                                                                                    if (animationDrawable.numberOfFrames == it2.value.characterUri.size) {
+                                                                                    if (animationDrawable.numberOfFrames == it3.value.characterUri.size) {
                                                                                         /*
                                                                                         val charExp =
                                                                                             (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
@@ -170,15 +169,15 @@ class DashboardCharacterShopFragment :
                                                                                         val charExp =
                                                                                             (100.0 * (it.value.user.user_current_exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
                                                                                                     / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
-                                                                                        binding.dashCharacterShopIvCharacter.minimumWidth =
+                                                                                        binding.dashCharacterInfoIvCharacter.minimumWidth =
                                                                                             resource.width * PIXELS_PER_METRE
-                                                                                        binding.dashCharacterShopIvCharacter.minimumHeight =
+                                                                                        binding.dashCharacterInfoIvCharacter.minimumHeight =
                                                                                             resource.height * PIXELS_PER_METRE
-                                                                                        binding.dashCharacterShopIvCharacter.setImageDrawable(
+                                                                                        binding.dashCharacterInfoIvCharacter.setImageDrawable(
                                                                                             animationDrawable
                                                                                         )
                                                                                         animationDrawable =
-                                                                                            binding.dashCharacterShopIvCharacter.drawable as AnimationDrawable
+                                                                                            binding.dashCharacterInfoIvCharacter.drawable as AnimationDrawable
                                                                                         animationDrawable.start()
                                                                                     }
                                                                                 }
@@ -189,7 +188,7 @@ class DashboardCharacterShopFragment :
                                                             is Resource.Loading -> {
                                                             }
                                                             is Resource.Failure -> {
-                                                                handleApiError(it2)
+                                                                handleApiError(it3)
                                                             }
                                                         }
                                                     })
@@ -245,7 +244,7 @@ class DashboardCharacterShopFragment :
         val navDirection: NavDirections? =
             when (name) {
                 "shop" -> {
-                    null
+                    DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDashCharacterShop()
                 }
                 else -> {
                     null
@@ -256,12 +255,12 @@ class DashboardCharacterShopFragment :
         }
     }
 
-    override fun getViewModel() = DashboardCharacterShopViewModel::class.java
+    override fun getViewModel() = DashboardCharacterInfoViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentDashboardCharacterShopBinding.inflate(inflater, container, false)
+    ) = FragmentDashboardCharacterInfoBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }

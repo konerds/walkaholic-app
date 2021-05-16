@@ -1,10 +1,12 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_shop
+package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import android.os.Bundle
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -12,12 +14,16 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.EventObserver
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterShopDetailFragment(
     private val position: Int
-) : BaseFragment<DashboardCharacterShopDetailViewModel, FragmentDetailCharacterShopBinding, MainRepository>() {
+) : BaseFragment<DashboardCharacterShopDetailViewModel, FragmentDetailCharacterShopBinding, MainRepository>(),
+    CharacterItemSlotClickListener {
 
     val arrayListShopItem = arrayListOf<ItemInfo>()
 
@@ -30,6 +36,10 @@ class DashboardCharacterShopDetailFragment(
         arrayListShopItem.add(ItemInfo("hair", "0", "똑딱이핀", "3000"))
         arrayListShopItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
         arrayListShopItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
+        viewModel.onClickEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@DashboardCharacterShopDetailFragment::onClickEvent)
+        )
         binding.dashCharacterInfoDetailRV.also {
             val linearLayoutManager = LinearLayoutManager(requireContext())
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -41,8 +51,18 @@ class DashboardCharacterShopDetailFragment(
                 else -> null
             }?.let { arrayListFilteredItemInfo ->
                 DashboardCharacterShopDetailAdapter(
-                    arrayListFilteredItemInfo
+                    arrayListFilteredItemInfo, this
                 )
+            }
+        }
+    }
+
+    private fun onClickEvent(name: String) {
+        when (name) {
+            "walk_record" -> {
+            }
+            else -> {
+                null
             }
         }
     }
@@ -61,4 +81,6 @@ class DashboardCharacterShopDetailFragment(
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
     }
+
+    override fun onRecyclerViewItemClick(view: View, position: Int, itemInfo: ArrayList<ItemInfo>, selectedItems: SparseBooleanArray, selectedTotalPrice: Int) { }
 }

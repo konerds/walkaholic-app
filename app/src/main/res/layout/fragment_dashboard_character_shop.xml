@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopViewModel" />
+            type="com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopViewModel" />
 
         <variable
             name="user"
@@ -150,12 +150,27 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical"
+                        android:text="선택아이템("
+                        android:textSize="14sp" />
+
+                    <TextView
                         android:id="@+id/dashCharacterShopTvIntro1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical"
-                        android:text="선택아이템(1) 총 "
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical"
+                        android:text=") 총"
                         android:textSize="14sp" />
 
                     <TextView
@@ -164,7 +179,16 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical"
-                        android:text="3,000P"
+                        android:textColor="#F37520"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical"
+                        android:text="P"
                         android:textColor="#F37520"
                         android:textSize="14sp"
                         android:textStyle="bold" />

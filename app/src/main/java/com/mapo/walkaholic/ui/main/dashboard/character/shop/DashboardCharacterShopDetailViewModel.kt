@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_info
+package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,16 +10,16 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class DashboardCharacterInfoViewModel(
+class DashboardCharacterShopDetailViewModel(
         private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
+    /*
+        @TODO SHOP DATA RESPONSE
+     */
     override fun init() {}
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
-    private val _characterItemResponse: MutableLiveData<Resource<CharacterItemResponse>> = MutableLiveData()
-    val characterItemResponse: LiveData<Resource<CharacterItemResponse>>
-        get() = _characterItemResponse
     private val _expTableResponse: MutableLiveData<Resource<ExpTableResponse>> = MutableLiveData()
     val expTableResponse: LiveData<Resource<ExpTableResponse>>
         get() = _expTableResponse
@@ -37,12 +37,6 @@ class DashboardCharacterInfoViewModel(
                 }
                 progressBarVisibility.set(false)
             }
-        }
-    }
-
-    fun getUserCharacterItem(id: String) {
-        viewModelScope.launch {
-            _characterItemResponse.value = mainRepository.getCharacterItem(id)
         }
     }
 

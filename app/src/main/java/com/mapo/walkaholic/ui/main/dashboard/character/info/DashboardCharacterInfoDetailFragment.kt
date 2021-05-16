@@ -1,10 +1,12 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_info
+package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import android.os.Bundle
+import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -12,13 +14,15 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.main.dashboard.character_shop.DashboardCharacterShopDetailAdapter
+import com.mapo.walkaholic.ui.base.EventObserver
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterInfoDetailFragment(
     private val position: Int
-) : BaseFragment<DashboardCharacterInfoDetailViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
+) : BaseFragment<DashboardCharacterInfoDetailViewModel, FragmentDetailCharacterInfoBinding, MainRepository>(),
+    CharacterItemSlotClickListener {
 
     val arrayListInventoryItem = arrayListOf<ItemInfo>()
 
@@ -33,6 +37,10 @@ class DashboardCharacterInfoDetailFragment(
         arrayListInventoryItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
          */
+        viewModel.onClickEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@DashboardCharacterInfoDetailFragment::onClickEvent)
+        )
         binding.dashCharacterInfoDetailRV.also {
             val linearLayoutManager = LinearLayoutManager(requireContext())
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -58,7 +66,7 @@ class DashboardCharacterInfoDetailFragment(
                         else -> {
                         }
                     }
-                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult)
+                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
                 }
                 1 -> {
                     val filterResult =
@@ -79,10 +87,20 @@ class DashboardCharacterInfoDetailFragment(
                         else -> {
                         }
                     }
-                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult)
+                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
                 }
                 else -> {
                 }
+            }
+        }
+    }
+
+    private fun onClickEvent(name: String) {
+        when (name) {
+            "walk_record" -> {
+            }
+            else -> {
+                null
             }
         }
     }
@@ -100,5 +118,22 @@ class DashboardCharacterInfoDetailFragment(
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+    }
+
+    override fun onRecyclerViewItemClick(
+        view: View,
+        position: Int,
+        arrayListItemInfo: ArrayList<ItemInfo>,
+        selectedItems: SparseBooleanArray,
+        selectedTotalPrice: Int
+    ) {
+        when (view.id) {
+            R.id.itemInventoryLayout -> {
+
+            }
+            R.id.itemInventoryIvDiscard -> {
+
+            }
+        }
     }
 }

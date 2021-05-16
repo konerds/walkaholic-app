@@ -1,9 +1,8 @@
-package com.mapo.walkaholic.ui.main.dashboard.character_shop
+package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.mapo.walkaholic.ui.base.BaseFragment
 
 class DashboardCharacterShopViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     var fragments : ArrayList<Fragment> = ArrayList()
