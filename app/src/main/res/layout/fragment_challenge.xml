@@ -9,6 +9,7 @@
         android:id="@+id/challengeTL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TabLayout"
         app:layout_constraintTop_toTopOf="parent"
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="5dp" />

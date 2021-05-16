@@ -25,25 +25,64 @@ class DashboardCharacterInfoDetailFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arrayListInventoryItem.add(ItemInfo("face", "0", "진한눈썹", "3000"))
+        /*
         arrayListInventoryItem.add(ItemInfo("face", "1", "속눈썹펌", "3000"))
         arrayListInventoryItem.add(ItemInfo("face", "2", "수줍은볼", "3000"))
         arrayListInventoryItem.add(ItemInfo("face", "3", "발그레볼", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "0", "똑딱이핀", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
+         */
         binding.dashCharacterInfoDetailRV.also {
             val linearLayoutManager = LinearLayoutManager(requireContext())
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
             it.layoutManager = linearLayoutManager
             it.setHasFixedSize(true)
-            it.adapter = when(position) {
-                0 -> arrayListInventoryItem.filter { itemInfo -> itemInfo.itemType == "face" } as ArrayList<ItemInfo>
-                1 -> arrayListInventoryItem.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
-                else -> null
-            }?.let { arrayListFilteredItemInfo ->
-                DashboardCharacterInfoDetailAdapter(
-                    arrayListFilteredItemInfo
-                )
+            when (position) {
+                0 -> {
+                    val filterResult =
+                        arrayListInventoryItem.filter { itemInfo -> itemInfo.itemType == "face" } as ArrayList<ItemInfo>
+                    when (filterResult.size) {
+                        0 -> {
+                            filterResult.add(ItemInfo(null, null, null, null))
+                            filterResult.add(ItemInfo(null, null, null, null))
+                            filterResult.add(ItemInfo(null, null, null, null))
+                        }
+                        1 -> {
+                            filterResult.add(ItemInfo(null, null, null, null))
+                            filterResult.add(ItemInfo(null, null, null, null))
+                        }
+                        2 -> {
+                            filterResult.add(ItemInfo(null, null, null, null))
+                        }
+                        else -> {
+                        }
+                    }
+                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult)
+                }
+                1 -> {
+                    val filterResult =
+                        arrayListInventoryItem.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
+                    when (filterResult.size) {
+                        0 -> {
+                            filterResult.add(ItemInfo(null, null, null, null))
+                            filterResult.add(ItemInfo(null, null, null, null))
+                            filterResult.add(ItemInfo(null, null, null, null))
+                        }
+                        1 -> {
+                            filterResult.add(ItemInfo(null, null, null, null))
+                            filterResult.add(ItemInfo(null, null, null, null))
+                        }
+                        2 -> {
+                            filterResult.add(ItemInfo(null, null, null, null))
+                        }
+                        else -> {
+                        }
+                    }
+                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult)
+                }
+                else -> {
+                }
             }
         }
     }

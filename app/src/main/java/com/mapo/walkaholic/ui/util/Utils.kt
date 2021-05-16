@@ -27,7 +27,6 @@ import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlin.coroutines.coroutineContext
 
 private const val RESOURCE_BASE_URL = "http://49.50.166.31:80/resource/global/"
-private const val PIXELS_PER_METRE = 4
 
 fun <A : Activity> Activity.startNewActivity(activity: Class<A>) {
     Intent(this, activity).also {
@@ -151,33 +150,41 @@ fun bindDashTheme(view: ImageView, theme_code: String) {
 }
 
 @BindingAdapter("app:setImage")
-fun setImageUrl(view: ImageView, imageSrc: String) {
-    Glide.with(view.context)
-        .load("${RESOURCE_BASE_URL}${imageSrc}")
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-        .into(object : CustomTarget<Drawable>() {
-            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    resource.minimumWidth.toFloat(),
-                    GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
-                ).toInt()
-                view.minimumWidth = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    resource.minimumWidth.toFloat(),
-                    GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
-                ).toInt()
-                view.minimumHeight = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    resource.minimumHeight.toFloat(),
-                    GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
-                ).toInt()
-                view.setImageDrawable(resource)
-                Log.d(TAG, "${resource.minimumWidth} ${resource.minimumHeight} ${view.minimumWidth} ${view.minimumHeight}")
-            }
+fun setImageUrl(view: ImageView, imageSrc: String?) {
+    if(!imageSrc.isNullOrEmpty()) {
+        Glide.with(view.context)
+            .load("${RESOURCE_BASE_URL}${imageSrc}")
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .into(object : CustomTarget<Drawable>() {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
+                    TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        resource.minimumWidth.toFloat(),
+                        GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                    ).toInt()
+                    view.minimumWidth = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        resource.minimumWidth.toFloat(),
+                        GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                    ).toInt()
+                    view.minimumHeight = TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        resource.minimumHeight.toFloat(),
+                        GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                    ).toInt()
+                    view.setImageDrawable(resource)
+                    Log.d(
+                        TAG,
+                        "${resource.minimumWidth} ${resource.minimumHeight} ${view.minimumWidth} ${view.minimumHeight}"
+                    )
+                }
 
-            override fun onLoadCleared(placeholder: Drawable?) {}
+                override fun onLoadCleared(placeholder: Drawable?) {}
 
-        })
+            })
+    }
 }

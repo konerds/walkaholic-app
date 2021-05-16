@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.kakao.sdk.auth.model.OAuthToken
 import com.mapo.walkaholic.R
@@ -49,10 +51,9 @@ class DashboardFragment :
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
-        private const val CHARACTER_SMALL_WIDTH = 69
-        private const val CHARACTER_SMALL_HEIGHT = 86
-        private const val CHARACTER_BETWEEN_CIRCLE_PADDING = PIXELS_PER_METRE * 30
-        private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
+        private const val DASH_CHARACTER_RATE = 0.6051
+        private const val CHARACTER_BETWEEN_CIRCLE_PADDING = 65
+        private const val CHARACTER_EXP_CIRCLE_SIZE = 99
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,6 +113,7 @@ class DashboardFragment :
                                                                             .diskCacheStrategy(
                                                                                 DiskCacheStrategy.NONE
                                                                             ).skipMemoryCache(true)
+                                                                            .override((Target.SIZE_ORIGINAL.toFloat() * DASH_CHARACTER_RATE.toFloat()).toInt(), (Target.SIZE_ORIGINAL.toFloat() * DASH_CHARACTER_RATE.toFloat()).toInt())
                                                                             .into(object :
                                                                                 CustomTarget<Bitmap>() {
                                                                                 override fun onLoadCleared(
@@ -127,6 +129,7 @@ class DashboardFragment :
                                                                                         BitmapDrawable(
                                                                                             resource
                                                                                         )
+                                                                                    characterBitmap
                                                                                     animationDrawable.addFrame(
                                                                                         characterBitmap,
                                                                                         ANIMATION_DURATION
@@ -213,7 +216,7 @@ class DashboardFragment :
                                                                                         )
                                                                                         paint.color =
                                                                                             Color.parseColor(
-                                                                                                "#D46544"
+                                                                                                "#F9A25B"
                                                                                             )
                                                                                         canvasInfo.drawArc(
                                                                                             oval,
@@ -244,9 +247,17 @@ class DashboardFragment :
                                                                                             bitmapInfoSheet
                                                                                         )
                                                                                         binding.dashIvCharacter.minimumWidth =
-                                                                                            resource.width * PIXELS_PER_METRE
+                                                                                            TypedValue.applyDimension(
+                                                                                            TypedValue.COMPLEX_UNIT_DIP,
+                                                                                            resource.width.toFloat(),
+                                                                                            GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                                                                                        ).toInt()
                                                                                         binding.dashIvCharacter.minimumHeight =
-                                                                                            resource.height * PIXELS_PER_METRE
+                                                                                            TypedValue.applyDimension(
+                                                                                                TypedValue.COMPLEX_UNIT_DIP,
+                                                                                                resource.height.toFloat(),
+                                                                                                GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                                                                                            ).toInt()
                                                                                         binding.dashIvCharacter.setImageDrawable(
                                                                                             animationDrawable
                                                                                         )
