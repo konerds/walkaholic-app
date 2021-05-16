@@ -7,55 +7,66 @@
 
         <variable
             name="missionItem"
-            type="com.mapo.walkaholic.data.model.Theme" />
+            type="com.mapo.walkaholic.data.model.MissionCondition" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
         app:cardElevation="0dp">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="121dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
 
-                <ImageView
-                    android:layout_width="328dp"
-                    android:layout_height="114dp"
-                    android:layout_gravity="center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/challenge_mission_bar"
+                android:layout_width="10dp"
+                android:layout_height="122dp"
+                android:orientation="vertical"
+                android:background="@drawable/box_dashboard_uppercorner_f9a25b"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp">
 
                 <TextView
+                    style="@style/font_semi_bold_24_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="미션" />
+                    android:text='@{missionItem.mission_title}'
+                    android:textColor="@color/color443f35" />
 
-                <LinearLayout
+                <TextView
+                    style="@style/font_black_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:layout_marginTop="8dp"
+                    android:text='현재 3,000걸음 걸었어요!'
+                    android:textColor="@color/h3" />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/challenge_mission_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text='@{missionItem.course_title}'
-                        android:textColor="#C9C3B9"
-                        android:textSize="24sp"
-                        android:textStyle="bold"/>
+                        android:text='@{missionItem.reward + "P 받기"}'/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text='@{missionItem.course_name}'
-                        android:textColor="#6C6B67"
-                        android:textSize="10sp"
-                        android:layout_marginTop="8dp"/>
+            </LinearLayout>
 
-                </LinearLayout>
         </FrameLayout>
 
     </androidx.cardview.widget.CardView>

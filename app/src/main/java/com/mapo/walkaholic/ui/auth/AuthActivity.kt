@@ -1,8 +1,13 @@
 package com.mapo.walkaholic.ui.auth
 
 import android.app.Activity
+import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
+import android.util.Base64.NO_WRAP
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.LinearLayout
@@ -27,6 +32,8 @@ import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*
 import kotlinx.coroutines.runBlocking
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 @RequiresApi(Build.VERSION_CODES.M)
 class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthRepository>() {
@@ -46,11 +53,9 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         })
          */
-        /*
         Log.i(
-            ContentValues.TAG, "${getHashKey()}"
+            ContentValues.TAG, "해쉬값+${getHashKey()}"
         )
-         */
     }
 
     override fun onBackPressed() {
@@ -96,7 +101,6 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
         return AuthRepository.getInstance(api, userPreferences)
     }
 
-    /*
     private fun getHashKey(): String? {
         try {
             if (Build.VERSION.SDK_INT >= 28) {
@@ -133,5 +137,4 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
 
         return null
     }
-     */
 }

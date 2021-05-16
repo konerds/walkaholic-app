@@ -41,6 +41,7 @@
                 android:layout_width="328dp"
                 android:layout_height="526dp"
                 android:background="@drawable/box_dashboard_corner_white"
+                android:layout_gravity="center_horizontal"
                 android:visibility="gone">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -78,14 +79,14 @@
                         android:id="@+id/challengeRankingTvRankNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/h689F38"
+                        android:textColor="@color/color689f38"
                         android:text="1" />
                     <TextView
                         style="@style/font_black_24_one"
                         android:id="@+id/challengeRankingTvRankT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/h689F38"
+                        android:textColor="@color/color689f38"
                         android:textSize="24sp"
                         android:text="위" />
                     <TextView

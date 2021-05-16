@@ -61,4 +61,22 @@ interface InnerApi {
         @Field("user_id") userId: Long,
         @Field("walk_month") walkMonth: String
     ): WalkRecordExistInMonthResponse
+
+    @FormUrlEncoded
+    @POST("info/missionCondition")
+    suspend fun getMissionCondition(
+        @Field("mission_id") missionId: String,
+    ): MissionConditionResponse
+
+    /*@FormUrlEncoded
+    @POST("info/missionDaily")
+    suspend fun getMissionDaily(
+        @Field("mission_id") missionId: String,
+    ): MissionDailyResponse
+
+    @FormUrlEncoded
+    @POST("info/missionWeekly")
+    suspend fun getMissionWeekly(
+        @Field("mission_id") missionId: String,
+    ): MissionWeeklyResponse*/
 }

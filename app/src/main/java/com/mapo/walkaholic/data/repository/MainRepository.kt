@@ -135,4 +135,16 @@ class MainRepository(
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
         api.getPoints(body)
     }
+
+    suspend fun getMissionCondition(missionID:String) = safeApiCall {
+        api.getMissionCondition(missionID)
+    }
+
+/*    suspend fun getMissionDaily(missionID:String) = safeApiCall {
+        api.getMissionDaily(missionID)
+    }
+
+    suspend fun getMissionWeekly(missionID:String) = safeApiCall {
+        api.getMissionWeekly(missionID)
+    }*/
 }

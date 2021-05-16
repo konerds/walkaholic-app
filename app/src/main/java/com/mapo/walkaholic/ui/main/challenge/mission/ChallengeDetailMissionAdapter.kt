@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
+import com.mapo.walkaholic.data.model.MissionCondition
+import com.mapo.walkaholic.data.model.MissionDaily
 import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.databinding.ItemChallengeMissionBinding
 
 class ChallengeDetailMissionAdapter(
-    private val missions: ArrayList<Theme>
+    private val missions: ArrayList<MissionCondition>
 ) : RecyclerView.Adapter<ChallengeDetailMissionAdapter.ItemChallengeMissionViewHolder>() {
     inner class ItemChallengeMissionViewHolder(
         val binding : ItemChallengeMissionBinding

@@ -1,20 +1,27 @@
 package com.mapo.walkaholic.ui.main.challenge
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.mapo.walkaholic.data.model.Mission
+import com.mapo.walkaholic.data.model.MissionCondition
+import com.mapo.walkaholic.data.model.MissionDaily
 import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
 import kotlinx.coroutines.flow.first
@@ -27,15 +34,45 @@ class ChallengeDetailFragment(
     private lateinit var viewPager: ViewPager2
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val dummyMission1 =
+            MissionCondition("00", "01", "3000 걸음", "3000", "100")
+        val dummyMission2 =
+            MissionCondition("00", "02", "5,000 걸음", "5000", "200")
+        val dummyMission3 =
+            MissionCondition("01", "02", "일일미션 5회", "5", "500")
+        val dummyMission4 =
+            MissionCondition("01", "02", "일일미션 10회", "10", "1000")
+        val dummyArrayList: ArrayList<MissionCondition> = ArrayList()
+        dummyArrayList.add(dummyMission1)
+        dummyArrayList.add(dummyMission2)
+
+        viewModel.missionConditionResponse.observe(viewLifecycleOwner, Observer { it2 ->
+            binding.challengeRVMission.also {
+                it.layoutManager = LinearLayoutManager(requireContext())
+                //동일한 크기의 아이템 항목을 사용자에게 리스트로 보여주기 위해 크기가 변경되지 않음을 명시
+                it.setHasFixedSize(true)
+                when(it2) {
+                    is Resource.Success -> {
+                        if(!it2.value.error) {
+                            it.adapter = it2.value.missionCondition?.let { it3 -> ChallengeDetailMissionAdapter(dummyArrayList) }
+                        }
+                        Log.e("missionCondition", it2.value.missionCondition.toString())
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Failure -> {
+                        it2.errorBody?.let { it1 -> Log.e("missionCondition", it1.string()) }
+                        handleApiError(it2)
+                    }
+                }
+            }
+        })
+        viewModel.getMissionCondition(when(position) { 0 -> "00" 1 -> "01" else -> ""})
+
         when (position) {
             0 -> {
-                val dummyMission1 =
-                    Theme(null, null, "day_mission1", null, null, null, null, null, null, null, null)
-                val dummyMission2 =
-                    Theme(null, null, "day_mission2", null, null, null, null, null, null, null, null)
-                val dummyArrayList: ArrayList<Theme> = ArrayList()
-                dummyArrayList.add(dummyMission1)
-                dummyArrayList.add(dummyMission2)
                 binding.challengeTvIntro1.text = "일일미션을 완료하고\n포인트를 받으세요!"
                 binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
                 binding.challengeTvIntro1.visibility = View.VISIBLE
@@ -43,18 +80,9 @@ class ChallengeDetailFragment(
                 binding.challengeLayoutRanking.visibility = View.GONE
                 binding.challengeLayoutRankingIntro.visibility = View.GONE
                 binding.challengeLayoutMission.visibility = View.VISIBLE
-                binding.challengeRVMission.layoutManager = LinearLayoutManager(requireContext())
-                binding.challengeRVMission.setHasFixedSize(true)
-                binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
+                //binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
             }
             1 -> {
-                val dummyMission1 =
-                    Theme(null, null, "week_mission1", null, null, null, null, null, null, null, null)
-                val dummyMission2 =
-                    Theme(null, null, "week_mission2", null, null, null, null, null, null, null, null)
-                val dummyArrayList: ArrayList<Theme> = ArrayList()
-                dummyArrayList.add(dummyMission1)
-                dummyArrayList.add(dummyMission2)
                 binding.challengeTvIntro1.text = "주간미션을 완료하고\n포인트를 받으세요!"
                 binding.challengeTvIntro2.text = "미션은 매주 월요일 자정에 갱신되어요"
                 binding.challengeTvIntro1.visibility = View.VISIBLE
@@ -62,9 +90,7 @@ class ChallengeDetailFragment(
                 binding.challengeLayoutRanking.visibility = View.GONE
                 binding.challengeLayoutRankingIntro.visibility = View.GONE
                 binding.challengeLayoutMission.visibility = View.VISIBLE
-                binding.challengeRVMission.layoutManager = LinearLayoutManager(requireContext())
-                binding.challengeRVMission.setHasFixedSize(true)
-                binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
+                //binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
             }
             2 -> {
                 binding.challengeTvIntro1.visibility = View.GONE
