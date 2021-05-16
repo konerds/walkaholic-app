@@ -1,19 +1,16 @@
 package com.mapo.walkaholic.ui
 
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.GuideInformation
 import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.GuideRepository
@@ -65,34 +62,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
             when (responseGuide) {
                 is Resource.Success -> {
                     if (!responseGuide.value.error) {
-                        val guideList = responseGuide.value.guideInformation
-                        val adapter = object : RecyclerView.Adapter<ViewHolder>() {
-                            inner class GuideViewHolder(itemView: View) : ViewHolder(itemView) {
-                                private val binding = ItemGuideBinding.inflate(layoutInflater)
-                            }
-
-                            override fun onCreateViewHolder(
-                                parent: ViewGroup,
-                                position: Int
-                            ): ViewHolder {
-                                val inflater = LayoutInflater.from(parent.context)
-                                val view = inflater.inflate(R.layout.item_guide, parent, false)
-                                return GuideViewHolder(view)
-                            }
-
-                            override fun onBindViewHolder(
-                                holder: ViewHolder,
-                                position: Int
-                            ) {
-                                setImageUrl(
-                                    holder.itemView.guideIvItem,
-                                    guideList[position].tutorial_filename
-                                )
-                            }
-
-                            override fun getItemCount(): Int = guideList.size
-                        }
-                        binding.guideVp.adapter = adapter
+                        binding.guideVp.adapter = GuideAdapter(responseGuide.value.guideInformation)
                     }
                 }
                 is Resource.Loading -> {

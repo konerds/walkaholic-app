@@ -46,7 +46,7 @@ class DashboardProfileFragment :
                 is Resource.Success -> {
                     if (!it.value.error) {
                         binding.user = it.value.user
-                        if(it.value.user.user_gender == "0") {
+                        if (it.value.user.user_gender == "0") {
                             binding.dashProfileChipMale.isChecked = true
                             binding.dashProfileChipFemale.isChecked = false
                         } else {
@@ -79,13 +79,13 @@ class DashboardProfileFragment :
         })
         viewModel.getUser()
         val heightItems = mutableListOf<Int>()
-        for(item in 100..300) {
+        for (item in 100..300) {
             heightItems.add(item)
         }
         val heightAdapter = ArrayAdapter(requireContext(), R.layout.item_text_view, heightItems)
         (binding.dashProfileEtHeight as? AutoCompleteTextView)?.setAdapter(heightAdapter)
         val weightItems = mutableListOf<Int>()
-        for(item in 10..300) {
+        for (item in 10..300) {
             weightItems.add(item)
         }
         val weightAdapter = ArrayAdapter(requireContext(), R.layout.item_text_view, weightItems)
@@ -93,14 +93,16 @@ class DashboardProfileFragment :
     }
 
     private fun onClickEvent(name: String) {
-        val navDirection : NavDirections? =
-        when (name) {
-            "profile_completed" -> {
-                com.mapo.walkaholic.ui.main.dashboard.DashboardProfileFragmentDirections.actionActionBnvDashProfileToActionBnvDash()
+        val navDirection: NavDirections? =
+            when (name) {
+                "profile_completed" -> {
+                    DashboardProfileFragmentDirections.actionActionBnvDashProfileToActionBnvDash()
+                }
+                else -> {
+                    null
+                }
             }
-            else -> { null }
-        }
-        if(navDirection != null) {
+        if (navDirection != null) {
             findNavController().navigate(navDirection)
         }
     }

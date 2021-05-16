@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="itemInfo"
+            type="com.mapo.walkaholic.data.model.ItemInfo" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="134dp"
+        android:layout_height="132dp"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/box_inventory_item_base" />
+
+        <LinearLayout
+            android:layout_width="134dp"
+            android:layout_height="104dp"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_vertical"
+                app:setImage='@{"item_" + itemInfo.itemType + "_" + itemInfo.itemId + ".png"}' />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/box_inventory_item_lowercorner" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_gravity="bottom"
+            android:gravity="center|center_vertical"
+            android:text='@{itemInfo.itemName + " / " + itemInfo.itemPrice + "P"}'
+            android:textColor="@color/mdWhite1000"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+</layout>

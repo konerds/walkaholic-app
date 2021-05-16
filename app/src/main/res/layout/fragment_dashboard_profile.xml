@@ -125,12 +125,12 @@
                             android:textColor="#6C6B67"
                             android:textStyle="bold"
                             android:theme="@style/Theme.MaterialComponents.Light"
-                            app:checkedIcon="@drawable/ic_checked"
+                            app:checkedIcon="@drawable/ic_dashboard_profile_gender_checked"
                             app:checkedIconVisible="true"
                             app:chipBackgroundColor="@android:color/transparent"
-                            app:chipIcon="@drawable/ic_unchecked"
+                            app:chipIcon="@drawable/ic_dashboard_profile_gender_unchecked"
                             app:chipIconVisible="true"
-                            app:closeIcon="@drawable/ic_unchecked"
+                            app:closeIcon="@drawable/ic_dashboard_profile_gender_unchecked"
                             app:iconStartPadding="12dp" />
 
                         <com.google.android.material.chip.Chip
@@ -146,10 +146,10 @@
                             android:textColor="#6C6B67"
                             android:textStyle="bold"
                             android:theme="@style/Theme.MaterialComponents.Light"
-                            app:checkedIcon="@drawable/ic_checked"
+                            app:checkedIcon="@drawable/ic_dashboard_profile_gender_checked"
                             app:checkedIconVisible="true"
                             app:chipBackgroundColor="@android:color/transparent"
-                            app:chipIcon="@drawable/ic_unchecked"
+                            app:chipIcon="@drawable/ic_dashboard_profile_gender_unchecked"
                             app:chipIconVisible="true"
                             app:iconStartPadding="12dp" />
                     </com.google.android.material.chip.ChipGroup>
@@ -233,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="@drawable/box_dashboard_corner_peach"
+                android:background="@drawable/box_dashboard_corner_f9a25b"
                 android:onClick='@{()->viewModel.onClickEvent("profile_completed")}'
                 android:text="완료"
                 android:textColor="@color/mdWhite1000"

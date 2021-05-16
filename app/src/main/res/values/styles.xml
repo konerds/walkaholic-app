@@ -1,6 +1,8 @@
 <resources>
     <!-- Base Screen Theme -->
-    <style name="Theme.AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+        <item name="tabStyle">@style/Widget.App.TabLayout</item>
         <item name="colorPrimary">#F9A25B</item>
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
@@ -11,17 +13,17 @@
         <item name="colorOnPrimary">@color/mdWhite1000</item>
         <item name="colorOnSecondary">@color/mdWhite1000</item>
         <item name="colorOnBackground">@color/mdWhite1000</item>
-        <item name="colorOnSurface">@color/mdGrey200</item>
+        <item name="colorOnSurface">@color/mdWhite1000</item>
         <item name="colorOnError">@color/mdWhite1000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
     <!-- Auth Screen Theme -->
-    <style name="Theme.AuthTheme" parent="Theme.AppTheme">
+    <style name="Theme.AuthTheme" parent="Theme.App">
         <item name="android:colorBackground">@color/mdWhite1000</item>
     </style>
     <!-- Guide Screen Theme -->
-    <style name="Theme.GuideTheme" parent="Theme.AppTheme">
+    <style name="Theme.GuideTheme" parent="Theme.App">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowFullscreen">true</item>
@@ -29,7 +31,7 @@
         <item name="android:windowBackground">#FF000000</item>
     </style>
     <!-- Splash Screen Theme -->
-    <style name="Theme.SplashTheme" parent="Theme.AppTheme">
+    <style name="Theme.SplashTheme" parent="Theme.App">
         <item name="android:background">@color/mdWhite1000</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -37,21 +39,37 @@
         <item name="windowNoTitle">true</item>
     </style>
     <!-- Character Item Shop Theme -->
-    <style name="Theme.CharacterShopTheme" parent="Theme.AppTheme">
+    <style name="Theme.CharacterShopTheme" parent="Theme.App">
         <item name="colorPrimary">#689F38</item>
     </style>
     <!-- Challenge Screen Theme -->
-    <style name="Theme.ChallegeTheme" parent="Theme.AppTheme">
+    <style name="Theme.ChallegeTheme" parent="Theme.App">
         <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
-    Bottom Navigation Style
-
-    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+    <!-- Bottom Navigation Style -->
+    <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
     </style>
-
     <style name="ThemeOverlay.App.BottomNavigationView" parent="">
-        <item name="colorPrimary">#A79F8F</item>
-        <item name="colorOnSurface">#E3E0DB</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">#E3E0DB</item>
+    </style>
+    <!-- Base Tab Layout Style -->
+    <style name="Widget.App.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
+        <item name="tabTextColor">@color/mdWhite1000</item>
+        <item name="tabTextAppearance">@style/TextAppearance.App.Button</item>
+    </style>
+    <style name="ThemeOverlay.App.TabLayout" parent="android:Widget">
+        <item name="tabBackground">@drawable/selector_tab_layout</item>
+        <item name="tabIndicatorColor">@android:color/transparent</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
+    </style>
+    <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textColor">@color/mdWhite1000</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

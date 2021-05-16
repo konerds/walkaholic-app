@@ -2,6 +2,7 @@ package com.mapo.walkaholic.ui.main.dashboard.character_shop
 
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +12,11 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -25,6 +27,7 @@ import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.dashboard.character_info.DashboardCharacterInfoViewPagerAdapter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
@@ -40,14 +43,20 @@ class DashboardCharacterShopFragment :
         private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
     }
 
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager2
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        tabLayout = binding.dashCharacterShopTL
-        viewPager = binding.dashCharacterShopVP
+        val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
+        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0))
+        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(1))
+        binding.dashCharacterShopVP.adapter = pagerAdapter
+        TabLayoutMediator(binding.dashCharacterShopTL, binding.dashCharacterShopVP) { tab, position ->
+            tab.text = when(position) {
+                0 -> "얼굴"
+                1 -> "머리"
+                else -> ""
+            }
+        }.attach()
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@DashboardCharacterShopFragment::onClickEvent)
