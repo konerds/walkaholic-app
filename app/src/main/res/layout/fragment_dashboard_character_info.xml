@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:theme="@style/Theme.CustomTabBackgroundTheme">
+        android:theme="@style/Theme.DashboardCharacterTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,8 +52,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashCharacterInfoTvCharacterName"
+                    style="@style/font_semi_bold_16_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -119,8 +119,8 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            style="@style/font_black_28_one"
                             android:id="@+id/dashCharacterInfoTvPoint"
+                            style="@style/font_black_28_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.toAnyToString(user.user_point)}"
@@ -138,8 +138,8 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/font_medium_16_one"
                     android:id="@+id/dashCharacterInfoTvIntro"
+                    style="@style/font_medium_16_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -150,7 +150,7 @@
                     android:minHeight="32dp"
                     android:onClick='@{()->viewModel.onClickEvent("shop")}'
                     android:text="상점에서 아이템을 구매하세요!"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <FrameLayout
                     android:id="@+id/dashCharacterInfoLayoutFrame"
@@ -181,9 +181,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:layout_margin="16dp"
-                    android:progressDrawable="@drawable/progressbar_dashboard_character_info"
                     android:max="@{viewModel.toLongToInt(expTable.requireexp1 - expTable.requireexp2)}"
-                    android:progress="@{viewModel.toLongToInt(user.user_current_exp - expTable.requireexp2)}" />
+                    android:progress="@{viewModel.toLongToInt(user.user_current_exp - expTable.requireexp2)}"
+                    android:progressDrawable="@drawable/progressbar_dashboard_character_info" />
 
             </LinearLayout>
 
@@ -206,7 +206,6 @@
                         android:id="@+id/dashCharacterInfoTL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#F9F9F9"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.viewpager2.widget.ViewPager2

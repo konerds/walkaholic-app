@@ -9,9 +9,7 @@
         android:id="@+id/themeTL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="5dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/themeVP"

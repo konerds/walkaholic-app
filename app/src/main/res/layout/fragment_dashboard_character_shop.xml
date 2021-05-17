@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:theme="@style/Theme.CustomTabBackgroundTheme">
+        android:theme="@style/Theme.DashboardCharacterTheme">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,8 +52,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashCharacterShopTvCharacterName"
+                    style="@style/font_semi_bold_16_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -119,8 +119,8 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            style="@style/font_black_28_one"
                             android:id="@+id/dashCharacterShopTvPoint"
+                            style="@style/font_black_28_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.toAnyToString(user.user_point)}"
@@ -158,8 +158,8 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        style="@style/font_medium_16_one"
                         android:id="@+id/dashCharacterShopTvIntro1"
+                        style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -176,8 +176,8 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        style="@style/font_black_16_one"
                         android:id="@+id/dashCharacterShopTvIntro2"
+                        style="@style/font_black_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -197,8 +197,8 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        style="@style/font_medium_16_one"
                         android:id="@+id/dashCharacterShopTvIntro3"
+                        style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -238,9 +238,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:layout_margin="16dp"
-                    android:progressDrawable="@drawable/progressbar_dashboard_character_shop"
                     android:max="@{viewModel.toLongToInt(expTable.requireexp1 - expTable.requireexp2)}"
-                    android:progress="@{viewModel.toLongToInt(user.user_current_exp - expTable.requireexp2)}" />
+                    android:progress="@{viewModel.toLongToInt(user.user_current_exp - expTable.requireexp2)}"
+                    android:progressDrawable="@drawable/progressbar_dashboard_character_shop" />
 
             </LinearLayout>
 
@@ -263,7 +263,6 @@
                         android:id="@+id/dashCharacterShopTL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#F9F9F9"
                         app:layout_constraintTop_toTopOf="parent"
                         app:tabBackground="@drawable/selector_tab_layout_character_shop" />
 

@@ -2,6 +2,9 @@
     <!-- Base Screen Theme -->
     <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicatorHeight">5dp</item>
         <item name="colorPrimary">#F9A25B</item>
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
@@ -12,7 +15,7 @@
         <item name="colorOnPrimary">@color/mdWhite1000</item>
         <item name="colorOnSecondary">@color/mdWhite1000</item>
         <item name="colorOnBackground">@color/mdWhite1000</item>
-        <item name="colorOnSurface">@color/mdWhite1000</item>
+        <item name="colorOnSurface">#E3E0DB</item>
         <item name="colorOnError">@color/mdWhite1000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -38,7 +41,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <!-- Dashboard Screen Theme -->
-    <style name="Theme.CustomTabBackgroundTheme" parent="Theme.App">
+    <style name="Theme.DashboardCharacterTheme" parent="Theme.App">
         <item name="tabStyle">@style/Widget.App.TabLayout</item>
     </style>
     <!-- Challenge Screen Theme -->
@@ -58,6 +61,7 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
         <item name="tabTextColor">@color/mdWhite1000</item>
         <item name="tabTextAppearance">@style/TextAppearance.App.Button</item>
+        <item name="android:background">#F9F9F9</item>
     </style>
     <style name="ThemeOverlay.App.TabLayout" parent="android:Widget">
         <item name="tabBackground">@drawable/selector_tab_layout</item>
