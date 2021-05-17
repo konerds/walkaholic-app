@@ -79,6 +79,6 @@ class SplashActivity :
 
     override fun getActivityRepository(): SplashRepository {
         val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
-        return SplashRepository.getInstance(api, userPreferences)
+        return SplashRepository(api, userPreferences)
     }
 }

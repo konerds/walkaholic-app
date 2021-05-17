@@ -98,7 +98,7 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
 
     override fun getActivityRepository(): AuthRepository {
         val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
-        return AuthRepository.getInstance(api, userPreferences)
+        return AuthRepository(api, userPreferences)
     }
 
     private fun getHashKey(): String? {

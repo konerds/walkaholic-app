@@ -40,6 +40,6 @@ class ChallengeDetailRankingFragment(
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 }

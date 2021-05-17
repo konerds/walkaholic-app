@@ -58,6 +58,7 @@ class DashboardFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
         viewModel.onClickEvent.observe(
             viewLifecycleOwner,
@@ -584,6 +585,6 @@ class DashboardFragment :
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 }

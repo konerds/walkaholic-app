@@ -25,6 +25,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterInfoBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
 import kotlinx.coroutines.flow.first
@@ -32,7 +33,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
 class DashboardCharacterInfoFragment :
-    BaseFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>() {
+    BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>() {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -44,6 +45,7 @@ class DashboardCharacterInfoFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
         val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
         pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(0))
@@ -267,6 +269,6 @@ class DashboardCharacterInfoFragment :
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 }

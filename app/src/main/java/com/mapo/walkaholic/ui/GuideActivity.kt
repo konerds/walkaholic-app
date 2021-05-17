@@ -113,6 +113,6 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
 
     override fun getActivityRepository(): GuideRepository {
         val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
-        return GuideRepository.getInstance(api, userPreferences)
+        return GuideRepository(api, userPreferences)
     }
 }

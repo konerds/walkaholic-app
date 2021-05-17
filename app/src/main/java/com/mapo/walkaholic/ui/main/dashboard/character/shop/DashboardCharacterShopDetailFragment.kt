@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -14,6 +13,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
@@ -22,7 +22,7 @@ import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterShopDetailFragment(
     private val position: Int
-) : BaseFragment<DashboardCharacterShopDetailViewModel, FragmentDetailCharacterShopBinding, MainRepository>(),
+) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>(),
     CharacterItemSlotClickListener {
 
     val arrayListShopItem = arrayListOf<ItemInfo>()
@@ -67,7 +67,7 @@ class DashboardCharacterShopDetailFragment(
         }
     }
 
-    override fun getViewModel() = DashboardCharacterShopDetailViewModel::class.java
+    override fun getViewModel() = DashboardCharacterShopViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -79,7 +79,7 @@ class DashboardCharacterShopDetailFragment(
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 
     override fun onRecyclerViewItemClick(view: View, position: Int, itemInfo: ArrayList<ItemInfo>, selectedItems: SparseBooleanArray, selectedTotalPrice: Int) { }

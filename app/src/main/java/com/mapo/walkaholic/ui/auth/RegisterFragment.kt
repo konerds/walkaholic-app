@@ -243,7 +243,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
     ) = FragmentRegisterBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository {
-        return AuthRepository.getInstance(
+        return AuthRepository(
             remoteDataSource.buildRetrofitInnerApi(GuestApi::class.java),
             userPreferences
         )

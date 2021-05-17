@@ -95,7 +95,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="#ECECEC"
-                android:elevation="2dp"
+                android:elevation="4dp"
                 app:layout_constraintBottom_toTopOf="@id/dashLayout1"
                 app:layout_constraintTop_toBottomOf="@id/dashLayout1Head" />
 
@@ -106,7 +106,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/box_dashboard_lowercorner_white"
-                android:elevation="2dp"
+                android:elevation="4dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashLayout3"
                 app:layout_constraintTop_toBottomOf="@id/dashLayout1Space">

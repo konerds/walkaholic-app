@@ -48,15 +48,19 @@ class ViewModelFactory(
                     isAssignableFrom(DashboardCharacterInfoViewModel::class.java) -> DashboardCharacterInfoViewModel(
                         repository as MainRepository
                     )
+                    /*
                     isAssignableFrom(DashboardCharacterInfoDetailViewModel::class.java) -> DashboardCharacterInfoDetailViewModel(
                         repository as MainRepository
                     )
+                     */
                     isAssignableFrom(DashboardCharacterShopViewModel::class.java) -> DashboardCharacterShopViewModel(
                         repository as MainRepository
                     )
+                    /*
                     isAssignableFrom(DashboardCharacterShopDetailViewModel::class.java) -> DashboardCharacterShopDetailViewModel(
                         repository as MainRepository
                     )
+                     */
                     isAssignableFrom(DashboardCalendarViewModel::class.java) -> DashboardCalendarViewModel(
                         repository as MainRepository
                     )

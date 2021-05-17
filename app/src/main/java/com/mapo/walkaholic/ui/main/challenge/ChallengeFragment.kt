@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -60,6 +61,6 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 }

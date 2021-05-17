@@ -7,23 +7,6 @@ class GuideRepository(
     private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-    companion object {
-        @Volatile
-        private var instance: GuideRepository? = null
-
-        @JvmStatic
-        fun getInstance(
-            api: GuestApi,
-            preferences: UserPreferences
-        ): GuideRepository =
-            instance ?: synchronized(this) {
-                instance ?: GuideRepository(api, preferences).also {
-                    instance = it
-                }
-            }
-
-    }
-
     suspend fun getTutorialFilenames() = safeApiCall {
         api.getTutorialFilenames()
     }

@@ -220,6 +220,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiAPIS = remoteDataSource.buildRetrofitInnerApi(ApisApi::class.java, jwtToken)
         val apiSGIS = remoteDataSource.buildRetrofitInnerApi(SgisApi::class.java, jwtToken)
-        return MainRepository.getInstance(api, apiAPIS, apiSGIS, userPreferences)
+        return MainRepository(api, apiAPIS, apiSGIS, userPreferences)
     }
 }

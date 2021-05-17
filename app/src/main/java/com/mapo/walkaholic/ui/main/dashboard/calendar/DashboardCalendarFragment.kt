@@ -33,6 +33,7 @@ class DashboardCalendarFragment :
     BaseFragment<DashboardCalendarViewModel, FragmentDashboardCalendarBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         var startTimeCalendar = Calendar.getInstance()
@@ -59,7 +60,7 @@ class DashboardCalendarFragment :
             when (it) {
                 is Resource.Success -> {
                     it.value.walkRecord.forEachIndexed { index, walkRecord ->
-                        Log.e("기록", walkRecord.toString())
+                        Log.e(TAG, walkRecord.toString())
                         calendarDays.add(walkRecord.recordYear?.let { it1 ->
                             walkRecord.recordMonth?.let { it2 ->
                                 walkRecord.recordDay?.let { it3 ->

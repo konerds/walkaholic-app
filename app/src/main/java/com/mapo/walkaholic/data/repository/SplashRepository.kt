@@ -7,20 +7,5 @@ class SplashRepository(
     private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-    companion object {
-        @Volatile
-        private var instance: SplashRepository? = null
 
-        @JvmStatic
-        fun getInstance(
-            api: GuestApi,
-            preferences: UserPreferences
-        ): SplashRepository =
-            instance ?: synchronized(this) {
-                instance ?: SplashRepository(api, preferences).also {
-                    instance = it
-                }
-            }
-
-    }
 }

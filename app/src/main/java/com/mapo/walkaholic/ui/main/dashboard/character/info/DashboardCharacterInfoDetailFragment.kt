@@ -14,6 +14,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import kotlinx.coroutines.flow.first
@@ -21,7 +22,7 @@ import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterInfoDetailFragment(
     private val position: Int
-) : BaseFragment<DashboardCharacterInfoDetailViewModel, FragmentDetailCharacterInfoBinding, MainRepository>(),
+) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>(),
     CharacterItemSlotClickListener {
 
     val arrayListInventoryItem = arrayListOf<ItemInfo>()
@@ -105,7 +106,7 @@ class DashboardCharacterInfoDetailFragment(
         }
     }
 
-    override fun getViewModel() = DashboardCharacterInfoDetailViewModel::class.java
+    override fun getViewModel() = DashboardCharacterInfoViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -117,7 +118,7 @@ class DashboardCharacterInfoDetailFragment(
         val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
-        return MainRepository.getInstance(api, apiWeather, apiSGIS, userPreferences)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 
     override fun onRecyclerViewItemClick(

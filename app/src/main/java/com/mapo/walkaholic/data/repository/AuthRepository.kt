@@ -7,21 +7,6 @@ class AuthRepository(
     private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-    companion object {
-        @Volatile
-        private var instance: AuthRepository? = null
-        @JvmStatic
-        fun getInstance(
-            api: GuestApi,
-            preferences: UserPreferences
-        ): AuthRepository =
-                instance ?: synchronized(this) {
-                    instance ?: AuthRepository(api, preferences).also {
-                        instance = it
-                    }
-                }
-    }
-
     suspend fun getTerm() = safeApiCall {
         api.getTerm()
     }

@@ -39,7 +39,7 @@
                 android:layout_width="10dp"
                 android:layout_height="122dp"
                 android:orientation="vertical"
-                android:background="@drawable/selector_challenge_progress_top"/>
+                android:background="@drawable/box_dashboard_uppercorner_f9a25b"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{missionItem.mission_title}'
-                        android:textColor="@color/colorc9c3b9" />
+                        android:textColor="@color/color443f35" />
 
                     <TextView
                         style="@style/font_black_10_one"
@@ -77,9 +77,9 @@
                     style="@style/font_semi_bold_16_one"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/selector_challenge_progress_btn"
+                    android:background="@drawable/button_challenge_corner_f9a25b"
                     android:text='@{missionItem.reward + "P 받기"}'
-                    android:textColor="@color/colorc9c3b9"
+                    android:textColor="@color/colorf9af00"
                     android:layout_gravity="center_vertical"
                     />
 
