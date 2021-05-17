@@ -52,106 +52,107 @@ class ChallengeDetailFragment(
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
 
-        viewModel.getMissionCondition(when (position) {0 -> "00" 1 -> "01" else -> "" })
-        viewModel.missionConditionResponse.observe(viewLifecycleOwner, Observer { it2 ->
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.challengeRVMission.also {
                 it.layoutManager = LinearLayoutManager(requireContext())
-                //동일한 크기의 아이템 항목을 사용자에게 리스트로 보여주기 위해 크기가 변경되지 않음을 명시
                 it.setHasFixedSize(true)
                 when (it2) {
                     is Resource.Success -> {
                         if (!it2.value.error) {
-                            it.adapter = it2.value.missionCondition?.let { it3 ->
-                                ChallengeDetailMissionAdapter(dummyArrayList)
-                            }
+                            viewModel.getMissionCondition(when (position) {0 -> "00" 1 -> "01" else -> "" })
+                            viewModel.missionConditionResponse.observe(viewLifecycleOwner, Observer { it3 ->
+                                binding.challengeRVMission.also {
+                                    it.layoutManager = LinearLayoutManager(requireContext())
+                                    //동일한 크기의 아이템 항목을 사용자에게 리스트로 보여주기 위해 크기가 변경되지 않음을 명시
+                                    it.setHasFixedSize(true)
+                                    when (it3) {
+                                        is Resource.Success -> {
+                                            if (!it2.value.error) {
+                                                // @TODO GET DATA WHEN REST EXECUTE SUCCESSFUL
+                                            }
+                                            Log.e("missionCondition", it3.value.missionCondition.toString())
+                                        }
+                                        is Resource.Loading -> {
+
+                                        }
+                                        is Resource.Failure -> {
+                                            it3.errorBody?.let { it1 -> Log.e("missionCondition", it1.string()) }
+                                            handleApiError(it3)
+                                        }
+                                    }
+                                    when (position) {
+                                        0 -> {
+                                            binding.challengeTvIntro1.text = "일일미션을 완료하고\n포인트를 받으세요!"
+                                            binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
+                                            binding.challengeTvIntro1.visibility = View.VISIBLE
+                                            binding.challengeTvIntro2.visibility = View.VISIBLE
+                                            binding.challengeLayoutRanking.visibility = View.GONE
+                                            binding.challengeLayoutRankingIntro.visibility = View.GONE
+                                            binding.challengeLayoutMission.visibility = View.VISIBLE
+                                            /*it.adapter = it3.value.missionCondition?.let { it3 ->
+                                                ChallengeDetailMissionAdapter(dummyArrayList)
+                                            }*/
+                                            it.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
+                                        }
+                                        1 -> {
+                                            binding.challengeTvIntro1.text = "주간미션을 완료하고\n포인트를 받으세요!"
+                                            binding.challengeTvIntro2.text = "미션은 매주 월요일 자정에 갱신되어요"
+                                            binding.challengeTvIntro1.visibility = View.VISIBLE
+                                            binding.challengeTvIntro2.visibility = View.VISIBLE
+                                            binding.challengeLayoutRanking.visibility = View.GONE
+                                            binding.challengeLayoutRankingIntro.visibility = View.GONE
+                                            binding.challengeLayoutMission.visibility = View.VISIBLE
+                                            /*it.adapter = it3.value.missionCondition?.let { it3 ->
+                                                ChallengeDetailMissionAdapter(dummyArrayList)
+                                            }*/
+                                            it.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
+                                        }
+                                        2 -> {
+                                            binding.challengeTvIntro1.visibility = View.GONE
+                                            binding.challengeTvIntro2.visibility = View.GONE
+                                            binding.challengeLayoutMission.visibility = View.GONE
+                                            binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
+                                            tabLayout = binding.challengeRankingTL
+                                            viewPager = binding.challengeRankingVP
+                                            val adapter = ChallengeRankingViewPagerAdapter(this, 2)
+                                            viewPager.adapter = adapter
+                                            val tabName: ArrayList<String> = arrayListOf()
+                                            tabName.add("월별포인트")
+                                            tabName.add("누적포인트")
+                                            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                                                tab.text = tabName?.get(position)
+                                            }.attach()
+                                            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                                                override fun onTabSelected(tab: TabLayout.Tab?) {
+                                                    viewPager.currentItem = tab!!.position
+                                                }
+
+                                                override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+                                                }
+
+                                                override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                                                }
+                                            })
+                                            binding.challengeLayoutRanking.visibility = View.VISIBLE
+                                        }
+                                    }
+
+                                }
+                            })
                         }
-                        Log.e("missionCondition", it2.value.missionCondition.toString())
                     }
                     is Resource.Loading -> {
 
                     }
                     is Resource.Failure -> {
-                        it2.errorBody?.let { it1 -> Log.e("missionCondition", it1.string()) }
                         handleApiError(it2)
                     }
                 }
             }
         })
-
-/*        viewModel.userResponse.observe(viewLifecycleOwner, Observer { it2 ->
-            binding.challengeRVMission.also {
-                it.layoutManager = LinearLayoutManager(requireContext())
-                it.setHasFixedSize(true)
-                when (it2) {
-                    is Resource.Success -> {
-                        if (!it2.value.error) {
-                            *//*it.adapter = it2.value.user?.let { it3 ->
-                                ChallengeDetailMissionAdapter(it3)
-                            }*//*
-                        }
-                    }
-                    is Resource.Loading -> {
-
-                    }
-                    is Resource.Failure -> {
-                        handleApiError(it2)
-                    }
-                }
-            }
-        })*/
-
-        when (position) {
-            0 -> {
-                binding.challengeTvIntro1.text = "일일미션을 완료하고\n포인트를 받으세요!"
-                binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
-                binding.challengeTvIntro1.visibility = View.VISIBLE
-                binding.challengeTvIntro2.visibility = View.VISIBLE
-                binding.challengeLayoutRanking.visibility = View.GONE
-                binding.challengeLayoutRankingIntro.visibility = View.GONE
-                binding.challengeLayoutMission.visibility = View.VISIBLE
-                binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
-            }
-            1 -> {
-                binding.challengeTvIntro1.text = "주간미션을 완료하고\n포인트를 받으세요!"
-                binding.challengeTvIntro2.text = "미션은 매주 월요일 자정에 갱신되어요"
-                binding.challengeTvIntro1.visibility = View.VISIBLE
-                binding.challengeTvIntro2.visibility = View.VISIBLE
-                binding.challengeLayoutRanking.visibility = View.GONE
-                binding.challengeLayoutRankingIntro.visibility = View.GONE
-                binding.challengeLayoutMission.visibility = View.VISIBLE
-                binding.challengeRVMission.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
-            }
-            2 -> {
-                binding.challengeTvIntro1.visibility = View.GONE
-                binding.challengeTvIntro2.visibility = View.GONE
-                binding.challengeLayoutMission.visibility = View.GONE
-                binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
-                tabLayout = binding.challengeRankingTL
-                viewPager = binding.challengeRankingVP
-                val adapter = ChallengeRankingViewPagerAdapter(this, 2)
-                viewPager.adapter = adapter
-                val tabName: ArrayList<String> = arrayListOf()
-                tabName.add("월별포인트")
-                tabName.add("누적포인트")
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                    tab.text = tabName?.get(position)
-                }.attach()
-                tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab?) {
-                        viewPager.currentItem = tab!!.position
-                    }
-
-                    override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-                    }
-
-                    override fun onTabReselected(tab: TabLayout.Tab?) {
-
-                    }
-                })
-                binding.challengeLayoutRanking.visibility = View.VISIBLE
-            }
-        }
+        viewModel.getUser()
     }
 
     override fun getViewModel() = ChallengeDetailViewModel::class.java
