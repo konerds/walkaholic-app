@@ -29,6 +29,7 @@ class ChallengeDetailMissionAdapter(
 
     override fun onBindViewHolder(holder: ItemChallengeMissionViewHolder, position: Int) {
         holder.binding.missionItem = missions[position]
+        holder.binding.viewModel
     }
 
     override fun getItemCount() = missions.size
