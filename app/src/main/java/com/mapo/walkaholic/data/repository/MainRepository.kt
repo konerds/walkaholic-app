@@ -21,17 +21,6 @@ class MainRepository(
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
     companion object {
-        @Volatile
-        private var instance: MainRepository? = null
-        @JvmStatic
-        fun getInstance(api: InnerApi, apiWeather: ApisApi, SGISApiSgis: SgisApi, preferences: UserPreferences): MainRepository =
-                instance ?: synchronized(this) {
-                    instance
-                            ?: MainRepository(api, apiWeather, SGISApiSgis, preferences).also {
-                                instance = it
-                            }
-                }
-
         private const val APIS_API_KEY =
                 "qJr%2BQI4XC6oql7dTNz2MAuqL%2BKyg2AEdr6pKt2bBbzm9Bsj9jXkbPR%2FiQq%2BHKXN90xmsL%2BLrN4woIelJo1Ul4g%3D%3D"
         private const val APIS_WEATHER_NUM_OF_ROWS = "100"

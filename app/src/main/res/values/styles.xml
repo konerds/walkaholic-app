@@ -3,8 +3,8 @@
     <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
-        <item name="tabIndicatorFullWidth">true</item>
-        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicatorHeight">5dp</item>
         <item name="colorPrimary">#F9A25B</item>
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
@@ -19,10 +19,6 @@
         <item name="colorOnError">@color/mdWhite1000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:letterSpacing">0.02</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
     <!-- Auth Screen Theme -->
     <style name="Theme.AuthTheme" parent="Theme.App">
@@ -50,7 +46,7 @@
     </style>
     <!-- Challenge Screen Theme -->
     <style name="Theme.ChallegeTheme" parent="Theme.App">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <!-- Bottom Navigation Style -->
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
@@ -74,11 +70,10 @@
         <item name="tabIndicatorFullWidth">false</item>
     </style>
     <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
-        <item name="fontFamily">@font/noto_sans_bold</item>
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/noto_sans_black</item>
+        <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textColor">@color/mdWhite1000</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">0.02</item>
     </style>
 
     <!-- Font Style-->
@@ -145,68 +140,54 @@
     <!-- semi bold -->
     <!-- semi bold one -->
     <style name="font_semi_bold_10_one" parent="font_black_10_one">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_12_one" parent="font_black_12_one">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_14_one" parent="font_black_12_one">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_16_one" parent="font_black_16_one">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_20_one" parent="font_black_20_one">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_24_one" parent="font_black_24_one">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <!-- semi bold two -->
     <style name="font_semi_bold_10_two" parent="font_black_10_two">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_12_two" parent="font_black_12_two">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_14_two" parent="font_black_12_two">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_16_two" parent="font_black_16_two">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_20_two" parent="font_black_20_two">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <style name="font_semi_bold_24_two" parent="font_black_24_two">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
     </style>
     <!-- medium -->
     <!-- medium one -->
     <style name="font_medium_12_one" parent="font_black_12_one">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
     </style>
-    <style name="font_medium_14_one" parent="font_black_12_one">
+    <style name="font_medium_14_one" parent="font_semi_bold_14_one">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
-        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/h3</item>
     </style>
     <style name="font_medium_16_one" parent="font_black_16_one">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
     </style>
-    
 </resources>

@@ -101,7 +101,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
     ) = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository {
-        return AuthRepository.getInstance(
+        return AuthRepository(
             remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java),
             userPreferences
         )
