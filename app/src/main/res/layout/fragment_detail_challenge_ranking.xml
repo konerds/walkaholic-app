@@ -8,6 +8,98 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/challengeLayoutRankingIntro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/box_dashboard_corner_white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/challengeRankingTvIntro1"
+                    style="@style/font_black_20_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="유니님, 월별랭킹" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/challengeRankingTvRankNum"
+                        style="@style/font_black_30_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/color689f38" />
+
+                    <TextView
+                        android:id="@+id/challengeRankingTvRankT"
+                        style="@style/font_black_24_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="위"
+                        android:textColor="@color/color689f38"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/challengeRankingTvIntro2"
+                        style="@style/font_black_24_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="를 기록 했어요!"
+                        android:textColor="#000000"
+                        android:textSize="24sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/challengeRankingTvIntro3"
+                    style="@style/font_semi_bold_10_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="월별랭킹은 매월 1일 자정에 갱신되어요" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/challengeLayoutRanking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/challengeRankingTL"
+                style="@style/Widget.App.TabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:tabBackground="@drawable/selector_tab_layout" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/challengeRankingVP"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/challengeLayoutMission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
