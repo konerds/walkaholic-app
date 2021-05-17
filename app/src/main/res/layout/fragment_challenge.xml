@@ -9,11 +9,7 @@
         android:id="@+id/challengeTL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TabLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorHeight="2dp"
-        app:tabMode="fixed"
-        app:tabTextColor="@color/colore3e0db" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/challengeVP"
