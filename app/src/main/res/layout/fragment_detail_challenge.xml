@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     app:tabIndicatorFullWidth="false"
                     app:tabIndicatorHeight="5dp"
-                    app:tabBackground="@drawable/selector_tab_layout"/>
+                    app:tabBackground="@drawable/selector_tab_layout" />
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/challengeRankingVP"
