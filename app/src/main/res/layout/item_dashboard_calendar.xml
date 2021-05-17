@@ -9,162 +9,170 @@
             type="com.mapo.walkaholic.data.model.WalkRecord" />
     </data>
 
+    <!--그림자효과 내기 위한 부모 레이아웃-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
-        android:elevation="4dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:background="@drawable/box_dashboard_uppercorner_eeedea"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="1dp"
+            android:orientation="vertical"
+            android:elevation="2dp">
 
-            <TextView
-                style="@style/font_semi_bold_12_one"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@{recordItem.walk_date}"
-                android:textColor="@color/h1"
-                android:layout_marginLeft="16dp" />
+                android:layout_height="20dp"
+                android:background="@drawable/box_dashboard_uppercorner_eeedea"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                style="@style/font_semi_bold_12_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{recordItem.walk_time}"
-                android:textColor="@color/h4"
-                android:layout_marginLeft="3dp"/>
+                <TextView
+                    style="@style/font_semi_bold_12_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@{recordItem.walk_date}"
+                    android:textColor="@color/h1"
+                    android:layout_marginLeft="16dp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+                <TextView
+                    style="@style/font_semi_bold_12_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{recordItem.walk_time}"
+                    android:textColor="@color/h4"
+                    android:layout_marginLeft="3dp"/>
 
-            <TextView
-                style="@style/font_semi_bold_10_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/share"
-                android:textColor="@color/h1"
-                android:layout_marginRight="16dp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    style="@style/font_semi_bold_10_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/share"
+                    android:textColor="@color/h1"
+                    android:layout_marginRight="16dp" />
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:background="@drawable/box_dashboard_lowercorner_white"
+                android:layout_gravity="center_vertical">
+
+                <LinearLayout
+                    android:id="@+id/recordCalendarRLDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        style="@style/font_black_20_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@{recordItem.walk_distance}" />
+
+                    <TextView
+                        style="@style/font_semi_bold_10_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/dash_calendar_distance"
+                        android:textColor="@color/h4"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recordCalendarRLWalkAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintLeft_toRightOf="@id/recordCalendarRLDistance"
+                    app:layout_constraintRight_toLeftOf="@id/recordCalendarRLCalorie"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        style="@style/font_black_20_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="7000" />
+                    <!--android:text="@{recordItem.walk_amount}"-->
+
+                    <TextView
+                        style="@style/font_semi_bold_10_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/dash_calendar_step_count"
+                        android:textColor="@color/h4"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recordCalendarRLCalorie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintLeft_toRightOf="@id/recordCalendarRLWalkAmount"
+                    app:layout_constraintRight_toLeftOf="@id/recordCalendarRLMap"
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        style="@style/font_black_20_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@{recordItem.walk_calorie}" />
+
+                    <TextView
+                        style="@style/font_semi_bold_10_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/dash_calendar_kcal"
+                        android:textColor="@color/h4"
+                        android:layout_marginTop="8dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recordCalendarRLMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="16dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal"
-            android:background="@drawable/box_dashboard_lowercorner_white"
-            android:layout_gravity="center_vertical">
-
-            <LinearLayout
-                android:id="@+id/recordCalendarRLDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:orientation="vertical"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    style="@style/font_black_20_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@{recordItem.walk_distance}" />
-
-                <TextView
-                    style="@style/font_semi_bold_10_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/dash_calendar_distance"
-                    android:textColor="@color/h4"
-                    android:layout_marginTop="8dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/recordCalendarRLWalkAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toRightOf="@id/recordCalendarRLDistance"
-                app:layout_constraintRight_toLeftOf="@id/recordCalendarRLCalorie"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    style="@style/font_black_20_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="7000" />
-                <!--android:text="@{recordItem.walk_amount}"-->
-
-                <TextView
-                    style="@style/font_semi_bold_10_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/dash_calendar_step_count"
-                    android:textColor="@color/h4"
-                    android:layout_marginTop="8dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/recordCalendarRLCalorie"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toRightOf="@id/recordCalendarRLWalkAmount"
-                app:layout_constraintRight_toLeftOf="@id/recordCalendarRLMap"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    style="@style/font_black_20_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@{recordItem.walk_calorie}" />
-
-                <TextView
-                    style="@style/font_semi_bold_10_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/dash_calendar_kcal"
-                    android:textColor="@color/h4"
-                    android:layout_marginTop="8dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/recordCalendarRLMap"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="16dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

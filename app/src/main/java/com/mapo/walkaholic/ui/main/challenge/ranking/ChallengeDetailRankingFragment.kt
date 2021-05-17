@@ -18,6 +18,7 @@ class ChallengeDetailRankingFragment(
 ) : BaseFragment<ChallengeDetailRankingViewModel, FragmentDetailChallengeRankingBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // recycler 구성
         when (position) {
             0 -> {
 

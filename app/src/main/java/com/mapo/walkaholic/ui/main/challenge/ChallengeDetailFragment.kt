@@ -109,6 +109,7 @@ class ChallengeDetailFragment(
                                             it.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
                                         }
                                         2 -> {
+                                            //observe 하여 user 네임, 닉넴 뿌려주기
                                             binding.challengeTvIntro1.visibility = View.GONE
                                             binding.challengeTvIntro2.visibility = View.GONE
                                             binding.challengeLayoutMission.visibility = View.GONE

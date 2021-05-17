@@ -4,7 +4,7 @@
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
         <item name="tabIndicatorFullWidth">false</item>
-        <item name="tabIndicatorHeight">5dp</item>
+        <item name="tabIndicatorHeight">2dp</item>
         <item name="colorPrimary">#F9A25B</item>
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
