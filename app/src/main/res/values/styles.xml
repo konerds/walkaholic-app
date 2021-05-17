@@ -140,51 +140,64 @@
     <!-- semi bold -->
     <!-- semi bold one -->
     <style name="font_semi_bold_10_one" parent="font_black_10_one">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_12_one" parent="font_black_12_one">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_14_one" parent="font_black_12_one">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_16_one" parent="font_black_16_one">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_20_one" parent="font_black_20_one">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_24_one" parent="font_black_24_one">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <!-- semi bold two -->
     <style name="font_semi_bold_10_two" parent="font_black_10_two">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_12_two" parent="font_black_12_two">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_14_two" parent="font_black_12_two">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_16_two" parent="font_black_16_two">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_20_two" parent="font_black_20_two">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="font_semi_bold_24_two" parent="font_black_24_two">
-        <item name="android:fontFamily">@font/noto_sans_semi_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
     <!-- medium -->
     <!-- medium one -->
     <style name="font_medium_12_one" parent="font_black_12_one">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
     </style>
-    <style name="font_medium_14_one" parent="font_semi_bold_14_one">
+    <style name="font_medium_14_one" parent="font_black_12_one">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/h3</item>
     </style>
     <style name="font_medium_16_one" parent="font_black_16_one">
