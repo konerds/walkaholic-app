@@ -187,4 +187,5 @@
     <style name="font_medium_16_one" parent="font_black_16_one">
         <item name="android:fontFamily">@font/noto_sans_medium</item>
     </style>
+
 </resources>

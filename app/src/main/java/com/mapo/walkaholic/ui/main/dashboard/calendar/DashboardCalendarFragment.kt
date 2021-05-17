@@ -59,7 +59,7 @@ class DashboardCalendarFragment :
             when (it) {
                 is Resource.Success -> {
                     it.value.walkRecord.forEachIndexed { index, walkRecord ->
-                        Log.e(TAG, walkRecord.toString())
+                        Log.e("기록", walkRecord.toString())
                         calendarDays.add(walkRecord.recordYear?.let { it1 ->
                             walkRecord.recordMonth?.let { it2 ->
                                 walkRecord.recordDay?.let { it3 ->

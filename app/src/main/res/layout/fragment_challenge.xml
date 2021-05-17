@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TabLayout"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="5dp" />
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/colore3e0db" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/challengeVP"
