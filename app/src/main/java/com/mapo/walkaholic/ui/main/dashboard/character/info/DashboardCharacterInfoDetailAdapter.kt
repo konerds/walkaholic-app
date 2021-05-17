@@ -4,18 +4,23 @@ import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.databinding.ItemSlotInventoryBinding
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import com.mapo.walkaholic.ui.base.BaseViewModel
+import com.mapo.walkaholic.ui.base.EventObserver
 
 class DashboardCharacterInfoDetailAdapter(
     private var arrayListItemInfo: ArrayList<ItemInfo>,
-    private val listener: CharacterItemSlotClickListener
+    val viewModel : DashboardCharacterInfoViewModel
 ) : RecyclerView.Adapter<DashboardCharacterInfoDetailAdapter.DashboardCharacterInfoDetailViewHolder>() {
 
+    init {
+        viewModel.initSelectedInventoryItem(arrayListItemInfo.size, arrayListItemInfo)
+    }
+
     private val selectedItems: SparseBooleanArray = SparseBooleanArray(0)
-    private var selectedTotalPrice: Int = 0
 
     inner class DashboardCharacterInfoDetailViewHolder(
         val binding: ItemSlotInventoryBinding
@@ -57,20 +62,28 @@ class DashboardCharacterInfoDetailAdapter(
             holder.setItemInfo(null)
         } else {
             holder.setItemInfo(arrayListItemInfo[position])
-            holder.binding.itemInventoryLayout.setOnClickListener {
-                toggleItemSelected(position)
-                listener.onRecyclerViewItemClick(holder.binding.itemInventoryLayout, position, arrayListItemInfo, selectedItems, selectedTotalPrice)
+            holder.binding.viewModel = viewModel
+            holder.binding.lifecycleOwner?.let { holderLifecycleOwner ->
+                viewModel.selectedInventoryItem.observe(holderLifecycleOwner, Observer { _selectedInventoryItem ->
+                    holder.binding.itemInventoryLayout.setOnClickListener {
+                        if(_selectedInventoryItem.first) {
+                            viewModel.unselectSelectedInventoryItem(position, arrayListItemInfo[position])
+                        } else {
+                            viewModel.selectSelectedInventoryItem(position, arrayListItemInfo[position])
+                        }
+                        notifyItemChanged(position)
+                    }
+                })
             }
+            holder.binding.viewModel!!.getSelectedInventoryItem(position)
         }
     }
 
     override fun getItemCount() = arrayListItemInfo.size
 
-    fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
-        arrayListItemInfo = arrayListNewInfoItemInfo
-    }
-
     private fun toggleItemSelected(position: Int) {
+
+        viewModel.getSelectedInventoryItem(position)
         if (selectedItems.get(position, false)) {
             selectedItems.delete(position)
             notifyItemChanged(position)

@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import android.os.Bundle
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,9 @@ import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
@@ -27,8 +23,7 @@ import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterShopDetailFragment(
     private val position: Int
-) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>(),
-    CharacterItemSlotClickListener {
+) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>() {
 
     val arrayListShopItem = arrayListOf<ItemInfo>()
 
@@ -69,7 +64,7 @@ class DashboardCharacterShopDetailFragment(
                 else -> null
             }?.let { arrayListFilteredItemInfo ->
                 DashboardCharacterShopDetailAdapter(
-                    arrayListFilteredItemInfo, this
+                    arrayListFilteredItemInfo
                 )
             }
         }
@@ -123,6 +118,4 @@ class DashboardCharacterShopDetailFragment(
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
-
-    override fun onRecyclerViewItemClick(view: View, position: Int, itemInfo: ArrayList<ItemInfo>, selectedItems: SparseBooleanArray, selectedTotalPrice: Int) { }
 }

@@ -1,17 +1,14 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import android.util.SparseBooleanArray
-import android.util.SparseIntArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.databinding.ItemSlotShopBinding
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 
 class DashboardCharacterShopDetailAdapter(
-    private var arrayListItemInfo: ArrayList<ItemInfo>,
-    private val listener: CharacterItemSlotClickListener
+    private var arrayListItemInfo: ArrayList<ItemInfo>
 ) : RecyclerView.Adapter<DashboardCharacterShopDetailAdapter.DashboardCharacterShopDetailViewHolder>() {
 
     private val selectedItems: SparseBooleanArray = SparseBooleanArray(0)
@@ -48,7 +45,6 @@ class DashboardCharacterShopDetailAdapter(
             holder.binding.itemShopLayout.setOnClickListener {
                 toggleItemSelected(position)
                 selectedTotalPrice += arrayListItemInfo[position].itemPrice!!.toInt()
-                listener.onRecyclerViewItemClick(holder.binding.itemShopLayout, position, arrayListItemInfo, selectedItems, selectedTotalPrice)
             }
         }
     }

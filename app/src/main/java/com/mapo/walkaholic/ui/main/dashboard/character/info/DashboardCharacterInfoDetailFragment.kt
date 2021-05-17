@@ -1,33 +1,28 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import android.os.Bundle
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterInfoDetailFragment(
     private val position: Int
-) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>(),
-    CharacterItemSlotClickListener {
+) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
 
     val arrayListInventoryItem = arrayListOf<ItemInfo>()
 
@@ -84,7 +79,7 @@ class DashboardCharacterInfoDetailFragment(
                         else -> {
                         }
                     }
-                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
+                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, viewModel)
                 }
                 1 -> {
                     val filterResult =
@@ -105,7 +100,7 @@ class DashboardCharacterInfoDetailFragment(
                         else -> {
                         }
                     }
-                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
+                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, viewModel)
                 }
                 else -> {
                 }
@@ -160,22 +155,5 @@ class DashboardCharacterInfoDetailFragment(
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
-    }
-
-    override fun onRecyclerViewItemClick(
-        view: View,
-        position: Int,
-        arrayListItemInfo: ArrayList<ItemInfo>,
-        selectedItems: SparseBooleanArray,
-        selectedTotalPrice: Int
-    ) {
-        when (view.id) {
-            R.id.itemInventoryLayout -> {
-
-            }
-            R.id.itemInventoryIvDiscard -> {
-
-            }
-        }
     }
 }

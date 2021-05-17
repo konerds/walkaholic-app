@@ -27,12 +27,10 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewPagerAdapter
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
@@ -41,7 +39,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
 class DashboardCharacterShopFragment :
-    BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>(), CharacterItemSlotClickListener {
+    BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>() {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -315,14 +313,5 @@ class DashboardCharacterShopFragment :
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
-    }
-
-    override fun onRecyclerViewItemClick(view: View, position: Int, itemInfo: ArrayList<ItemInfo>, selectedItems: SparseBooleanArray, selectedTotalPrice: Int) {
-        when(view.id) {
-            R.id.itemShopLayout -> {
-                binding.dashCharacterShopTvIntro1.text = selectedItems.size().toString()
-                binding.dashCharacterShopTvIntro2.text = selectedTotalPrice.toString()
-            }
-        }
     }
 }

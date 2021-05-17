@@ -1,6 +1,8 @@
 package com.mapo.walkaholic.data.repository
 
+import android.util.SparseBooleanArray
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
@@ -22,7 +24,7 @@ class MainRepository(
 ) : BaseRepository(preferences) {
     companion object {
         private const val APIS_API_KEY =
-                "qJr%2BQI4XC6oql7dTNz2MAuqL%2BKyg2AEdr6pKt2bBbzm9Bsj9jXkbPR%2FiQq%2BHKXN90xmsL%2BLrN4woIelJo1Ul4g%3D%3D"
+            "qJr%2BQI4XC6oql7dTNz2MAuqL%2BKyg2AEdr6pKt2bBbzm9Bsj9jXkbPR%2FiQq%2BHKXN90xmsL%2BLrN4woIelJo1Ul4g%3D%3D"
         private const val APIS_WEATHER_NUM_OF_ROWS = "100"
         private const val APIS_RETURN_TYPE = "json"
         private const val APIS_ENCODE_TYPE = "utf-8"
@@ -35,7 +37,12 @@ class MainRepository(
         private const val SGIS_EPSG_WGS = "4326"
         private const val SGIS_EPSG_BESSEL = "5181"
     }
+
     private var mMap: NaverMap? = null
+
+
+    private val selectedInventoryItemMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private val selectedShopItemMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
 
     fun setNaverMap(mMap: NaverMap) {
         this.mMap = mMap
@@ -56,13 +63,18 @@ class MainRepository(
     }
 
     suspend fun getWeatherDust(sidoName: String) = safeApiCall {
-        apiWeather.getWeatherDust(URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE), APIS_RETURN_TYPE, sidoName, APIS_WEATHER_DUST_VER)
+        apiWeather.getWeatherDust(
+            URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
+            APIS_RETURN_TYPE,
+            sidoName,
+            APIS_WEATHER_DUST_VER
+        )
     }
 
     suspend fun getSGISAccessToken() = safeApiCall {
         SGISApiSgis.getAccessTokenSGIS(
-                URLDecoder.decode(SGIS_API_CONSUMER_KEY),
-                URLDecoder.decode(SGIS_API_SECRET_KEY)
+            URLDecoder.decode(SGIS_API_CONSUMER_KEY),
+            URLDecoder.decode(SGIS_API_SECRET_KEY)
         )
     }
 
@@ -72,32 +84,56 @@ class MainRepository(
 
     suspend fun getNearMsrstn(currentTmX: String, currentTmY: String) = safeApiCall {
         apiWeather.getNearMsrstn(
-                URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
-                APIS_RETURN_TYPE,
-                currentTmX,
-                currentTmY
+            URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
+            APIS_RETURN_TYPE,
+            currentTmX,
+            currentTmY
         )
     }
 
-    suspend fun getTodayWeather(nX: String, nY: String, requireDate: Date): Resource<TodayWeatherResponse> {
+    suspend fun getTodayWeather(
+        nX: String,
+        nY: String,
+        requireDate: Date
+    ): Resource<TodayWeatherResponse> {
         val currentTimeZone = TimeZone.getTimeZone(TIME_ZONE)
         val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
         val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT, Locale.KOREAN)
         dateFormat.timeZone = currentTimeZone
         timeFormat.timeZone = currentTimeZone
         return safeApiCall {
-            apiWeather.getTodayWeather(URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE), APIS_RETURN_TYPE, dateFormat.format(requireDate), timeFormat.format(requireDate), APIS_WEATHER_NUM_OF_ROWS, nX, nY)
+            apiWeather.getTodayWeather(
+                URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
+                APIS_RETURN_TYPE,
+                dateFormat.format(requireDate),
+                timeFormat.format(requireDate),
+                APIS_WEATHER_NUM_OF_ROWS,
+                nX,
+                nY
+            )
         }
     }
 
-    suspend fun getYesterdayWeather(nX: String, nY: String, requireDate: Date): Resource<YesterdayWeatherResponse> {
+    suspend fun getYesterdayWeather(
+        nX: String,
+        nY: String,
+        requireDate: Date
+    ): Resource<YesterdayWeatherResponse> {
         val currentTimeZone = TimeZone.getTimeZone(TIME_ZONE)
         val dateFormat = SimpleDateFormat(APIS_WEATHER_DATE_FORMAT, Locale.KOREAN)
         val timeFormat = SimpleDateFormat(APIS_WEATHER_TIME_FORMAT, Locale.KOREAN)
         dateFormat.timeZone = currentTimeZone
         timeFormat.timeZone = currentTimeZone
         return safeApiCall {
-            apiWeather.getYesterdayWeather(URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE), APIS_RETURN_TYPE, dateFormat.format(requireDate), timeFormat.format(requireDate), APIS_WEATHER_NUM_OF_ROWS, nX, nY)
+            apiWeather.getYesterdayWeather(
+                URLDecoder.decode(APIS_API_KEY, APIS_ENCODE_TYPE),
+                APIS_RETURN_TYPE,
+                dateFormat.format(requireDate),
+                timeFormat.format(requireDate),
+                APIS_WEATHER_NUM_OF_ROWS,
+                nX,
+                nY
+            )
         }
     }
 
@@ -109,15 +145,32 @@ class MainRepository(
         api.getThemeDetail(themeId)
     }
 
-    suspend fun getCharacterUriList(characterType:String) = safeApiCall {
+    suspend fun getCharacterUriList(characterType: String) = safeApiCall {
         api.getCharacterUriList(characterType)
     }
 
-    suspend fun getCalendarDate(userId:Long, walkDate:String) = safeApiCall {
+    fun initSelectedInventoryItem(size:Int, arrayListItemInfo: ArrayList<ItemInfo>) {
+        var position: Int
+        for(i in 0 until size) {
+            selectedInventoryItemMap[i] = Pair(false, arrayListItemInfo[i])
+        }
+    }
+
+    fun getSelectedInventoryItem(position: Int) = selectedInventoryItemMap[position]
+
+    fun selectSelectedInventoryItem(position: Int, itemInfo: ItemInfo) {
+        selectedInventoryItemMap[position] = Pair(true, itemInfo)
+    }
+
+    fun unselectSelectedInventoryItem(position: Int, itemInfo: ItemInfo) {
+        selectedInventoryItemMap[position] = Pair(false, itemInfo)
+    }
+
+    suspend fun getCalendarDate(userId: Long, walkDate: String) = safeApiCall {
         api.getCalendarDate(userId, walkDate)
     }
 
-    suspend fun getCalendarMonth(userId:Long, walkMonth:String) = safeApiCall {
+    suspend fun getCalendarMonth(userId: Long, walkMonth: String) = safeApiCall {
         api.getCalendarMonth(userId, walkMonth)
     }
 
@@ -125,11 +178,11 @@ class MainRepository(
         api.getPoints(body)
     }
 
-    suspend fun getMissionCondition(missionID:String) = safeApiCall {
+    suspend fun getMissionCondition(missionID: String) = safeApiCall {
         api.getMissionCondition(missionID)
     }
 
-    suspend fun getMissionProgress(missionID:String, conditionId:String) = safeApiCall {
+    suspend fun getMissionProgress(missionID: String, conditionId: String) = safeApiCall {
         api.getMissionProgress(missionID, conditionId)
     }
 

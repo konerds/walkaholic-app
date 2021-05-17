@@ -1,9 +1,11 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
+import android.util.SparseBooleanArray
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
+import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -26,6 +28,9 @@ class DashboardCharacterInfoViewModel(
     private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
     val characterUriList: LiveData<Resource<CharacterUriResponse>>
         get() = _characterUriList
+    private val _selectedInventoryItem: MutableLiveData<Pair<Boolean, ItemInfo>> = MutableLiveData()
+    val selectedInventoryItem: LiveData<Pair<Boolean, ItemInfo>>
+        get() = _selectedInventoryItem
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -57,6 +62,30 @@ class DashboardCharacterInfoViewModel(
     fun getCharacterUriList(characterType: String) {
         viewModelScope.launch {
             _characterUriList.value = mainRepository.getCharacterUriList(characterType)
+        }
+    }
+
+    fun initSelectedInventoryItem(size:Int, arrayListItemInfo: ArrayList<ItemInfo>) {
+        viewModelScope.launch {
+            mainRepository.initSelectedInventoryItem(size, arrayListItemInfo)
+        }
+    }
+
+    fun getSelectedInventoryItem(position:Int) {
+        viewModelScope.launch {
+            _selectedInventoryItem.value = mainRepository.getSelectedInventoryItem(position)
+        }
+    }
+
+    fun unselectSelectedInventoryItem(position:Int, itemInfo: ItemInfo) {
+        viewModelScope.launch {
+            mainRepository.unselectSelectedInventoryItem(position, itemInfo)
+        }
+    }
+
+    fun selectSelectedInventoryItem(position: Int, itemInfo: ItemInfo) {
+        viewModelScope.launch {
+            mainRepository.selectSelectedInventoryItem(position, itemInfo)
         }
     }
 }
