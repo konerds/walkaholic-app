@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/challengeLayoutRankingIntro"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -98,6 +98,7 @@
                 android:layout_height="0dp" />
 
         </LinearLayout>
+ -->
 
         <LinearLayout
             android:id="@+id/challengeLayoutMission"
