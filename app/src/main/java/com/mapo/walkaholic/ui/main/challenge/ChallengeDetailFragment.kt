@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.get
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -23,9 +25,13 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.BaseSharedFragment
+import com.mapo.walkaholic.ui.base.EventObserver
+import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
+import com.mapo.walkaholic.ui.snackbar
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -35,10 +41,23 @@ import kotlin.collections.ArrayList
 
 class ChallengeDetailFragment(
     private val position: Int
-) : BaseFragment<ChallengeDetailViewModel, FragmentDetailChallengeBinding, MainRepository>() {
+) : BaseSharedFragment<ChallengeViewModel, FragmentDetailChallengeBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val sharedViewModel : ChallengeViewModel by viewModels {
+            ViewModelFactory(getFragmentRepository())
+        }
+        viewModel = sharedViewModel
+        viewModel.showToastEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@ChallengeDetailFragment::showToastEvent)
+        )
+
+        viewModel.showSnackbarEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@ChallengeDetailFragment::showSnackbarEvent)
+        )
         super.onViewCreated(view, savedInstanceState)
 
         val dummyMission1 =
@@ -169,7 +188,31 @@ class ChallengeDetailFragment(
         viewModel.getUser()
     }
 
-    override fun getViewModel() = ChallengeDetailViewModel::class.java
+    private fun showToastEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                Toast.makeText(
+                    requireContext(),
+                    contents,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showSnackbarEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                requireView().snackbar(contents)
+            }
+        }
+    }
+
+    override fun getViewModel() = ChallengeViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,

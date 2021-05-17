@@ -5,6 +5,8 @@ import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
@@ -15,7 +17,10 @@ import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
+import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
+import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -28,6 +33,19 @@ class DashboardCharacterShopDetailFragment(
     val arrayListShopItem = arrayListOf<ItemInfo>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val sharedViewModel : DashboardCharacterShopViewModel by viewModels {
+            ViewModelFactory(getFragmentRepository())
+        }
+        viewModel = sharedViewModel
+        viewModel.showToastEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@DashboardCharacterShopDetailFragment::showToastEvent)
+        )
+
+        viewModel.showSnackbarEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@DashboardCharacterShopDetailFragment::showSnackbarEvent)
+        )
         super.onViewCreated(view, savedInstanceState)
         arrayListShopItem.add(ItemInfo("face", "0", "진한눈썹", "3000"))
         arrayListShopItem.add(ItemInfo("face", "1", "속눈썹펌", "3000"))
@@ -63,6 +81,30 @@ class DashboardCharacterShopDetailFragment(
             }
             else -> {
                 null
+            }
+        }
+    }
+
+    private fun showToastEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                Toast.makeText(
+                    requireContext(),
+                    contents,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showSnackbarEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                requireView().snackbar(contents)
             }
         }
     }

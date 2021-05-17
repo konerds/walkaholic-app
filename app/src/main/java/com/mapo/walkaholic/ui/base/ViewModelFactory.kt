@@ -11,18 +11,13 @@ import com.mapo.walkaholic.ui.auth.LoginViewModel
 import com.mapo.walkaholic.ui.auth.RegisterViewModel
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainViewModel
-import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingViewModel
-import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
 import com.mapo.walkaholic.ui.main.dashboard.*
 import com.mapo.walkaholic.ui.main.dashboard.calendar.DashboardCalendarViewModel
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoDetailViewModel
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
-import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopDetailViewModel
 import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopViewModel
 import com.mapo.walkaholic.ui.main.dashboard.profile.DashboardProfileViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
-import com.mapo.walkaholic.ui.main.theme.ThemeDetailViewModel
 import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
 import java.lang.IllegalArgumentException
 
@@ -48,32 +43,15 @@ class ViewModelFactory(
                     isAssignableFrom(DashboardCharacterInfoViewModel::class.java) -> DashboardCharacterInfoViewModel(
                         repository as MainRepository
                     )
-                    /*
-                    isAssignableFrom(DashboardCharacterInfoDetailViewModel::class.java) -> DashboardCharacterInfoDetailViewModel(
-                        repository as MainRepository
-                    )
-                     */
                     isAssignableFrom(DashboardCharacterShopViewModel::class.java) -> DashboardCharacterShopViewModel(
                         repository as MainRepository
                     )
-                    /*
-                    isAssignableFrom(DashboardCharacterShopDetailViewModel::class.java) -> DashboardCharacterShopDetailViewModel(
-                        repository as MainRepository
-                    )
-                     */
                     isAssignableFrom(DashboardCalendarViewModel::class.java) -> DashboardCalendarViewModel(
                         repository as MainRepository
                     )
                     isAssignableFrom(ThemeViewModel::class.java) -> ThemeViewModel(repository as MainRepository)
-                    isAssignableFrom(ThemeDetailViewModel::class.java) -> ThemeDetailViewModel(repository as MainRepository)
                     isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(
                             repository as MainRepository
-                    )
-                    isAssignableFrom(ChallengeDetailViewModel::class.java) -> ChallengeDetailViewModel(
-                        repository as MainRepository
-                    )
-                    isAssignableFrom(ChallengeDetailRankingViewModel::class.java) -> ChallengeDetailRankingViewModel(
-                        repository as MainRepository
                     )
                     isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MainRepository)
                     else -> throw IllegalArgumentException(

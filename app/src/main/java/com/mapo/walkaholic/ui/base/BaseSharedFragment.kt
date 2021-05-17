@@ -42,13 +42,16 @@ abstract class BaseSharedFragment<VM : BaseViewModel, B : ViewBinding, R : BaseR
         userPreferences = UserPreferences(requireContext())
         binding = getFragmentBinding(inflater, container)
 
+        /*
         val sharedViewModel : BaseViewModel by viewModels {
             ViewModelFactory(getFragmentRepository())
         }
         viewModel = sharedViewModel as VM
+         */
 
         lifecycleScope.launch { userPreferences.jwtToken.first() }
 
+        /*
         viewModel.showToastEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@BaseSharedFragment::showToastEvent)
@@ -58,10 +61,12 @@ abstract class BaseSharedFragment<VM : BaseViewModel, B : ViewBinding, R : BaseR
             viewLifecycleOwner,
             EventObserver(this@BaseSharedFragment::showSnackbarEvent)
         )
+         */
 
         return binding.root
     }
 
+    /*
     private fun showToastEvent(contents: String) {
         when(contents) {
             null -> { }
@@ -85,6 +90,7 @@ abstract class BaseSharedFragment<VM : BaseViewModel, B : ViewBinding, R : BaseR
             }
         }
     }
+     */
 
     fun logout() = lifecycleScope.launch {
         viewModel.logout()

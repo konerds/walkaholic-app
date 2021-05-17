@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -14,14 +16,31 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.base.BaseSharedFragment
+import com.mapo.walkaholic.ui.base.EventObserver
+import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>() {
+class ChallengeFragment : BaseSharedFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val sharedViewModel : ChallengeViewModel by viewModels {
+            ViewModelFactory(getFragmentRepository())
+        }
+        viewModel = sharedViewModel
+        viewModel.showToastEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@ChallengeFragment::showToastEvent)
+        )
+
+        viewModel.showSnackbarEvent.observe(
+            viewLifecycleOwner,
+            EventObserver(this@ChallengeFragment::showSnackbarEvent)
+        )
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.challengeTL
         viewPager = binding.challengeVP
@@ -47,6 +66,30 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
 
             }
         })
+    }
+
+    private fun showToastEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                Toast.makeText(
+                    requireContext(),
+                    contents,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun showSnackbarEvent(contents: String) {
+        when(contents) {
+            null -> { }
+            "" -> { }
+            else -> {
+                requireView().snackbar(contents)
+            }
+        }
     }
 
     override fun getViewModel() = ChallengeViewModel::class.java
