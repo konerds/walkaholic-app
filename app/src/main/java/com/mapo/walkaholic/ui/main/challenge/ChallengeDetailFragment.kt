@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -125,6 +126,19 @@ class ChallengeDetailFragment(
                                             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                                                 override fun onTabSelected(tab: TabLayout.Tab?) {
                                                     viewPager.currentItem = tab!!.position
+                                                    when(tab!!.position) {
+                                                        0 -> {
+                                                            binding.challengeRankingTvIntro1.text = "${it2.value.user.user_nick_name}님, 월별랭킹"
+                                                            // binding. ~~ 순위
+                                                            binding.challengeRankingTvIntro3.text = "월별랭킹은 매월 1일 자정에 갱신되어요"
+                                                        }
+                                                        1 -> {
+                                                            binding.challengeRankingTvIntro1.text = "${it2.value.user.user_nick_name}님, 누적랭킹"
+                                                            // binding. ~~ 순위
+                                                            binding.challengeRankingTvIntro3.text = "서비스 시작일(2021년 05월 17일)부터 현재까지"
+                                                        }
+                                                        else -> { }
+                                                    }
                                                 }
 
                                                 override fun onTabUnselected(tab: TabLayout.Tab?) {
