@@ -50,6 +50,7 @@ class DashboardCharacterShopFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
         val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
         pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0))

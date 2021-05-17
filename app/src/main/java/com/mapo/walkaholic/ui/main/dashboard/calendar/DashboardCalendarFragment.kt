@@ -33,6 +33,7 @@ class DashboardCalendarFragment :
     BaseFragment<DashboardCalendarViewModel, FragmentDashboardCalendarBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
         var startTimeCalendar = Calendar.getInstance()
