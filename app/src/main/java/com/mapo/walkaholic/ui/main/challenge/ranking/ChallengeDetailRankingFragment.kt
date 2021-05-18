@@ -63,7 +63,7 @@ class ChallengeDetailRankingFragment(
         dummyArrayList.add(dummyMission3)
         dummyArrayList.add(dummyMission4)
 
-        viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { it2 ->
+        /*viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.challengeRVRanking.also {
                 it.layoutManager = LinearLayoutManager(requireContext())
                 it.setHasFixedSize(true)
@@ -84,11 +84,13 @@ class ChallengeDetailRankingFragment(
                     }
                 }
             }
-        })
-        viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" 2 -> "02" else -> ""})
+        })*/
+        //viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" 2 -> "02" else -> ""})
 
-        binding.challengeRankingList.visibility = View.VISIBLE
-
+        val layoutManger = LinearLayoutManager(requireContext())
+        layoutManger.orientation = LinearLayoutManager.VERTICAL
+        binding.challengeRVRanking.layoutManager = layoutManger
+        binding.challengeRVRanking.setHasFixedSize(true)
         when (position) {
             0 -> {
                 binding.challengeRVRanking.adapter = ChallengeDetailRankingAdapter(dummyArrayList)
@@ -97,6 +99,7 @@ class ChallengeDetailRankingFragment(
                 binding.challengeRVRanking.adapter = ChallengeDetailRankingAdapter(dummyArrayList)
             }
         }
+        binding.challengeRankingList.visibility = View.VISIBLE
     }
 
     private fun showToastEvent(contents: String) {
