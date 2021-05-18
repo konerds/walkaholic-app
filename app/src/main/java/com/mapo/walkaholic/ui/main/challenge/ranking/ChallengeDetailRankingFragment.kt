@@ -85,7 +85,7 @@ class ChallengeDetailRankingFragment(
                 }
             }
         })
-        viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" 2 -> "02" else -> ""})
+        viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" else -> ""})
 
         binding.challengeRankingList.visibility = View.VISIBLE
 
