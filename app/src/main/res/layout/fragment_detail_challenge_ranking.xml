@@ -3,12 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/challengeLayoutMission"
+            android:id="@+id/challenge_ranking_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -17,11 +21,11 @@
             android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/challengeRVMission"
+                android:id="@+id/challengeRVRanking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="22dp"
-                tools:listitem="@layout/item_challenge_mission" />
+                tools:listitem="@layout/item_challenge_ranking" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

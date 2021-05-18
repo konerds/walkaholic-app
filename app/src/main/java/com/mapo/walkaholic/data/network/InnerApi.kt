@@ -75,6 +75,12 @@ interface InnerApi {
         @Field("condition_id") conditionId: String,
     ): MissionProgressResponse
 
+    @FormUrlEncoded
+    @POST("info/ranking")
+    suspend fun getRanking(
+        @Field("ranking_id") ranking_id: String
+    ): RankingResponse
+
     /*@FormUrlEncoded
     @POST("info/missionDaily")
     suspend fun getMissionDaily(

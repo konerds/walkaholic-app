@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.Theme
+import com.mapo.walkaholic.data.model.Ranking
 import com.mapo.walkaholic.databinding.ItemChallengeRankingBinding
 
 class ChallengeDetailRankingAdapter(
-    private val rankings: ArrayList<Theme>
+    private val rankings: ArrayList<Ranking>
 ) : RecyclerView.Adapter<ChallengeDetailRankingAdapter.ItemChallengeRankingViewHolder>() {
     inner class ItemChallengeRankingViewHolder(
         val binding : ItemChallengeRankingBinding

@@ -186,6 +186,11 @@ class MainRepository(
         api.getMissionProgress(missionID, conditionId)
     }
 
+    suspend fun getRanking(rankingId: String) = safeApiCall {
+        api.getRanking(rankingId)
+    }
+
+
 /*    suspend fun getMissionDaily(missionID:String) = safeApiCall {
         api.getMissionDaily(missionID)
     }

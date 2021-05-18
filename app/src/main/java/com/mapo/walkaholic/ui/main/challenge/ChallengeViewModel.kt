@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.MissionConditionResponse
 import com.mapo.walkaholic.data.model.response.MissionProgressResponse
+import com.mapo.walkaholic.data.model.response.RankingResponse
 import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -28,6 +29,9 @@ class ChallengeViewModel(
     private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> = MutableLiveData()
     val missionProgressResponse: LiveData<Resource<MissionProgressResponse>>
         get() = _missionProgressResponse
+    private val _rankingResponse: MutableLiveData<Resource<RankingResponse>> = MutableLiveData()
+    val rankingResponse: LiveData<Resource<RankingResponse>>
+        get() = _rankingResponse
 
     fun getUser() {
         progressBarVisibility.set(true)
@@ -54,4 +58,9 @@ class ChallengeViewModel(
         }
     }
 
+    fun getRanking(rankingId: String) {
+        viewModelScope.launch {
+            _rankingResponse.value = mainRepository.getRanking(rankingId)
+        }
+    }
 }

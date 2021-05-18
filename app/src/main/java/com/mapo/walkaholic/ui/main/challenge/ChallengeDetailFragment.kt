@@ -90,7 +90,7 @@ class ChallengeDetailFragment(
                                             if (!it2.value.error) {
                                                 // @TODO GET DATA WHEN REST EXECUTE SUCCESSFUL
                                             }
-                                            Log.e("missionCondition", it3.value.missionCondition.toString())
+                                            //Log.e("missionCondition", it3.value.missionCondition.toString())
                                         }
                                         is Resource.Loading -> {
 
@@ -133,6 +133,7 @@ class ChallengeDetailFragment(
                                             binding.challengeTvIntro2.visibility = View.GONE
                                             binding.challengeLayoutMission.visibility = View.GONE
                                             binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
+
                                             tabLayout = binding.challengeRankingTL
                                             viewPager = binding.challengeRankingVP
                                             val adapter = ChallengeRankingViewPagerAdapter(this, 2)
