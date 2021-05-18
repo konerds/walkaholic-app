@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.ObservableMap
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -40,6 +41,7 @@ import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.notifyAll
 import okhttp3.internal.toImmutableMap
 import kotlin.math.*
 
@@ -58,6 +60,9 @@ class DashboardCharacterShopFragment :
     private var selectedSlotShopMapFace = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
     private var selectedSlotShopMapHair = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
 
+    /*private var selectedSlotShopMapFace = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private var selectedSlotShopMapHair = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()*/
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedViewModel: DashboardCharacterShopViewModel by viewModels {
             ViewModelFactory(getFragmentRepository())
@@ -67,7 +72,6 @@ class DashboardCharacterShopFragment :
             viewLifecycleOwner,
             EventObserver(this@DashboardCharacterShopFragment::showToastEvent)
         )
-
         viewModel.showSnackbarEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@DashboardCharacterShopFragment::showSnackbarEvent)
@@ -139,7 +143,35 @@ class DashboardCharacterShopFragment :
                                                                     it2.value.characterUri.forEachIndexed { index1, s ->
                                                                         Glide.with(requireContext())
                                                                             .asBitmap()
-                                                                            .load("${viewModel!!.getResourceBaseUri()}${s.evolution_filename}")
+                                                                            .load(
+                                                                                viewModel!!.getResourceBaseUri() +
+                                                                                        when(selectedSlotShopMapFace?.filter { faceValue -> faceValue.value.first }
+                                                                                            ?.get(0)?.second?.itemId) {
+                                                                                            "0" -> {
+                                                                                                "face" + selectedSlotShopMapFace!![0]!!.second!!.itemId
+                                                                                            }
+                                                                                            "1" -> {
+                                                                                                "face" + selectedSlotShopMapFace!![0]!!.second!!.itemId
+                                                                                            }
+                                                                                            "2" -> {
+                                                                                                "face" + selectedSlotShopMapFace!![0]!!.second!!.itemId
+                                                                                            }
+                                                                                            else -> { "" }
+                                                                                        } +
+                                                                                        when(selectedSlotShopMapHair?.filter { hairValue -> hairValue.value.first }
+                                                                                            ?.get(0)?.second?.itemId) {
+                                                                                            "0" -> {
+                                                                                                "face" + selectedSlotShopMapHair!![0]!!.second!!.itemId
+                                                                                            }
+                                                                                            "1" -> {
+                                                                                                "face" + selectedSlotShopMapHair!![0]!!.second!!.itemId
+                                                                                            }
+                                                                                            "2" -> {
+                                                                                                "face" + selectedSlotShopMapHair!![0]!!.second!!.itemId
+                                                                                            }
+                                                                                            else -> { "" }
+                                                                                        } +
+                                                                                        "${s.evolution_filename}.png")
                                                                             .diskCacheStrategy(
                                                                                 DiskCacheStrategy.NONE
                                                                             ).skipMemoryCache(true)
@@ -349,19 +381,19 @@ class DashboardCharacterShopFragment :
                 Log.d(TAG, "Click Event In Shop Layout")
                 if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
                     binding.dashCharacterShopTvIntro1.text =
-                        (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace.filter { it.value.first }.size).toString()
+                        (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace?.filter { it.value.first }!!.size).toString()
                     binding.dashCharacterShopTvIntro2.text =
                         (selectedSlotShopMap.filter { it.value.first }
                             .map { it.value.second.itemPrice!!.toInt() }
-                            .sum() + selectedSlotShopMapFace.filter { it.value.first }
+                            .sum() + selectedSlotShopMapFace!!.filter { it.value.first }
                             .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
                 } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
                     binding.dashCharacterShopTvIntro1.text =
-                        (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapHair.filter { it.value.first }.size).toString()
+                        (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapHair?.filter { it.value.first }!!.size).toString()
                     binding.dashCharacterShopTvIntro2.text =
                         (selectedSlotShopMap.filter { it.value.first }
                             .map { it.value.second.itemPrice!!.toInt() }
-                            .sum() + selectedSlotShopMapHair.filter { it.value.first }
+                            .sum() + selectedSlotShopMapHair!!.filter { it.value.first }
                             .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
                 }
             }
