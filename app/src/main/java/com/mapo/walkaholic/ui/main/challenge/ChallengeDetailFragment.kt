@@ -1,41 +1,35 @@
 package com.mapo.walkaholic.ui.main.challenge
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.mapo.walkaholic.data.model.Mission
 import com.mapo.walkaholic.data.model.MissionCondition
-import com.mapo.walkaholic.data.model.MissionDaily
-import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
+import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingFragment
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
 import com.mapo.walkaholic.ui.snackbar
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -129,15 +123,18 @@ class ChallengeDetailFragment(
                                         }
                                         2 -> {
                                             //observe 하여 user 네임, 닉넴 뿌려주기
+                                            Log.e(TAG, "랭킹 탭레이아웃 진입")
                                             binding.challengeTvIntro1.visibility = View.GONE
                                             binding.challengeTvIntro2.visibility = View.GONE
                                             binding.challengeLayoutMission.visibility = View.GONE
+                                            binding.challengeLayoutRanking.visibility = View.VISIBLE
                                             binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
-
                                             tabLayout = binding.challengeRankingTL
                                             viewPager = binding.challengeRankingVP
-                                            val adapter = ChallengeRankingViewPagerAdapter(this, 2)
-                                            viewPager.adapter = adapter
+                                            val pagerAdapter = ChallengeRankingViewPagerAdapter(requireActivity())
+                                            pagerAdapter.addFragment(ChallengeDetailRankingFragment(0))
+                                            pagerAdapter.addFragment(ChallengeDetailRankingFragment(1))
+                                            viewPager.adapter = pagerAdapter
                                             val tabName: ArrayList<String> = arrayListOf()
                                             tabName.add("월별포인트")
                                             tabName.add("누적포인트")
@@ -170,7 +167,6 @@ class ChallengeDetailFragment(
 
                                                 }
                                             })
-                                            binding.challengeLayoutRanking.visibility = View.VISIBLE
                                         }
                                     }
 

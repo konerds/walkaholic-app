@@ -130,7 +130,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/challengeRankingTL"
@@ -142,7 +142,7 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/challengeRankingVP"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
