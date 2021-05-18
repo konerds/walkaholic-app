@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel" />
@@ -39,7 +40,7 @@
                 android:layout_width="10dp"
                 android:layout_height="122dp"
                 android:orientation="vertical"
-                android:background="@drawable/selector_challenge_progress_top"/>
+                android:background="@drawable/selector_challenge_progress_top" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -87,11 +88,14 @@
 
         </FrameLayout>
         <LinearLayout
+            android:id="@+id/challenge_mission_bottom_bar"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginLeft="24dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/box_challenge_c9c3b9"/>
+            android:orientation="horizontal"
+            android:background="@drawable/box_challenge_c9c3b9"
+            android:visibility="visible"/>
 
     </androidx.cardview.widget.CardView>
 </layout>

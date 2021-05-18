@@ -63,9 +63,11 @@ class ChallengeDetailRankingFragment(
         dummyArrayList.add(dummyMission3)
         dummyArrayList.add(dummyMission4)
 
-        /*viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { it2 ->
+        viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.challengeRVRanking.also {
-                it.layoutManager = LinearLayoutManager(requireContext())
+                val layoutManger = LinearLayoutManager(requireContext())
+                layoutManger.orientation = LinearLayoutManager.VERTICAL
+                it.layoutManager = layoutManger
                 it.setHasFixedSize(true)
                 when (it2) {
                     is Resource.Success -> {
@@ -84,13 +86,14 @@ class ChallengeDetailRankingFragment(
                     }
                 }
             }
-        })*/
-        //viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" 2 -> "02" else -> ""})
+        })
+        viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" else -> ""})
 
         val layoutManger = LinearLayoutManager(requireContext())
         layoutManger.orientation = LinearLayoutManager.VERTICAL
         binding.challengeRVRanking.layoutManager = layoutManger
         binding.challengeRVRanking.setHasFixedSize(true)
+
         when (position) {
             0 -> {
                 binding.challengeRVRanking.adapter = ChallengeDetailRankingAdapter(dummyArrayList)

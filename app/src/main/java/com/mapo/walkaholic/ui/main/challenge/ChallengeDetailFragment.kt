@@ -1,25 +1,30 @@
 package com.mapo.walkaholic.ui.main.challenge
 
 import android.content.ContentValues.TAG
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.MissionCondition
+import com.mapo.walkaholic.data.model.MissionProgress
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
+import com.mapo.walkaholic.databinding.ItemChallengeMissionBinding
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
@@ -54,17 +59,32 @@ class ChallengeDetailFragment(
         )
         super.onViewCreated(view, savedInstanceState)
 
+        val missionItemBinding = ItemChallengeMissionBinding.inflate(layoutInflater)
+
         val dummyMission1 =
-            MissionCondition("00", "01", "3,000 걸음", "3000", "100")
+            MissionCondition("00", "00", "3,000 걸음", "3000", "100")
         val dummyMission2 =
-            MissionCondition("00", "02", "5,000 걸음", "5000", "200")
+            MissionCondition("00", "01", "5,000 걸음", "5000", "200")
         val dummyMission3 =
-            MissionCondition("01", "02", "일일미션 5회", "5", "500")
+            MissionCondition("00", "02", "10,000 걸음", "10000", "300")
         val dummyMission4 =
-            MissionCondition("01", "02", "일일미션 10회", "10", "1000")
+            MissionCondition("00", "03", "모든 미션 완료", "3", "600")
         val dummyArrayList: ArrayList<MissionCondition> = ArrayList()
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
+        dummyArrayList.add(dummyMission3)
+        dummyArrayList.add(dummyMission4)
+
+        val dummyProgress1 =
+            MissionProgress("00", "00", "00", "y")
+        val dummyProgress2 =
+            MissionProgress("00", "00", "01", "y")
+        val dummyProgress3 =
+            MissionProgress("00", "00", "02", "y")
+        val dummyProgressArrayList: ArrayList<MissionProgress> = ArrayList()
+        dummyProgressArrayList.add(dummyProgress1)
+        dummyProgressArrayList.add(dummyProgress2)
+        dummyProgressArrayList.add(dummyProgress3)
 
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.challengeRVMission.also {
@@ -82,7 +102,10 @@ class ChallengeDetailFragment(
                                     when (it3) {
                                         is Resource.Success -> {
                                             if (!it2.value.error) {
-                                                // @TODO GET DATA WHEN REST EXECUTE SUCCESSFUL
+                                                /*@TODO GET DATA WHEN REST EXECUTE SUCCESSFUL
+                                                it.adapter = it2.value.missionCondition?.let { it3 ->
+                                                    ChallengeDetailMissionAdapter(dummyArrayList)
+                                                }*/
                                             }
                                             //Log.e("missionCondition", it3.value.missionCondition.toString())
                                         }
@@ -94,6 +117,8 @@ class ChallengeDetailFragment(
                                             handleApiError(it3)
                                         }
                                     }
+
+
                                     when (position) {
                                         0 -> {
                                             binding.challengeTvIntro1.text = "일일미션을 완료하고\n포인트를 받으세요!"
@@ -103,9 +128,7 @@ class ChallengeDetailFragment(
                                             binding.challengeLayoutRanking.visibility = View.GONE
                                             binding.challengeLayoutRankingIntro.visibility = View.GONE
                                             binding.challengeLayoutMission.visibility = View.VISIBLE
-                                            /*it.adapter = it3.value.missionCondition?.let { it3 ->
-                                                ChallengeDetailMissionAdapter(dummyArrayList)
-                                            }*/
+
                                             it.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
                                         }
                                         1 -> {
@@ -116,9 +139,7 @@ class ChallengeDetailFragment(
                                             binding.challengeLayoutRanking.visibility = View.GONE
                                             binding.challengeLayoutRankingIntro.visibility = View.GONE
                                             binding.challengeLayoutMission.visibility = View.VISIBLE
-                                            /*it.adapter = it3.value.missionCondition?.let { it3 ->
-                                                ChallengeDetailMissionAdapter(dummyArrayList)
-                                            }*/
+
                                             it.adapter = ChallengeDetailMissionAdapter(dummyArrayList)
                                         }
                                         2 -> {
