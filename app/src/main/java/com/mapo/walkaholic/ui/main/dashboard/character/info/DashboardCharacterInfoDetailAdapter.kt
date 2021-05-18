@@ -1,6 +1,5 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,13 @@ class DashboardCharacterInfoDetailAdapter(
     private val listener: CharacterItemSlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterInfoDetailAdapter.DashboardCharacterInfoDetailViewHolder>() {
 
-    private val selectedItems: SparseBooleanArray = SparseBooleanArray(0)
-    private var selectedTotalPrice: Int = 0
+    private val selectedSlotInventoryMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+
+    init {
+        for(i in 0 until arrayListItemInfo.size) {
+            selectedSlotInventoryMap[i] = Pair(false, arrayListItemInfo[i])
+        }
+    }
 
     inner class DashboardCharacterInfoDetailViewHolder(
         val binding: ItemSlotInventoryBinding
@@ -59,7 +63,7 @@ class DashboardCharacterInfoDetailAdapter(
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemInventoryLayout.setOnClickListener {
                 toggleItemSelected(position)
-                listener.onRecyclerViewItemClick(holder.binding.itemInventoryLayout, position, arrayListItemInfo, selectedItems, selectedTotalPrice)
+                listener.onRecyclerViewItemClick(holder.binding.itemInventoryLayout, position, selectedSlotInventoryMap)
             }
         }
     }
@@ -71,20 +75,25 @@ class DashboardCharacterInfoDetailAdapter(
     }
 
     private fun toggleItemSelected(position: Int) {
-        if (selectedItems.get(position, false)) {
-            selectedItems.delete(position)
+        if(selectedSlotInventoryMap[position] != null) {
+            if (selectedSlotInventoryMap[position]!!.first) {
+                selectedSlotInventoryMap[position] = Pair(false, selectedSlotInventoryMap[position]!!.second)
+            } else {
+                selectedSlotInventoryMap[position] = Pair(true, selectedSlotInventoryMap[position]!!.second)
+            }
             notifyItemChanged(position)
-        } else {
-            selectedItems.put(position, true)
-            notifyItemChanged(position)
-        }
+        } else { }
     }
 
     private fun isItemSelected(position: Int): Boolean {
-        return selectedItems.get(position, false)
+        return if (selectedSlotInventoryMap[position] != null) {
+            selectedSlotInventoryMap[position]!!.first
+        } else {
+            false
+        }
     }
 
-    fun clearSelectedItem() {
+    /*fun clearSelectedItem() {
         var position: Int
         for (i in 0 until selectedItems.size()) {
             position = selectedItems.keyAt(i)
@@ -92,5 +101,5 @@ class DashboardCharacterInfoDetailAdapter(
             notifyItemChanged(position)
         }
         selectedItems.clear()
-    }
+    }*/
 }

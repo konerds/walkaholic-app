@@ -1,10 +1,12 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
+import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -38,10 +40,12 @@ import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.toImmutableMap
 import kotlin.math.*
 
 class DashboardCharacterShopFragment :
-    BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>(), CharacterItemSlotClickListener {
+    BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>(),
+    CharacterItemSlotClickListener {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -51,8 +55,11 @@ class DashboardCharacterShopFragment :
         private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
     }
 
+    private var selectedSlotShopMapFace = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private var selectedSlotShopMapHair = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel : DashboardCharacterShopViewModel by viewModels {
+        val sharedViewModel: DashboardCharacterShopViewModel by viewModels {
             ViewModelFactory(getFragmentRepository())
         }
         viewModel = sharedViewModel
@@ -69,11 +76,14 @@ class DashboardCharacterShopFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
-        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0))
-        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(1))
+        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0, this))
+        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(1, this))
         binding.dashCharacterShopVP.adapter = pagerAdapter
-        TabLayoutMediator(binding.dashCharacterShopTL, binding.dashCharacterShopVP) { tab, position ->
-            tab.text = when(position) {
+        TabLayoutMediator(
+            binding.dashCharacterShopTL,
+            binding.dashCharacterShopVP
+        ) { tab, position ->
+            tab.text = when (position) {
                 0 -> "얼굴"
                 1 -> "머리"
                 else -> ""
@@ -264,24 +274,28 @@ class DashboardCharacterShopFragment :
     }
 
     private fun onClickEvent(name: String) {
-        val navDirection: NavDirections? =
             when (name) {
                 "shop" -> {
-                    null
+                    val navDirection: NavDirections? = null
+                    if (navDirection != null) {
+                        findNavController().navigate(navDirection)
+                    }
                 }
                 else -> {
-                    null
+                    val navDirection: NavDirections? = null
+                    if (navDirection != null) {
+                        findNavController().navigate(navDirection)
+                    }
                 }
             }
-        if (navDirection != null) {
-            findNavController().navigate(navDirection)
-        }
     }
 
     private fun showToastEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
+        when (contents) {
+            null -> {
+            }
+            "" -> {
+            }
             else -> {
                 Toast.makeText(
                     requireContext(),
@@ -293,9 +307,11 @@ class DashboardCharacterShopFragment :
     }
 
     private fun showSnackbarEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
+        when (contents) {
+            null -> {
+            }
+            "" -> {
+            }
             else -> {
                 requireView().snackbar(contents)
             }
@@ -317,11 +333,37 @@ class DashboardCharacterShopFragment :
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 
-    override fun onRecyclerViewItemClick(view: View, position: Int, itemInfo: ArrayList<ItemInfo>, selectedItems: SparseBooleanArray, selectedTotalPrice: Int) {
-        when(view.id) {
+    override fun onRecyclerViewItemClick(
+        view: View,
+        position: Int,
+        selectedSlotShopMap: MutableMap<Int, Pair<Boolean, ItemInfo>>
+    ) {
+        if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
+            selectedSlotShopMapHair = selectedSlotShopMap
+        } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
+            selectedSlotShopMapFace = selectedSlotShopMap
+        }
+        Log.d(TAG, "Click Event From Shop Adapter")
+        when (view.id) {
             R.id.itemShopLayout -> {
-                binding.dashCharacterShopTvIntro1.text = selectedItems.size().toString()
-                binding.dashCharacterShopTvIntro2.text = selectedTotalPrice.toString()
+                Log.d(TAG, "Click Event In Shop Layout")
+                if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
+                    binding.dashCharacterShopTvIntro1.text =
+                        (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace.filter { it.value.first }.size).toString()
+                    binding.dashCharacterShopTvIntro2.text =
+                        (selectedSlotShopMap.filter { it.value.first }
+                            .map { it.value.second.itemPrice!!.toInt() }
+                            .sum() + selectedSlotShopMapFace.filter { it.value.first }
+                            .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
+                } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
+                    binding.dashCharacterShopTvIntro1.text =
+                        (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapHair.filter { it.value.first }.size).toString()
+                    binding.dashCharacterShopTvIntro2.text =
+                        (selectedSlotShopMap.filter { it.value.first }
+                            .map { it.value.second.itemPrice!!.toInt() }
+                            .sum() + selectedSlotShopMapHair.filter { it.value.first }
+                            .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
+                }
             }
         }
     }

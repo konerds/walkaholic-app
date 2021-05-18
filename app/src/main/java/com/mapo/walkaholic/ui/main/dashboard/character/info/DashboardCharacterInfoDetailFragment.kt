@@ -1,6 +1,8 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -165,10 +167,9 @@ class DashboardCharacterInfoDetailFragment(
     override fun onRecyclerViewItemClick(
         view: View,
         position: Int,
-        arrayListItemInfo: ArrayList<ItemInfo>,
-        selectedItems: SparseBooleanArray,
-        selectedTotalPrice: Int
+        selectedItemInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>
     ) {
+        Log.d(ContentValues.TAG, "Click Event From Inventory Adapter")
         when (view.id) {
             R.id.itemInventoryLayout -> {
 

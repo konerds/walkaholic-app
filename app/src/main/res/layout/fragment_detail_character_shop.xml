@@ -1,68 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="viewModel"
+            type="com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/box_dashboard_lowercorner_white"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:background="@drawable/box_dashboard_lowercorner_white"
+            android:orientation="vertical">
 
-            <TextView
-                style="@style/font_semi_bold_20_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="아이템 목록"
-                android:textColor="#666258" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/font_semi_bold_20_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="아이템 목록"
+                    android:textColor="#666258" />
+
+                <LinearLayout
+                    android:id="@+id/dashCharacterInfoInitLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="right"
+                    android:onClick='@{()->viewModel.onClickEvent("select_clear")}'
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_character_info_init" />
+
+                    <TextView
+                        style="@style/font_semi_bold_12_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="상태초기화" />
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:layout_marginRight="16dp"
-                android:gravity="right"
+                android:layout_marginLeft="15.5dp"
+                android:layout_marginRight="15.5dp"
+                android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_character_info_init" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dashCharacterInfoDetailRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="132dp"
+                    tools:listitem="@layout/item_slot_shop" />
 
-                <TextView
-                    style="@style/font_semi_bold_12_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="상태초기화" />
             </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15.5dp"
-            android:layout_marginRight="15.5dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dashCharacterInfoDetailRV"
-                android:layout_width="match_parent"
-                android:layout_height="132dp"
-                tools:listitem="@layout/item_slot_shop" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</layout>

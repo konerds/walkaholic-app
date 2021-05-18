@@ -1,6 +1,8 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -26,9 +29,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterShopDetailFragment(
-    private val position: Int
-) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>(),
-    CharacterItemSlotClickListener {
+    private val position: Int,
+    private val listener : CharacterItemSlotClickListener
+) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>() {
 
     val arrayListShopItem = arrayListOf<ItemInfo>()
 
@@ -37,6 +40,7 @@ class DashboardCharacterShopDetailFragment(
             ViewModelFactory(getFragmentRepository())
         }
         viewModel = sharedViewModel
+        binding.viewModel = viewModel
         viewModel.showToastEvent.observe(
             viewLifecycleOwner,
             EventObserver(this@DashboardCharacterShopDetailFragment::showToastEvent)
@@ -69,7 +73,7 @@ class DashboardCharacterShopDetailFragment(
                 else -> null
             }?.let { arrayListFilteredItemInfo ->
                 DashboardCharacterShopDetailAdapter(
-                    arrayListFilteredItemInfo, this
+                    arrayListFilteredItemInfo, listener
                 )
             }
         }
@@ -78,6 +82,10 @@ class DashboardCharacterShopDetailFragment(
     private fun onClickEvent(name: String) {
         when (name) {
             "walk_record" -> {
+            }
+            "select_clear" -> {
+                Log.d(ContentValues.TAG,"Click Init Button Event")
+                //binding.dashCharacterInfoDetailRV
             }
             else -> {
                 null
@@ -123,6 +131,4 @@ class DashboardCharacterShopDetailFragment(
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
-
-    override fun onRecyclerViewItemClick(view: View, position: Int, itemInfo: ArrayList<ItemInfo>, selectedItems: SparseBooleanArray, selectedTotalPrice: Int) { }
 }
