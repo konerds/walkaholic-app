@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel" />
+            type="com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel" />
 
         <variable
             name="user"
