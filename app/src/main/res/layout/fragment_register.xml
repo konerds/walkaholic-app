@@ -87,7 +87,6 @@
                 android:layout_marginTop="20dp"
                 android:checkable="true"
                 android:gravity="center_vertical"
-                android:onClick='@{() -> viewModel.onClickEvent("agreeAll")}'
                 android:text="모두 동의"
                 android:theme="@style/Theme.MaterialComponents.Light" />
 
@@ -99,7 +98,6 @@
                 android:layout_marginTop="20dp"
                 android:checkable="true"
                 android:gravity="center_vertical"
-                android:onClick='@{() -> viewModel.onClickEvent("agreeService")}'
                 android:text="서비스 이용 동의"
                 android:theme="@style/Theme.MaterialComponents.Light" />
 
@@ -110,7 +108,6 @@
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:gravity="center_vertical"
-                android:onClick='@{() -> viewModel.onClickEvent("agreePrivacy")}'
                 android:text="개인정보 이용 동의"
                 android:theme="@style/Theme.MaterialComponents.Light" />
         </LinearLayout>
@@ -157,8 +154,7 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/birth"
                     android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:onClick='@{() -> viewModel.onClickEvent("setBirth")}' />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -255,7 +251,6 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/btn_default"
                 android:foreground="?selectableItemBackground"
-                android:onClick='@{() -> viewModel.onClickEvent("registerConfirm")}'
                 android:text="@string/register" />
         </LinearLayout>
 

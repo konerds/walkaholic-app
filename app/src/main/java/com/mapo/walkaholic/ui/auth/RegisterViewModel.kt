@@ -3,12 +3,14 @@ package com.mapo.walkaholic.ui.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.AuthResponse
 import com.mapo.walkaholic.data.model.response.TermResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
+import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
@@ -41,29 +43,25 @@ class RegisterViewModel(
     }
 
     fun register(
-        nickname: String,
-        birth: Int,
-        gender: Int,
-        height: Int,
-        weight: Int
+        userBirth : String,
+        userGender : String,
+        userHeight : String,
+        userNickname : String,
+        userWeight : String
     ) {
         progressBarVisibility.set(true)
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            tokenInfo!!.id.toString().trim().let {
-                if (it != null) {
-                    viewModelScope.launch {
-                        _registerResponse.value =
-                            repository.register(
-                                it.toLong(),
-                                nickname,
-                                birth,
-                                gender,
-                                height,
-                                weight
-                            )
-                    }
-                } else {
-                    logout()
+            tokenInfo!!.id.let {
+                viewModelScope.launch {
+                    _registerResponse.value =
+                        repository.register(
+                            userBirth,
+                            userGender,
+                            userHeight,
+                            it,
+                            userNickname,
+                            userWeight
+                        )
                 }
             }
         }

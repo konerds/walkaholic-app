@@ -120,34 +120,39 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 }
             }
         }
-        viewModel.userResponse.observe(this, Observer {
-            Log.i(
-                ContentValues.TAG, "Observing... ${it}"
-            )
-            when (it) {
+        viewModel.userResponse.observe(this, Observer { _userResponse ->
+            when (_userResponse) {
                 is Resource.Success -> {
-                    if (!it.value.error) {
-                        bindingNavigationHeader.user = it.value.user
-                        lifecycleScope.launch {
-                            viewModel.saveJwtToken(it.value.jwtToken)
+                    when(_userResponse.value.code) {
+                        "200" -> {
+                            bindingNavigationHeader.user = _userResponse.value.data
+                            lifecycleScope.launch {
+                                /*viewModel.saveJwtToken(_userResponse.value.jwtToken)*/
+                            }
                         }
-                        Log.i(
-                            ContentValues.TAG, "${it.value.user}"
-                        )
-                    } else {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.err_user),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        //logout()
+                        "400" -> {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //logout()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //logout()
+                        }
                     }
                 }
                 is Resource.Loading -> {
 
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(_userResponse)
                 }
             }
         })

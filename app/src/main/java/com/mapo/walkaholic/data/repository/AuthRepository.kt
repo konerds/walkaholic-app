@@ -1,7 +1,15 @@
 package com.mapo.walkaholic.data.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import com.google.gson.Gson
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.request.LoginRequestBody
+import com.mapo.walkaholic.data.model.request.SignupRequestBody
 import com.mapo.walkaholic.data.network.GuestApi
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 
 class AuthRepository(
     private val api: GuestApi,
@@ -12,7 +20,7 @@ class AuthRepository(
     }
 
     suspend fun login(id: Long) = safeApiCall {
-        api.login(id)
+        api.login(LoginRequestBody(id))
     }
 
     /*
@@ -22,13 +30,13 @@ class AuthRepository(
      */
 
     suspend fun register(
-        id: Long,
-        nickname: String,
-        birth: Int,
-        gender: Int,
-        height: Int,
-        weight: Int
+        userBirth : String,
+        userGender : String,
+        userHeight : String,
+        userUid : Long,
+        userNickname : String,
+        userWeight : String
     ) = safeApiCall {
-        api.register(id, nickname, birth, gender, height, weight)
+        api.register(SignupRequestBody(userBirth, userGender, userHeight, userUid, userNickname, userWeight))
     }
 }

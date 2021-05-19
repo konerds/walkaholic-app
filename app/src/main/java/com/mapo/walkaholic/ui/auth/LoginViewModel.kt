@@ -39,6 +39,10 @@ class LoginViewModel(
         }
     }
 
+    fun getFilenameTitleLogo() = viewModelScope.launch {
+        _filenameLogoTitle.value = "logo_title.png"
+    }
+
     fun login() {
         progressBarVisibility.set(true)
         viewModelScope.launch {
@@ -52,10 +56,6 @@ class LoginViewModel(
                 }
             }
         }
-    }
-
-    fun getFilenameTitleLogo() = viewModelScope.launch {
-        _filenameLogoTitle.value = "logo_title.png"
     }
 
     /*

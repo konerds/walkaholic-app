@@ -46,7 +46,6 @@
                 android:layout_gravity="center|center_vertical"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:onClick='@{() -> viewModel.onClickEvent("kakao_login")}'
                 android:background="@drawable/btn_login_kakao"
                 android:foreground="?selectableItemBackground" />
 
@@ -57,7 +56,6 @@
                 android:layout_marginTop="40dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick='@{() -> viewModel.onClickEvent("tutorial")}'
                 android:text="@string/tutorial"
                 android:textColor="#999283"
                 android:textSize="12sp"

@@ -48,14 +48,6 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
          */
         binding.viewModel = viewModel
         /*
-            Observe Click Event
-         */
-        viewModel.onClickEvent.observe(
-            this,
-            // Delegate Click Event To onClickEvent Function
-            EventObserver(this@GuideActivity::onClickEvent)
-        )
-        /*
             Observe Resource of Tutorial Filename
          */
         viewModel.filenameListGuide.observe(this, Observer { responseGuide ->
@@ -77,18 +69,11 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
             Call Rest Function in ViewModel
          */
         viewModel.getFilenameListGuide()
-    }
-
-    /*
-        Funtion For Handle Click Event
-     */
-    private fun onClickEvent(name: String) {
-        when (name) {
-            "tutorial_skip" -> {
-                startNewActivity(AuthActivity::class.java)
-            }
-            else -> {
-            }
+        /*
+            Click Listener For Skip Button
+         */
+        binding.guideChipSkip.setOnClickListener {
+            startNewActivity(AuthActivity::class.java)
         }
     }
 

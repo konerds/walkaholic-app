@@ -57,10 +57,6 @@ class DashboardCharacterInfoDetailFragment(
         arrayListInventoryItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
          */
-        viewModel.onClickEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoDetailFragment::onClickEvent)
-        )
         binding.dashCharacterInfoDetailRV.also {
             val linearLayoutManager = LinearLayoutManager(requireContext())
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -111,16 +107,6 @@ class DashboardCharacterInfoDetailFragment(
                 }
                 else -> {
                 }
-            }
-        }
-    }
-
-    private fun onClickEvent(name: String) {
-        when (name) {
-            "walk_record" -> {
-            }
-            else -> {
-                null
             }
         }
     }

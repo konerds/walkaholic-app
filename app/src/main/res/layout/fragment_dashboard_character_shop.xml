@@ -64,11 +64,10 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/dashCharacterShopIvShop"
+                    android:id="@+id/dashCharacterShopIvInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:onClick='@{()->viewModel.onClickEvent("character_info")}'
                     android:src="@drawable/ic_dashboard_profile_setting"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -123,7 +122,7 @@
                             style="@style/font_black_28_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.toAnyToString(user.user_point)}"
+                            android:text="@{viewModel.toAnyToString(user.currentPoint)}"
                             android:textColor="#689F38" />
 
                         <TextView
@@ -228,19 +227,19 @@
                         android:layout_gravity="left|bottom"
                         android:layout_marginLeft="16dp"
                         android:gravity="center|center_vertical"
-                        android:text='@{"LV." + viewModel.toAnyToString(user.level_id)}'
+                        android:text='@{"LV." + viewModel.toAnyToString(user.levelId)}'
                         android:textColor="#6C6B67" />
 
                 </FrameLayout>
 
-                <ProgressBar
+                <!--<ProgressBar
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:layout_margin="16dp"
                     android:max="@{viewModel.toLongToInt(expTable.requireexp1 - expTable.requireexp2)}"
-                    android:progress="@{viewModel.toLongToInt(user.user_current_exp - expTable.requireexp2)}"
-                    android:progressDrawable="@drawable/progressbar_dashboard_character_shop" />
+                    android:progress="@{viewModel.toLongToInt(user.currentExp - expTable.requireexp2)}"
+                    android:progressDrawable="@drawable/progressbar_dashboard_character_shop" />-->
 
             </LinearLayout>
 

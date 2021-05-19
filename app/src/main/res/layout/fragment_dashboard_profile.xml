@@ -79,7 +79,7 @@
                         android:hint="닉네임"
                         android:importantForAutofill="no"
                         android:inputType="number"
-                        android:text="@{user.user_nick_name}" />
+                        android:text="@{user.nickName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -184,7 +184,7 @@
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:overScrollMode="always"
-                        android:text="@{user.user_height}" />
+                        android:text="@{user.height}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -221,7 +221,7 @@
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:overScrollMode="always"
-                        android:text="@{user.user_weight}" />
+                        android:text="@{user.weight}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -233,7 +233,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:background="@drawable/box_dashboard_corner_f9a25b"
-                android:onClick='@{()->viewModel.onClickEvent("profile_completed")}'
                 android:text="완료"
                 android:textColor="@color/mdWhite1000"
                 app:layout_constraintTop_toBottomOf="@id/dashProfileLayout" />

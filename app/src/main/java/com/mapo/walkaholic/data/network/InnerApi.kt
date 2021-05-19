@@ -9,10 +9,9 @@ interface InnerApi {
     @GET("auth/logout")
     suspend fun logout(): ResponseBody
 
-    @FormUrlEncoded
-    @POST("info/user")
+    @GET("user/{id}")
     suspend fun getUser(
-        @Field("id") id: Long
+        @Path(value = "id", encoded = false) id: Long
     ): UserResponse
 
     @FormUrlEncoded
@@ -36,7 +35,6 @@ interface InnerApi {
         @Field("theme_id") themeId: String
     ): ThemeResponse
 
-    @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
         @Body body: MapRequestBody
