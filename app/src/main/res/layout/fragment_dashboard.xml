@@ -20,8 +20,8 @@
             type="com.mapo.walkaholic.data.model.CharacterItem" />
 
         <variable
-            name="expTable"
-            type="com.mapo.walkaholic.data.model.ExpTable" />
+            name="expInformation"
+            type="com.mapo.walkaholic.data.model.ExpInformation" />
 
         <variable
             name="weatherDust"
@@ -64,8 +64,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashTvCharacterName"
+                    style="@style/font_semi_bold_16_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -81,7 +81,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_dashboard_profile_setting"
-                    android:onClick='@{()->viewModel.onClickEvent("character_info")}'
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -134,10 +133,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
                         android:gravity="center|center_vertical"
-                        android:text='@{"LV." + viewModel.toAnyToString(user.level_id)}'
+                        android:text='@{"LV." + viewModel.toAnyToString(user.levelId)}'
                         android:textColor="#F37520"
                         android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </FrameLayout>
 
@@ -145,11 +144,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text='@{"경험치 " + viewModel.toAnyToString(user.user_current_exp - expTable.requireexp2) + " / " + viewModel.toAnyToString(expTable.requireexp1 - expTable.requireexp2)}' />
+                    android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - expInformation.currentLevelNeedExp) + " / " + viewModel.toAnyToString(expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp)}' />
 
                 <TextView
-                    style="@style/font_medium_14_one"
                     android:id="@+id/dashTvIntro"
+                    style="@style/font_medium_14_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -158,8 +157,7 @@
                     android:gravity="center|center_vertical"
                     android:minWidth="220dp"
                     android:minHeight="32dp"
-                    android:onClick='@{()->viewModel.onClickEvent("profile")}'
-                    app:full_text='@{userCharacterItem.pet_name + "가 " + user.user_nick_name + "님을 기다렸어요!"}'
+                    app:full_text='@{userCharacterItem.pet_name + "가 " + user.nickName + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
                     app:span_text="@{userCharacterItem.pet_name}" />
 
@@ -187,7 +185,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:onClick='@{()->viewModel.onClickEvent("walk_record")}'
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -218,8 +215,8 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/font_black_30_one"
                         android:id="@+id/dashTvWalkAmount"
+                        style="@style/font_black_30_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
@@ -228,8 +225,8 @@
                         android:textColor="#F37520" />
 
                     <TextView
-                        style="@style/font_semi_bold_24_one"
                         android:id="@+id/dashTvWalkToday"
+                        style="@style/font_semi_bold_24_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
@@ -253,7 +250,7 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginLeft="20dp"
                         android:text="@string/dash_km_distance"
-                        android:textColor="@color/h5"/>
+                        android:textColor="@color/h5" />
 
                     <TextView
                         style="@style/font_black_16_one"
@@ -305,6 +302,7 @@
                     android:weightSum="5">
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/dashBtnWalkStart"
                         style="@style/font_semi_bold_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -313,8 +311,7 @@
                         android:minWidth="272dp"
                         android:minHeight="52dp"
                         android:text="@string/dash_walk_play"
-                        android:textColor="@color/mdWhite1000"
-                        android:onClick='@{()->viewModel.onClickEvent("walk_start")}'/>
+                        android:textColor="@color/mdWhite1000" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -381,8 +378,8 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            style="@style/font_medium_12_one"
                             android:id="@+id/dashTvDustStation"
+                            style="@style/font_medium_12_one"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="4dp"
@@ -396,10 +393,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_dashboard_station"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            android:src="@drawable/ic_dashboard_station" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -519,7 +516,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:background="@drawable/box_dashboard_lowercorner_grey"
-                    android:text="@string/dash_show_detail"/>
+                    android:text="@string/dash_show_detail" />
 
             </LinearLayout>
 

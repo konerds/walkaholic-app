@@ -22,6 +22,7 @@ import com.mapo.walkaholic.databinding.FragmentDashboardProfileBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
@@ -39,36 +40,44 @@ class DashboardProfileFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        viewModel.onClickEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardProfileFragment::onClickEvent)
-        )
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
                 is Resource.Success -> {
-                    if (!it.value.error) {
-                        binding.user = it.value.user
-                        if (it.value.user.user_gender == "0") {
-                            binding.dashProfileChipMale.isChecked = true
-                            binding.dashProfileChipFemale.isChecked = false
-                        } else {
-                            binding.dashProfileChipFemale.isChecked = true
-                            binding.dashProfileChipMale.isChecked = false
+                    when (_userResponse.value.code) {
+                        "200" -> {
+                            binding.user = _userResponse.value.data.first()
+                            if (_userResponse.value.data.first().gender == "남") {
+                                binding.dashProfileChipMale.isChecked = true
+                                binding.dashProfileChipFemale.isChecked = false
+                            } else {
+                                binding.dashProfileChipFemale.isChecked = true
+                                binding.dashProfileChipMale.isChecked = false
+                            }
                         }
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.err_user),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        //logout()
-                        //requireActivity().startNewActivity(AuthActivity::class.java)
+                        "400" -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //logout()
+                            //requireActivity().startNewActivity(AuthActivity::class.java)
+                        }
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //logout()
+                            //requireActivity().startNewActivity(AuthActivity::class.java)
+                        }
                     }
                 }
                 is Resource.Loading -> {
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(_userResponse)
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.err_user),
@@ -92,20 +101,12 @@ class DashboardProfileFragment :
         }
         val weightAdapter = ArrayAdapter(requireContext(), R.layout.item_text_view, weightItems)
         (binding.dashProfileEtWeight as? AutoCompleteTextView)?.setAdapter(weightAdapter)
-    }
-
-    private fun onClickEvent(name: String) {
-        val navDirection: NavDirections? =
-            when (name) {
-                "profile_completed" -> {
-                    DashboardProfileFragmentDirections.actionActionBnvDashProfileToActionBnvDash()
-                }
-                else -> {
-                    null
-                }
+        binding.dashProfileBtnComplete.setOnClickListener {
+            val navDirection: NavDirections? =
+                DashboardProfileFragmentDirections.actionActionBnvDashProfileToActionBnvDash()
+            if (navDirection != null) {
+                findNavController().navigate(navDirection)
             }
-        if (navDirection != null) {
-            findNavController().navigate(navDirection)
         }
     }
 

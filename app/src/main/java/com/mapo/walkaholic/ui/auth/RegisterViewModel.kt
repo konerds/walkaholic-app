@@ -41,29 +41,25 @@ class RegisterViewModel(
     }
 
     fun register(
-        nickname: String,
-        birth: Int,
-        gender: Int,
-        height: Int,
-        weight: Int
+        userBirth : String,
+        userGender : String,
+        userHeight : String,
+        userNickname : String,
+        userWeight : String
     ) {
         progressBarVisibility.set(true)
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            tokenInfo!!.id.toString().trim().let {
-                if (it != null) {
-                    viewModelScope.launch {
-                        _registerResponse.value =
-                            repository.register(
-                                it.toLong(),
-                                nickname,
-                                birth,
-                                gender,
-                                height,
-                                weight
-                            )
-                    }
-                } else {
-                    logout()
+            tokenInfo!!.id.let {
+                viewModelScope.launch {
+                    _registerResponse.value =
+                        repository.register(
+                            userBirth,
+                            userGender,
+                            userHeight,
+                            it,
+                            userNickname,
+                            userWeight
+                        )
                 }
             }
         }

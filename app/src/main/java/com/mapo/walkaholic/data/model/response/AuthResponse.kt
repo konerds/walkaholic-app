@@ -1,7 +1,11 @@
 package com.mapo.walkaholic.data.model.response
 
 data class AuthResponse(
-        val error: Boolean,
-        val message: String,
-        val jwtToken: String
-)
+    val code: String,
+    val message: String,
+    val data: ArrayList<DataAuth>
+) {
+    inner class DataAuth(
+        val userId: Long
+    )
+}

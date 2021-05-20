@@ -58,10 +58,6 @@ class DashboardCharacterShopDetailFragment(
         arrayListShopItem.add(ItemInfo("hair", "0", "똑딱이핀", "3000"))
         arrayListShopItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
         arrayListShopItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
-        viewModel.onClickEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterShopDetailFragment::onClickEvent)
-        )
         binding.dashCharacterInfoDetailRV.also {
             val linearLayoutManager = LinearLayoutManager(requireContext())
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -77,19 +73,9 @@ class DashboardCharacterShopDetailFragment(
                 )
             }
         }
-    }
-
-    private fun onClickEvent(name: String) {
-        when (name) {
-            "walk_record" -> {
-            }
-            "select_clear" -> {
-                Log.d(ContentValues.TAG,"Click Init Button Event")
-                //binding.dashCharacterInfoDetailRV
-            }
-            else -> {
-                null
-            }
+        binding.dashCharacterShopInitLayout.setOnClickListener {
+            Log.d(ContentValues.TAG,"Click Init Button Event")
+            //binding.dashCharacterInfoDetailRV
         }
     }
 
