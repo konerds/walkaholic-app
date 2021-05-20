@@ -1,23 +1,20 @@
 package com.mapo.walkaholic.data.network
 
+import com.mapo.walkaholic.data.model.request.LoginRequestBody
+import com.mapo.walkaholic.data.model.request.SignupRequestBody
 import com.mapo.walkaholic.data.model.response.AuthResponse
 import com.mapo.walkaholic.data.model.response.GuideInformationResponse
 import com.mapo.walkaholic.data.model.response.TermResponse
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface GuestApi {
-    @FormUrlEncoded
-    @POST("auth/create")
+    @Headers(
+        "Accept:application/json, text/plain, */*",
+        "Content-Type:application/json;charset=UTF-8"
+    )
+    @POST("signup")
     suspend fun register(
-            @Field("id") id: Long,
-            @Field("nickname") nickname: String,
-            @Field("birth") birth: Int,
-            @Field("gender") gender: Int,
-            @Field("height") height: Int,
-            @Field("weight") weight: Int
+        @Body userSignUpDto: SignupRequestBody
     ): AuthResponse
 
     @GET("global/guide")
@@ -26,10 +23,13 @@ interface GuestApi {
     @GET("auth/term")
     suspend fun getTerm(): TermResponse
 
-    @FormUrlEncoded
-    @POST("auth/login")
+    @Headers(
+        "Accept:application/json, text/plain, */*",
+        "Content-Type:application/json;charset=UTF-8"
+    )
+    @POST("login")
     suspend fun login(
-            @Field("id") id: Long
+        @Body userLogin: LoginRequestBody
     ): AuthResponse
 
     /*

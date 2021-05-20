@@ -1,8 +1,9 @@
 package com.mapo.walkaholic.data.model.response
 
-import com.mapo.walkaholic.data.model.UserCharacter
+import com.mapo.walkaholic.data.model.UserCharacterFilename
 
 data class UserCharacterResponse(
-        val error: Boolean,
-        val userCharacter: UserCharacter
+        val code: String,
+        val message: String,
+        val data: ArrayList<UserCharacterFilename>
 )

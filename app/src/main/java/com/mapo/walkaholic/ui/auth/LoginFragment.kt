@@ -34,62 +34,61 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
         viewModel.filenameLogoTitle.observe(viewLifecycleOwner, Observer {
             setImageUrl(binding.loginIvLogo, it)
         })
-        viewModel.onClickEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@LoginFragment::onClickEvent)
-        )
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is Resource.Success -> {
-                    if (!it.value.error) {
-                        lifecycleScope.launch {
+                    when (it.value.code) {
+                        "200" -> {
+                            lifecycleScope.launch {
+                                Toast.makeText(
+                                    requireContext(),
+                                    it.value.message.trim(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                /*viewModel.saveJwtToken(it.value.jwtToken)*/
+                                // Log.d(TAG, it.value.jwtToken)
+                                Log.d(TAG, it.value.message)
+                                requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
+                            }
+                        }
+                        "400" -> {
+                            requireView().findNavController()
+                                .navigate(R.id.action_loginFragment_to_registerFragment)
+                        }
+                        else -> {
                             Toast.makeText(
                                 requireContext(),
                                 it.value.message.trim(),
                                 Toast.LENGTH_SHORT
                             ).show()
-                            viewModel.saveJwtToken(it.value.jwtToken)
-                            // Log.d(TAG, it.value.jwtToken)
-                            requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
                         }
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            it.value.message.trim(),
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
+                }
+                is Resource.Loading -> {
+
                 }
                 is Resource.Failure -> {
                     handleApiError(it) { viewModel.login() }
-                    requireView().findNavController()
-                        .navigate(R.id.action_loginFragment_to_registerFragment)
                 }
             }
         })
-    }
-
-    private fun onClickEvent(name: String) {
-        when (name) {
-            "kakao_login" -> {
-                val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-                    if (error != null) {
-                        viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
-                            .getString(R.string.err_auth))
-                    } else if (token != null) {
-                        viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
-                            .getString(R.string.msg_success_auth))
-                        viewModel.login()
-                        //viewModel.login(token)
-                    }
+        binding.loginBtnKakao.setOnClickListener {
+            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+                if (error != null) {
+                    viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
+                        .getString(R.string.err_auth))
+                } else if (token != null) {
+                    viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
+                        .getString(R.string.msg_success_auth))
+                    viewModel.login()
+                    //viewModel.login(token)
                 }
-                viewModel.getFilenameTitleLogo()
-                viewModel.getAuth(callback)
             }
-            "tutorial" -> {
-                requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
-            }
-            else -> { }
+            viewModel.getFilenameTitleLogo()
+            viewModel.getAuth(callback)
+        }
+        binding.loginBtnTutorial.setOnClickListener {
+            requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
         }
     }
 

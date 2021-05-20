@@ -1,6 +1,8 @@
 package com.mapo.walkaholic.data.repository
 
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.request.LoginRequestBody
+import com.mapo.walkaholic.data.model.request.SignupRequestBody
 import com.mapo.walkaholic.data.network.GuestApi
 
 class AuthRepository(
@@ -11,8 +13,8 @@ class AuthRepository(
         api.getTerm()
     }
 
-    suspend fun login(id: Long) = safeApiCall {
-        api.login(id)
+    suspend fun login(userId: Long) = safeApiCall {
+        api.login(LoginRequestBody(userId))
     }
 
     /*
@@ -22,13 +24,13 @@ class AuthRepository(
      */
 
     suspend fun register(
-        id: Long,
-        nickname: String,
-        birth: Int,
-        gender: Int,
-        height: Int,
-        weight: Int
+        userBirth: String,
+        userGender: String,
+        userHeight : String,
+        userId: Long,
+        userNickname: String,
+        userWeight : String
     ) = safeApiCall {
-        api.register(id, nickname, birth, gender, height, weight)
+        api.register(SignupRequestBody(userBirth, userGender, userHeight, userId, userNickname, userWeight))
     }
 }

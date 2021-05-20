@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RemoteDataSource {
     companion object {
-        private const val BASE_URL = "http://49.50.166.31:8080/"
+        private const val BASE_URL = "http://15.164.103.223:8080/api/v1/"
         private const val BASE_URL_OPENAPI_APIS = "http://apis.data.go.kr/"
         private const val BASE_URL_OPENAPI_SGIS = "https://sgisapi.kostat.go.kr/OpenAPI3/"
     }

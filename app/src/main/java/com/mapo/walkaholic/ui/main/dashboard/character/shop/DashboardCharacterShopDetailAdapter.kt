@@ -1,18 +1,22 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.databinding.ItemSlotShopBinding
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 
 class DashboardCharacterShopDetailAdapter(
-    private var arrayListItemInfo: ArrayList<ItemInfo>
+    private var arrayListItemInfo: ArrayList<ItemInfo>,
+    private val listener: CharacterItemSlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterShopDetailAdapter.DashboardCharacterShopDetailViewHolder>() {
 
-    private val selectedItems: SparseBooleanArray = SparseBooleanArray(0)
-    private var selectedTotalPrice: Int = 0
+    private val selectedSlotShopMap = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
+
+    init {
+        clearSelectedItem()
+    }
 
     inner class DashboardCharacterShopDetailViewHolder(
         val binding: ItemSlotShopBinding
@@ -44,38 +48,42 @@ class DashboardCharacterShopDetailAdapter(
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemShopLayout.setOnClickListener {
                 toggleItemSelected(position)
-                selectedTotalPrice += arrayListItemInfo[position].itemPrice!!.toInt()
+                listener.onRecyclerViewItemClick(holder.binding.itemShopLayout, position, selectedSlotShopMap)
             }
         }
     }
 
     override fun getItemCount() = arrayListItemInfo.size
 
-    fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
+    /*fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
         arrayListItemInfo = arrayListNewInfoItemInfo
-    }
+    }*/
 
     private fun toggleItemSelected(position: Int) {
-        if (selectedItems.get(position, false)) {
-            selectedItems.delete(position)
+        if(selectedSlotShopMap[position] != null) {
+            for(i in 0 until arrayListItemInfo.size) {
+                selectedSlotShopMap[i] = Triple(selectedSlotShopMap[i]!!.first, arrayListItemInfo[i], false)
+            }
+            if (selectedSlotShopMap[position]!!.first) {
+                selectedSlotShopMap[position] = Triple(false, selectedSlotShopMap[position]!!.second, false)
+            } else {
+                selectedSlotShopMap[position] = Triple(true, selectedSlotShopMap[position]!!.second, true)
+            }
             notifyItemChanged(position)
-        } else {
-            selectedItems.put(position, true)
-            notifyItemChanged(position)
-        }
+        } else { }
     }
 
     private fun isItemSelected(position: Int): Boolean {
-        return selectedItems.get(position, false)
+        return if (selectedSlotShopMap[position] != null) {
+            selectedSlotShopMap[position]!!.first
+        } else {
+            false
+        }
     }
 
-    fun clearSelectedItem() {
-        var position: Int
-        for (i in 0 until selectedItems.size()) {
-            position = selectedItems.keyAt(i)
-            selectedItems.put(position, false)
-            notifyItemChanged(position)
+    private fun clearSelectedItem() {
+        for(i in 0 until arrayListItemInfo.size) {
+            selectedSlotShopMap[i] = Triple(false, arrayListItemInfo[i], false)
         }
-        selectedItems.clear()
     }
 }

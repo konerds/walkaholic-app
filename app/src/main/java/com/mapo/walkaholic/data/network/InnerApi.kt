@@ -9,23 +9,25 @@ interface InnerApi {
     @GET("auth/logout")
     suspend fun logout(): ResponseBody
 
-    @FormUrlEncoded
-    @POST("info/user")
+    @GET("user/{id}")
     suspend fun getUser(
-        @Field("id") id: Long
+        @Path("id") id: String
     ): UserResponse
 
-    @FormUrlEncoded
+    @GET("user/{id}/exp")
+    suspend fun getExpInformation(
+        @Path("id") id: String
+    ): ExpInformationResponse
+
     @POST("info/characterItem")
     suspend fun getCharacterItem(
         @Field("id") id: String
     ): CharacterItemResponse
 
-    @FormUrlEncoded
-    @POST("info/exptable")
-    suspend fun getExpTable(
-        @Field("exp") exp: Long
-    ): ExpTableResponse
+    @GET("user/{id}/pet/appearance")
+    suspend fun getUserCharacter(
+        @Path("id") id: String
+    ): UserCharacterResponse
 
     @GET("info/themelist")
     suspend fun getThemeEnum(): ThemeEnumResponse

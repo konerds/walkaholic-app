@@ -1,26 +1,23 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.databinding.ItemSlotInventoryBinding
-import com.mapo.walkaholic.ui.base.BaseViewModel
-import com.mapo.walkaholic.ui.base.EventObserver
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 
 class DashboardCharacterInfoDetailAdapter(
     private var arrayListItemInfo: ArrayList<ItemInfo>,
-    val viewModel : DashboardCharacterInfoViewModel
+    private val listener: CharacterItemSlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterInfoDetailAdapter.DashboardCharacterInfoDetailViewHolder>() {
 
-    init {
-        viewModel.initSelectedInventoryItem(arrayListItemInfo.size, arrayListItemInfo)
-    }
+    private val selectedSlotInventoryMap = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
 
-    private val selectedItems: SparseBooleanArray = SparseBooleanArray(0)
+    init {
+        clearSelectedItem()
+    }
 
     inner class DashboardCharacterInfoDetailViewHolder(
         val binding: ItemSlotInventoryBinding
@@ -62,48 +59,43 @@ class DashboardCharacterInfoDetailAdapter(
             holder.setItemInfo(null)
         } else {
             holder.setItemInfo(arrayListItemInfo[position])
-            holder.binding.viewModel = viewModel
-            holder.binding.lifecycleOwner?.let { holderLifecycleOwner ->
-                viewModel.selectedInventoryItem.observe(holderLifecycleOwner, Observer { _selectedInventoryItem ->
-                    holder.binding.itemInventoryLayout.setOnClickListener {
-                        if(_selectedInventoryItem.first) {
-                            viewModel.unselectSelectedInventoryItem(position, arrayListItemInfo[position])
-                        } else {
-                            viewModel.selectSelectedInventoryItem(position, arrayListItemInfo[position])
-                        }
-                        notifyItemChanged(position)
-                    }
-                })
+            holder.binding.itemInventoryLayout.setOnClickListener {
+                toggleItemSelected(position)
+                listener.onRecyclerViewItemClick(holder.binding.itemInventoryLayout, position, selectedSlotInventoryMap)
             }
-            holder.binding.viewModel!!.getSelectedInventoryItem(position)
         }
     }
 
     override fun getItemCount() = arrayListItemInfo.size
 
-    private fun toggleItemSelected(position: Int) {
+    /*fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
+        arrayListItemInfo = arrayListNewInfoItemInfo
+    }*/
 
-        viewModel.getSelectedInventoryItem(position)
-        if (selectedItems.get(position, false)) {
-            selectedItems.delete(position)
-            notifyItemChanged(position)
-        } else {
-            selectedItems.put(position, true)
-            notifyItemChanged(position)
-        }
+    private fun toggleItemSelected(position: Int) {
+        if(selectedSlotInventoryMap[position] != null) {
+            if (selectedSlotInventoryMap[position]!!.first) {
+                clearSelectedItem()
+                selectedSlotInventoryMap[position] = Triple(false, selectedSlotInventoryMap[position]!!.second, false)
+            } else {
+                clearSelectedItem()
+                selectedSlotInventoryMap[position] = Triple(true, selectedSlotInventoryMap[position]!!.second, true)
+            }
+            notifyDataSetChanged()
+        } else { }
     }
 
     private fun isItemSelected(position: Int): Boolean {
-        return selectedItems.get(position, false)
+        return if (selectedSlotInventoryMap[position] != null) {
+            selectedSlotInventoryMap[position]!!.first
+        } else {
+            false
+        }
     }
 
-    fun clearSelectedItem() {
-        var position: Int
-        for (i in 0 until selectedItems.size()) {
-            position = selectedItems.keyAt(i)
-            selectedItems.put(position, false)
-            notifyItemChanged(position)
+    private fun clearSelectedItem() {
+        for(i in 0 until arrayListItemInfo.size) {
+            selectedSlotInventoryMap[i] = Triple(false, arrayListItemInfo[i], false)
         }
-        selectedItems.clear()
     }
 }
