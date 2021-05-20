@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 class GuideViewModel(
     private val guideRepository: GuideRepository
 ) : BaseViewModel(guideRepository) {
-    private val _filenameListGuide: MutableLiveData<Resource<GuideInformationResponse>> =
+    private val _filenameGuideImageResponse: MutableLiveData<Resource<GuideInformationResponse>> =
         MutableLiveData()
-    val filenameListGuide: LiveData<Resource<GuideInformationResponse>>
-        get() = _filenameListGuide
+    val filenameGuideImageResponse: LiveData<Resource<GuideInformationResponse>>
+        get() = _filenameGuideImageResponse
 
-    fun getFilenameListGuide() = viewModelScope.launch {
-        _filenameListGuide.value = guideRepository.getTutorialFilenames()
+    fun getFilenameGuideImage() = viewModelScope.launch {
+        _filenameGuideImageResponse.value = guideRepository.getFilenameGuideImage()
     }
 
     override fun init() {

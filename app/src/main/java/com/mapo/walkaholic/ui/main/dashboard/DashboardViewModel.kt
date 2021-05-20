@@ -47,9 +47,9 @@ class DashboardViewModel(
     private val _yesterdayWeatherResponse: MutableLiveData<Resource<YesterdayWeatherResponse>> = MutableLiveData()
     val yesterdayWeatherResponse: LiveData<Resource<YesterdayWeatherResponse>>
         get() = _yesterdayWeatherResponse
-    private val _themeEnumResponse: MutableLiveData<Resource<ThemeEnumResponse>> = MutableLiveData()
-    val themeEnumResponse: LiveData<Resource<ThemeEnumResponse>>
-        get() = _themeEnumResponse
+    private val _Filename_themeCategoryImageResponse: MutableLiveData<Resource<FilenameThemeCategoryImageResponse>> = MutableLiveData()
+    val filenameThemeCategoryImageResponse: LiveData<Resource<FilenameThemeCategoryImageResponse>>
+        get() = _Filename_themeCategoryImageResponse
     private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
     val characterUriList: LiveData<Resource<CharacterUriResponse>>
         get() = _characterUriList
@@ -150,9 +150,9 @@ class DashboardViewModel(
         }
     }
 
-    fun getThemeEnum() {
+    fun getFilenameThemeCategoryImage() {
         viewModelScope.launch {
-            _themeEnumResponse.value = mainRepository.getThemeEnum()
+            _Filename_themeCategoryImageResponse.value = mainRepository.getFilenameThemeCategoryImage()
         }
     }
 

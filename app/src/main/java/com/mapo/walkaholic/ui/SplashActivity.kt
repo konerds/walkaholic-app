@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.GuestApi
+import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.SplashRepository
 import com.mapo.walkaholic.databinding.ActivitySplashscreenBinding
 import com.mapo.walkaholic.ui.auth.AuthActivity
@@ -41,32 +42,57 @@ class SplashActivity :
         /*
             Observe Resource of Splash Logo Filename
          */
-        viewModel.filenameLogoSplash.observe(this, Observer { responseSplash ->
-            binding.filenameSplash = responseSplash
+        viewModel.filenameSplashImageResponse.observe(this, Observer { _responseSplash ->
+            when (_responseSplash) {
+                is Resource.Success -> {
+                    when (_responseSplash.value.code) {
+                        "200" -> {
+                            binding.filenameSplashImage = _responseSplash.value.data.first()
+                            /*
+                                Splash Logo Animation
+                            */
+                            splashIv.alpha = 0f
+                            splashIv.animate().setDuration(1500).alpha(1f).withEndAction {
+                                /*
+                                    Check Is Launched First
+                                 */
+                                userPreferences.isFirst.asLiveData()
+                                    .observe(this, Observer { isFirst ->
+                                        if (isFirst == null) {
+                                            // If First, Move Activity To Tutorial Activity
+                                            startNewActivity(GuideActivity::class.java as Class<Activity>)
+                                        } else {
+                                            // If Not First, Move Activity To Auth Activity
+                                            startNewActivity(AuthActivity::class.java as Class<Activity>)
+                                        }
+                                        overridePendingTransition(
+                                            android.R.anim.fade_in,
+                                            android.R.anim.fade_out
+                                        )
+                                    })
+                            }
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_responseSplash) { viewModel.getFilenameSplashImage() }
+                }
+            }
         })
         /*
             Call Rest Function in ViewModel
          */
-        viewModel.getFilenameSplashLogo()
-        /*
-            Splash Logo Animation
-         */
-        splashIv.alpha = 0f
-        splashIv.animate().setDuration(1500).alpha(1f).withEndAction {
-            /*
-                Check Is Launched First
-             */
-            userPreferences.isFirst.asLiveData().observe(this, Observer { isFirst ->
-                if (isFirst == null) {
-                    // If First, Move Activity To Tutorial Activity
-                    startNewActivity(GuideActivity::class.java as Class<Activity>)
-                } else {
-                    // If Not First, Move Activity To Auth Activity
-                    startNewActivity(AuthActivity::class.java as Class<Activity>)
-                }
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            })
-        }
+        viewModel.getFilenameSplashImage()
     }
 
     override fun onDestroy() {

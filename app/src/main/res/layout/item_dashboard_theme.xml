@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="themeEnumItem"
-            type="com.mapo.walkaholic.data.model.ThemeEnum" />
+            name="filenameThemeCategoryImage"
+            type="com.mapo.walkaholic.data.model.response.FilenameThemeCategoryImageResponse.FilenameThemeCategoryImage" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:theme_code="@{themeEnumItem.id}" />
+            app:theme_code="@{filenameThemeCategoryImage.themeFilename}" />
 
     </androidx.cardview.widget.CardView>
 </layout>

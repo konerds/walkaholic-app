@@ -7,7 +7,7 @@ class GuideRepository(
     private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-    suspend fun getTutorialFilenames() = safeApiCall {
-        api.getTutorialFilenames()
+    suspend fun getFilenameGuideImage() = safeApiCall {
+        api.getFilenameGuideImage()
     }
 }

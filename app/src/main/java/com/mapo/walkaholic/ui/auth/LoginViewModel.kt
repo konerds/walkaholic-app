@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.AuthResponse
+import com.mapo.walkaholic.data.model.response.FilenameLogoImageResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -17,9 +18,9 @@ class LoginViewModel(
 ) : BaseViewModel(repository) {
     override fun init() {}
 
-    private val _filenameLogoTitle = MutableLiveData("logo_title.png")
-    val filenameLogoTitle: LiveData<String>
-        get() = _filenameLogoTitle
+    private val _filenameLogoImageResponse : MutableLiveData<Resource<FilenameLogoImageResponse>> = MutableLiveData()
+    val filenameLogoImageResponse: LiveData<Resource<FilenameLogoImageResponse>>
+        get() = _filenameLogoImageResponse
 
     private val _loginResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
     val loginResponse: LiveData<Resource<AuthResponse>>
@@ -40,7 +41,7 @@ class LoginViewModel(
     }
 
     fun getFilenameTitleLogo() = viewModelScope.launch {
-        _filenameLogoTitle.value = "logo_title.png"
+        _filenameLogoImageResponse.value = repository.getFilenameLogoImage()
     }
 
     fun login() {

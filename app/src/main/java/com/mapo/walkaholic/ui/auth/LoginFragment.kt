@@ -2,7 +2,6 @@ package com.mapo.walkaholic.ui.auth
 
 import android.app.Activity
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,7 +18,6 @@ import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentLoginBinding
 import com.mapo.walkaholic.ui.*
 import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainActivity
 import kotlinx.coroutines.launch
@@ -31,8 +29,29 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
         lifecycleScope.launch {
             viewModel.saveIsFirst()
         }
-        viewModel.filenameLogoTitle.observe(viewLifecycleOwner, Observer {
-            setImageUrl(binding.loginIvLogo, it)
+        viewModel.filenameLogoImageResponse.observe(viewLifecycleOwner, Observer { _filenameLogoImageResponse ->
+            when(_filenameLogoImageResponse) {
+                is Resource.Success -> {
+                    when(_filenameLogoImageResponse.value.code) {
+                        "200" -> {
+                            binding.filenameLogoImage = _filenameLogoImageResponse.value.data.first()
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_filenameLogoImageResponse) { viewModel.getFilenameTitleLogo() }
+                }
+            }
         })
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             when (it) {

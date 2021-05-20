@@ -10,6 +10,9 @@
         <variable
             name="viewModel"
             type="com.mapo.walkaholic.ui.auth.LoginViewModel" />
+        <variable
+            name="filenameLogoImage"
+            type="com.mapo.walkaholic.data.model.response.FilenameLogoImageResponse.FilenameLogoImage" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +29,7 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
             android:scaleType="fitCenter"
+            app:setImage="@{filenameLogoImage.logoFilename}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@id/loginLayoutSNS"

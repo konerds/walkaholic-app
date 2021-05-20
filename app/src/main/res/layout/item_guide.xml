@@ -20,6 +20,6 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:visibility="visible"
-            app:setImage="@{guideInformation.tutorial_filename}" />
+            app:setImage="@{guideInformation.tutorialFilename}" />
     </FrameLayout>
 </layout>

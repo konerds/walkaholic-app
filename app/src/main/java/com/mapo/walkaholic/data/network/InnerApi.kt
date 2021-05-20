@@ -41,8 +41,8 @@ interface InnerApi {
         @Path("id") id: String
     ): UserCharacterFilenameResponse
 
-    @GET("info/themelist")
-    suspend fun getThemeEnum(): ThemeEnumResponse
+    @GET("global/resource/theme")
+    suspend fun getFilenameThemeCategoryImage(): FilenameThemeCategoryImageResponse
 
     @FormUrlEncoded
     @POST("info/themedetail")

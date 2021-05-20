@@ -143,8 +143,8 @@ class MainRepository(
         }
     }
 
-    suspend fun getThemeEnum() = safeApiCall {
-        api.getThemeEnum()
+    suspend fun getFilenameThemeCategoryImage() = safeApiCall {
+        api.getFilenameThemeCategoryImage()
     }
 
     suspend fun getThemeDetail(themeId: String) = safeApiCall {

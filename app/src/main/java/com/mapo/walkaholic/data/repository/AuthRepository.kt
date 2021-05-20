@@ -9,8 +9,16 @@ class AuthRepository(
     private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-    suspend fun getTerm() = safeApiCall {
-        api.getTerm()
+    suspend fun getFilenameLogoImage() = safeApiCall {
+        api.getFilenameLogoImage()
+    }
+
+    suspend fun getTermService() = safeApiCall {
+        api.getTermService()
+    }
+
+    suspend fun getTermPrivacy() = safeApiCall {
+        api.getTermPrivacy()
     }
 
     suspend fun login(userId: Long) = safeApiCall {

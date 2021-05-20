@@ -8,8 +8,8 @@
             name="viewModel"
             type="com.mapo.walkaholic.ui.SplashViewModel" />
         <variable
-            name="filenameSplash"
-            type="String" />
+            name="filenameSplashImage"
+            type="com.mapo.walkaholic.data.model.response.FilenameSplashImageResponse.SplashFilename" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             android:id="@+id/splashIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:setImage="@{filenameSplash}"
+            app:setImage="@{filenameSplashImage.splashFilename}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

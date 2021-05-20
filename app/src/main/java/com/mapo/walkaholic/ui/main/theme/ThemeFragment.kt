@@ -49,7 +49,7 @@ class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, M
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.themeTL
         viewPager = binding.themeVP
-        viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
+        /*viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     is Resource.Success -> {
                         if (!it.value.error) {
@@ -82,7 +82,7 @@ class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, M
                         handleApiError(it)
                     }
                 }
-        })
+        })*/
         viewModel.getThemeEnum()
     }
 

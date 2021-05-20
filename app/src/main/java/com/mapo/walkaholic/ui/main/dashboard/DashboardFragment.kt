@@ -499,24 +499,31 @@ class DashboardFragment :
                 }
             }
         })
-        viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer { it2 ->
-            binding.dashRVTheme.also {
+        viewModel.filenameThemeCategoryImageResponse.observe(viewLifecycleOwner, Observer { _filenameThemeCategoryImageResponse ->
+            binding.dashRVTheme.also { _dashRVTheme ->
                 val linearLayoutManager = LinearLayoutManager(requireContext())
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                it.layoutManager = linearLayoutManager
-                it.setHasFixedSize(true)
-                when (it2) {
+                _dashRVTheme.layoutManager = linearLayoutManager
+                _dashRVTheme.setHasFixedSize(true)
+                when (_filenameThemeCategoryImageResponse) {
                     is Resource.Success -> {
-                        if (!it2.value.error) {
-                            it.adapter =
-                                it2.value.themeEnum?.let { it3 -> DashboardThemeAdapter(it3) }
+                        when (_filenameThemeCategoryImageResponse.value.code) {
+                            "200" -> {
+                                _dashRVTheme.adapter = DashboardThemeAdapter(_filenameThemeCategoryImageResponse.value.data)
+                            }
+                            "400" -> {
+                                // Error
+                            }
+                            else -> {
+                                // Error
+                            }
                         }
                     }
                     is Resource.Loading -> {
 
                     }
                     is Resource.Failure -> {
-                        handleApiError(it2)
+                        handleApiError(_filenameThemeCategoryImageResponse) { viewModel.getFilenameThemeCategoryImage() }
                     }
                 }
             }
@@ -530,7 +537,7 @@ class DashboardFragment :
         Log.e(">>", "x = " + tmp.x.toString() + ", y = " + tmp.y.toString())
         viewModel.getYesterdayWeather(tmp.x.toInt().toString(), tmp.y.toInt().toString())
         viewModel.getTodayWeather(tmp.x.toInt().toString(), tmp.y.toInt().toString())
-        viewModel.getThemeEnum()
+        viewModel.getFilenameThemeCategoryImage()
         binding.dashIvSetting.setOnClickListener {
             val navDirection: NavDirections? =
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvDashCharacterInfo()

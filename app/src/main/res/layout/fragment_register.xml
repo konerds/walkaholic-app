@@ -10,10 +10,17 @@
         <variable
             name="viewModel"
             type="com.mapo.walkaholic.ui.auth.RegisterViewModel" />
+        <variable
+            name="filenameLogoImage"
+            type="com.mapo.walkaholic.data.model.response.FilenameLogoImageResponse.FilenameLogoImage" />
 
         <variable
-            name="terms"
-            type="com.mapo.walkaholic.data.model.Terms" />
+            name="termService"
+            type="com.mapo.walkaholic.data.model.response.TermServiceResponse.TermService" />
+
+        <variable
+            name="termPrivacy"
+            type="com.mapo.walkaholic.data.model.response.TermPrivacyResponse.TermPrivacy" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +35,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:setImage="@{filenameLogoImage.logoFilename}"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
@@ -60,7 +68,7 @@
                 android:scrollbarThumbVertical="@color/colorAccent"
                 android:scrollbarTrackVertical="@color/colorSecondary"
                 android:scrollbars="vertical"
-                android:text="@{terms.svrterm}"
+                android:text="@{termService.serviceTermContent}"
                 android:textColor="#000000" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -76,7 +84,7 @@
                 android:scrollbarThumbVertical="@color/colorAccent"
                 android:scrollbarTrackVertical="@color/colorSecondary"
                 android:scrollbars="vertical"
-                android:text="@{terms.prvterm}"
+                android:text="@{termPrivacy.privacyTermContent}"
                 android:textColor="#000000" />
 
             <com.google.android.material.chip.Chip

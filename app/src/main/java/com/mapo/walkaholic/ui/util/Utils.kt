@@ -26,7 +26,7 @@ import com.mapo.walkaholic.ui.auth.LoginFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlin.coroutines.coroutineContext
 
-private const val RESOURCE_BASE_URL = "http://49.50.166.31:80/resource/global/"
+private const val RESOURCE_BASE_URL = "http://15.164.103.223:8080/static/img/"
 
 fun <A : Activity> Activity.startNewActivity(activity: Class<A>) {
     Intent(this, activity).also {
