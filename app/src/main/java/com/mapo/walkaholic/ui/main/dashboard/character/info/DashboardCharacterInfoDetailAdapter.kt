@@ -13,12 +13,10 @@ class DashboardCharacterInfoDetailAdapter(
     private val listener: CharacterItemSlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterInfoDetailAdapter.DashboardCharacterInfoDetailViewHolder>() {
 
-    private val selectedSlotInventoryMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private val selectedSlotInventoryMap = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
 
     init {
-        for(i in 0 until arrayListItemInfo.size) {
-            selectedSlotInventoryMap[i] = Pair(false, arrayListItemInfo[i])
-        }
+        clearSelectedItem()
     }
 
     inner class DashboardCharacterInfoDetailViewHolder(
@@ -70,18 +68,20 @@ class DashboardCharacterInfoDetailAdapter(
 
     override fun getItemCount() = arrayListItemInfo.size
 
-    fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
+    /*fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
         arrayListItemInfo = arrayListNewInfoItemInfo
-    }
+    }*/
 
     private fun toggleItemSelected(position: Int) {
         if(selectedSlotInventoryMap[position] != null) {
             if (selectedSlotInventoryMap[position]!!.first) {
-                selectedSlotInventoryMap[position] = Pair(false, selectedSlotInventoryMap[position]!!.second)
+                clearSelectedItem()
+                selectedSlotInventoryMap[position] = Triple(false, selectedSlotInventoryMap[position]!!.second, false)
             } else {
-                selectedSlotInventoryMap[position] = Pair(true, selectedSlotInventoryMap[position]!!.second)
+                clearSelectedItem()
+                selectedSlotInventoryMap[position] = Triple(true, selectedSlotInventoryMap[position]!!.second, true)
             }
-            notifyItemChanged(position)
+            notifyDataSetChanged()
         } else { }
     }
 
@@ -93,13 +93,9 @@ class DashboardCharacterInfoDetailAdapter(
         }
     }
 
-    /*fun clearSelectedItem() {
-        var position: Int
-        for (i in 0 until selectedItems.size()) {
-            position = selectedItems.keyAt(i)
-            selectedItems.put(position, false)
-            notifyItemChanged(position)
+    private fun clearSelectedItem() {
+        for(i in 0 until arrayListItemInfo.size) {
+            selectedSlotInventoryMap[i] = Triple(false, arrayListItemInfo[i], false)
         }
-        selectedItems.clear()
-    }*/
+    }
 }

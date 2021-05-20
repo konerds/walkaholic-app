@@ -11,20 +11,35 @@ interface InnerApi {
 
     @GET("user/{id}")
     suspend fun getUser(
-        @Path(value = "id", encoded = false) id: Long
+        @Path("id") id: String
     ): UserResponse
 
-    @FormUrlEncoded
+    @GET("user/{id}/exp")
+    suspend fun getExpInformation(
+        @Path("id") id: String
+    ): ExpInformationResponse
+
     @POST("info/characterItem")
     suspend fun getCharacterItem(
         @Field("id") id: String
-    ): CharacterItemResponse
+    ): UserCharacterEquipStatusResponse
 
-    @FormUrlEncoded
-    @POST("info/exptable")
-    suspend fun getExpTable(
-        @Field("exp") exp: Long
-    ): ExpTableResponse
+    @GET("user/{id}/pet/appearance")
+    suspend fun getUserCharacterFilename(
+        @Path("id") id: String
+    ): UserCharacterFilenameResponse
+
+    @GET("user/{id}/item/equip")
+    suspend fun getUserCharacterEquipStatus(
+        @Path("id") id: String
+    ): UserCharacterEquipStatusResponse
+
+    @GET("user/{id}/item/view")
+    suspend fun getUserCharacterPreviewFilename(
+        @Query("faceItemId") faceItemId : String,
+        @Query("headItemId") headItemId : String,
+        @Path("id") id: String
+    ): UserCharacterFilenameResponse
 
     @GET("info/themelist")
     suspend fun getThemeEnum(): ThemeEnumResponse
@@ -35,6 +50,7 @@ interface InnerApi {
         @Field("theme_id") themeId: String
     ): ThemeResponse
 
+    @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
         @Body body: MapRequestBody

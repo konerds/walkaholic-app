@@ -53,9 +53,9 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         })
          */
-        Log.i(
+        /*Log.i(
             ContentValues.TAG, "해쉬값+${getHashKey()}"
-        )
+        )*/
     }
 
     override fun onBackPressed() {
@@ -101,7 +101,7 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
         return AuthRepository(api, userPreferences)
     }
 
-    private fun getHashKey(): String? {
+    /*private fun getHashKey(): String? {
         try {
             if (Build.VERSION.SDK_INT >= 28) {
                 val packageInfo = packageManager.getPackageInfo(
@@ -136,5 +136,5 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
         }
 
         return null
-    }
+    }*/
 }

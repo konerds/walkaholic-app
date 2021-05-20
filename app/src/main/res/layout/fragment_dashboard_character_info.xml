@@ -16,12 +16,8 @@
             type="com.mapo.walkaholic.data.model.User" />
 
         <variable
-            name="userCharacterItem"
-            type="com.mapo.walkaholic.data.model.CharacterItem" />
-
-        <variable
-            name="expTable"
-            type="com.mapo.walkaholic.data.model.ExpTable" />
+            name="expInformation"
+            type="com.mapo.walkaholic.data.model.ExpInformation" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -57,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{userCharacterItem.pet_name}"
+                    android:text="@{user.nickName}"
                     android:textColor="@color/mdWhite1000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -174,14 +170,14 @@
 
                 </FrameLayout>
 
-                <!--<ProgressBar
+                <ProgressBar
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="16dp"
                     android:layout_margin="16dp"
-                    android:max="@{viewModel.toLongToInt(expTable.requireexp1 - expTable.requireexp2)}"
-                    android:progress="@{viewModel.toLongToInt(user.currentExp - expTable.requireexp2)}"
-                    android:progressDrawable="@drawable/progressbar_dashboard_character_info" />-->
+                    android:max="@{expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp}"
+                    android:progress="@{user.currentExp - expInformation.currentLevelNeedExp}"
+                    android:progressDrawable="@drawable/progressbar_dashboard_character_info" />
 
             </LinearLayout>
 

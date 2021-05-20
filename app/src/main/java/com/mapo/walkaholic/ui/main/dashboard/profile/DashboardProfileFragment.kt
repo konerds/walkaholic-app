@@ -40,13 +40,13 @@ class DashboardProfileFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
                 is Resource.Success -> {
-                    when (it.value.code) {
+                    when (_userResponse.value.code) {
                         "200" -> {
-                            binding.user = it.value.data
-                            if (it.value.data!!.gender == "남") {
+                            binding.user = _userResponse.value.data.first()
+                            if (_userResponse.value.data.first().gender == "남") {
                                 binding.dashProfileChipMale.isChecked = true
                                 binding.dashProfileChipFemale.isChecked = false
                             } else {
@@ -77,7 +77,7 @@ class DashboardProfileFragment :
                 is Resource.Loading -> {
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(_userResponse)
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.err_user),

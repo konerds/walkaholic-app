@@ -69,9 +69,6 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
             Call Rest Function in ViewModel
          */
         viewModel.getFilenameListGuide()
-        /*
-            Click Listener For Skip Button
-         */
         binding.guideChipSkip.setOnClickListener {
             startNewActivity(AuthActivity::class.java)
         }

@@ -1,8 +1,6 @@
 package com.mapo.walkaholic.data.repository
 
-import android.util.SparseBooleanArray
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
@@ -40,26 +38,34 @@ class MainRepository(
 
     private var mMap: NaverMap? = null
 
-
-    private val selectedInventoryItemMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
-    private val selectedShopItemMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
-
     fun setNaverMap(mMap: NaverMap) {
         this.mMap = mMap
     }
 
     fun getNaverMap() = this.mMap
 
-    suspend fun getUser(id: Long) = safeApiCall {
-        api.getUser(id)
+    suspend fun getUser(userId: Long) = safeApiCall {
+        api.getUser(userId.toString())
     }
 
-    suspend fun getCharacterItem(id: String) = safeApiCall {
-        api.getCharacterItem(id)
+    suspend fun getUserCharacterFilename(userId: Long) = safeApiCall {
+        api.getUserCharacterFilename(userId.toString())
     }
 
-    suspend fun getExpTable(exp: Long) = safeApiCall {
-        api.getExpTable(exp)
+    suspend fun getUserCharacterEquipStatus(userId: Long) = safeApiCall {
+        api.getUserCharacterEquipStatus(userId.toString())
+    }
+
+    suspend fun getUserCharacterPreviewFilename(faceItemId : String, headItemId : String, userId: Long) = safeApiCall {
+        api.getUserCharacterPreviewFilename(faceItemId, headItemId, userId.toString())
+    }
+
+    suspend fun getCharacterItem(petId: Int) = safeApiCall {
+        api.getCharacterItem(petId.toString())
+    }
+
+    suspend fun getExpInformation(userId: Long) = safeApiCall {
+        api.getExpInformation(userId.toString())
     }
 
     suspend fun getWeatherDust(sidoName: String) = safeApiCall {
@@ -147,23 +153,6 @@ class MainRepository(
 
     suspend fun getCharacterUriList(characterType: String) = safeApiCall {
         api.getCharacterUriList(characterType)
-    }
-
-    fun initSelectedInventoryItem(size:Int, arrayListItemInfo: ArrayList<ItemInfo>) {
-        var position: Int
-        for(i in 0 until size) {
-            selectedInventoryItemMap[i] = Pair(false, arrayListItemInfo[i])
-        }
-    }
-
-    fun getSelectedInventoryItem(position: Int) = selectedInventoryItemMap[position]
-
-    fun selectSelectedInventoryItem(position: Int, itemInfo: ItemInfo) {
-        selectedInventoryItemMap[position] = Pair(true, itemInfo)
-    }
-
-    fun unselectSelectedInventoryItem(position: Int, itemInfo: ItemInfo) {
-        selectedInventoryItemMap[position] = Pair(false, itemInfo)
     }
 
     suspend fun getCalendarDate(userId: Long, walkDate: String) = safeApiCall {

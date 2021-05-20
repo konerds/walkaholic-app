@@ -5,5 +5,5 @@ import android.view.View
 import com.mapo.walkaholic.data.model.ItemInfo
 
 interface CharacterItemSlotClickListener {
-    fun onRecyclerViewItemClick(view: View, position: Int, selectedItemInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>)
+    fun onRecyclerViewItemClick(view: View, position: Int, selectedItemInfoMap: MutableMap<Int, Triple<Boolean, ItemInfo, Boolean>>)
 }

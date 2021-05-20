@@ -123,12 +123,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         viewModel.userResponse.observe(this, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
-                    when(_userResponse.value.code) {
+                    when (_userResponse.value.code) {
                         "200" -> {
-                            bindingNavigationHeader.user = _userResponse.value.data
-                            lifecycleScope.launch {
-                                /*viewModel.saveJwtToken(_userResponse.value.jwtToken)*/
-                            }
+                            bindingNavigationHeader.user = _userResponse.value.data.first()
+                            /*lifecycleScope.launch {
+                                viewModel.saveJwtToken(it.value.jwtToken)
+                            }*/
+                            Log.i(
+                                ContentValues.TAG, "${_userResponse.value.data.first()}"
+                            )
                         }
                         "400" -> {
                             Toast.makeText(

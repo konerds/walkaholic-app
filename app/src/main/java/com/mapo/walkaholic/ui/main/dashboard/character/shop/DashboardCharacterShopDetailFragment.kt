@@ -73,7 +73,7 @@ class DashboardCharacterShopDetailFragment(
                 )
             }
         }
-        binding.dashCharacterInfoInitLayout.setOnClickListener {
+        binding.dashCharacterShopInitLayout.setOnClickListener {
             Log.d(ContentValues.TAG,"Click Init Button Event")
             //binding.dashCharacterInfoDetailRV
         }

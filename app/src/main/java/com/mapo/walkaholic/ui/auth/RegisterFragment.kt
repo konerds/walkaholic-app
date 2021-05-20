@@ -24,11 +24,9 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentRegisterBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.setImageUrl
-import com.mapo.walkaholic.ui.snackbar
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -80,14 +78,14 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                             "400" -> {
                                 Toast.makeText(
                                     requireContext(),
-                                    "${it.value.code}${it.value.message}",
+                                    it.value.message,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                             else -> {
                                 Toast.makeText(
                                     requireContext(),
-                                    "${it.value.code}${it.value.message}",
+                                    it.value.message,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -132,7 +130,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                 binding.registerChipAgreeAll.performClick()
             }
         }
-        binding.registerChipAgreePrivacy.setOnClickListener {
+        binding.registerChipAgreeService.setOnClickListener {
             if (binding.registerChipAgreePrivacy.isChecked && binding.registerChipAgreeService.isChecked) {
                 binding.registerChipAgreeAll.isChecked = true
                 binding.registerChipAgreeAll.performClick()
@@ -175,7 +173,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
         binding.registerBtnRegister.setOnClickListener {
             val imm =
                 requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            val userNick: String = binding.registerEtNickname.text.toString().trim()
+            val userNickname: String = binding.registerEtNickname.text.toString().trim()
             val userBirth: String = binding.registerEtBirth.text.toString().trim()
             val userGender: String = when {
                 binding.registerChipMale.isChecked -> "남"
@@ -185,10 +183,10 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
             val userHeight: String = binding.registerEtHeight.text.toString().trim()
             val userWeight: String = binding.registerEtWeight.text.toString().trim()
             when {
-                userNick.isEmpty() || !Pattern.compile(
+                userNickname.isEmpty() || !Pattern.compile(
                     "^[0-9a-zA-Z가-힣]*$"
                 )
-                    .matcher(userNick).matches() -> {
+                    .matcher(userNickname).matches() -> {
                     binding.registerEtNickname.error =
                         "${getString(R.string.nickname)}을 ${getString(R.string.err_input)}"
                     binding.registerEtNickname.isFocusableInTouchMode = true
@@ -232,10 +230,10 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                 }
                 else -> {
                     viewModel.register(
+                        userBirth,
                         userGender,
                         userHeight,
-                        userBirth,
-                        userNick,
+                        userNickname,
                         userWeight
                     )
                 }

@@ -47,6 +47,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 ).show()
                                 /*viewModel.saveJwtToken(it.value.jwtToken)*/
                                 // Log.d(TAG, it.value.jwtToken)
+                                Log.d(TAG, it.value.message)
                                 requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
                             }
                         }
@@ -63,28 +64,22 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                         }
                     }
                 }
+                is Resource.Loading -> {
+
+                }
                 is Resource.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        it.errorBody.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    /*handleApiError(it) { viewModel.login() }*/
+                    handleApiError(it) { viewModel.login() }
                 }
             }
         })
         binding.loginBtnKakao.setOnClickListener {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    viewModel.showToastEvent(
-                        GlobalApplication.getGlobalApplicationContext()
-                            .getString(R.string.err_auth)
-                    )
+                    viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
+                        .getString(R.string.err_auth))
                 } else if (token != null) {
-                    viewModel.showToastEvent(
-                        GlobalApplication.getGlobalApplicationContext()
-                            .getString(R.string.msg_success_auth)
-                    )
+                    viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
+                        .getString(R.string.msg_success_auth))
                     viewModel.login()
                     //viewModel.login(token)
                 }

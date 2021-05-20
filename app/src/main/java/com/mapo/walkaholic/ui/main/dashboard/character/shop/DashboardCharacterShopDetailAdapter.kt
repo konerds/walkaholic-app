@@ -12,7 +12,7 @@ class DashboardCharacterShopDetailAdapter(
     private val listener: CharacterItemSlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterShopDetailAdapter.DashboardCharacterShopDetailViewHolder>() {
 
-    private val selectedSlotShopMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private val selectedSlotShopMap = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
 
     init {
         clearSelectedItem()
@@ -55,16 +55,19 @@ class DashboardCharacterShopDetailAdapter(
 
     override fun getItemCount() = arrayListItemInfo.size
 
-    fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
+    /*fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
         arrayListItemInfo = arrayListNewInfoItemInfo
-    }
+    }*/
 
     private fun toggleItemSelected(position: Int) {
         if(selectedSlotShopMap[position] != null) {
+            for(i in 0 until arrayListItemInfo.size) {
+                selectedSlotShopMap[i] = Triple(selectedSlotShopMap[i]!!.first, arrayListItemInfo[i], false)
+            }
             if (selectedSlotShopMap[position]!!.first) {
-                selectedSlotShopMap[position] = Pair(false, selectedSlotShopMap[position]!!.second)
+                selectedSlotShopMap[position] = Triple(false, selectedSlotShopMap[position]!!.second, false)
             } else {
-                selectedSlotShopMap[position] = Pair(true, selectedSlotShopMap[position]!!.second)
+                selectedSlotShopMap[position] = Triple(true, selectedSlotShopMap[position]!!.second, true)
             }
             notifyItemChanged(position)
         } else { }
@@ -78,9 +81,9 @@ class DashboardCharacterShopDetailAdapter(
         }
     }
 
-    fun clearSelectedItem() {
+    private fun clearSelectedItem() {
         for(i in 0 until arrayListItemInfo.size) {
-            selectedSlotShopMap[i] = Pair(false, arrayListItemInfo[i])
+            selectedSlotShopMap[i] = Triple(false, arrayListItemInfo[i], false)
         }
     }
 }

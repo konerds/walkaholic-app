@@ -49,14 +49,12 @@ class DashboardCharacterInfoDetailFragment(
         )
         super.onViewCreated(view, savedInstanceState)
         arrayListInventoryItem.add(ItemInfo("face", "0", "진한눈썹", "3000"))
-        /*
         arrayListInventoryItem.add(ItemInfo("face", "1", "속눈썹펌", "3000"))
         arrayListInventoryItem.add(ItemInfo("face", "2", "수줍은볼", "3000"))
         arrayListInventoryItem.add(ItemInfo("face", "3", "발그레볼", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "0", "똑딱이핀", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
         arrayListInventoryItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
-         */
         binding.dashCharacterInfoDetailRV.also {
             val linearLayoutManager = LinearLayoutManager(requireContext())
             linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -109,6 +107,10 @@ class DashboardCharacterInfoDetailFragment(
                 }
             }
         }
+        binding.dashCharacterInfoInitLayout.setOnClickListener {
+            Log.d(ContentValues.TAG,"Click Init Button Event")
+            //binding.dashCharacterInfoDetailRV
+        }
     }
 
     private fun showToastEvent(contents: String) {
@@ -153,7 +155,7 @@ class DashboardCharacterInfoDetailFragment(
     override fun onRecyclerViewItemClick(
         view: View,
         position: Int,
-        selectedItemInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>
+        selectedItemInfoMap: MutableMap<Int, Triple<Boolean, ItemInfo, Boolean>>
     ) {
         Log.d(ContentValues.TAG, "Click Event From Inventory Adapter")
         when (view.id) {

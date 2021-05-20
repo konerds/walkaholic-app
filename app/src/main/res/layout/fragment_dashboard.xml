@@ -17,11 +17,11 @@
 
         <variable
             name="userCharacterItem"
-            type="com.mapo.walkaholic.data.model.CharacterItem" />
+            type="com.mapo.walkaholic.data.model.CharacterItemInfo" />
 
         <variable
-            name="expTable"
-            type="com.mapo.walkaholic.data.model.ExpTable" />
+            name="expInformation"
+            type="com.mapo.walkaholic.data.model.ExpInformation" />
 
         <variable
             name="weatherDust"
@@ -64,12 +64,12 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/font_semi_bold_16_one"
                     android:id="@+id/dashTvCharacterName"
+                    style="@style/font_semi_bold_16_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{userCharacterItem.pet_name}"
+                    android:text="@{user.nickName}"
                     android:textColor="@color/mdWhite1000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -136,7 +136,7 @@
                         android:text='@{"LV." + viewModel.toAnyToString(user.levelId)}'
                         android:textColor="#F37520"
                         android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </FrameLayout>
 
@@ -144,11 +144,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - viewModel.toLongToInt(expTable.requireexp2)) + " / " + viewModel.toAnyToString(expTable.requireexp1 - viewModel.toLongToInt(expTable.requireexp2))}' />
+                    android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - expInformation.currentLevelNeedExp) + " / " + viewModel.toAnyToString(expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp)}' />
 
                 <TextView
-                    style="@style/font_medium_14_one"
                     android:id="@+id/dashTvIntro"
+                    style="@style/font_medium_14_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -157,9 +157,9 @@
                     android:gravity="center|center_vertical"
                     android:minWidth="220dp"
                     android:minHeight="32dp"
-                    app:full_text='@{userCharacterItem.pet_name + "가 " + user.nickName + "님을 기다렸어요!"}'
+                    app:full_text='@{user.nickName + "가 " + user.nickName + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
-                    app:span_text="@{userCharacterItem.pet_name}" />
+                    app:span_text="@{user.nickName}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -215,8 +215,8 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/font_black_30_one"
                         android:id="@+id/dashTvWalkAmount"
+                        style="@style/font_black_30_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
@@ -225,8 +225,8 @@
                         android:textColor="#F37520" />
 
                     <TextView
-                        style="@style/font_semi_bold_24_one"
                         android:id="@+id/dashTvWalkToday"
+                        style="@style/font_semi_bold_24_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
@@ -250,7 +250,7 @@
                         android:layout_gravity="left|center_vertical"
                         android:layout_marginLeft="20dp"
                         android:text="@string/dash_km_distance"
-                        android:textColor="@color/h5"/>
+                        android:textColor="@color/h5" />
 
                     <TextView
                         style="@style/font_black_16_one"
@@ -378,8 +378,8 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            style="@style/font_medium_12_one"
                             android:id="@+id/dashTvDustStation"
+                            style="@style/font_medium_12_one"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="4dp"
@@ -393,10 +393,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="16dp"
+                            android:src="@drawable/ic_dashboard_station"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
-                            android:src="@drawable/ic_dashboard_station" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -516,7 +516,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:background="@drawable/box_dashboard_lowercorner_grey"
-                    android:text="@string/dash_show_detail"/>
+                    android:text="@string/dash_show_detail" />
 
             </LinearLayout>
 
