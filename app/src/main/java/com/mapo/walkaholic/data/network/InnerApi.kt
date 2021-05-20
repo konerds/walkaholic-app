@@ -81,6 +81,12 @@ interface InnerApi {
         @Field("ranking_id") ranking_id: String
     ): RankingResponse
 
+    @FormUrlEncoded
+    @POST("info/storagePath")
+    suspend fun getStoragePath(
+        @Field("user_id") user_id: Long
+    ): StoragePathResponse
+
     /*@FormUrlEncoded
     @POST("info/missionDaily")
     suspend fun getMissionDaily(

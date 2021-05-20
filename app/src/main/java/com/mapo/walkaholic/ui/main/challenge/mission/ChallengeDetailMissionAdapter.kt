@@ -44,6 +44,9 @@ class ChallengeDetailMissionAdapter(
                 )
             }
             3 -> {
+                //Drawable 설정 둘 다 가능
+                // holder.binding.challengeMissionBar.setBackgroundResource(
+                //                    R.drawable.selector_challenge_progress)
                 val myImage: Drawable? = ResourcesCompat.getDrawable(
                     holder.binding.root.resources,
                     R.drawable.selector_challenge_progress_bottom,

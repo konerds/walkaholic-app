@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="rankingItem"
             type="com.mapo.walkaholic.data.model.Ranking" />
@@ -26,10 +25,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/ranking_crown"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="14dp" />
-                <!--app:setImage="@{rankingItem.ranking_image}"-->
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/ic_challenge_crown_gray"/>
 
                 <TextView
                     style="@style/font_black_16_one"

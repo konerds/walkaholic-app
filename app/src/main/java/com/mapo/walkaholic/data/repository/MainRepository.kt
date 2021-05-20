@@ -190,6 +190,10 @@ class MainRepository(
         api.getRanking(rankingId)
     }
 
+    suspend fun getStoragePath(userId: Long) = safeApiCall {
+        api.getStoragePath(userId)
+    }
+
 
 /*    suspend fun getMissionDaily(missionID:String) = safeApiCall {
         api.getMissionDaily(missionID)

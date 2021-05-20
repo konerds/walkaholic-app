@@ -1,7 +1,10 @@
 package com.mapo.walkaholic.ui.main.challenge.ranking
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.R
@@ -27,6 +30,29 @@ class ChallengeDetailRankingAdapter(
 
     override fun onBindViewHolder(holder: ItemChallengeRankingViewHolder, position: Int) {
         holder.binding.rankingItem = rankings[position]
+
+        when (position) {
+            0 -> {
+                holder.binding.rankingCrown.setBackgroundResource(
+                    R.drawable.ic_challenge_crown_gold
+                )
+            }
+            1 -> {
+                holder.binding.rankingCrown.setBackgroundResource(
+                    R.drawable.ic_challenge_crown_skyblue
+                )
+            }
+            2 -> {
+                holder.binding.rankingCrown.setBackgroundResource(
+                    R.drawable.ic_challenge_crown_orange
+                )
+            }
+            else -> {
+                holder.binding.rankingCrown.setBackgroundResource(
+                    R.drawable.ic_challenge_crown_gray
+                )
+            }
+        }
     }
 
     override fun getItemCount() = rankings.size
