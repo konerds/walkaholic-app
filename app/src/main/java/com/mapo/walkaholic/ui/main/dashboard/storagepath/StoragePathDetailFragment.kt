@@ -45,10 +45,10 @@ class StoragePathDetailFragment(
         )
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
                 is Resource.Success -> {
-                    viewModel.getStoragePath(it.value.user.id)
+                    viewModel.getStoragePath(_userResponse.value.data.first().id,)
                     viewModel.storagePathResponse.observe(viewLifecycleOwner, Observer { it2 ->
                         binding.storagePathRV.also {
                             it.layoutManager = LinearLayoutManager(requireContext())
@@ -85,7 +85,7 @@ class StoragePathDetailFragment(
 
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(_userResponse)
                 }
             }
         })

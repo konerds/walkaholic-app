@@ -7,22 +7,10 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingFragment
 
-class ChallengeRankingViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    var fragments : ArrayList<Fragment> = ArrayList()
-
-    override fun getItemCount(): Int = fragments.size
+class ChallengeRankingViewPagerAdapter(fragment: BaseSharedFragment<*, *, *>, private val num_pages: Int) : FragmentStateAdapter(fragment) {
+    override fun getItemCount(): Int = num_pages
 
     override fun createFragment(position: Int): Fragment {
-        return fragments[position]
-    }
-
-    fun addFragment(fragment: Fragment) {
-        fragments.add(fragment)
-        notifyItemInserted(fragments.size-1)
-    }
-
-    fun removeFragment() {
-        fragments.removeLast()
-        notifyItemRemoved(fragments.size)
+        return ChallengeDetailRankingFragment(position)
     }
 }
