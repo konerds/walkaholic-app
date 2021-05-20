@@ -23,11 +23,11 @@ class DashboardViewModel(
     private val _expInformationResponse: MutableLiveData<Resource<ExpInformationResponse>> = MutableLiveData()
     val expInformationResponse: LiveData<Resource<ExpInformationResponse>>
         get() = _expInformationResponse
-    private val _userCharacterResponse: MutableLiveData<Resource<UserCharacterResponse>> = MutableLiveData()
-    val userCharacterResponse: LiveData<Resource<UserCharacterResponse>>
-        get() = _userCharacterResponse
-    private val _characterItemResponse: MutableLiveData<Resource<CharacterItemResponse>> = MutableLiveData()
-    val characterItemResponse: LiveData<Resource<CharacterItemResponse>>
+    private val _userCharacterFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> = MutableLiveData()
+    val userCharacterFilenameResponse: LiveData<Resource<UserCharacterFilenameResponse>>
+        get() = _userCharacterFilenameResponse
+    private val _characterItemResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
+    val characterItemResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
         get() = _characterItemResponse
     private val _weatherDustResponse: MutableLiveData<Resource<WeatherDustResponse>> = MutableLiveData()
     val weatherDustResponse: LiveData<Resource<WeatherDustResponse>>
@@ -77,7 +77,7 @@ class DashboardViewModel(
 
     fun getUserCharacterFilename(userId: Long) {
         viewModelScope.launch {
-            _userCharacterResponse.value = mainRepository.getUserCharacterFilename(userId)
+            _userCharacterFilenameResponse.value = mainRepository.getUserCharacterFilename(userId)
         }
     }
 

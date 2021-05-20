@@ -49,7 +49,15 @@ class MainRepository(
     }
 
     suspend fun getUserCharacterFilename(userId: Long) = safeApiCall {
-        api.getUserCharacter(userId.toString())
+        api.getUserCharacterFilename(userId.toString())
+    }
+
+    suspend fun getUserCharacterEquipStatus(userId: Long) = safeApiCall {
+        api.getUserCharacterEquipStatus(userId.toString())
+    }
+
+    suspend fun getUserCharacterPreviewFilename(faceItemId : String, headItemId : String, userId: Long) = safeApiCall {
+        api.getUserCharacterPreviewFilename(faceItemId, headItemId, userId.toString())
     }
 
     suspend fun getCharacterItem(petId: Int) = safeApiCall {

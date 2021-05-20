@@ -2,9 +2,6 @@ package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import android.content.ContentValues.TAG
 import android.graphics.*
-import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,28 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.CharacterItem
-import com.mapo.walkaholic.data.model.ExpInformation
+import com.mapo.walkaholic.data.model.CharacterItemInfo
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
-import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
-import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewPagerAdapter
 import com.mapo.walkaholic.ui.snackbar
@@ -74,7 +63,7 @@ class DashboardCharacterShopFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.userCharacterItem = CharacterItem("1", "비타씨")
+        binding.userCharacterItem = CharacterItemInfo("1", "비타씨")
 
         val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
         pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0, this))

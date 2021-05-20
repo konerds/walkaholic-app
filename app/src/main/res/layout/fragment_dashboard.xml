@@ -17,7 +17,7 @@
 
         <variable
             name="userCharacterItem"
-            type="com.mapo.walkaholic.data.model.CharacterItem" />
+            type="com.mapo.walkaholic.data.model.CharacterItemInfo" />
 
         <variable
             name="expInformation"
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{userCharacterItem.pet_name}"
+                    android:text="@{user.nickName}"
                     android:textColor="@color/mdWhite1000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -157,9 +157,9 @@
                     android:gravity="center|center_vertical"
                     android:minWidth="220dp"
                     android:minHeight="32dp"
-                    app:full_text='@{userCharacterItem.pet_name + "가 " + user.nickName + "님을 기다렸어요!"}'
+                    app:full_text='@{user.nickName + "가 " + user.nickName + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
-                    app:span_text="@{userCharacterItem.pet_name}" />
+                    app:span_text="@{user.nickName}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

@@ -17,7 +17,7 @@
 
         <variable
             name="userCharacterItem"
-            type="com.mapo.walkaholic.data.model.CharacterItem" />
+            type="com.mapo.walkaholic.data.model.CharacterItemInfo" />
 
         <variable
             name="expInformation"
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{userCharacterItem.pet_name}"
+                    android:text="@{user.nickName}"
                     android:textColor="@color/mdWhite1000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
