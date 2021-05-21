@@ -7,5 +7,5 @@ data class Theme(
     val courseAddress : String,
     val courseFilename : String,
     val courseTime : String,
-    val courseDistance : Long
+    val courseDistance : String
 )

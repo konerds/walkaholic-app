@@ -50,9 +50,9 @@ class StoragePathViewModel(
         }
     }
 
-    fun getThemeDetail(themeId: String) {
+    /*fun getThemeDetail(themeId: String) {
         viewModelScope.launch {
             _themeResponse.value = mainRepository.getThemeDetail(themeId)
         }
-    }
+    }*/
 }

@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{storagePathItem.course_name}" />
+                android:text="@{storagePathItem.courseName}" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -62,21 +62,21 @@
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{storagePathItem.course_address}" />
+                    android:text="@{storagePathItem.courseAddress}" />
 
                 <TextView
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text='@{" | " + storagePathItem.course_distance + " | "}'/>
+                    android:text='@{" | " + storagePathItem.courseDistance + " | "}'/>
 
                 <TextView
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{storagePathItem.course_time}" />
+                    android:text="@{storagePathItem.courseTime}" />
 
             </LinearLayout>
 

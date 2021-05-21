@@ -50,9 +50,9 @@ class StoragePathDetailFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val dummyMission1 =
-            Theme("00", "01", "소나무 숲길", "피톤치드", "강북구","소나무_숲길", "1.8", "50", "10", "10", "1")
+            Theme(0,"소나무 숲길", "소나무 숲길", "피톤치드", "강북구","90", "1.8")
         val dummyMission2 =
-            Theme("00", "02", "경의선 숲길", "피톤치드", "마포구","소나무_숲길", "4.8", "30", "10", "10", "1")
+            Theme(0, "경의선 숲길", "경의선 숲길", "피톤치드", "마포구","90", "4.8")
         val dummyArrayList: ArrayList<Theme> = ArrayList()
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
@@ -68,7 +68,7 @@ class StoragePathDetailFragment(
                             is Resource.Success -> {
                                 //조회된 코스 목록의 아이디를 이용해 코스 상세 정보 조회
                                 //viewModel.getThemeDetail(_storagePathResponse.value.StoragePath.course_id)
-                                viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
+                                /*viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
                                     binding.storagePathRV.also {
                                         it.layoutManager = LinearLayoutManager(requireContext())
                                         it.setHasFixedSize(true)
@@ -89,7 +89,7 @@ class StoragePathDetailFragment(
                                             }
                                         }
                                     }
-                                })
+                                })*/
                             }
                             is Resource.Loading -> {
 
