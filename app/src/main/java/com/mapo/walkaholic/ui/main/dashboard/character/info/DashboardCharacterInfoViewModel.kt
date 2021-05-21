@@ -27,6 +27,9 @@ class DashboardCharacterInfoViewModel(
     private val _userCharacterEquipStatusResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
     val userCharacterEquipStatusResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
         get() = _userCharacterEquipStatusResponse
+    private val _statusUserCharacterInventoryItemResponse: MutableLiveData<Resource<UserInventoryItemStatusResponse>> = MutableLiveData()
+    val statusUserCharacterInventoryItemResponse: LiveData<Resource<UserInventoryItemStatusResponse>>
+        get() = _statusUserCharacterInventoryItemResponse
     private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
     val characterUriList: LiveData<Resource<CharacterUriResponse>>
         get() = _characterUriList
@@ -68,6 +71,12 @@ class DashboardCharacterInfoViewModel(
     fun getUserCharacterItem(petId: Int) {
         viewModelScope.launch {
             _userCharacterEquipStatusResponse.value = mainRepository.getCharacterItem(petId)
+        }
+    }
+
+    fun getStatusUserCharacterInventoryItem(userId : Long) {
+        viewModelScope.launch {
+            _statusUserCharacterInventoryItemResponse.value = mainRepository.getStatusUserCharacterInventoryItem(userId)
         }
     }
 

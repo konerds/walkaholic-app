@@ -43,7 +43,7 @@ class DashboardCharacterShopDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: DashboardCharacterShopDetailViewHolder, position: Int) {
-        if(arrayListItemInfo[position].itemId.isNullOrEmpty()) { }
+        if(arrayListItemInfo[position].itemName.isNullOrEmpty()) { }
         else {
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemShopLayout.setOnClickListener {

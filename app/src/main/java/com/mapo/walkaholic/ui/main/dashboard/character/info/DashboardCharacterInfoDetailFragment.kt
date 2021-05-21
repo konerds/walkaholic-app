@@ -3,24 +3,25 @@ package com.mapo.walkaholic.ui.main.dashboard.character.info
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
@@ -30,8 +31,6 @@ class DashboardCharacterInfoDetailFragment(
     private val position: Int
 ) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>(),
     CharacterItemSlotClickListener {
-
-    val arrayListInventoryItem = arrayListOf<ItemInfo>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedViewModel : DashboardCharacterInfoViewModel by viewModels {
@@ -48,65 +47,106 @@ class DashboardCharacterInfoDetailFragment(
             EventObserver(this@DashboardCharacterInfoDetailFragment::showSnackbarEvent)
         )
         super.onViewCreated(view, savedInstanceState)
-        arrayListInventoryItem.add(ItemInfo("face", "0", "진한눈썹", "3000"))
-        arrayListInventoryItem.add(ItemInfo("face", "1", "속눈썹펌", "3000"))
-        arrayListInventoryItem.add(ItemInfo("face", "2", "수줍은볼", "3000"))
-        arrayListInventoryItem.add(ItemInfo("face", "3", "발그레볼", "3000"))
-        arrayListInventoryItem.add(ItemInfo("hair", "0", "똑딱이핀", "3000"))
-        arrayListInventoryItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
-        arrayListInventoryItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
-        binding.dashCharacterInfoDetailRV.also {
-            val linearLayoutManager = LinearLayoutManager(requireContext())
-            linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-            it.layoutManager = linearLayoutManager
-            it.setHasFixedSize(true)
-            when (position) {
-                0 -> {
-                    val filterResult =
-                        arrayListInventoryItem.filter { itemInfo -> itemInfo.itemType == "face" } as ArrayList<ItemInfo>
-                    when (filterResult.size) {
-                        0 -> {
-                            filterResult.add(ItemInfo(null, null, null, null))
-                            filterResult.add(ItemInfo(null, null, null, null))
-                            filterResult.add(ItemInfo(null, null, null, null))
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
+                is Resource.Success -> {
+                    when (_userResponse.value.code) {
+                        "200" -> {
+                            viewModel.getStatusUserCharacterInventoryItem(_userResponse.value.data.first().id)
+                            viewModel.statusUserCharacterInventoryItemResponse.observe(viewLifecycleOwner, Observer { _statusUserCharacterInventoryItem ->
+                                when(_statusUserCharacterInventoryItem) {
+                                    is Resource.Success -> {
+                                        when(_statusUserCharacterInventoryItem.value.code) {
+                                            "200" -> {
+                                                binding.dashCharacterInfoDetailRV.also { _dashCharacterInfoDetailRV ->
+                                                    val linearLayoutManager = LinearLayoutManager(requireContext())
+                                                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                                                    _dashCharacterInfoDetailRV.layoutManager = linearLayoutManager
+                                                    _dashCharacterInfoDetailRV.setHasFixedSize(true)
+                                                    when (position) {
+                                                        0 -> {
+                                                            val filterResult =
+                                                                _statusUserCharacterInventoryItem.value.data.filter { _data -> _data.itemType == "face" } as ArrayList<ItemInfo>
+                                                            when (filterResult.size) {
+                                                                0 -> {
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                }
+                                                                1 -> {
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                }
+                                                                2 -> {
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                }
+                                                                else -> {
+                                                                }
+                                                            }
+                                                            _dashCharacterInfoDetailRV.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
+                                                        }
+                                                        1 -> {
+                                                            val filterResult =
+                                                                _statusUserCharacterInventoryItem.value.data.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
+                                                            when (filterResult.size) {
+                                                                0 -> {
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                }
+                                                                1 -> {
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                }
+                                                                2 -> {
+                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                }
+                                                                else -> {
+                                                                }
+                                                            }
+                                                            _dashCharacterInfoDetailRV.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
+                                                        }
+                                                        else -> {
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            "400" -> {
+                                                // Error
+                                            }
+                                            else -> {
+                                                // Error
+                                            }
+                                        }
+                                    }
+                                    is Resource.Loading -> {
+                                        // Loading
+                                    }
+                                    is Resource.Failure -> {
+                                        // Network Error
+                                        handleApiError(_statusUserCharacterInventoryItem) { viewModel.getStatusUserCharacterInventoryItem(_userResponse.value.data.first().id) }
+                                    }
+                                }
+                            })
                         }
-                        1 -> {
-                            filterResult.add(ItemInfo(null, null, null, null))
-                            filterResult.add(ItemInfo(null, null, null, null))
-                        }
-                        2 -> {
-                            filterResult.add(ItemInfo(null, null, null, null))
+                        "400" -> {
+                            // Error
                         }
                         else -> {
+                            // Error
                         }
                     }
-                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
                 }
-                1 -> {
-                    val filterResult =
-                        arrayListInventoryItem.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
-                    when (filterResult.size) {
-                        0 -> {
-                            filterResult.add(ItemInfo(null, null, null, null))
-                            filterResult.add(ItemInfo(null, null, null, null))
-                            filterResult.add(ItemInfo(null, null, null, null))
-                        }
-                        1 -> {
-                            filterResult.add(ItemInfo(null, null, null, null))
-                            filterResult.add(ItemInfo(null, null, null, null))
-                        }
-                        2 -> {
-                            filterResult.add(ItemInfo(null, null, null, null))
-                        }
-                        else -> {
-                        }
-                    }
-                    it.adapter = DashboardCharacterInfoDetailAdapter(filterResult, this)
+                is Resource.Loading -> {
+
                 }
-                else -> {
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_userResponse) { }
                 }
             }
-        }
+        })
+        viewModel.getDash()
         binding.dashCharacterInfoInitLayout.setOnClickListener {
             Log.d(ContentValues.TAG,"Click Init Button Event")
             //binding.dashCharacterInfoDetailRV

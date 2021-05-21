@@ -32,31 +32,31 @@ class TodayWeatherResponseDeserializer : JsonDeserializer<TodayWeatherResponse> 
                                 rawWeatherData?.forEachIndexed { i3, jsonElement3 ->
                                     if (jsonElement3.asJsonObject["category"].asString.toString().trim() == "SKY" && (jsonElement3.asJsonObject["fcstTime"].asString.toString().trim() == timeFormat.format(requireDate))) {
                                         return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), when (jsonElement3.asJsonObject["fcstValue"].asInt) {
-                                            1 -> "맑음"
-                                            2, 3 -> "구름"
-                                            4 -> "흐림"
-                                            else -> "오류"
+                                            1 -> "1" // 맑음
+                                            2, 3 -> "2" // 구름
+                                            4 -> "3" // 흐림
+                                            else -> "7" // 오류
                                         }))
                                     } else { }
                                 }
                             }
                             1, 4, 5 -> {
-                                return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "비"))
+                                return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "6")) // 비
                             }
                             2, 6 -> {
-                                return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "진눈개비"))
+                                return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "4")) // 진눈개비
                             }
                             3, 7 -> {
-                                return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "눈"))
+                                return TodayWeatherResponse(false, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "5")) // 눈
                             }
                             else -> {
-                                return TodayWeatherResponse(true, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "오류"))
+                                return TodayWeatherResponse(true, TodayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim(), "7")) // 오류
                             }
                         }
                     }
                 }
             } else { }
         }
-        return TodayWeatherResponse(true, TodayWeather("오류", "오류"))
+        return TodayWeatherResponse(true, TodayWeather("오류", "7")) // 오류
     }
 }

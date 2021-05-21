@@ -15,7 +15,6 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailThemeBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
@@ -42,29 +41,36 @@ class ThemeDetailFragment(
             EventObserver(this@ThemeDetailFragment::showSnackbarEvent)
         )
         super.onViewCreated(view, savedInstanceState)
-        viewModel.themeResponse.observe(viewLifecycleOwner, Observer { it2 ->
-            binding.themeRVTheme.also {
-                it.layoutManager = LinearLayoutManager(requireContext())
-                it.setHasFixedSize(true)
-                when (it2) {
-                    is Resource.Success -> {
-                        if (!it2.value.error) {
-                            it.adapter =
-                                it2.value.theme?.let { it3 -> ThemeDetailAdapter(it3) }
+        viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
+            when (_themeResponse) {
+                is Resource.Success -> {
+                    when (_themeResponse.value.code) {
+                        "200" -> {
+                            binding.themeRVTheme.also { _themeRVTheme ->
+                                _themeRVTheme.layoutManager = LinearLayoutManager(requireContext())
+                                _themeRVTheme.setHasFixedSize(true)
+                                _themeRVTheme.adapter = ThemeDetailAdapter(_themeResponse.value.data)
+                            }
                         }
-                        Log.e("Theme_Detail", it2.value.theme.toString())
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
                     }
-                    is Resource.Loading -> {
+                    Log.e("Theme", _themeResponse.value.data.toString())
+                }
+                is Resource.Loading -> {
 
-                    }
-                    is Resource.Failure -> {
-                        it2.errorBody?.let { it1 -> Log.e("Theme_Detail", it1.string()) }
-                        handleApiError(it2)
-                    }
+                }
+                is Resource.Failure -> {
+                    _themeResponse.errorBody?.let { _errorBody -> Log.e("Theme_Detail", _errorBody.string()) }
+                    handleApiError(_themeResponse)
                 }
             }
         })
-        viewModel.getThemeDetail(when(position) { 0 -> "00" 1 -> "01" 2 -> "02" else -> ""})
+        viewModel.getTheme(when(position) { 0 -> "001" 1 -> "002" 2 -> "003" else -> ""})
     }
 
     private fun showToastEvent(contents: String) {

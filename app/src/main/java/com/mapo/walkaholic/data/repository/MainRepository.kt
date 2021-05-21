@@ -143,12 +143,28 @@ class MainRepository(
         }
     }
 
+    suspend fun getFilenameWeather(weatherCode : String) = safeApiCall {
+        api.getFilenameWeather(weatherCode)
+    }
+
     suspend fun getFilenameThemeCategoryImage() = safeApiCall {
         api.getFilenameThemeCategoryImage()
     }
 
-    suspend fun getThemeDetail(themeId: String) = safeApiCall {
-        api.getThemeDetail(themeId)
+    suspend fun getCategoryTheme() = safeApiCall {
+        api.getCategoryTheme()
+    }
+
+    suspend fun getTheme(themeCode: String) = safeApiCall {
+        api.getTheme(themeCode)
+    }
+
+    suspend fun getStatusUserCharacterInventoryItem(userId : Long) = safeApiCall {
+        api.getStatusUserCharacterInventoryItem(userId.toString())
+    }
+
+    suspend fun getStatusShopSaleItem() = safeApiCall {
+        api.getStatusShopSaleItem()
     }
 
     suspend fun getCharacterUriList(characterType: String) = safeApiCall {

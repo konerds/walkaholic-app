@@ -66,7 +66,7 @@
                 android:orientation="horizontal">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/dashCharacterInfoDetailRV"
+                    android:id="@+id/dashCharacterShopDetailRV"
                     android:layout_width="match_parent"
                     android:layout_height="132dp"
                     tools:listitem="@layout/item_slot_shop" />

@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
                 android:visibility="gone"
-                app:setImage='@{"item_" + itemInfo.itemType + "_" + itemInfo.itemId + ".png"}' />
+                app:setImage="@{itemInfo.itemFilename}" />
         </LinearLayout>
 
         <ImageView

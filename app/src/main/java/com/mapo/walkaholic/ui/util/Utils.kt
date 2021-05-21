@@ -132,23 +132,6 @@ fun formatText(textView: TextView, full_text: String?, span_text: String?, span_
     textView.text = spannable
 }
 
-@BindingAdapter("app:theme_code")
-fun bindDashTheme(view: ImageView, theme_code: String) {
-    when (theme_code) {
-        "00" -> {
-            setImageUrl(view, "theme_healing.png")
-        }
-        "01" -> {
-            setImageUrl(view, "theme_date.png")
-        }
-        "02" -> {
-            setImageUrl(view, "theme_exercise.png")
-        }
-        else -> {
-        }
-    }
-}
-
 @BindingAdapter("app:setImage")
 fun setImageUrl(view: ImageView, imageSrc: String?) {
     if(!imageSrc.isNullOrEmpty()) {

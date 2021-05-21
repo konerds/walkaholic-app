@@ -23,6 +23,9 @@ class DashboardCharacterShopViewModel(
     private val _userCharacterFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> = MutableLiveData()
     val userCharacterFilenameResponse: LiveData<Resource<UserCharacterFilenameResponse>>
         get() = _userCharacterFilenameResponse
+    private val _statusShopSaleItemResponse: MutableLiveData<Resource<ShopSaleItemStatusResponse>> = MutableLiveData()
+    val statusShopSaleItemResponse: LiveData<Resource<ShopSaleItemStatusResponse>>
+        get() = _statusShopSaleItemResponse
     private val _characterItemResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
     val characterItemResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
         get() = _characterItemResponse
@@ -52,6 +55,12 @@ class DashboardCharacterShopViewModel(
     fun getUserCharacterFilename(userId: Long) {
         viewModelScope.launch {
             _userCharacterFilenameResponse.value = mainRepository.getUserCharacterFilename(userId)
+        }
+    }
+
+    fun getStatusShopSaleItem() {
+        viewModelScope.launch {
+            _statusShopSaleItemResponse.value = mainRepository.getStatusShopSaleItem()
         }
     }
 
