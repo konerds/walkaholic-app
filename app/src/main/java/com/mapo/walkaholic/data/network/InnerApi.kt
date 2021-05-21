@@ -36,19 +36,34 @@ interface InnerApi {
 
     @GET("user/{id}/item/view")
     suspend fun getUserCharacterPreviewFilename(
+        @Path("id") id: String,
         @Query("faceItemId") faceItemId : String,
-        @Query("headItemId") headItemId : String,
-        @Path("id") id: String
-    ): UserCharacterFilenameResponse
+        @Query("headItemId") headItemId : String
+    ): UserCharacterPreviewFilenameResponse
+
+    @GET("global/resource/weather/{code}")
+    suspend fun getFilenameWeather(
+        @Path("code") code: String
+    ) : FilenameWeatherResponse
+
+    @GET("global/resource/theme/name")
+    suspend fun getCategoryTheme(): CategoryThemeResponse
 
     @GET("global/resource/theme")
     suspend fun getFilenameThemeCategoryImage(): FilenameThemeCategoryImageResponse
 
-    @FormUrlEncoded
-    @POST("info/themedetail")
-    suspend fun getThemeDetail(
-        @Field("theme_id") themeId: String
+    @GET("course/theme")
+    suspend fun getTheme(
+        @Query("themeCode") themeCode: String
     ): ThemeResponse
+
+    @GET("user/{id}/item")
+    suspend fun getStatusUserCharacterInventoryItem(
+        @Path("id") id: String
+    ) : UserInventoryItemStatusResponse
+
+    @GET("item")
+    suspend fun getStatusShopSaleItem() : ShopSaleItemStatusResponse
 
     @FormUrlEncoded
     @POST("map")

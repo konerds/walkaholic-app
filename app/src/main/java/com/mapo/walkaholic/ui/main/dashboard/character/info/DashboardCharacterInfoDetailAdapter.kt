@@ -55,7 +55,7 @@ class DashboardCharacterInfoDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: DashboardCharacterInfoDetailViewHolder, position: Int) {
-        if(arrayListItemInfo[position].itemId.isNullOrEmpty()) {
+        if(arrayListItemInfo[position].itemName.isNullOrEmpty()) {
             holder.setItemInfo(null)
         } else {
             holder.setItemInfo(arrayListItemInfo[position])

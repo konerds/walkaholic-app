@@ -47,9 +47,12 @@ class DashboardViewModel(
     private val _yesterdayWeatherResponse: MutableLiveData<Resource<YesterdayWeatherResponse>> = MutableLiveData()
     val yesterdayWeatherResponse: LiveData<Resource<YesterdayWeatherResponse>>
         get() = _yesterdayWeatherResponse
-    private val _Filename_themeCategoryImageResponse: MutableLiveData<Resource<FilenameThemeCategoryImageResponse>> = MutableLiveData()
+    private val _filenameWeatherResponse: MutableLiveData<Resource<FilenameWeatherResponse>> = MutableLiveData()
+    val filenameWeatherResponse: LiveData<Resource<FilenameWeatherResponse>>
+        get() = _filenameWeatherResponse
+    private val _filenameThemeCategoryImageResponse: MutableLiveData<Resource<FilenameThemeCategoryImageResponse>> = MutableLiveData()
     val filenameThemeCategoryImageResponse: LiveData<Resource<FilenameThemeCategoryImageResponse>>
-        get() = _Filename_themeCategoryImageResponse
+        get() = _filenameThemeCategoryImageResponse
     private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
     val characterUriList: LiveData<Resource<CharacterUriResponse>>
         get() = _characterUriList
@@ -150,9 +153,15 @@ class DashboardViewModel(
         }
     }
 
+    fun getFilenameWeather(weatherCode : String) {
+        viewModelScope.launch {
+            _filenameWeatherResponse.value = mainRepository.getFilenameWeather(weatherCode)
+        }
+    }
+
     fun getFilenameThemeCategoryImage() {
         viewModelScope.launch {
-            _Filename_themeCategoryImageResponse.value = mainRepository.getFilenameThemeCategoryImage()
+            _filenameThemeCategoryImageResponse.value = mainRepository.getFilenameThemeCategoryImage()
         }
     }
 

@@ -2,6 +2,9 @@ package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
 import android.content.ContentValues.TAG
 import android.graphics.*
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,26 +12,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.CharacterItemInfo
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragment
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewPagerAdapter
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.selects.select
 import kotlin.math.*
 
 class DashboardCharacterShopFragment :
@@ -79,7 +91,343 @@ class DashboardCharacterShopFragment :
                 else -> ""
             }
         }.attach()
-        /*viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
+                is Resource.Success -> {
+                    when (_userResponse.value.code) {
+                        "200" -> {
+                            binding.user = _userResponse.value.data.first()
+                            viewModel.getUserCharacterEquipStatus(_userResponse.value.data.first().id)
+                            viewModel.userCharacterEquipStatusResponse.observe(
+                                viewLifecycleOwner,
+                                Observer { _userCharacterEquipStatusResponse ->
+                                    when (_userCharacterEquipStatusResponse) {
+                                        is Resource.Success -> {
+                                            when (_userCharacterEquipStatusResponse.value.code) {
+                                                "200" -> {
+                                                    with(binding) {
+                                                        viewModel!!.getExpInformation(_userResponse.value.data.first().id)
+                                                        viewModel!!.expInformationResponse.observe(
+                                                            viewLifecycleOwner,
+                                                            Observer { _expInformationResponse ->
+                                                                when (_expInformationResponse) {
+                                                                    is Resource.Success -> {
+                                                                        when (_expInformationResponse.value.code) {
+                                                                            "200" -> {
+                                                                                binding.expInformation =
+                                                                                    _expInformationResponse.value.data.first()
+                                                                                _userCharacterEquipStatusResponse.value.data.forEachIndexed { dataIndex, dataElement ->
+                                                                                    val userCharacterEquipStatus =
+                                                                                        mutableMapOf<String, String>()
+                                                                                    if (dataElement.itemType == "hair") {
+                                                                                        userCharacterEquipStatus["hair"] =
+                                                                                            dataElement.itemId
+                                                                                    } else if (dataElement.itemType == "face") {
+                                                                                        userCharacterEquipStatus["face"] =
+                                                                                            dataElement.itemId
+                                                                                    }
+                                                                                    if ((dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
+                                                                                        viewModel!!.getUserCharacterPreviewFilename(
+                                                                                            _userResponse.value.data.first().id,
+                                                                                            if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                                userCharacterEquipStatus["face"]
+                                                                                                    .toString()
+                                                                                            } else {
+                                                                                                ""
+                                                                                            },
+                                                                                            if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                                userCharacterEquipStatus["hair"]
+                                                                                                    .toString()
+                                                                                            } else {
+                                                                                                ""
+                                                                                            }
+                                                                                        )
+                                                                                        viewModel!!.userCharacterPreviewFilenameResponse.observe(
+                                                                                            viewLifecycleOwner,
+                                                                                            Observer { _userCharacterPreviewFilenameResponse ->
+                                                                                                when (_userCharacterPreviewFilenameResponse) {
+                                                                                                    is Resource.Success -> {
+                                                                                                        when (_userCharacterPreviewFilenameResponse.value.code) {
+                                                                                                            "200" -> {
+                                                                                                                var animationDrawable =
+                                                                                                                    AnimationDrawable()
+                                                                                                                animationDrawable.isOneShot =
+                                                                                                                    false
+                                                                                                                _userCharacterPreviewFilenameResponse.value.data.forEachIndexed { filenameIndex, filenameElement ->
+                                                                                                                    Glide.with(
+                                                                                                                        requireContext()
+                                                                                                                    )
+                                                                                                                        .asBitmap()
+                                                                                                                        .load(
+                                                                                                                            "${viewModel!!.getResourceBaseUri()}${filenameElement.filename}"
+                                                                                                                        )
+                                                                                                                        .diskCacheStrategy(
+                                                                                                                            DiskCacheStrategy.NONE
+                                                                                                                        )
+                                                                                                                        .skipMemoryCache(
+                                                                                                                            true
+                                                                                                                        )
+                                                                                                                        .into(
+                                                                                                                            object :
+                                                                                                                                CustomTarget<Bitmap>() {
+                                                                                                                                override fun onLoadCleared(
+                                                                                                                                    placeholder: Drawable?
+                                                                                                                                ) {
+                                                                                                                                }
+
+                                                                                                                                override fun onResourceReady(
+                                                                                                                                    resource: Bitmap,
+                                                                                                                                    transition: Transition<in Bitmap>?
+                                                                                                                                ) {
+                                                                                                                                    val characterBitmap =
+                                                                                                                                        BitmapDrawable(
+                                                                                                                                            resource
+                                                                                                                                        )
+                                                                                                                                    animationDrawable.addFrame(
+                                                                                                                                        characterBitmap,
+                                                                                                                                        ANIMATION_DURATION
+                                                                                                                                    )
+                                                                                                                                    if (animationDrawable.numberOfFrames == _userCharacterPreviewFilenameResponse.value.data.size) {
+                                                                                                                                        /*val charExp =
+                                                                                                                                            (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
+                                                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
+                                                                                                                                        val radius =
+                                                                                                                                            CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
+                                                                                                                                        val bitmapInfoSheet =
+                                                                                                                                            Bitmap.createBitmap(
+                                                                                                                                                (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
+                                                                                                                                                (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
+                                                                                                                                                Bitmap.Config.ARGB_8888
+                                                                                                                                            )
+                                                                                                                                        val canvasInfo =
+                                                                                                                                            Canvas(
+                                                                                                                                                bitmapInfoSheet
+                                                                                                                                            )
+                                                                                                                                        val startAngle =
+                                                                                                                                            135F
+                                                                                                                                        val sweepAngle =
+                                                                                                                                            270F
+                                                                                                                                        val paint =
+                                                                                                                                            Paint()
+                                                                                                                                        paint.isAntiAlias =
+                                                                                                                                            true
+                                                                                                                                        paint.color =
+                                                                                                                                            Color.parseColor(
+                                                                                                                                                "#C9C9C9"
+                                                                                                                                            )
+                                                                                                                                        paint.style =
+                                                                                                                                            Paint.Style.FILL
+                                                                                                                                        var oval =
+                                                                                                                                            RectF(
+                                                                                                                                                0.toFloat(),
+                                                                                                                                                0.toFloat(),
+                                                                                                                                                canvasInfo.width.toFloat(),
+                                                                                                                                                canvasInfo.height.toFloat()
+                                                                                                                                            )
+                                                                                                                                        canvasInfo.drawArc(
+                                                                                                                                            oval,
+                                                                                                                                            startAngle,
+                                                                                                                                            sweepAngle,
+                                                                                                                                            true,
+                                                                                                                                            paint
+                                                                                                                                        )
+                                                                                                                                        paint.color =
+                                                                                                                                            Color.parseColor(
+                                                                                                                                                "#D46544"
+                                                                                                                                            )
+                                                                                                                                        canvasInfo.drawArc(
+                                                                                                                                            oval,
+                                                                                                                                            startAngle,
+                                                                                                                                            2.7F * charExp,
+                                                                                                                                            true,
+                                                                                                                                            paint
+                                                                                                                                        )
+                                                                                                                                        paint.xfermode =
+                                                                                                                                            PorterDuffXfermode(
+                                                                                                                                                PorterDuff.Mode.CLEAR
+                                                                                                                                            )
+                                                                                                                                        oval =
+                                                                                                                                            RectF(
+                                                                                                                                                ((canvasInfo.width / 2) - radius).toFloat(),
+                                                                                                                                                ((canvasInfo.height / 2) - radius).toFloat(),
+                                                                                                                                                ((canvasInfo.width / 2) + radius).toFloat(),
+                                                                                                                                                ((canvasInfo.height / 2) + radius).toFloat()
+                                                                                                                                            )
+                                                                                                                                        canvasInfo.drawArc(
+                                                                                                                                            oval,
+                                                                                                                                            startAngle,
+                                                                                                                                            sweepAngle,
+                                                                                                                                            true,
+                                                                                                                                            paint
+                                                                                                                                        )
+                                                                                                                                        binding.dashIvCharacterInfo.setImageBitmap(
+                                                                                                                                            bitmapInfoSheet
+                                                                                                                                        )
+                                                                                                                                        binding.dashIvCharacter.minimumWidth =
+                                                                                                                                            resource.width * PIXELS_PER_METRE
+                                                                                                                                        binding.dashIvCharacter.minimumHeight =
+                                                                                                                                            resource.height * PIXELS_PER_METRE
+                                                                                                                                        binding.dashIvCharacter.setImageDrawable(
+                                                                                                                                            animationDrawable
+                                                                                                                                        )
+                                                                                                                                        animationDrawable =
+                                                                                                                                            binding.dashIvCharacter.drawable as AnimationDrawable
+                                                                                                                                        animationDrawable.start()
+        */
+                                                                                                                                        val charExp =
+                                                                                                                                            (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
+                                                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
+                                                                                                                                        binding.dashCharacterShopIvCharacter.minimumWidth =
+                                                                                                                                            resource.width * PIXELS_PER_METRE
+                                                                                                                                        binding.dashCharacterShopIvCharacter.minimumHeight =
+                                                                                                                                            resource.height * PIXELS_PER_METRE
+                                                                                                                                        binding.dashCharacterShopIvCharacter.setImageDrawable(
+                                                                                                                                            animationDrawable
+                                                                                                                                        )
+                                                                                                                                        animationDrawable =
+                                                                                                                                            binding.dashCharacterShopIvCharacter.drawable as AnimationDrawable
+                                                                                                                                        animationDrawable.start()
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            })
+                                                                                                                }
+                                                                                                            }
+                                                                                                            "400" -> {
+                                                                                                                // Error
+                                                                                                            }
+                                                                                                            else -> {
+                                                                                                                // Error
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    is Resource.Loading -> {
+                                                                                                        // Loading
+                                                                                                    }
+                                                                                                    is Resource.Failure -> {
+                                                                                                        handleApiError(
+                                                                                                            _userCharacterPreviewFilenameResponse
+                                                                                                        ) {
+                                                                                                            viewModel!!.getUserCharacterPreviewFilename(
+                                                                                                                _userResponse.value.data.first().id,
+                                                                                                                if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                                                    userCharacterEquipStatus.get(
+                                                                                                                        "face"
+                                                                                                                    )
+                                                                                                                        .toString()
+                                                                                                                } else {
+                                                                                                                    ""
+                                                                                                                },
+                                                                                                                if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                                                    userCharacterEquipStatus.get(
+                                                                                                                        "hair"
+                                                                                                                    )
+                                                                                                                        .toString()
+                                                                                                                } else {
+                                                                                                                    ""
+                                                                                                                }
+                                                                                                            )
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            })
+                                                                                    } else {
+
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            "400" -> {
+                                                                                Toast.makeText(
+                                                                                    requireContext(),
+                                                                                    getString(R.string.err_user),
+                                                                                    Toast.LENGTH_SHORT
+                                                                                ).show()
+                                                                                //logout()
+                                                                            }
+                                                                            else -> {
+                                                                                Toast.makeText(
+                                                                                    requireContext(),
+                                                                                    getString(R.string.err_user),
+                                                                                    Toast.LENGTH_SHORT
+                                                                                ).show()
+                                                                                //logout()
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    is Resource.Failure -> {
+                                                                        // Network Error
+                                                                        handleApiError(
+                                                                            _expInformationResponse
+                                                                        )
+                                                                        Toast.makeText(
+                                                                            requireContext(),
+                                                                            getString(R.string.err_user),
+                                                                            Toast.LENGTH_SHORT
+                                                                        ).show()
+                                                                        //logout()
+                                                                    }
+                                                                }
+                                                            })
+                                                    }
+                                                }
+                                                "400" -> {
+                                                    // Error
+                                                }
+                                                else -> {
+                                                    // Error
+                                                }
+                                            }
+                                        }
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            // Network Error
+                                            handleApiError(_userCharacterEquipStatusResponse) {
+                                                viewModel.getUserCharacterEquipStatus(
+                                                    _userResponse.value.data.first().id
+                                                )
+                                            }
+                                        }
+                                    }
+                                })
+                        }
+                        "400" -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //logout()
+                            //requireActivity().startNewActivity(AuthActivity::class.java)
+                        }
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_user),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //logout()
+                            //requireActivity().startNewActivity(AuthActivity::class.java)
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                }
+                is Resource.Failure -> {
+                    handleApiError(_userResponse)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.err_user),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    //logout()
+                    //requireActivity().startNewActivity(AuthActivity::class.java)
+                }
+            }
+        })
+        /*
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
                     when (_userResponse.value.code) {
@@ -365,15 +713,64 @@ class DashboardCharacterShopFragment :
         position: Int,
         selectedSlotShopMap: MutableMap<Int, Triple<Boolean, ItemInfo, Boolean>>
     ) {
-        if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
-            selectedSlotShopMapHair = selectedSlotShopMap
-        } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
-            selectedSlotShopMapFace = selectedSlotShopMap
-        }
         Log.d(TAG, "Click Event From Shop Adapter")
         when (view.id) {
             R.id.itemShopLayout -> {
                 Log.d(TAG, "Click Event In Shop Layout")
+
+                if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
+                    selectedSlotShopMapHair = selectedSlotShopMap
+                } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
+                    selectedSlotShopMapFace = selectedSlotShopMap
+                }
+
+                val _lastSelectedFace : String =
+                    if(selectedSlotShopMap.filter { faceValue -> faceValue.value.third }.isNotEmpty()) {
+                        selectedSlotShopMap.filter { faceValue -> faceValue.value.third }[0]!!.second.itemId.toString()
+                    } else {
+                        if(selectedSlotShopMap.filter { faceValue -> faceValue.value.first }.isNotEmpty()) {
+                            selectedSlotShopMap.filter { faceValue -> faceValue.value.first }[0]!!.second.itemId.toString()
+                        } else {
+                            ""
+                        }
+                    }
+
+                val _lastSelectedHair : String =
+                    if(selectedSlotShopMap.filter { hairValue -> hairValue.value.third }.isNotEmpty()) {
+                        selectedSlotShopMap.filter { hairValue -> hairValue.value.third }[0]!!.second.itemId.toString()
+                    } else {
+                        if(selectedSlotShopMap.filter { hairValue -> hairValue.value.first }.isNotEmpty()) {
+                            selectedSlotShopMap.filter { hairValue -> hairValue.value.first }[0]!!.second.itemId.toString()
+                        } else {
+                            ""
+                        }
+                    }
+
+                viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+                    when(_userResponse) {
+                        is Resource.Success -> {
+                            when(_userResponse.value.code) {
+                                "200" -> {
+                                    viewModel.getUserCharacterPreviewFilename(_userResponse.value.data.first().id, _lastSelectedFace, _lastSelectedHair)
+                                }
+                                "400" -> {
+                                    // Error
+                                }
+                                else -> {
+                                    // Error
+                                }
+                            }
+                        }
+                        is Resource.Loading -> {
+                            // Loading
+                        }
+                        is Resource.Failure -> {
+                            // Network Error
+                            handleApiError(_userResponse)
+                        }
+                    }
+                })
+
                 if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
                     binding.dashCharacterShopTvIntro1.text =
                         (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace?.filter { it.value.first }!!.size).toString()

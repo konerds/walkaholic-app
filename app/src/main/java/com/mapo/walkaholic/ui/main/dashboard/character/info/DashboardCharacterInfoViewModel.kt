@@ -21,12 +21,15 @@ class DashboardCharacterInfoViewModel(
     private val _expInformationResponse: MutableLiveData<Resource<ExpInformationResponse>> = MutableLiveData()
     val expInformationResponse: LiveData<Resource<ExpInformationResponse>>
         get() = _expInformationResponse
-    private val _userCharacterPreviewFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> = MutableLiveData()
-    val userCharacterPreviewFilenameResponse: LiveData<Resource<UserCharacterFilenameResponse>>
+    private val _userCharacterPreviewFilenameResponse: MutableLiveData<Resource<UserCharacterPreviewFilenameResponse>> = MutableLiveData()
+    val userCharacterPreviewFilenameResponse: LiveData<Resource<UserCharacterPreviewFilenameResponse>>
         get() = _userCharacterPreviewFilenameResponse
     private val _userCharacterEquipStatusResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
     val userCharacterEquipStatusResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
         get() = _userCharacterEquipStatusResponse
+    private val _statusUserCharacterInventoryItemResponse: MutableLiveData<Resource<UserInventoryItemStatusResponse>> = MutableLiveData()
+    val statusUserCharacterInventoryItemResponse: LiveData<Resource<UserInventoryItemStatusResponse>>
+        get() = _statusUserCharacterInventoryItemResponse
     private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
     val characterUriList: LiveData<Resource<CharacterUriResponse>>
         get() = _characterUriList
@@ -59,15 +62,21 @@ class DashboardCharacterInfoViewModel(
         }
     }
 
-    fun getUserCharacterPreviewFilename(faceItemId : String, headItemId : String, userId: Long) {
+    fun getUserCharacterPreviewFilename(userId: Long, faceItemId : String, headItemId : String) {
         viewModelScope.launch {
-            _userCharacterPreviewFilenameResponse.value = mainRepository.getUserCharacterPreviewFilename(faceItemId, headItemId, userId)
+            _userCharacterPreviewFilenameResponse.value = mainRepository.getUserCharacterPreviewFilename(userId, faceItemId, headItemId)
         }
     }
 
     fun getUserCharacterItem(petId: Int) {
         viewModelScope.launch {
             _userCharacterEquipStatusResponse.value = mainRepository.getCharacterItem(petId)
+        }
+    }
+
+    fun getStatusUserCharacterInventoryItem(userId : Long) {
+        viewModelScope.launch {
+            _statusUserCharacterInventoryItemResponse.value = mainRepository.getStatusUserCharacterInventoryItem(userId)
         }
     }
 

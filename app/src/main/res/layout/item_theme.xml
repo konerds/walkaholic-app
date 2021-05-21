@@ -25,7 +25,7 @@
                 android:layout_width="328dp"
                 android:layout_height="114dp"
                 android:layout_gravity="center_horizontal"
-                app:setImage="@{themeItem.course_filename}" />
+                app:setImage="@{themeItem.courseFilename}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text='@{themeItem.course_title}'
+                    android:text='@{themeItem.courseTitle}'
                     android:textColor="@color/mdWhite1000" />
 
                 <TextView
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text='@{themeItem.course_name}'
+                    android:text='@{themeItem.courseName}'
                     android:textColor="@color/mdWhite1000" />
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text='@{themeItem.course_address + " | 걷는거리 " + themeItem.course_distance + "KM | 소요시간 " + themeItem.course_time}'
+                    android:text='@{themeItem.courseAddress + " | 걷는거리 " + themeItem.courseDistance + "KM | 소요시간 " + themeItem.courseTime}'
                     android:textColor="@color/mdWhite1000" />
 
             </LinearLayout>

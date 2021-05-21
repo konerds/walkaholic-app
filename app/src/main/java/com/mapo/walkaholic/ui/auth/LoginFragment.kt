@@ -103,12 +103,12 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                     //viewModel.login(token)
                 }
             }
-            viewModel.getFilenameTitleLogo()
             viewModel.getAuth(callback)
         }
         binding.loginBtnTutorial.setOnClickListener {
             requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
         }
+        viewModel.getFilenameTitleLogo()
     }
 
     override fun getViewModel() = LoginViewModel::class.java

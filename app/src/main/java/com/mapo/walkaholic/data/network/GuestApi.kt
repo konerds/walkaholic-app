@@ -12,7 +12,7 @@ interface GuestApi {
     @GET("global/resource/logo")
     suspend fun getFilenameLogoImage(): FilenameLogoImageResponse
 
-    @GET("global/guide")
+    @GET("global/resource/tutorial")
     suspend fun getFilenameGuideImage(): GuideInformationResponse
 
     @GET("term/service")

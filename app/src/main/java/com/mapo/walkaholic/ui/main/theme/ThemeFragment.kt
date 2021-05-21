@@ -11,19 +11,17 @@ import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.mapo.walkaholic.data.model.ThemeEnum
+import com.mapo.walkaholic.data.model.response.CategoryThemeResponse
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentThemeBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -49,20 +47,21 @@ class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, M
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.themeTL
         viewPager = binding.themeVP
-        /*viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    is Resource.Success -> {
-                        if (!it.value.error) {
-                            val adapter = it.value.themeEnum?.let { it2 -> ThemeViewPagerAdapter(this, it2.size) }
+
+        viewModel.categoryThemeResponse.observe(viewLifecycleOwner, Observer { _categoryThemeResponse ->
+            when(_categoryThemeResponse) {
+                is Resource.Success -> {
+                    when(_categoryThemeResponse.value.code) {
+                        "200" -> {
+                            val adapter = ThemeViewPagerAdapter(this, _categoryThemeResponse.value.data.size)
                             viewPager.adapter = adapter
-                            val tabName : ArrayList<ThemeEnum>? = it.value.themeEnum
+                            val tabName : ArrayList<CategoryThemeResponse.CategoryTheme>? = _categoryThemeResponse.value.data
                             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                                tab.text = tabName?.get(position)?.code_value
+                                tab.text = tabName?.get(position)?.themeName
                             }.attach()
                             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                                 override fun onTabSelected(tab: TabLayout.Tab?) {
                                     viewPager.currentItem = tab!!.position
-                                    Log.e("VP", tab!!.position.toString())
                                 }
 
                                 override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -74,6 +73,31 @@ class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, M
                                 }
                             })
                         }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_categoryThemeResponse) { viewModel.getCategoryTheme() }
+                }
+            }
+        })
+        viewModel.getCategoryTheme()
+
+        /*viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
+                when (it) {
+                    is Resource.Success -> {
+                        if (!it.value.error) {
+
+                        }
                     }
                     is Resource.Loading -> {
 
@@ -83,7 +107,7 @@ class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, M
                     }
                 }
         })*/
-        viewModel.getThemeEnum()
+        /*viewModel.getThemeEnum()*/
     }
 
     private fun showToastEvent(contents: String) {

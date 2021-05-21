@@ -20,9 +20,15 @@ class DashboardCharacterShopViewModel(
     private val _expInformationResponse: MutableLiveData<Resource<ExpInformationResponse>> = MutableLiveData()
     val expInformationResponse: LiveData<Resource<ExpInformationResponse>>
         get() = _expInformationResponse
-    private val _userCharacterFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> = MutableLiveData()
-    val userCharacterFilenameResponse: LiveData<Resource<UserCharacterFilenameResponse>>
-        get() = _userCharacterFilenameResponse
+    private val _userCharacterPreviewFilenameResponse: MutableLiveData<Resource<UserCharacterPreviewFilenameResponse>> = MutableLiveData()
+    val userCharacterPreviewFilenameResponse: LiveData<Resource<UserCharacterPreviewFilenameResponse>>
+        get() = _userCharacterPreviewFilenameResponse
+    private val _userCharacterEquipStatusResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
+    val userCharacterEquipStatusResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
+        get() = _userCharacterEquipStatusResponse
+    private val _statusShopSaleItemResponse: MutableLiveData<Resource<ShopSaleItemStatusResponse>> = MutableLiveData()
+    val statusShopSaleItemResponse: LiveData<Resource<ShopSaleItemStatusResponse>>
+        get() = _statusShopSaleItemResponse
     private val _characterItemResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
     val characterItemResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
         get() = _characterItemResponse
@@ -49,9 +55,21 @@ class DashboardCharacterShopViewModel(
         }
     }
 
-    fun getUserCharacterFilename(userId: Long) {
+    fun getStatusShopSaleItem() {
         viewModelScope.launch {
-            _userCharacterFilenameResponse.value = mainRepository.getUserCharacterFilename(userId)
+            _statusShopSaleItemResponse.value = mainRepository.getStatusShopSaleItem()
+        }
+    }
+
+    fun getUserCharacterEquipStatus(userId: Long) {
+        viewModelScope.launch {
+            _userCharacterEquipStatusResponse.value = mainRepository.getUserCharacterEquipStatus(userId)
+        }
+    }
+
+    fun getUserCharacterPreviewFilename(userId: Long, faceItemId : String, headItemId : String) {
+        viewModelScope.launch {
+            _userCharacterPreviewFilenameResponse.value = mainRepository.getUserCharacterPreviewFilename(userId, faceItemId, headItemId)
         }
     }
 

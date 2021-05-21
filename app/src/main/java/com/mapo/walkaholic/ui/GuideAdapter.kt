@@ -2,12 +2,8 @@ package com.mapo.walkaholic.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.GuideInformation
-import com.mapo.walkaholic.data.model.ThemeEnum
-import com.mapo.walkaholic.databinding.ItemDashboardThemeBinding
 import com.mapo.walkaholic.databinding.ItemGuideBinding
 
 class GuideAdapter(

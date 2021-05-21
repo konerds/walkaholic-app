@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:theme_code="@{filenameThemeCategoryImage.themeFilename}" />
+            app:setImage="@{filenameThemeCategoryImage.themeFilename}" />
 
     </androidx.cardview.widget.CardView>
 </layout>

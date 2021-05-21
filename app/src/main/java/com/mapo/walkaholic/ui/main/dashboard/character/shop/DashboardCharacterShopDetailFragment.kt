@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
+import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
@@ -21,7 +23,9 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoDetailAdapter
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
@@ -32,8 +36,6 @@ class DashboardCharacterShopDetailFragment(
     private val position: Int,
     private val listener : CharacterItemSlotClickListener
 ) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>() {
-
-    val arrayListShopItem = arrayListOf<ItemInfo>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedViewModel : DashboardCharacterShopViewModel by viewModels {
@@ -51,27 +53,47 @@ class DashboardCharacterShopDetailFragment(
             EventObserver(this@DashboardCharacterShopDetailFragment::showSnackbarEvent)
         )
         super.onViewCreated(view, savedInstanceState)
-        arrayListShopItem.add(ItemInfo("face", "0", "진한눈썹", "3000"))
-        arrayListShopItem.add(ItemInfo("face", "1", "속눈썹펌", "3000"))
-        arrayListShopItem.add(ItemInfo("face", "2", "수줍은볼", "3000"))
-        arrayListShopItem.add(ItemInfo("face", "3", "발그레볼", "3000"))
-        arrayListShopItem.add(ItemInfo("hair", "0", "똑딱이핀", "3000"))
-        arrayListShopItem.add(ItemInfo("hair", "1", "나뭇잎컷", "3000"))
-        arrayListShopItem.add(ItemInfo("hair", "2", "최준머리", "3000"))
-        binding.dashCharacterInfoDetailRV.also {
-            val linearLayoutManager = LinearLayoutManager(requireContext())
-            linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-            it.layoutManager = linearLayoutManager
-            it.setHasFixedSize(true)
-            it.adapter = when(position) {
-                0 -> arrayListShopItem.filter { itemInfo -> itemInfo.itemType == "face" } as ArrayList<ItemInfo>
-                1 -> arrayListShopItem.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
-                else -> null
-            }?.let { arrayListFilteredItemInfo ->
-                DashboardCharacterShopDetailAdapter(
-                    arrayListFilteredItemInfo, listener
-                )
+        viewModel.getStatusShopSaleItem()
+        viewModel.statusShopSaleItemResponse.observe(viewLifecycleOwner, Observer { _statusShopSaleItemResponse ->
+            when(_statusShopSaleItemResponse) {
+                is Resource.Success -> {
+                    when(_statusShopSaleItemResponse.value.code) {
+                        "200" -> {
+                            binding.dashCharacterShopDetailRV.also { _dashCharacterShopDetailRV ->
+                                val linearLayoutManager = LinearLayoutManager(requireContext())
+                                linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                                _dashCharacterShopDetailRV.layoutManager = linearLayoutManager
+                                _dashCharacterShopDetailRV.setHasFixedSize(true)
+                                _dashCharacterShopDetailRV.adapter = when(position) {
+                                    0 -> _statusShopSaleItemResponse.value.data.filter { _data -> _data.itemType == "face" } as ArrayList<ItemInfo>
+                                    1 -> _statusShopSaleItemResponse.value.data.filter { _data -> _data.itemType == "hair" } as ArrayList<ItemInfo>
+                                    else -> null
+                                }?.let { arrayListFilteredItemInfo ->
+                                    DashboardCharacterShopDetailAdapter(
+                                        arrayListFilteredItemInfo, listener
+                                    )
+                                }
+                            }
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_statusShopSaleItemResponse) { viewModel.getStatusShopSaleItem() }
+                }
             }
+        })
+        binding.dashCharacterShopDetailRV.also { _dashCharacterShopDetailRV ->
+
         }
         binding.dashCharacterShopInitLayout.setOnClickListener {
             Log.d(ContentValues.TAG,"Click Init Button Event")
