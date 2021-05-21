@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.AuthResponse
-import com.mapo.walkaholic.data.model.response.TermResponse
+import com.mapo.walkaholic.data.model.response.FilenameLogoImageResponse
+import com.mapo.walkaholic.data.model.response.TermPrivacyResponse
+import com.mapo.walkaholic.data.model.response.TermServiceResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -16,26 +18,38 @@ class RegisterViewModel(
 ) : BaseViewModel(repository) {
     override fun init() {}
 
-    private val _filenameLogoTitle = MutableLiveData("logo_title.png")
-    val filenameLogoTitle: LiveData<String>
-        get() = _filenameLogoTitle
+    private val _filenameLogoImageResponse : MutableLiveData<Resource<FilenameLogoImageResponse>> = MutableLiveData()
+    val filenameLogoImageResponse: LiveData<Resource<FilenameLogoImageResponse>>
+        get() = _filenameLogoImageResponse
 
-    private val _termResponse: MutableLiveData<Resource<TermResponse>> = MutableLiveData()
-    val termResponse: LiveData<Resource<TermResponse>>
-        get() = _termResponse
+    private val _termServiceResponse: MutableLiveData<Resource<TermServiceResponse>> = MutableLiveData()
+    val termServiceResponse: LiveData<Resource<TermServiceResponse>>
+        get() = _termServiceResponse
+
+    private val _termPrivacyResponse: MutableLiveData<Resource<TermPrivacyResponse>> = MutableLiveData()
+    val termPrivacyResponse: LiveData<Resource<TermPrivacyResponse>>
+        get() = _termPrivacyResponse
 
     private val _registerResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
     val registerResponse: LiveData<Resource<AuthResponse>>
         get() = _registerResponse
 
     fun getFilenameTitleLogo() = viewModelScope.launch {
-        _filenameLogoTitle.value = "logo_title.png"
+        _filenameLogoImageResponse.value = repository.getFilenameLogoImage()
     }
 
-    fun getTerm() {
+    fun getTermService() {
         progressBarVisibility.set(true)
         viewModelScope.launch {
-            _termResponse.value = repository.getTerm()
+            _termServiceResponse.value = repository.getTermService()
+            progressBarVisibility.set(false)
+        }
+    }
+
+    fun getTermPrivacy() {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            _termPrivacyResponse.value = repository.getTermPrivacy()
             progressBarVisibility.set(false)
         }
     }

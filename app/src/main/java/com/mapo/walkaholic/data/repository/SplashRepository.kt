@@ -7,5 +7,7 @@ class SplashRepository(
     private val api: GuestApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-
+    suspend fun getSplashFilename() = safeApiCall {
+        api.getFilenameSplashImage()
+    }
 }

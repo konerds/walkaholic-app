@@ -26,7 +26,6 @@ import com.mapo.walkaholic.databinding.FragmentRegisterBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
-import com.mapo.walkaholic.ui.setImageUrl
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -41,25 +40,83 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
         binding.registerTvService.movementMethod = ScrollingMovementMethod.getInstance()
         binding.registerTvPrivacy.movementMethod = ScrollingMovementMethod.getInstance()
         binding.registerEtBirth.setText(SimpleDateFormat("yyyy-MM-dd").format(Date()))
-        viewModel.filenameLogoTitle.observe(viewLifecycleOwner, Observer {
-            setImageUrl(binding.registerIvLogo, it)
-        })
-        viewModel.termResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
+        viewModel.filenameLogoImageResponse.observe(viewLifecycleOwner, Observer { _filenameLogoImageResponse ->
+            when(_filenameLogoImageResponse) {
                 is Resource.Success -> {
-                    if (!it.value.error) {
-                        binding.terms = it.value.terms
-                        binding.terms?.let { }
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.err_unexpected),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    when(_filenameLogoImageResponse.value.code) {
+                        "200" -> {
+                            binding.filenameLogoImage = _filenameLogoImageResponse.value.data.first()
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_filenameLogoImageResponse) { viewModel.getFilenameTitleLogo() }
+                }
+            }
+        })
+        viewModel.termServiceResponse.observe(viewLifecycleOwner, Observer { _termServiceResponse ->
+            when (_termServiceResponse) {
+                is Resource.Success -> {
+                    when (_termServiceResponse.value.code) {
+                        "200" -> {
+                            binding.termService = _termServiceResponse.value.data.first()
+                        }
+                        "400" -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_unexpected),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_unexpected),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(_termServiceResponse) { viewModel.getTermService() }
+                }
+            }
+        })
+        viewModel.termPrivacyResponse.observe(viewLifecycleOwner, Observer { _termPrivacyResponse ->
+            when (_termPrivacyResponse) {
+                is Resource.Success -> {
+                    when (_termPrivacyResponse.value.code) {
+                        "200" -> {
+                            binding.termPrivacy = _termPrivacyResponse.value.data.first()
+                        }
+                        "400" -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_unexpected),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.err_unexpected),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                    handleApiError(_termPrivacyResponse) { viewModel.getTermPrivacy() }
                 }
             }
         })
@@ -97,7 +154,8 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                 }
             })
         viewModel.getFilenameTitleLogo()
-        viewModel.getTerm()
+        viewModel.getTermService()
+        viewModel.getTermPrivacy()
         binding.registerChipAgreeAll.setOnClickListener {
             binding.registerChipAgreeService.isClickable = false
             binding.registerChipAgreePrivacy.isClickable = false

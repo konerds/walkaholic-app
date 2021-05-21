@@ -3,7 +3,7 @@ package com.mapo.walkaholic.ui.main.theme
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mapo.walkaholic.data.model.response.ThemeEnumResponse
+import com.mapo.walkaholic.data.model.response.FilenameThemeCategoryImageResponse
 import com.mapo.walkaholic.data.model.response.ThemeResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -16,8 +16,8 @@ class ThemeViewModel(
     override fun init() {
 
     }
-    private val _themeEnumResponse: MutableLiveData<Resource<ThemeEnumResponse>> = MutableLiveData()
-    val themeEnumResponse: LiveData<Resource<ThemeEnumResponse>>
+    private val _themeEnumResponse: MutableLiveData<Resource<FilenameThemeCategoryImageResponse>> = MutableLiveData()
+    val themeEnumResponse: LiveData<Resource<FilenameThemeCategoryImageResponse>>
         get() = _themeEnumResponse
 
     private val _themeResponse: MutableLiveData<Resource<ThemeResponse>> = MutableLiveData()
@@ -26,7 +26,7 @@ class ThemeViewModel(
 
     fun getThemeEnum() {
         viewModelScope.launch {
-            _themeEnumResponse.value = mainRepository.getThemeEnum()
+            _themeEnumResponse.value = mainRepository.getFilenameThemeCategoryImage()
         }
     }
 

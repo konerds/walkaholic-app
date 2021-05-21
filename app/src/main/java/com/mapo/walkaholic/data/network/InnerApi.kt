@@ -22,15 +22,27 @@ interface InnerApi {
     @POST("info/characterItem")
     suspend fun getCharacterItem(
         @Field("id") id: String
-    ): CharacterItemResponse
+    ): UserCharacterEquipStatusResponse
 
     @GET("user/{id}/pet/appearance")
-    suspend fun getUserCharacter(
+    suspend fun getUserCharacterFilename(
         @Path("id") id: String
-    ): UserCharacterResponse
+    ): UserCharacterFilenameResponse
 
-    @GET("info/themelist")
-    suspend fun getThemeEnum(): ThemeEnumResponse
+    @GET("user/{id}/item/equip")
+    suspend fun getUserCharacterEquipStatus(
+        @Path("id") id: String
+    ): UserCharacterEquipStatusResponse
+
+    @GET("user/{id}/item/view")
+    suspend fun getUserCharacterPreviewFilename(
+        @Query("faceItemId") faceItemId : String,
+        @Query("headItemId") headItemId : String,
+        @Path("id") id: String
+    ): UserCharacterFilenameResponse
+
+    @GET("global/resource/theme")
+    suspend fun getFilenameThemeCategoryImage(): FilenameThemeCategoryImageResponse
 
     @FormUrlEncoded
     @POST("info/themedetail")

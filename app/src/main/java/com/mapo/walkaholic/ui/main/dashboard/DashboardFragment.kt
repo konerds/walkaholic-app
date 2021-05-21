@@ -22,7 +22,6 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.CharacterItem
 import com.mapo.walkaholic.data.model.GridXy
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -53,8 +52,6 @@ class DashboardFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.userCharacterItem = CharacterItem("1", "비타씨")
-
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -62,7 +59,7 @@ class DashboardFragment :
                         "200" -> {
                             binding.user = _userResponse.value.data.first()
                             viewModel.getUserCharacterFilename(_userResponse.value.data.first().id)
-                            viewModel.userCharacterResponse.observe(viewLifecycleOwner, Observer { _userCharacterResponse ->
+                            viewModel.userCharacterFilenameResponse.observe(viewLifecycleOwner, Observer { _userCharacterResponse ->
                                 when (_userCharacterResponse) {
                                     is Resource.Success -> {
                                         when(_userCharacterResponse.value.code) {
@@ -304,24 +301,6 @@ class DashboardFragment :
                                     }
                                 }
                             })
-                            viewModel.getUserCharacterItem(_userResponse.value.data.first().petId)
-                            viewModel.characterItemResponse.observe(
-                                viewLifecycleOwner,
-                                Observer { _characterItemResponse ->
-                                    when (_characterItemResponse) {
-                                        is Resource.Success -> {
-                                            if (!_characterItemResponse.value.error) {
-                                                binding.userCharacterItem = _characterItemResponse.value.characterItem
-                                            }
-                                        }
-                                        is Resource.Loading -> {
-
-                                        }
-                                        is Resource.Failure -> {
-                                            handleApiError(_characterItemResponse)
-                                        }
-                                    }
-                                })
                         }
                         "400" -> {
                             // Error
@@ -520,24 +499,31 @@ class DashboardFragment :
                 }
             }
         })
-        viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer { it2 ->
-            binding.dashRVTheme.also {
+        viewModel.filenameThemeCategoryImageResponse.observe(viewLifecycleOwner, Observer { _filenameThemeCategoryImageResponse ->
+            binding.dashRVTheme.also { _dashRVTheme ->
                 val linearLayoutManager = LinearLayoutManager(requireContext())
                 linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                it.layoutManager = linearLayoutManager
-                it.setHasFixedSize(true)
-                when (it2) {
+                _dashRVTheme.layoutManager = linearLayoutManager
+                _dashRVTheme.setHasFixedSize(true)
+                when (_filenameThemeCategoryImageResponse) {
                     is Resource.Success -> {
-                        if (!it2.value.error) {
-                            it.adapter =
-                                it2.value.themeEnum?.let { it3 -> DashboardThemeAdapter(it3) }
+                        when (_filenameThemeCategoryImageResponse.value.code) {
+                            "200" -> {
+                                _dashRVTheme.adapter = DashboardThemeAdapter(_filenameThemeCategoryImageResponse.value.data)
+                            }
+                            "400" -> {
+                                // Error
+                            }
+                            else -> {
+                                // Error
+                            }
                         }
                     }
                     is Resource.Loading -> {
 
                     }
                     is Resource.Failure -> {
-                        handleApiError(it2)
+                        handleApiError(_filenameThemeCategoryImageResponse) { viewModel.getFilenameThemeCategoryImage() }
                     }
                 }
             }
@@ -551,7 +537,7 @@ class DashboardFragment :
         Log.e(">>", "x = " + tmp.x.toString() + ", y = " + tmp.y.toString())
         viewModel.getYesterdayWeather(tmp.x.toInt().toString(), tmp.y.toInt().toString())
         viewModel.getTodayWeather(tmp.x.toInt().toString(), tmp.y.toInt().toString())
-        viewModel.getThemeEnum()
+        viewModel.getFilenameThemeCategoryImage()
         binding.dashIvSetting.setOnClickListener {
             val navDirection: NavDirections? =
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvDashCharacterInfo()
