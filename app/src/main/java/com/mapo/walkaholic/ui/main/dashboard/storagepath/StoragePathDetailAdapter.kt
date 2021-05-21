@@ -10,12 +10,12 @@ import com.mapo.walkaholic.databinding.ItemThemeBinding
 import com.mapo.walkaholic.ui.main.theme.ThemeDetailAdapter
 
 class StoragePathDetailAdapter (
-    private val arrayListStoragePath: ArrayList<StoragePath>
+    private val arrayListStoragePath: ArrayList<Theme>
 ) : RecyclerView.Adapter<StoragePathDetailAdapter.ItemStoragePathViewHolder>() {
     inner class ItemStoragePathViewHolder(
         val binding: ItemStoragePathBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun setStoragePathItem(storagePathItem: StoragePath) {
+        fun setStoragePathItem(storagePathItem: Theme) {
             binding.storagePathItem = storagePathItem
         }
     }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.StoragePathResponse
-import com.mapo.walkaholic.data.model.response.ThemeEnumResponse
+import com.mapo.walkaholic.data.model.response.ThemeResponse
 import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -22,9 +22,14 @@ class StoragePathViewModel(
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
+
     private val _storagePathResponse: MutableLiveData<Resource<StoragePathResponse>> = MutableLiveData()
     val storagePathResponse: LiveData<Resource<StoragePathResponse>>
         get() = _storagePathResponse
+
+    private val _themeResponse: MutableLiveData<Resource<ThemeResponse>> = MutableLiveData()
+    val themeResponse: LiveData<Resource<ThemeResponse>>
+        get() = _themeResponse
 
     fun getUser() {
         progressBarVisibility.set(true)
@@ -39,9 +44,15 @@ class StoragePathViewModel(
         }
     }
 
-    fun getStoragePath(userId: Long) {
+    fun getStoragePath(userId: Long, id: String) {
         viewModelScope.launch {
-            _storagePathResponse.value = mainRepository.getStoragePath(userId)
+            _storagePathResponse.value = mainRepository.getStoragePath(userId, id)
+        }
+    }
+
+    fun getThemeDetail(themeId: String) {
+        viewModelScope.launch {
+            _themeResponse.value = mainRepository.getThemeDetail(themeId)
         }
     }
 }

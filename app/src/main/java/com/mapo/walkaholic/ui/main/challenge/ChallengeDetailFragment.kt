@@ -65,12 +65,14 @@ class ChallengeDetailFragment(
         val dummyMission2 =
             MissionCondition("00", "02", "5,000 걸음", "5000", "200")
         val dummyMission3 =
-            MissionCondition("01", "02", "일일미션 5회", "5", "500")
+            MissionCondition("01", "01", "일일미션 5회", "5", "500")
         val dummyMission4 =
             MissionCondition("01", "02", "일일미션 10회", "10", "1000")
         val dummyArrayList: ArrayList<MissionCondition> = ArrayList()
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
+        dummyArrayList.add(dummyMission3)
+        dummyArrayList.add(dummyMission4)
 
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             binding.challengeRVMission.also { _challengeRVMission ->

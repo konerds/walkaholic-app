@@ -57,11 +57,17 @@ class ChallengeDetailRankingFragment(
             Ranking("02", "03", "3", "고구마", "1,000")
         val dummyMission4 =
             Ranking("03", "04", "4", "오렌지", "800")
+        val dummyMission5 =
+            Ranking("04", "03", "3", "딸기", "500")
+        val dummyMission6 =
+            Ranking("05", "04", "4", "수박", "300")
         val dummyArrayList: ArrayList<Ranking> = ArrayList()
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
         dummyArrayList.add(dummyMission3)
         dummyArrayList.add(dummyMission4)
+        dummyArrayList.add(dummyMission5)
+        dummyArrayList.add(dummyMission6)
 
         viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { it2 ->
             binding.challengeRVRanking.also {

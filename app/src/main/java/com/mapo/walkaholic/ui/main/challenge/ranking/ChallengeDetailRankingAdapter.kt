@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.challenge.ranking
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -33,24 +34,31 @@ class ChallengeDetailRankingAdapter(
 
         when (position) {
             0 -> {
-                holder.binding.rankingCrown.setBackgroundResource(
-                    R.drawable.ic_challenge_crown_gold
+                val crownImg: Drawable? = ResourcesCompat.getDrawable(
+                    holder.binding.root.resources,
+                    R.drawable.ic_challenge_crown_gold,
+                    null
                 )
+                holder.binding.rankingCrown.setImageDrawable(crownImg)
+
+                holder.binding.challengeRankingUserTv.setTextColor(Color.parseColor("#F37520"))
+                holder.binding.challengeRankingPointTv.setTextColor(Color.parseColor("#689F38"))
             }
             1 -> {
-                holder.binding.rankingCrown.setBackgroundResource(
-                    R.drawable.ic_challenge_crown_skyblue
+                val crownImg: Drawable? = ResourcesCompat.getDrawable(
+                    holder.binding.root.resources,
+                    R.drawable.ic_challenge_crown_skyblue,
+                    null
                 )
+                holder.binding.rankingCrown.setImageDrawable(crownImg)
             }
             2 -> {
-                holder.binding.rankingCrown.setBackgroundResource(
-                    R.drawable.ic_challenge_crown_orange
+                val crownImg: Drawable? = ResourcesCompat.getDrawable(
+                    holder.binding.root.resources,
+                    R.drawable.ic_challenge_crown_orange,
+                    null
                 )
-            }
-            else -> {
-                holder.binding.rankingCrown.setBackgroundResource(
-                    R.drawable.ic_challenge_crown_gray
-                )
+                holder.binding.rankingCrown.setImageDrawable(crownImg)
             }
         }
     }

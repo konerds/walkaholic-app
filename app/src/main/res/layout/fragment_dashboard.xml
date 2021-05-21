@@ -271,6 +271,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/dashTvcalorie"
                         style="@style/font_semi_bold_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

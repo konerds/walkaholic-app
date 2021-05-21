@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mapo.walkaholic.data.model.Ranking
+import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
@@ -20,6 +22,8 @@ import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingAdapter
+import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
 import com.mapo.walkaholic.ui.main.theme.ThemeDetailAdapter
 import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
 import com.mapo.walkaholic.ui.snackbar
@@ -45,38 +49,54 @@ class StoragePathDetailFragment(
         )
         super.onViewCreated(view, savedInstanceState)
 
+        val dummyMission1 =
+            Theme("00", "01", "소나무 숲길", "피톤치드", "강북구","소나무_숲길", "1.8", "50", "10", "10", "1")
+        val dummyMission2 =
+            Theme("00", "02", "경의선 숲길", "피톤치드", "마포구","소나무_숲길", "4.8", "30", "10", "10", "1")
+        val dummyArrayList: ArrayList<Theme> = ArrayList()
+        dummyArrayList.add(dummyMission1)
+        dummyArrayList.add(dummyMission2)
+
+        //사용자 조회
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
-                    viewModel.getStoragePath(_userResponse.value.data.first().id,)
-                    viewModel.storagePathResponse.observe(viewLifecycleOwner, Observer { it2 ->
-                        binding.storagePathRV.also {
-                            it.layoutManager = LinearLayoutManager(requireContext())
-                            it.setHasFixedSize(true)
-                            when (it2) {
-                                is Resource.Success -> {
-                                    if (!it2.value.error) {
-                                        it.adapter =
-                                            it2.value.StoragePath?.let { it3 ->
-                                                StoragePathDetailAdapter(
-                                                    it3
-                                                )
+                    //userid와 position으로 해당 종류에 유저가 갖고 있는 목록 조회
+                    viewModel.getStoragePath(_userResponse.value.data.first().id, when(position) { 0 -> "00" 1 -> "01" else -> ""})
+                    viewModel.storagePathResponse.observe(viewLifecycleOwner, Observer { _storagePathResponse ->
+                        when (_storagePathResponse) {
+                            is Resource.Success -> {
+                                //조회된 코스 목록의 아이디를 이용해 코스 상세 정보 조회
+                                //viewModel.getThemeDetail(_storagePathResponse.value.StoragePath.course_id)
+                                viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
+                                    binding.storagePathRV.also {
+                                        it.layoutManager = LinearLayoutManager(requireContext())
+                                        it.setHasFixedSize(true)
+                                        when (_themeResponse) {
+                                            is Resource.Success -> {
+                                                if (!_themeResponse.value.error) {
+                                                    it.adapter =
+                                                        _themeResponse.value.theme?.let { _themeResponse -> StoragePathDetailAdapter(_themeResponse) }
+                                                }
+                                                Log.e("Theme_Detail", _themeResponse.value.theme.toString())
                                             }
-                                    }
-                                    Log.e("Storage_Path", it2.value.StoragePath.toString())
-                                }
-                                is Resource.Loading -> {
+                                            is Resource.Loading -> {
 
-                                }
-                                is Resource.Failure -> {
-                                    it2.errorBody?.let { it1 ->
-                                        Log.e(
-                                            "Storage_Path",
-                                            it1.string()
-                                        )
+                                            }
+                                            is Resource.Failure -> {
+                                                _themeResponse.errorBody?.let { _themeResponse -> Log.e("Theme_Detail", _themeResponse.string()) }
+                                                handleApiError(_themeResponse)
+                                            }
+                                        }
                                     }
-                                    handleApiError(it2)
-                                }
+                                })
+                            }
+                            is Resource.Loading -> {
+
+                            }
+                            is Resource.Failure -> {
+                                _storagePathResponse.errorBody?.let { _storagePathResponse -> Log.e("StoragePath", _storagePathResponse.string()) }
+                                handleApiError(_storagePathResponse)
                             }
                         }
                     })
@@ -85,12 +105,26 @@ class StoragePathDetailFragment(
 
                 }
                 is Resource.Failure -> {
+                    _userResponse.errorBody?.let { _userResponse -> Log.e("user", _userResponse.string()) }
                     handleApiError(_userResponse)
                 }
             }
         })
-        //viewModel.getStoragePath(when(position) { 0 -> "00" 1 -> "01" 2 -> "02" else -> ""})
 
+        val layoutManger = LinearLayoutManager(requireContext())
+        layoutManger.orientation = LinearLayoutManager.VERTICAL
+        binding.storagePathRV.layoutManager = layoutManger
+        binding.storagePathRV.setHasFixedSize(true)
+
+        when (position) {
+            0 -> {
+                Log.e("냐옹", "냐옹")
+                binding.storagePathRV.adapter = StoragePathDetailAdapter(dummyArrayList)
+            }
+            1 -> {
+                binding.storagePathRV.adapter = StoragePathDetailAdapter(dummyArrayList)
+            }
+        }
     }
 
     private fun showToastEvent(contents: String) {

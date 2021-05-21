@@ -42,6 +42,7 @@ class ChallengeDetailMissionAdapter(
                 holder.binding.challengeMissionBar.setBackgroundResource(
                     R.drawable.selector_challenge_progress_top
                 )
+                holder.binding.missionStartTv.visibility = View.VISIBLE
             }
             3 -> {
                 //Drawable 설정 둘 다 가능

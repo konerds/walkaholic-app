@@ -179,8 +179,8 @@ class MainRepository(
         api.getRanking(rankingId)
     }
 
-    suspend fun getStoragePath(userId: Long) = safeApiCall {
-        api.getStoragePath(userId)
+    suspend fun getStoragePath(userId: Long, id: String) = safeApiCall {
+        api.getStoragePath(userId, id)
     }
 
 

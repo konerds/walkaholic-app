@@ -98,7 +98,8 @@ interface InnerApi {
     @FormUrlEncoded
     @POST("info/storagePath")
     suspend fun getStoragePath(
-        @Field("user_id") user_id: Long
+        @Field("user_id") user_id: Long,
+        @Field("id") id: String
     ): StoragePathResponse
 
     /*@FormUrlEncoded
