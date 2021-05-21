@@ -724,6 +724,7 @@ class DashboardCharacterShopFragment :
                     selectedSlotShopMapFace = selectedSlotShopMap
                 }
 
+                /*
                 val _lastSelectedFace : String =
                     if(selectedSlotShopMap.filter { faceValue -> faceValue.value.third }.isNotEmpty()) {
                         selectedSlotShopMap.filter { faceValue -> faceValue.value.third }[0]!!.second.itemId.toString()
@@ -769,7 +770,7 @@ class DashboardCharacterShopFragment :
                             handleApiError(_userResponse)
                         }
                     }
-                })
+                })*/
 
                 if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
                     binding.dashCharacterShopTvIntro1.text =
