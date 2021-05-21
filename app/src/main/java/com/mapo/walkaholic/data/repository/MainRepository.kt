@@ -56,8 +56,14 @@ class MainRepository(
         api.getUserCharacterEquipStatus(userId.toString())
     }
 
-    suspend fun getUserCharacterPreviewFilename(faceItemId : String, headItemId : String, userId: Long) = safeApiCall {
-        api.getUserCharacterPreviewFilename(faceItemId, headItemId, userId.toString())
+    suspend fun getUserCharacterPreviewFilename(
+        userId: Long,
+        faceItemId: String,
+        headItemId: String
+    ) = safeApiCall {
+        api.getUserCharacterPreviewFilename(
+            userId.toString(), faceItemId, headItemId
+        )
     }
 
     suspend fun getCharacterItem(petId: Int) = safeApiCall {
@@ -143,7 +149,7 @@ class MainRepository(
         }
     }
 
-    suspend fun getFilenameWeather(weatherCode : String) = safeApiCall {
+    suspend fun getFilenameWeather(weatherCode: String) = safeApiCall {
         api.getFilenameWeather(weatherCode)
     }
 
@@ -159,7 +165,7 @@ class MainRepository(
         api.getTheme(themeCode)
     }
 
-    suspend fun getStatusUserCharacterInventoryItem(userId : Long) = safeApiCall {
+    suspend fun getStatusUserCharacterInventoryItem(userId: Long) = safeApiCall {
         api.getStatusUserCharacterInventoryItem(userId.toString())
     }
 

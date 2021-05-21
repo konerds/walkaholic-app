@@ -28,7 +28,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterInfoDetailFragment(
-    private val position: Int
+    private val position: Int,
+    private val listener : CharacterItemSlotClickListener
 ) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>(),
     CharacterItemSlotClickListener {
 
@@ -69,16 +70,16 @@ class DashboardCharacterInfoDetailFragment(
                                                                 _statusUserCharacterInventoryItem.value.data.filter { _data -> _data.itemType == "face" } as ArrayList<ItemInfo>
                                                             when (filterResult.size) {
                                                                 0 -> {
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
                                                                 }
                                                                 1 -> {
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
                                                                 }
                                                                 2 -> {
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
                                                                 }
                                                                 else -> {
                                                                 }
@@ -90,16 +91,16 @@ class DashboardCharacterInfoDetailFragment(
                                                                 _statusUserCharacterInventoryItem.value.data.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
                                                             when (filterResult.size) {
                                                                 0 -> {
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
                                                                 }
                                                                 1 -> {
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
                                                                 }
                                                                 2 -> {
-                                                                    filterResult.add(ItemInfo(null, null, null, null))
+                                                                    filterResult.add(ItemInfo(null, null, null, null, null))
                                                                 }
                                                                 else -> {
                                                                 }

@@ -86,7 +86,7 @@ class DashboardFragment :
                                                                                         requireContext()
                                                                                     )
                                                                                         .asBitmap()
-                                                                                        .load("${viewModel!!.getResourceBaseUri()}${_characterUriElement.fileName}")
+                                                                                        .load("${viewModel!!.getResourceBaseUri()}${_characterUriElement.filename}")
                                                                                         .diskCacheStrategy(
                                                                                             DiskCacheStrategy.NONE
                                                                                         )

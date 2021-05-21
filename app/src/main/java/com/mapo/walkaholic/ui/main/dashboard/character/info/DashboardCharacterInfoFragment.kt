@@ -1,10 +1,12 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
+import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +21,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.CharacterItemInfo
+import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
@@ -30,13 +32,15 @@ import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
 class DashboardCharacterInfoFragment :
-    BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>() {
+    BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>(),
+    CharacterItemSlotClickListener {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -45,6 +49,9 @@ class DashboardCharacterInfoFragment :
         private const val CHARACTER_BETWEEN_CIRCLE_PADDING = PIXELS_PER_METRE * 30
         private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
     }
+
+    private var selectedSlotInfoMapFace = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
+    private var selectedSlotInfoMapHair = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedViewModel: DashboardCharacterInfoViewModel by viewModels {
@@ -64,8 +71,8 @@ class DashboardCharacterInfoFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
-        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(0))
-        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(1))
+        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(0, this))
+        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(1, this))
         binding.dashCharacterInfoVP.adapter = pagerAdapter
         TabLayoutMediator(
             binding.dashCharacterInfoTL,
@@ -102,9 +109,9 @@ class DashboardCharacterInfoFragment :
                                                                             "200" -> {
                                                                                 binding.expInformation =
                                                                                     _expInformationResponse.value.data.first()
-                                                                                val userCharacterEquipStatus =
-                                                                                    mutableMapOf<String, String>()
                                                                                 _userCharacterEquipStatusResponse.value.data.forEachIndexed { dataIndex, dataElement ->
+                                                                                    val userCharacterEquipStatus =
+                                                                                        mutableMapOf<String, String>()
                                                                                     if (dataElement.itemType == "hair") {
                                                                                         userCharacterEquipStatus["hair"] =
                                                                                             dataElement.itemId
@@ -114,6 +121,7 @@ class DashboardCharacterInfoFragment :
                                                                                     }
                                                                                     if ((dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
                                                                                         viewModel!!.getUserCharacterPreviewFilename(
+                                                                                            _userResponse.value.data.first().id,
                                                                                             if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
                                                                                                 userCharacterEquipStatus["face"]
                                                                                                     .toString()
@@ -125,10 +133,8 @@ class DashboardCharacterInfoFragment :
                                                                                                     .toString()
                                                                                             } else {
                                                                                                 ""
-                                                                                            },
-                                                                                            _userResponse.value.data.first().id
+                                                                                            }
                                                                                         )
-
                                                                                         viewModel!!.userCharacterPreviewFilenameResponse.observe(
                                                                                             viewLifecycleOwner,
                                                                                             Observer { _userCharacterPreviewFilenameResponse ->
@@ -136,17 +142,17 @@ class DashboardCharacterInfoFragment :
                                                                                                     is Resource.Success -> {
                                                                                                         when (_userCharacterPreviewFilenameResponse.value.code) {
                                                                                                             "200" -> {
+                                                                                                                var animationDrawable =
+                                                                                                                    AnimationDrawable()
+                                                                                                                animationDrawable.isOneShot =
+                                                                                                                    false
                                                                                                                 _userCharacterPreviewFilenameResponse.value.data.forEachIndexed { filenameIndex, filenameElement ->
-                                                                                                                    var animationDrawable =
-                                                                                                                        AnimationDrawable()
-                                                                                                                    animationDrawable.isOneShot =
-                                                                                                                        false
                                                                                                                     Glide.with(
                                                                                                                         requireContext()
                                                                                                                     )
                                                                                                                         .asBitmap()
                                                                                                                         .load(
-                                                                                                                            "${viewModel!!.getResourceBaseUri()}${filenameElement.fileName}"
+                                                                                                                            "${viewModel!!.getResourceBaseUri()}${filenameElement.filename}"
                                                                                                                         )
                                                                                                                         .diskCacheStrategy(
                                                                                                                             DiskCacheStrategy.NONE
@@ -174,7 +180,7 @@ class DashboardCharacterInfoFragment :
                                                                                                                                         characterBitmap,
                                                                                                                                         ANIMATION_DURATION
                                                                                                                                     )
-                                                                                                                                    if (animationDrawable.numberOfFrames == _userCharacterPreviewFilenameResponse.value.data.size - 1) {
+                                                                                                                                    if (animationDrawable.numberOfFrames == _userCharacterPreviewFilenameResponse.value.data.size) {
                                                                                                                                         /*val charExp =
                                                                                                                                             (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
                                                                                                                                                     / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
@@ -295,6 +301,7 @@ class DashboardCharacterInfoFragment :
                                                                                                             _userCharacterPreviewFilenameResponse
                                                                                                         ) {
                                                                                                             viewModel!!.getUserCharacterPreviewFilename(
+                                                                                                                _userResponse.value.data.first().id,
                                                                                                                 if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
                                                                                                                     userCharacterEquipStatus.get(
                                                                                                                         "face"
@@ -310,8 +317,7 @@ class DashboardCharacterInfoFragment :
                                                                                                                         .toString()
                                                                                                                 } else {
                                                                                                                     ""
-                                                                                                                },
-                                                                                                                _userResponse.value.data.first().id
+                                                                                                                }
                                                                                                             )
                                                                                                         }
                                                                                                     }
@@ -369,7 +375,11 @@ class DashboardCharacterInfoFragment :
                                         }
                                         is Resource.Failure -> {
                                             // Network Error
-                                            handleApiError(_userCharacterEquipStatusResponse) { viewModel.getUserCharacterEquipStatus(_userResponse.value.data.first().id) }
+                                            handleApiError(_userCharacterEquipStatusResponse) {
+                                                viewModel.getUserCharacterEquipStatus(
+                                                    _userResponse.value.data.first().id
+                                                )
+                                            }
                                         }
                                     }
                                 })
@@ -466,5 +476,72 @@ class DashboardCharacterInfoFragment :
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
+    }
+
+    override fun onRecyclerViewItemClick(
+        view: View,
+        position: Int,
+        selectedSlotInfoMap: MutableMap<Int, Triple<Boolean, ItemInfo, Boolean>>
+    ) {
+        if (selectedSlotInfoMap[0]?.second?.itemType == "hair") {
+            selectedSlotInfoMapHair = selectedSlotInfoMap
+        } else if (selectedSlotInfoMap[0]?.second?.itemType == "face") {
+            selectedSlotInfoMapFace = selectedSlotInfoMap
+        }
+
+        val _lastSelectedFace : String =
+            if(selectedSlotInfoMap.filter { faceValue -> faceValue.value.third }.isNotEmpty()) {
+                selectedSlotInfoMap.filter { faceValue -> faceValue.value.third }[0]!!.second.itemId.toString()
+            } else {
+                if(selectedSlotInfoMap.filter { faceValue -> faceValue.value.first }.isNotEmpty()) {
+                    selectedSlotInfoMap.filter { faceValue -> faceValue.value.first }[0]!!.second.itemId.toString()
+                } else {
+                    ""
+                }
+            }
+
+        val _lastSelectedHair : String =
+            if(selectedSlotInfoMap.filter { hairValue -> hairValue.value.third }.isNotEmpty()) {
+                selectedSlotInfoMap.filter { hairValue -> hairValue.value.third }[0]!!.second.itemId.toString()
+            } else {
+                if(selectedSlotInfoMap.filter { hairValue -> hairValue.value.first }.isNotEmpty()) {
+                    selectedSlotInfoMap.filter { hairValue -> hairValue.value.first }[0]!!.second.itemId.toString()
+                } else {
+                    ""
+                }
+            }
+
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when(_userResponse) {
+                is Resource.Success -> {
+                    when(_userResponse.value.code) {
+                        "200" -> {
+                            viewModel.getUserCharacterPreviewFilename(_userResponse.value.data.first().id, _lastSelectedFace, _lastSelectedHair)
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_userResponse)
+                }
+            }
+        })
+
+        Log.d(TAG, "Click Event From Inventory Adapter")
+        when (view.id) {
+            R.id.itemInventoryLayout -> {
+                Log.d(TAG, "Click Event In Inventory Layout")
+
+            }
+        }
     }
 }

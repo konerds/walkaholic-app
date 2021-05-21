@@ -21,8 +21,8 @@ class DashboardCharacterInfoViewModel(
     private val _expInformationResponse: MutableLiveData<Resource<ExpInformationResponse>> = MutableLiveData()
     val expInformationResponse: LiveData<Resource<ExpInformationResponse>>
         get() = _expInformationResponse
-    private val _userCharacterPreviewFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> = MutableLiveData()
-    val userCharacterPreviewFilenameResponse: LiveData<Resource<UserCharacterFilenameResponse>>
+    private val _userCharacterPreviewFilenameResponse: MutableLiveData<Resource<UserCharacterPreviewFilenameResponse>> = MutableLiveData()
+    val userCharacterPreviewFilenameResponse: LiveData<Resource<UserCharacterPreviewFilenameResponse>>
         get() = _userCharacterPreviewFilenameResponse
     private val _userCharacterEquipStatusResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
     val userCharacterEquipStatusResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
@@ -62,9 +62,9 @@ class DashboardCharacterInfoViewModel(
         }
     }
 
-    fun getUserCharacterPreviewFilename(faceItemId : String, headItemId : String, userId: Long) {
+    fun getUserCharacterPreviewFilename(userId: Long, faceItemId : String, headItemId : String) {
         viewModelScope.launch {
-            _userCharacterPreviewFilenameResponse.value = mainRepository.getUserCharacterPreviewFilename(faceItemId, headItemId, userId)
+            _userCharacterPreviewFilenameResponse.value = mainRepository.getUserCharacterPreviewFilename(userId, faceItemId, headItemId)
         }
     }
 
