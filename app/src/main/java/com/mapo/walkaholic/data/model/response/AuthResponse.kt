@@ -5,7 +5,7 @@ data class AuthResponse(
     val message: String,
     val data: ArrayList<DataAuth>
 ) {
-    inner class DataAuth(
+    data class DataAuth(
         val userId: Long
     )
 }

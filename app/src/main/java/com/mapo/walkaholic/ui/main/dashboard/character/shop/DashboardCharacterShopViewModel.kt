@@ -29,12 +29,9 @@ class DashboardCharacterShopViewModel(
     private val _statusShopSaleItemResponse: MutableLiveData<Resource<ShopSaleItemStatusResponse>> = MutableLiveData()
     val statusShopSaleItemResponse: LiveData<Resource<ShopSaleItemStatusResponse>>
         get() = _statusShopSaleItemResponse
-    private val _characterItemResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
-    val characterItemResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
-        get() = _characterItemResponse
-    private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
-    val characterUriList: LiveData<Resource<CharacterUriResponse>>
-        get() = _characterUriList
+    private val _buyItemResponse: MutableLiveData<Resource<BuyItemResponse>> = MutableLiveData()
+    val buyItemResponse: LiveData<Resource<BuyItemResponse>>
+        get() = _buyItemResponse
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -73,17 +70,11 @@ class DashboardCharacterShopViewModel(
         }
     }
 
-    fun getUserCharacterItem(petId: Int) {
+    fun buyItem(userId: Long, faceItemId: Int?, hairItemId: Int?) {
         viewModelScope.launch {
-            _characterItemResponse.value = mainRepository.getCharacterItem(petId)
+            _buyItemResponse.value = mainRepository.buyItem(userId, faceItemId, hairItemId)
         }
     }
 
     fun toAnyToString(any: Any) = any.toString().trim()
-
-    fun getCharacterUriList(characterType: String) {
-        viewModelScope.launch {
-            _characterUriList.value = mainRepository.getCharacterUriList(characterType)
-        }
-    }
 }

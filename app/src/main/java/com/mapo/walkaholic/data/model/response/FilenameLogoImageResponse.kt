@@ -5,7 +5,7 @@ data class FilenameLogoImageResponse(
     val message: String,
     val data: ArrayList<FilenameLogoImage>
 ) {
-    inner class FilenameLogoImage(
+    data class FilenameLogoImage(
         val logoFilename : String
     )
 }

@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.data.repository
 
 import com.mapo.walkaholic.data.UserPreferences
+import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
@@ -74,10 +75,6 @@ class MainRepository(
                 headItemId
             }
         )
-    }
-
-    suspend fun getCharacterItem(petId: Int) = safeApiCall {
-        api.getCharacterItem(petId.toString())
     }
 
     suspend fun getExpInformation(userId: Long) = safeApiCall {
@@ -171,10 +168,6 @@ class MainRepository(
         api.getCategoryTheme()
     }
 
-    suspend fun getTheme(themeCode: String) = safeApiCall {
-        api.getTheme(themeCode)
-    }
-
     suspend fun getStatusUserCharacterInventoryItem(userId: Long) = safeApiCall {
         api.getStatusUserCharacterInventoryItem(userId.toString())
     }
@@ -183,8 +176,10 @@ class MainRepository(
         api.getStatusShopSaleItem()
     }
 
-    suspend fun getCharacterUriList(characterType: String) = safeApiCall {
-        api.getCharacterUriList(characterType)
+    suspend fun buyItem(userId: Long, faceItemId: Int?, hairItemId: Int?) = safeApiCall {
+        api.buyItem(userId.toString(), BuyItemRequestBody(
+            faceItemId, hairItemId
+        ))
     }
 
     suspend fun getCalendarDate(userId: Long, walkDate: String) = safeApiCall {
@@ -195,8 +190,8 @@ class MainRepository(
         api.getCalendarMonth(userId, walkMonth)
     }
 
-    suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
-        api.getPoints(body)
+    suspend fun getTheme(themeCode: String) = safeApiCall {
+        api.getTheme(themeCode)
     }
 
     suspend fun getMissionCondition(missionID: String) = safeApiCall {
@@ -211,8 +206,12 @@ class MainRepository(
         api.getRanking(rankingId)
     }
 
-    suspend fun getStoragePath(userId: Long, id: String) = safeApiCall {
-        api.getStoragePath(userId, id)
+    suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
+        api.getPoints(body)
+    }
+
+    suspend fun getFavoritePath(userId: Long, id: String) = safeApiCall {
+        api.getFavoritePath(userId, id)
     }
 
 

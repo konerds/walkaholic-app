@@ -5,7 +5,7 @@ data class TermServiceResponse(
     val message: String,
     val data: ArrayList<TermService>
 ) {
-    inner class TermService(
+    data class TermService(
         val serviceTermContent: String
     )
 }

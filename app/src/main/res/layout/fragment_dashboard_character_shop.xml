@@ -21,7 +21,7 @@
 
         <variable
             name="expInformation"
-            type="com.mapo.walkaholic.data.model.ExpInformation" />
+            type="com.mapo.walkaholic.data.model.response.ExpInformationResponse.ExpInformation" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -269,13 +269,29 @@
                         android:id="@+id/dashCharacterShopVP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/dashCharacterShopBtnBuy"
                         app:layout_constraintTop_toBottomOf="@id/dashCharacterShopTL" />
 
                 </LinearLayout>
 
             </LinearLayout>
-
+            
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/dashCharacterShopBtnBuy"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:elevation="4dp"
+                android:text="구매하기"
+                android:textColor="@color/mdWhite1000"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:background="@drawable/box_dashboard_corner_afd085"
+                app:layout_constraintTop_toBottomOf="@id/dashCharacterShopLayout2"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            
             <Space
                 android:id="@+id/dashCharacterShopEndSpace"
                 android:layout_width="match_parent"

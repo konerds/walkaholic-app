@@ -1,11 +1,10 @@
-package com.mapo.walkaholic.ui.main.dashboard.storagepath
+package com.mapo.walkaholic.ui.favoritepath
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.response.StoragePathResponse
+import com.mapo.walkaholic.data.model.response.FavoritePathResponse
 import com.mapo.walkaholic.data.model.response.ThemeResponse
 import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.network.Resource
@@ -13,7 +12,7 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class StoragePathViewModel(
+class FavoritePathViewModel(
     private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {
@@ -23,9 +22,9 @@ class StoragePathViewModel(
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
 
-    private val _storagePathResponse: MutableLiveData<Resource<StoragePathResponse>> = MutableLiveData()
-    val storagePathResponse: LiveData<Resource<StoragePathResponse>>
-        get() = _storagePathResponse
+    private val _favoritePathResponse: MutableLiveData<Resource<FavoritePathResponse>> = MutableLiveData()
+    val favoritePathResponse: LiveData<Resource<FavoritePathResponse>>
+        get() = _favoritePathResponse
 
     private val _themeResponse: MutableLiveData<Resource<ThemeResponse>> = MutableLiveData()
     val themeResponse: LiveData<Resource<ThemeResponse>>
@@ -44,9 +43,9 @@ class StoragePathViewModel(
         }
     }
 
-    fun getStoragePath(userId: Long, id: String) {
+    fun getFavoritePath(userId: Long, id: String) {
         viewModelScope.launch {
-            _storagePathResponse.value = mainRepository.getStoragePath(userId, id)
+            _favoritePathResponse.value = mainRepository.getFavoritePath(userId, id)
         }
     }
 

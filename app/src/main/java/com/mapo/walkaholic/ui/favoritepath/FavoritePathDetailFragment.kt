@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.storagepath
+package com.mapo.walkaholic.ui.favoritepath
 
 import android.os.Bundle
 import android.util.Log
@@ -9,43 +9,37 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mapo.walkaholic.data.model.Ranking
 import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.databinding.FragmentDetailStoragePathBinding
-import com.mapo.walkaholic.databinding.FragmentDetailThemeBinding
+import com.mapo.walkaholic.databinding.FragmentDetailFavoritePathBinding
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingAdapter
-import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
-import com.mapo.walkaholic.ui.main.theme.ThemeDetailAdapter
-import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class StoragePathDetailFragment(
+class FavoritePathDetailFragment(
     private val position: Int
-) : BaseSharedFragment<StoragePathViewModel, FragmentDetailStoragePathBinding, MainRepository>() {
+) : BaseSharedFragment<FavoritePathViewModel, FragmentDetailFavoritePathBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel: StoragePathViewModel by viewModels {
+        val sharedViewModel: FavoritePathViewModel by viewModels {
             ViewModelFactory(getFragmentRepository())
         }
         viewModel = sharedViewModel
         viewModel.showToastEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@StoragePathDetailFragment::showToastEvent)
+            EventObserver(this@FavoritePathDetailFragment::showToastEvent)
         )
 
         viewModel.showSnackbarEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@StoragePathDetailFragment::showSnackbarEvent)
+            EventObserver(this@FavoritePathDetailFragment::showSnackbarEvent)
         )
         super.onViewCreated(view, savedInstanceState)
 
@@ -62,21 +56,21 @@ class StoragePathDetailFragment(
             when (_userResponse) {
                 is Resource.Success -> {
                     //userid와 position으로 해당 종류에 유저가 갖고 있는 목록 조회
-                    viewModel.getStoragePath(_userResponse.value.data.first().id, when(position) { 0 -> "00" 1 -> "01" else -> ""})
-                    viewModel.storagePathResponse.observe(viewLifecycleOwner, Observer { _storagePathResponse ->
-                        when (_storagePathResponse) {
+                    viewModel.getFavoritePath(_userResponse.value.data.first().id, when(position) { 0 -> "00" 1 -> "01" else -> ""})
+                    viewModel.favoritePathResponse.observe(viewLifecycleOwner, Observer { _favoritePathResponse ->
+                        when (_favoritePathResponse) {
                             is Resource.Success -> {
                                 //조회된 코스 목록의 아이디를 이용해 코스 상세 정보 조회
-                                //viewModel.getThemeDetail(_storagePathResponse.value.StoragePath.course_id)
+                                //viewModel.getThemeDetail(_favoritePathResponse.value.FavoritePath.course_id)
                                 /*viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
-                                    binding.storagePathRV.also {
+                                    binding.favoritePathRV.also {
                                         it.layoutManager = LinearLayoutManager(requireContext())
                                         it.setHasFixedSize(true)
                                         when (_themeResponse) {
                                             is Resource.Success -> {
                                                 if (!_themeResponse.value.error) {
                                                     it.adapter =
-                                                        _themeResponse.value.theme?.let { _themeResponse -> StoragePathDetailAdapter(_themeResponse) }
+                                                        _themeResponse.value.theme?.let { _themeResponse -> FavoritePathDetailAdapter(_themeResponse) }
                                                 }
                                                 Log.e("Theme_Detail", _themeResponse.value.theme.toString())
                                             }
@@ -95,8 +89,8 @@ class StoragePathDetailFragment(
 
                             }
                             is Resource.Failure -> {
-                                _storagePathResponse.errorBody?.let { _storagePathResponse -> Log.e("StoragePath", _storagePathResponse.string()) }
-                                handleApiError(_storagePathResponse)
+                                _favoritePathResponse.errorBody?.let { _favoritePathResponse -> Log.e("FavoritePath", _favoritePathResponse.string()) }
+                                handleApiError(_favoritePathResponse)
                             }
                         }
                     })
@@ -113,16 +107,16 @@ class StoragePathDetailFragment(
 
         val layoutManger = LinearLayoutManager(requireContext())
         layoutManger.orientation = LinearLayoutManager.VERTICAL
-        binding.storagePathRV.layoutManager = layoutManger
-        binding.storagePathRV.setHasFixedSize(true)
+        binding.favoritePathRV.layoutManager = layoutManger
+        binding.favoritePathRV.setHasFixedSize(true)
 
         when (position) {
             0 -> {
                 Log.e("냐옹", "냐옹")
-                binding.storagePathRV.adapter = StoragePathDetailAdapter(dummyArrayList)
+                binding.favoritePathRV.adapter = FavoritePathDetailAdapter(dummyArrayList)
             }
             1 -> {
-                binding.storagePathRV.adapter = StoragePathDetailAdapter(dummyArrayList)
+                binding.favoritePathRV.adapter = FavoritePathDetailAdapter(dummyArrayList)
             }
         }
     }
@@ -151,12 +145,12 @@ class StoragePathDetailFragment(
         }
     }
 
-    override fun getViewModel() = StoragePathViewModel::class.java
+    override fun getViewModel() = FavoritePathViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentDetailStoragePathBinding.inflate(inflater, container, false)
+    ) = FragmentDetailFavoritePathBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }

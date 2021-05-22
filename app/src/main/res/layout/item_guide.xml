@@ -6,7 +6,7 @@
 
         <variable
             name="guideInformation"
-            type="com.mapo.walkaholic.data.model.GuideInformation" />
+            type="com.mapo.walkaholic.data.model.response.GuideInformationResponse.GuideInformation" />
     </data>
 
     <FrameLayout

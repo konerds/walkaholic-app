@@ -1,12 +1,10 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
-import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +30,7 @@ import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -40,18 +38,14 @@ import kotlin.math.*
 
 class DashboardCharacterInfoFragment :
     BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>(),
-    CharacterItemSlotClickListener {
+    CharacterInventorySlotClickListener {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
-        private const val CHARACTER_SMALL_WIDTH = 69
-        private const val CHARACTER_SMALL_HEIGHT = 86
-        private const val CHARACTER_BETWEEN_CIRCLE_PADDING = PIXELS_PER_METRE * 30
-        private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
     }
 
-    private var selectedSlotInfoMapFace = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
-    private var selectedSlotInfoMapHair = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
+    private var selectedSlotInfoMapFace = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private var selectedSlotInfoMapHair = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedViewModel: DashboardCharacterInfoViewModel by viewModels {
@@ -109,17 +103,17 @@ class DashboardCharacterInfoFragment :
                                                                             "200" -> {
                                                                                 binding.expInformation =
                                                                                     _expInformationResponse.value.data.first()
-                                                                                _userCharacterEquipStatusResponse.value.data.forEachIndexed { dataIndex, dataElement ->
-                                                                                    val userCharacterEquipStatus =
-                                                                                        mutableMapOf<String, String>()
-                                                                                    if (dataElement.itemType == "hair") {
+                                                                                val userCharacterEquipStatus =
+                                                                                    mutableMapOf<String, String>()
+                                                                                _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex, _dataElement ->
+                                                                                    if (_dataElement.itemType == "hair") {
                                                                                         userCharacterEquipStatus["hair"] =
-                                                                                            dataElement.itemId
-                                                                                    } else if (dataElement.itemType == "face") {
+                                                                                            _dataElement.itemId
+                                                                                    } else if (_dataElement.itemType == "face") {
                                                                                         userCharacterEquipStatus["face"] =
-                                                                                            dataElement.itemId
+                                                                                            _dataElement.itemId
                                                                                     }
-                                                                                    if ((dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
+                                                                                    if ((_dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
                                                                                         viewModel!!.getUserCharacterPreviewFilename(
                                                                                             _userResponse.value.data.first().id,
                                                                                             if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
@@ -146,13 +140,13 @@ class DashboardCharacterInfoFragment :
                                                                                                                     AnimationDrawable()
                                                                                                                 animationDrawable.isOneShot =
                                                                                                                     false
-                                                                                                                _userCharacterPreviewFilenameResponse.value.data.forEachIndexed { filenameIndex, filenameElement ->
+                                                                                                                _userCharacterPreviewFilenameResponse.value.data.forEachIndexed { _filenameIndex, _filenameElement ->
                                                                                                                     Glide.with(
                                                                                                                         requireContext()
                                                                                                                     )
                                                                                                                         .asBitmap()
                                                                                                                         .load(
-                                                                                                                            "${viewModel!!.getResourceBaseUri()}${filenameElement.filename}"
+                                                                                                                            "${viewModel!!.getResourceBaseUri()}${_filenameElement.filename}"
                                                                                                                         )
                                                                                                                         .diskCacheStrategy(
                                                                                                                             DiskCacheStrategy.NONE
@@ -183,93 +177,7 @@ class DashboardCharacterInfoFragment :
                                                                                                                                     if (animationDrawable.numberOfFrames == _userCharacterPreviewFilenameResponse.value.data.size) {
                                                                                                                                         /*val charExp =
                                                                                                                                             (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
-                                                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
-                                                                                                                                        val radius =
-                                                                                                                                            CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
-                                                                                                                                        val bitmapInfoSheet =
-                                                                                                                                            Bitmap.createBitmap(
-                                                                                                                                                (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
-                                                                                                                                                (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
-                                                                                                                                                Bitmap.Config.ARGB_8888
-                                                                                                                                            )
-                                                                                                                                        val canvasInfo =
-                                                                                                                                            Canvas(
-                                                                                                                                                bitmapInfoSheet
-                                                                                                                                            )
-                                                                                                                                        val startAngle =
-                                                                                                                                            135F
-                                                                                                                                        val sweepAngle =
-                                                                                                                                            270F
-                                                                                                                                        val paint =
-                                                                                                                                            Paint()
-                                                                                                                                        paint.isAntiAlias =
-                                                                                                                                            true
-                                                                                                                                        paint.color =
-                                                                                                                                            Color.parseColor(
-                                                                                                                                                "#C9C9C9"
-                                                                                                                                            )
-                                                                                                                                        paint.style =
-                                                                                                                                            Paint.Style.FILL
-                                                                                                                                        var oval =
-                                                                                                                                            RectF(
-                                                                                                                                                0.toFloat(),
-                                                                                                                                                0.toFloat(),
-                                                                                                                                                canvasInfo.width.toFloat(),
-                                                                                                                                                canvasInfo.height.toFloat()
-                                                                                                                                            )
-                                                                                                                                        canvasInfo.drawArc(
-                                                                                                                                            oval,
-                                                                                                                                            startAngle,
-                                                                                                                                            sweepAngle,
-                                                                                                                                            true,
-                                                                                                                                            paint
-                                                                                                                                        )
-                                                                                                                                        paint.color =
-                                                                                                                                            Color.parseColor(
-                                                                                                                                                "#D46544"
-                                                                                                                                            )
-                                                                                                                                        canvasInfo.drawArc(
-                                                                                                                                            oval,
-                                                                                                                                            startAngle,
-                                                                                                                                            2.7F * charExp,
-                                                                                                                                            true,
-                                                                                                                                            paint
-                                                                                                                                        )
-                                                                                                                                        paint.xfermode =
-                                                                                                                                            PorterDuffXfermode(
-                                                                                                                                                PorterDuff.Mode.CLEAR
-                                                                                                                                            )
-                                                                                                                                        oval =
-                                                                                                                                            RectF(
-                                                                                                                                                ((canvasInfo.width / 2) - radius).toFloat(),
-                                                                                                                                                ((canvasInfo.height / 2) - radius).toFloat(),
-                                                                                                                                                ((canvasInfo.width / 2) + radius).toFloat(),
-                                                                                                                                                ((canvasInfo.height / 2) + radius).toFloat()
-                                                                                                                                            )
-                                                                                                                                        canvasInfo.drawArc(
-                                                                                                                                            oval,
-                                                                                                                                            startAngle,
-                                                                                                                                            sweepAngle,
-                                                                                                                                            true,
-                                                                                                                                            paint
-                                                                                                                                        )
-                                                                                                                                        binding.dashIvCharacterInfo.setImageBitmap(
-                                                                                                                                            bitmapInfoSheet
-                                                                                                                                        )
-                                                                                                                                        binding.dashIvCharacter.minimumWidth =
-                                                                                                                                            resource.width * PIXELS_PER_METRE
-                                                                                                                                        binding.dashIvCharacter.minimumHeight =
-                                                                                                                                            resource.height * PIXELS_PER_METRE
-                                                                                                                                        binding.dashIvCharacter.setImageDrawable(
-                                                                                                                                            animationDrawable
-                                                                                                                                        )
-                                                                                                                                        animationDrawable =
-                                                                                                                                            binding.dashIvCharacter.drawable as AnimationDrawable
-                                                                                                                                        animationDrawable.start()
-        */
-                                                                                                                                        val charExp =
-                                                                                                                                            (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
-                                                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
+                                                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()*/
                                                                                                                                         binding.dashCharacterInfoIvCharacter.minimumWidth =
                                                                                                                                             resource.width * PIXELS_PER_METRE
                                                                                                                                         binding.dashCharacterInfoIvCharacter.minimumHeight =
@@ -478,10 +386,8 @@ class DashboardCharacterInfoFragment :
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 
-    override fun onRecyclerViewItemClick(
-        view: View,
-        position: Int,
-        selectedSlotInfoMap: MutableMap<Int, Triple<Boolean, ItemInfo, Boolean>>
+    override fun onItemClick(
+        selectedSlotInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>
     ) {
         if (selectedSlotInfoMap[0]?.second?.itemType == "hair") {
             selectedSlotInfoMapHair = selectedSlotInfoMap
@@ -489,34 +395,26 @@ class DashboardCharacterInfoFragment :
             selectedSlotInfoMapFace = selectedSlotInfoMap
         }
 
-        val _lastSelectedFace : String =
-            if(selectedSlotInfoMap.filter { faceValue -> faceValue.value.third }.isNotEmpty()) {
-                selectedSlotInfoMap.filter { faceValue -> faceValue.value.third }[0]!!.second.itemId.toString()
-            } else {
-                if(selectedSlotInfoMap.filter { faceValue -> faceValue.value.first }.isNotEmpty()) {
-                    selectedSlotInfoMap.filter { faceValue -> faceValue.value.first }[0]!!.second.itemId.toString()
-                } else {
-                    ""
-                }
-            }
-
-        val _lastSelectedHair : String =
-            if(selectedSlotInfoMap.filter { hairValue -> hairValue.value.third }.isNotEmpty()) {
-                selectedSlotInfoMap.filter { hairValue -> hairValue.value.third }[0]!!.second.itemId.toString()
-            } else {
-                if(selectedSlotInfoMap.filter { hairValue -> hairValue.value.first }.isNotEmpty()) {
-                    selectedSlotInfoMap.filter { hairValue -> hairValue.value.first }[0]!!.second.itemId.toString()
-                } else {
-                    ""
-                }
-            }
-
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
-            when(_userResponse) {
+            when (_userResponse) {
                 is Resource.Success -> {
-                    when(_userResponse.value.code) {
+                    when (_userResponse.value.code) {
                         "200" -> {
-                            viewModel.getUserCharacterPreviewFilename(_userResponse.value.data.first().id, _lastSelectedFace, _lastSelectedHair)
+                            viewModel.getUserCharacterPreviewFilename(
+                                _userResponse.value.data.first().id,
+                                if (selectedSlotInfoMapFace.filter { faceValue -> faceValue.value.first }
+                                        .isNotEmpty()) {
+                                    selectedSlotInfoMapFace.filter { faceValue -> faceValue.value.first }.values.first().second.itemId.toString()
+                                } else {
+                                    ""
+                                },
+                                if (selectedSlotInfoMapHair.filter { hairValue -> hairValue.value.first }
+                                        .isNotEmpty()) {
+                                    selectedSlotInfoMapHair.filter { hairValue -> hairValue.value.first }.values.first().second.itemId.toString()
+                                } else {
+                                    ""
+                                }
+                            )
                         }
                         "400" -> {
                             // Error
@@ -535,13 +433,5 @@ class DashboardCharacterInfoFragment :
                 }
             }
         })
-
-        Log.d(TAG, "Click Event From Inventory Adapter")
-        when (view.id) {
-            R.id.itemInventoryLayout -> {
-                Log.d(TAG, "Click Event In Inventory Layout")
-
-            }
-        }
     }
 }

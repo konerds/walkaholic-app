@@ -5,7 +5,7 @@ data class FilenameThemeCategoryImageResponse(
         val message: String,
         val data: ArrayList<FilenameThemeCategoryImage>
 ) {
-        inner class FilenameThemeCategoryImage(
+        data class FilenameThemeCategoryImage(
                 val themeFilename: String
         )
 }

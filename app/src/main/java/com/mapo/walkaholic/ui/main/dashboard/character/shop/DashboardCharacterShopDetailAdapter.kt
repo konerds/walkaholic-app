@@ -1,17 +1,15 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.databinding.ItemSlotShopBinding
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
 
 class DashboardCharacterShopDetailAdapter(
     private var arrayListItemInfo: ArrayList<ItemInfo>,
-    private val listener: CharacterItemSlotClickListener
+    private val listener: CharacterShopSlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterShopDetailAdapter.DashboardCharacterShopDetailViewHolder>() {
 
     private val selectedSlotShopMap = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
@@ -50,16 +48,12 @@ class DashboardCharacterShopDetailAdapter(
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemShopLayout.setOnClickListener {
                 toggleItemSelected(position)
-                listener.onRecyclerViewItemClick(holder.binding.itemShopLayout, position, selectedSlotShopMap)
+                listener.onItemClick(selectedSlotShopMap)
             }
         }
     }
 
     override fun getItemCount() = arrayListItemInfo.size
-
-    /*fun setData(arrayListNewInfoItemInfo: ArrayList<ItemInfo>) {
-        arrayListItemInfo = arrayListNewInfoItemInfo
-    }*/
 
     private fun toggleItemSelected(position: Int) {
         if(selectedSlotShopMap[position] != null) {
@@ -71,7 +65,7 @@ class DashboardCharacterShopDetailAdapter(
             } else {
                 selectedSlotShopMap[position] = Triple(true, selectedSlotShopMap[position]!!.second, true)
             }
-            notifyItemChanged(position)
+            notifyDataSetChanged()
         } else { }
     }
 
@@ -83,9 +77,11 @@ class DashboardCharacterShopDetailAdapter(
         }
     }
 
-    private fun clearSelectedItem() {
+    fun clearSelectedItem() {
         for(i in 0 until arrayListItemInfo.size) {
             selectedSlotShopMap[i] = Triple(false, arrayListItemInfo[i], false)
         }
     }
+
+    fun getData() = selectedSlotShopMap
 }

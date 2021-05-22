@@ -14,48 +14,51 @@ import java.util.*
 import kotlin.math.absoluteValue
 
 class DashboardViewModel(
-        private val mainRepository: MainRepository
+    private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {}
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
-    private val _expInformationResponse: MutableLiveData<Resource<ExpInformationResponse>> = MutableLiveData()
+    private val _expInformationResponse: MutableLiveData<Resource<ExpInformationResponse>> =
+        MutableLiveData()
     val expInformationResponse: LiveData<Resource<ExpInformationResponse>>
         get() = _expInformationResponse
-    private val _userCharacterFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> = MutableLiveData()
+    private val _userCharacterFilenameResponse: MutableLiveData<Resource<UserCharacterFilenameResponse>> =
+        MutableLiveData()
     val userCharacterFilenameResponse: LiveData<Resource<UserCharacterFilenameResponse>>
         get() = _userCharacterFilenameResponse
-    private val _characterItemResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
-    val characterItemResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
-        get() = _characterItemResponse
-    private val _weatherDustResponse: MutableLiveData<Resource<WeatherDustResponse>> = MutableLiveData()
+    private val _weatherDustResponse: MutableLiveData<Resource<WeatherDustResponse>> =
+        MutableLiveData()
     val weatherDustResponse: LiveData<Resource<WeatherDustResponse>>
         get() = _weatherDustResponse
-    private val _sgisAccessTokenResponse: MutableLiveData<Resource<SgisAccessTokenResponse>> = MutableLiveData()
+    private val _sgisAccessTokenResponse: MutableLiveData<Resource<SgisAccessTokenResponse>> =
+        MutableLiveData()
     val sgisAccessTokenResponse: LiveData<Resource<SgisAccessTokenResponse>>
         get() = _sgisAccessTokenResponse
     private val _tmCoordResponse: MutableLiveData<Resource<TmCoordResponse>> = MutableLiveData()
     val tmCoordResponse: LiveData<Resource<TmCoordResponse>>
         get() = _tmCoordResponse
-    private val _nearMsrstnResponse: MutableLiveData<Resource<NearMsrstnResponse>> = MutableLiveData()
+    private val _nearMsrstnResponse: MutableLiveData<Resource<NearMsrstnResponse>> =
+        MutableLiveData()
     val nearMsrstnResponse: LiveData<Resource<NearMsrstnResponse>>
         get() = _nearMsrstnResponse
-    private val _todayWeatherResponse: MutableLiveData<Resource<TodayWeatherResponse>> = MutableLiveData()
+    private val _todayWeatherResponse: MutableLiveData<Resource<TodayWeatherResponse>> =
+        MutableLiveData()
     val todayWeatherResponse: LiveData<Resource<TodayWeatherResponse>>
         get() = _todayWeatherResponse
-    private val _yesterdayWeatherResponse: MutableLiveData<Resource<YesterdayWeatherResponse>> = MutableLiveData()
+    private val _yesterdayWeatherResponse: MutableLiveData<Resource<YesterdayWeatherResponse>> =
+        MutableLiveData()
     val yesterdayWeatherResponse: LiveData<Resource<YesterdayWeatherResponse>>
         get() = _yesterdayWeatherResponse
-    private val _filenameWeatherResponse: MutableLiveData<Resource<FilenameWeatherResponse>> = MutableLiveData()
+    private val _filenameWeatherResponse: MutableLiveData<Resource<FilenameWeatherResponse>> =
+        MutableLiveData()
     val filenameWeatherResponse: LiveData<Resource<FilenameWeatherResponse>>
         get() = _filenameWeatherResponse
-    private val _filenameThemeCategoryImageResponse: MutableLiveData<Resource<FilenameThemeCategoryImageResponse>> = MutableLiveData()
+    private val _filenameThemeCategoryImageResponse: MutableLiveData<Resource<FilenameThemeCategoryImageResponse>> =
+        MutableLiveData()
     val filenameThemeCategoryImageResponse: LiveData<Resource<FilenameThemeCategoryImageResponse>>
         get() = _filenameThemeCategoryImageResponse
-    private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
-    val characterUriList: LiveData<Resource<CharacterUriResponse>>
-        get() = _characterUriList
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -84,13 +87,7 @@ class DashboardViewModel(
         }
     }
 
-    fun getUserCharacterItem(petId: Int) {
-        viewModelScope.launch {
-            _characterItemResponse.value = mainRepository.getCharacterItem(petId)
-        }
-    }
-
-    fun showTodayString() : String {
+    fun showTodayString(): String {
         val format = SimpleDateFormat("yyyy년 MM월 dd일, E요일", Locale.KOREAN)
         return format.format(Date())
     }
@@ -119,7 +116,7 @@ class DashboardViewModel(
         }
     }
 
-    fun getTodayWeather(nX : String, nY : String) {
+    fun getTodayWeather(nX: String, nY: String) {
         viewModelScope.launch {
             val todayDate = Date()
             todayDate.hours -= 1
@@ -127,16 +124,17 @@ class DashboardViewModel(
         }
     }
 
-    fun getYesterdayWeather(nX : String, nY : String) {
+    fun getYesterdayWeather(nX: String, nY: String) {
         viewModelScope.launch {
             val yesterdayDate = Date()
             yesterdayDate.date -= 1
             yesterdayDate.hours += 1
-            _yesterdayWeatherResponse.value = mainRepository.getYesterdayWeather(nX, nY, yesterdayDate)
+            _yesterdayWeatherResponse.value =
+                mainRepository.getYesterdayWeather(nX, nY, yesterdayDate)
         }
     }
 
-    fun getDifferenceTemperature(todayTemperature : String?, yesterdayTemperature : String?) : String {
+    fun getDifferenceTemperature(todayTemperature: String?, yesterdayTemperature: String?): String {
         if (todayTemperature.isNullOrEmpty() || yesterdayTemperature.isNullOrEmpty()) {
             return "오류"
         } else {
@@ -153,7 +151,7 @@ class DashboardViewModel(
         }
     }
 
-    fun getFilenameWeather(weatherCode : String) {
+    fun getFilenameWeather(weatherCode: String) {
         viewModelScope.launch {
             _filenameWeatherResponse.value = mainRepository.getFilenameWeather(weatherCode)
         }
@@ -161,13 +159,8 @@ class DashboardViewModel(
 
     fun getFilenameThemeCategoryImage() {
         viewModelScope.launch {
-            _filenameThemeCategoryImageResponse.value = mainRepository.getFilenameThemeCategoryImage()
-        }
-    }
-
-    fun getCharacterUriList(characterType: String) {
-        viewModelScope.launch {
-            _characterUriList.value = mainRepository.getCharacterUriList(characterType)
+            _filenameThemeCategoryImageResponse.value =
+                mainRepository.getFilenameThemeCategoryImage()
         }
     }
 }

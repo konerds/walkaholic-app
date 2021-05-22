@@ -5,7 +5,7 @@ data class CategoryThemeResponse(
     val message: String,
     val data: ArrayList<CategoryTheme>
 ) {
-    inner class CategoryTheme(
+    data class CategoryTheme(
         val themeName: String
     )
 }

@@ -5,7 +5,7 @@ data class TermPrivacyResponse(
     val message: String,
     val data: ArrayList<TermPrivacy>
 ) {
-    inner class TermPrivacy(
+    data class TermPrivacy(
         val privacyTermContent: String
     )
 }
