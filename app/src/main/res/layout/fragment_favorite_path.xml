@@ -4,19 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.dashboard.storagepath.StoragePathFragment">
+    tools:context=".ui.favoritepath.FavoritePathFragment">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/storagePathTL"
+        android:id="@+id/favoritePathTL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/storagePathVP"
+        android:id="@+id/favoritePathVP"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/storagePathTL" />
+        app:layout_constraintTop_toBottomOf="@id/favoritePathTL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

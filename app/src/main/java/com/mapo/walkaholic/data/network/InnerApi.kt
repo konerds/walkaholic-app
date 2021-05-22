@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.data.network
 
+import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.*
 import okhttp3.ResponseBody
@@ -18,11 +19,6 @@ interface InnerApi {
     suspend fun getExpInformation(
         @Path("id") id: String
     ): ExpInformationResponse
-
-    @POST("info/characterItem")
-    suspend fun getCharacterItem(
-        @Field("id") id: String
-    ): UserCharacterEquipStatusResponse
 
     @GET("user/{id}/pet/appearance")
     suspend fun getUserCharacterFilename(
@@ -65,17 +61,21 @@ interface InnerApi {
     @GET("item")
     suspend fun getStatusShopSaleItem() : ShopSaleItemStatusResponse
 
+    @Headers(
+        "Accept:application/json, text/plain, */*",
+        "Content-Type:application/json;charset=UTF-8"
+    )
+    @POST("user/{id}/item")
+    suspend fun buyItem(
+        @Path("id") id: String,
+        @Body buyItemInfo : BuyItemRequestBody
+    ) : BuyItemResponse
+
     @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
         @Body body: MapRequestBody
     ): MapResponse
-
-    @FormUrlEncoded
-    @POST("info/characterResource")
-    suspend fun getCharacterUriList(
-        @Field("character_id") characterType: String
-    ): CharacterUriResponse
 
     @FormUrlEncoded
     @POST("info/calendarDate")
@@ -111,11 +111,11 @@ interface InnerApi {
     ): RankingResponse
 
     @FormUrlEncoded
-    @POST("info/storagePath")
-    suspend fun getStoragePath(
+    @POST("info/favoritePath")
+    suspend fun getFavoritePath(
         @Field("user_id") user_id: Long,
         @Field("id") id: String
-    ): StoragePathResponse
+    ): FavoritePathResponse
 
     /*@FormUrlEncoded
     @POST("info/missionDaily")

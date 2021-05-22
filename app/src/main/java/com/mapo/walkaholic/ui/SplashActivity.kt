@@ -23,6 +23,10 @@ class SplashActivity :
         GlobalApplication.activityList.add(this)
         // Call Parent Function
         super.onCreate(savedInstanceState)
+        /********************************
+         * 테스트용 강제 이동
+         */
+        startNewActivity(AuthActivity::class.java as Class<Activity>)
         /*
             View Binding
          */

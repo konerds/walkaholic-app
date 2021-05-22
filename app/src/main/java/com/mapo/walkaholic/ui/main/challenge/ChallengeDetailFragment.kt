@@ -74,6 +74,122 @@ class ChallengeDetailFragment(
         dummyArrayList.add(dummyMission3)
         dummyArrayList.add(dummyMission4)
 
+        /*******************
+         * 테스트용 임시
+         */
+        binding.challengeRVMission.also { _challengeRVMission ->
+            _challengeRVMission.layoutManager = LinearLayoutManager(requireContext())
+            _challengeRVMission.setHasFixedSize(true)
+                            viewModel.getMissionCondition(
+                                when (position) {
+                                    0 -> "00"
+                                    1 -> "01"
+                                    else -> ""
+                                }
+                            )
+                                    _challengeRVMission.layoutManager =
+                                        LinearLayoutManager(requireContext())
+                                    // 동일한 크기의 아이템 항목을 사용자에게 리스트로 보여주기 위해 크기가 변경되지 않음을 명시
+                                    _challengeRVMission.setHasFixedSize(true)
+                                    when (position) {
+                                        0 -> {
+                                            binding.challengeTvIntro1.text =
+                                                "일일미션을 완료하고\n포인트를 받으세요!"
+                                            binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
+                                            binding.challengeTvIntro1.visibility = View.VISIBLE
+                                            binding.challengeTvIntro2.visibility = View.VISIBLE
+                                            binding.challengeLayoutRanking.visibility =
+                                                View.GONE
+                                            binding.challengeLayoutRankingIntro.visibility =
+                                                View.GONE
+                                            binding.challengeLayoutMission.visibility =
+                                                View.VISIBLE
+                                            /*it.adapter = it3.value.missionCondition?.let { it3 ->
+                                                ChallengeDetailMissionAdapter(dummyArrayList)
+                                            }*/
+                                            _challengeRVMission.adapter =
+                                                ChallengeDetailMissionAdapter(dummyArrayList)
+                                        }
+                                        1 -> {
+                                            binding.challengeTvIntro1.text =
+                                                "주간미션을 완료하고\n포인트를 받으세요!"
+                                            binding.challengeTvIntro2.text =
+                                                "미션은 매주 월요일 자정에 갱신되어요"
+                                            binding.challengeTvIntro1.visibility = View.VISIBLE
+                                            binding.challengeTvIntro2.visibility = View.VISIBLE
+                                            binding.challengeLayoutRanking.visibility =
+                                                View.GONE
+                                            binding.challengeLayoutRankingIntro.visibility =
+                                                View.GONE
+                                            binding.challengeLayoutMission.visibility =
+                                                View.VISIBLE
+                                            /*it.adapter = it3.value.missionCondition?.let { it3 ->
+                                                ChallengeDetailMissionAdapter(dummyArrayList)
+                                            }*/
+                                            _challengeRVMission.adapter =
+                                                ChallengeDetailMissionAdapter(dummyArrayList)
+                                        }
+                                        2 -> {
+                                            binding.challengeTvIntro1.visibility = View.GONE
+                                            binding.challengeTvIntro2.visibility = View.GONE
+                                            binding.challengeLayoutMission.visibility =
+                                                View.GONE
+                                            binding.challengeLayoutRankingIntro.visibility =
+                                                View.VISIBLE
+                                            tabLayout = binding.challengeRankingTL
+                                            viewPager = binding.challengeRankingVP
+                                            val adapter =
+                                                ChallengeRankingViewPagerAdapter(this, 2)
+                                            viewPager.adapter = adapter
+                                            val tabName: ArrayList<String> = arrayListOf()
+                                            tabName.add("월별포인트")
+                                            tabName.add("누적포인트")
+                                            TabLayoutMediator(
+                                                tabLayout,
+                                                viewPager
+                                            ) { tab, position ->
+                                                tab.text = tabName?.get(position)
+                                            }.attach()
+                                            tabLayout.addOnTabSelectedListener(object :
+                                                TabLayout.OnTabSelectedListener {
+                                                override fun onTabSelected(tab: TabLayout.Tab?) {
+                                                    viewPager.currentItem = tab!!.position
+                                                    when (tab!!.position) {
+                                                        0 -> {
+                                                            binding.challengeRankingTvIntro1.text =
+                                                                "님, 월별랭킹"
+                                                            // binding. ~~ 순위
+                                                            binding.challengeRankingTvIntro3.text =
+                                                                "월별랭킹은 매월 1일 자정에 갱신되어요"
+                                                        }
+                                                        1 -> {
+                                                            binding.challengeRankingTvIntro1.text =
+                                                                "님, 누적랭킹"
+                                                            // binding. ~~ 순위
+                                                            binding.challengeRankingTvIntro3.text =
+                                                                "서비스 시작일(2021년 05월 17일)부터 현재까지"
+                                                        }
+                                                        else -> {
+                                                        }
+                                                    }
+                                                }
+
+                                                override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+                                                }
+
+                                                override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                                                }
+                                            })
+                                            binding.challengeLayoutRanking.visibility =
+                                                View.VISIBLE
+                                        }
+                                    }
+        }
+
+        /******************/
+
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             binding.challengeRVMission.also { _challengeRVMission ->
                 _challengeRVMission.layoutManager = LinearLayoutManager(requireContext())

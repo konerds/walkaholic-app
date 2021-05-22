@@ -5,7 +5,7 @@ data class FilenameSplashImageResponse(
     val message: String,
     val data: ArrayList<SplashFilename>
 ) {
-    inner class SplashFilename(
+    data class SplashFilename(
         val splashFilename : String
     )
 }

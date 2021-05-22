@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="storagePathItem"
+            name="favoritePathItem"
             type="com.mapo.walkaholic.data.model.Theme" />
     </data>
 
@@ -25,11 +25,11 @@
             android:layout_marginLeft="9dp"
             android:layout_marginTop="16dp"
             android:button="@null"
-            android:background="@drawable/checkbox_storage_path" />
+            android:background="@drawable/checkbox_favorite_path" />
         <!--android:onClick="onCheckboxClicked"-->
 
         <ImageView
-            android:id="@+id/storagePathIV"
+            android:id="@+id/favoritePathIV"
             android:layout_width="58dp"
             android:layout_height="52dp"
             android:layout_marginLeft="8dp"
@@ -43,13 +43,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/storagePathTVTitle"
+                android:id="@+id/favoritePathTVTitle"
                 style="@style/font_semi_bold_20_one"
                 layout_alignParentTop="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{storagePathItem.courseName}" />
+                android:text="@{favoritePathItem.courseName}" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -62,21 +62,21 @@
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{storagePathItem.courseAddress}" />
+                    android:text="@{favoritePathItem.courseAddress}" />
 
                 <TextView
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text='@{" | " + storagePathItem.courseDistance + " | "}'/>
+                    android:text='@{" | " + favoritePathItem.courseDistance + " | "}'/>
 
                 <TextView
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{storagePathItem.courseTime}" />
+                    android:text="@{favoritePathItem.courseTime}" />
 
             </LinearLayout>
 
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginRight="12dp"
-            android:background="@drawable/box_storage_path_corner_f9a25b">
+            android:background="@drawable/box_favorite_path_corner_f9a25b">
 
             <TextView
                 style="@style/font_semi_bold_10_one"

@@ -21,19 +21,19 @@
 
         <variable
             name="expInformation"
-            type="com.mapo.walkaholic.data.model.ExpInformation" />
+            type="com.mapo.walkaholic.data.model.response.ExpInformationResponse.ExpInformation" />
 
         <variable
             name="weatherDust"
-            type="com.mapo.walkaholic.data.model.WeatherDust" />
+            type="com.mapo.walkaholic.data.model.response.WeatherDustResponse.WeatherDust" />
 
         <variable
             name="todayWeather"
-            type="com.mapo.walkaholic.data.model.TodayWeather" />
+            type="com.mapo.walkaholic.data.model.response.TodayWeatherResponse.TodayWeather" />
 
         <variable
             name="yesterdayWeather"
-            type="com.mapo.walkaholic.data.model.YesterdayWeather" />
+            type="com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse.YesterdayWeather" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -354,7 +354,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:gravity="start"
-                            android:text='@{todayWeather.temperatureCurrent + "ºC / " + todayWeather.weatherCode}' />
+                            android:text='@{todayWeather.temperatureCurrent + "ºC / " + todayWeather.weatherText}' />
 
                         <ImageView
                             android:id="@+id/dashIvWeather"

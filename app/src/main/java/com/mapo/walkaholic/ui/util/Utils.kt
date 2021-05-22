@@ -24,7 +24,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.ui.auth.LoginFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import kotlin.coroutines.coroutineContext
 
 private const val RESOURCE_BASE_URL = "http://15.164.103.223:8080/static/img/"
 
@@ -49,7 +48,7 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     snackbar.show()
 }
 
-fun Fragment.handleApiError(
+/*fun Fragment.handleApiError(
     failure: Resource.Failure,
     retry: (() -> Unit)? = null
 ) {
@@ -98,33 +97,48 @@ fun Activity.handleApiError(
             window.decorView.snackbar(error)
         }
     }
+}*/
+
+
+fun Fragment.handleApiError(
+    failure: Resource.Failure,
+    retry: (() -> Unit)? = null
+) {
+
+}
+
+fun Activity.handleApiError(
+    failure: Resource.Failure,
+    retry: (() -> Unit)? = null
+) {
+
 }
 
 @BindingAdapter("app:full_text", "app:span_text", "app:span_color")
-fun formatText(textView: TextView, full_text: String?, span_text: String?, span_color: Int) {
-    val _full_text: String
-    val _span_text: String
-    if (span_text.isNullOrEmpty() || span_text == "null") {
-        _span_text = "오류"
+fun formatText(textView: TextView, _fullText: String?, _spanText: String?, spanColor: Int) {
+    val fullText: String
+    val spanText: String
+    if (_spanText.isNullOrEmpty() || _spanText == "null") {
+        spanText = "오류"
     } else {
-        _span_text = span_text
+        spanText = _spanText
     }
-    if (full_text.isNullOrEmpty() || full_text == "null") {
-        _full_text = "오류"
+    if (_fullText.isNullOrEmpty() || _fullText == "null") {
+        fullText = "오류"
     } else {
-        _full_text = full_text
+        fullText = _fullText
     }
-    val firstMatchingIndex = when (_full_text.indexOf(_span_text)) {
+    val firstMatchingIndex = when (fullText.indexOf(spanText)) {
         -1 -> 0
-        else -> _full_text.indexOf(_span_text)
+        else -> fullText.indexOf(spanText)
     }
-    val lastMatchingIndex = when (firstMatchingIndex + _span_text.length) {
+    val lastMatchingIndex = when (firstMatchingIndex + spanText.length) {
         -1 -> 1
-        else -> firstMatchingIndex + _span_text.length
+        else -> firstMatchingIndex + spanText.length
     }
-    val spannable = SpannableString(_full_text)
+    val spannable = SpannableString(fullText)
     spannable.setSpan(
-        ForegroundColorSpan(span_color),
+        ForegroundColorSpan(spanColor),
         firstMatchingIndex,
         lastMatchingIndex,
         Spannable.SPAN_INCLUSIVE_EXCLUSIVE

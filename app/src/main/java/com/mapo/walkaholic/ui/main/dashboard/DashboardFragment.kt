@@ -118,42 +118,6 @@ class DashboardFragment :
                                                                                                     ANIMATION_DURATION
                                                                                                 )
                                                                                                 if (animationDrawable.numberOfFrames == _userCharacterResponse.value.data.size) {
-                                                                                                    /*
-                                                                                                    val charExp =
-                                                                                                        (100.0 * (userCharacter.exp.toFloat() - _exptable.value.exptable.requireexp2.toFloat())
-                                                                                                                / (_exptable.value.exptable.requireexp1.toFloat() - _exptable.value.exptable.requireexp2.toFloat())).toLong()
-                                                                                                    val radius =
-                                                                                                        CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
-                                                                                                    val bitmapInfoSheet =
-                                                                                                        Bitmap.createBitmap(
-                                                                                                            (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
-                                                                                                            (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
-                                                                                                            Bitmap.Config.ARGB_8888
-                                                                                                        )
-                                                                                                    val canvasInfo = Canvas(bitmapInfoSheet)
-                                                                                                    val startAngle = 135F
-                                                                                                    val sweepAngle = 270F
-                                                                                                    val paint = Paint()
-                                                                                                    paint.isAntiAlias = true
-                                                                                                    paint.color = Color.parseColor("#C9C9C9")
-                                                                                                    paint.style = Paint.Style.FILL
-                                                                                                    var oval = RectF(0.toFloat(), 0.toFloat(), canvasInfo.width.toFloat(), canvasInfo.height.toFloat())
-                                                                                                    canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
-                                                                                                    paint.color = Color.parseColor("#D46544")
-                                                                                                    canvasInfo.drawArc(oval, startAngle, 2.7F * charExp, true, paint)
-                                                                                                    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-                                                                                                    oval = RectF(((canvasInfo.width / 2) - radius).toFloat(),
-                                                                                                            ((canvasInfo.height / 2) - radius).toFloat(),
-                                                                                                            ((canvasInfo.width / 2) + radius).toFloat(),
-                                                                                                            ((canvasInfo.height / 2) + radius).toFloat())
-                                                                                                    canvasInfo.drawArc(oval, startAngle, sweepAngle, true, paint)
-                                                                                                    binding.dashIvCharacterInfo.setImageBitmap(bitmapInfoSheet)
-                                                                                                    binding.dashIvCharacter.minimumWidth = resource.width * PIXELS_PER_METRE
-                                                                                                    binding.dashIvCharacter.minimumHeight = resource.height * PIXELS_PER_METRE
-                                                                                                    binding.dashIvCharacter.setImageDrawable(animationDrawable)
-                                                                                                    animationDrawable = binding.dashIvCharacter.drawable as AnimationDrawable
-                                                                                                    animationDrawable.start()
-                                                                                                     */
                                                                                                     val charExp =
                                                                                                         (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
                                                                                                                 / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
@@ -253,9 +217,6 @@ class DashboardFragment :
                                                                                             }
                                                                                         })
                                                                                 }
-                                                                                viewModel!!.getCharacterUriList(
-                                                                                    _userResponse.value.data.first().petId.toString()
-                                                                                )
                                                                             }
                                                                             "400" -> {
                                                                                 // Error
@@ -480,55 +441,58 @@ class DashboardFragment :
                 }
             }
         })
-        viewModel.todayWeatherResponse.observe(viewLifecycleOwner, Observer { _todayWeatherResponse ->
-            when (_todayWeatherResponse) {
-                is Resource.Success -> {
-                    if (!_todayWeatherResponse.value.error) {
-                        binding.todayWeather = _todayWeatherResponse.value.todayWeather
-                        viewModel.getFilenameWeather(_todayWeatherResponse.value.todayWeather.weatherCode)
-                        viewModel.filenameWeatherResponse.observe(
-                            viewLifecycleOwner,
-                            Observer { _filenameWeatherResponse ->
-                                when (_filenameWeatherResponse) {
-                                    is Resource.Success -> {
-                                        when (_filenameWeatherResponse.value.code) {
-                                            "200" -> {
-                                                /*
-                                                    날씨 코드 관련
-                                                    1 맑음, 2 구름, 3 흐림, 4 비, 5 진눈개비, 6 눈, 7 오류
-                                                */
-                                                setImageUrl(
-                                                    binding.dashIvWeather, _filenameWeatherResponse.value.data.first().weatherFilename
-                                                )
-                                            }
-                                            "400" -> {
-                                                // Error
-                                            }
-                                            else -> {
-                                                // Error
+        viewModel.todayWeatherResponse.observe(
+            viewLifecycleOwner,
+            Observer { _todayWeatherResponse ->
+                when (_todayWeatherResponse) {
+                    is Resource.Success -> {
+                        if (!_todayWeatherResponse.value.error) {
+                            binding.todayWeather = _todayWeatherResponse.value.todayWeather
+                            viewModel.getFilenameWeather(_todayWeatherResponse.value.todayWeather.weatherCode)
+                            viewModel.filenameWeatherResponse.observe(
+                                viewLifecycleOwner,
+                                Observer { _filenameWeatherResponse ->
+                                    when (_filenameWeatherResponse) {
+                                        is Resource.Success -> {
+                                            when (_filenameWeatherResponse.value.code) {
+                                                "200" -> {
+                                                    /*
+                                                        날씨 코드 관련
+                                                        1 맑음, 2 구름, 3 흐림, 4 비, 5 진눈개비, 6 눈, 7 오류
+                                                    */
+                                                    setImageUrl(
+                                                        binding.dashIvWeather,
+                                                        _filenameWeatherResponse.value.data.first().weatherFilename
+                                                    )
+                                                }
+                                                "400" -> {
+                                                    // Error
+                                                }
+                                                else -> {
+                                                    // Error
+                                                }
                                             }
                                         }
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            // Network Error
+                                            handleApiError(_filenameWeatherResponse)
+                                        }
                                     }
-                                    is Resource.Loading -> {
-                                        // Loading
-                                    }
-                                    is Resource.Failure -> {
-                                        // Network Error
-                                        handleApiError(_filenameWeatherResponse)
-                                    }
-                                }
-                            })
-                    } else {
+                                })
+                        } else {
+                        }
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Failure -> {
+                        handleApiError(_todayWeatherResponse)
                     }
                 }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    handleApiError(_todayWeatherResponse)
-                }
-            }
-        })
+            })
         viewModel.filenameThemeCategoryImageResponse.observe(
             viewLifecycleOwner,
             Observer { _filenameThemeCategoryImageResponse ->

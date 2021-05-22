@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.mapo.walkaholic.data.model.YesterdayWeather
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
@@ -35,9 +34,13 @@ class YesterdayWeatherResponseDeserializer : JsonDeserializer<YesterdayWeatherRe
                 Log.i(
                         ContentValues.TAG, "Yesterday category & fcstTime : ${jsonElement.asJsonObject["category"].asString.toString().trim()} ${jsonElement.asJsonObject["fcstTime"].asString.toString().trim()}"
                 )
-                return YesterdayWeatherResponse(false, YesterdayWeather(jsonElement.asJsonObject["fcstValue"].asString.toString().trim()))
+                return YesterdayWeatherResponse(false,
+                    YesterdayWeatherResponse.YesterdayWeather(
+                        jsonElement.asJsonObject["fcstValue"].asString.toString().trim()
+                    )
+                )
             } else { }
         }
-        return YesterdayWeatherResponse(true, YesterdayWeather("오류"))
+        return YesterdayWeatherResponse(true, YesterdayWeatherResponse.YesterdayWeather("오류"))
     }
 }

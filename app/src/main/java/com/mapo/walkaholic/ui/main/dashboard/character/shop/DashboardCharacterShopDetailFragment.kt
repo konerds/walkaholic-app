@@ -1,9 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
-import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -19,14 +15,11 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character.CharacterItemSlotClickListener
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoDetailAdapter
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
+import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
@@ -34,7 +27,7 @@ import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterShopDetailFragment(
     private val position: Int,
-    private val listener : CharacterItemSlotClickListener
+    private val listener : CharacterShopSlotClickListener
 ) : BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDetailCharacterShopBinding, MainRepository>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,12 +85,11 @@ class DashboardCharacterShopDetailFragment(
                 }
             }
         })
-        binding.dashCharacterShopDetailRV.also { _dashCharacterShopDetailRV ->
-
-        }
-        binding.dashCharacterShopInitLayout.setOnClickListener {
-            Log.d(ContentValues.TAG,"Click Init Button Event")
-            //binding.dashCharacterInfoDetailRV
+        binding.dashCharacterShopInitLayout.setOnClickListener { _dashCharacterShopInitLayout ->
+            val adapter : DashboardCharacterShopDetailAdapter = binding.dashCharacterShopDetailRV.adapter as DashboardCharacterShopDetailAdapter
+            adapter.clearSelectedItem()
+            adapter.notifyDataSetChanged()
+            listener.onItemClick(adapter.getData())
         }
     }
 

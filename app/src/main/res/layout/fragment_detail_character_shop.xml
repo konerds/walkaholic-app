@@ -45,7 +45,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:src="@drawable/ic_character_info_init" />
+                        android:src="@drawable/ic_character_shop_init" />
 
                     <TextView
                         style="@style/font_semi_bold_12_one"

@@ -115,8 +115,8 @@
     <!-- 찜한 경로 이동 -->
     <fragment
         android:id="@+id/actionStoragePath"
-        android:name="com.mapo.walkaholic.ui.main.dashboard.storagepath.StoragePathFragment"
-        tools:layout="@layout/fragment_storage_path">
+        android:name="com.mapo.walkaholic.ui.favoritepath.FavoritePathFragment"
+        tools:layout="@layout/fragment_favorite_path">
         <action
             android:id="@+id/action_actionStoragePath_to_actionBnvDash"
             app:destination="@id/actionBnvDash"

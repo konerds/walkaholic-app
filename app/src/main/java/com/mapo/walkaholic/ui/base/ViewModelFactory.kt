@@ -17,7 +17,7 @@ import com.mapo.walkaholic.ui.main.dashboard.calendar.DashboardCalendarViewModel
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewModel
 import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopViewModel
 import com.mapo.walkaholic.ui.main.dashboard.profile.DashboardProfileViewModel
-import com.mapo.walkaholic.ui.main.dashboard.storagepath.StoragePathViewModel
+import com.mapo.walkaholic.ui.favoritepath.FavoritePathViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
 import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
 import java.lang.IllegalArgumentException
@@ -56,7 +56,7 @@ class ViewModelFactory(
                     isAssignableFrom(ChallengeViewModel::class.java) -> ChallengeViewModel(
                             repository as MainRepository
                     )
-                    isAssignableFrom(StoragePathViewModel::class.java) -> StoragePathViewModel(
+                    isAssignableFrom(FavoritePathViewModel::class.java) -> FavoritePathViewModel(
                         repository as MainRepository
                     )
                     isAssignableFrom(MapViewModel::class.java) -> MapViewModel(repository as MainRepository)

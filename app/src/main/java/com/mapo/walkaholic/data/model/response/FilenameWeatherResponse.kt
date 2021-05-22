@@ -5,7 +5,7 @@ data class FilenameWeatherResponse(
     val message: String,
     val data: ArrayList<FilenameWeather>
 ) {
-    inner class FilenameWeather(
+    data class FilenameWeather(
         val weatherFilename: String
     )
 }

@@ -30,9 +30,6 @@ class DashboardCharacterInfoViewModel(
     private val _statusUserCharacterInventoryItemResponse: MutableLiveData<Resource<UserInventoryItemStatusResponse>> = MutableLiveData()
     val statusUserCharacterInventoryItemResponse: LiveData<Resource<UserInventoryItemStatusResponse>>
         get() = _statusUserCharacterInventoryItemResponse
-    private val _characterUriList: MutableLiveData<Resource<CharacterUriResponse>> = MutableLiveData()
-    val characterUriList: LiveData<Resource<CharacterUriResponse>>
-        get() = _characterUriList
     private val _selectedInventoryItem: MutableLiveData<Pair<Boolean, ItemInfo>> = MutableLiveData()
     val selectedInventoryItem: LiveData<Pair<Boolean, ItemInfo>>
         get() = _selectedInventoryItem
@@ -68,12 +65,6 @@ class DashboardCharacterInfoViewModel(
         }
     }
 
-    fun getUserCharacterItem(petId: Int) {
-        viewModelScope.launch {
-            _userCharacterEquipStatusResponse.value = mainRepository.getCharacterItem(petId)
-        }
-    }
-
     fun getStatusUserCharacterInventoryItem(userId : Long) {
         viewModelScope.launch {
             _statusUserCharacterInventoryItemResponse.value = mainRepository.getStatusUserCharacterInventoryItem(userId)
@@ -81,10 +72,4 @@ class DashboardCharacterInfoViewModel(
     }
 
     fun toAnyToString(any: Any) = any.toString().trim()
-
-    fun getCharacterUriList(characterType: String) {
-        viewModelScope.launch {
-            _characterUriList.value = mainRepository.getCharacterUriList(characterType)
-        }
-    }
 }

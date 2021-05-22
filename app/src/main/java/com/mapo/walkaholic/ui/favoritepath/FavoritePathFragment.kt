@@ -1,8 +1,6 @@
-package com.mapo.walkaholic.ui.main.dashboard.storagepath
+package com.mapo.walkaholic.ui.favoritepath
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,49 +9,43 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
-import com.mapo.walkaholic.databinding.FragmentChallengeBinding
-import com.mapo.walkaholic.databinding.FragmentStoragePathBinding
-import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.databinding.FragmentFavoritePathBinding
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
-import com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel
-import com.mapo.walkaholic.ui.main.challenge.ChallengeViewPagerAdapter
-import com.mapo.walkaholic.ui.main.theme.ThemeViewModel
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class StoragePathFragment : BaseSharedFragment<StoragePathViewModel, FragmentStoragePathBinding, MainRepository>() {
+class FavoritePathFragment : BaseSharedFragment<FavoritePathViewModel, FragmentFavoritePathBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel : StoragePathViewModel by viewModels {
+        val sharedViewModel : FavoritePathViewModel by viewModels {
             ViewModelFactory(getFragmentRepository())
         }
         viewModel = sharedViewModel
         viewModel.showToastEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@StoragePathFragment::showToastEvent)
+            EventObserver(this@FavoritePathFragment::showToastEvent)
         )
 
         viewModel.showSnackbarEvent.observe(
             viewLifecycleOwner,
-            EventObserver(this@StoragePathFragment::showSnackbarEvent)
+            EventObserver(this@FavoritePathFragment::showSnackbarEvent)
         )
 
         super.onViewCreated(view, savedInstanceState)
 
-        tabLayout = binding.storagePathTL
-        viewPager = binding.storagePathVP
+        tabLayout = binding.favoritePathTL
+        viewPager = binding.favoritePathVP
 
-        val adapter = StoragePathViewPagerAdapter(this, 2)
+        val adapter = FavoritePathViewPagerAdapter(this, 2)
         viewPager.adapter = adapter
         val tabName : ArrayList<String> = arrayListOf()
         tabName.add("테마")
@@ -100,12 +92,12 @@ class StoragePathFragment : BaseSharedFragment<StoragePathViewModel, FragmentSto
         }
     }
 
-    override fun getViewModel() = StoragePathViewModel::class.java
+    override fun getViewModel() = FavoritePathViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentStoragePathBinding.inflate(inflater, container, false)
+    ) = FragmentFavoritePathBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository() : MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }
