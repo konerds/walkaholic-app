@@ -42,7 +42,7 @@
     <string name="dash_diet_weight">소모 칼로리</string>
     <string name="dash_walk_record">산책 기록</string>
     <string name="dash_walk_play">걷기시작</string>
-    <string name="dash_show_detail">자세히 보기 ▶</string>
+    <string name="dash_show_detail">자세히 보기</string>
     <!-- 안내 메시지 -->
     <string name="msg_register_agree">서비스이용 및 개인정보수집이용에 동의하셨습니다</string>
     <string name="msg_success_auth">카카오톡 인증 정보 수신에 성공하였습니다</string>

@@ -129,6 +129,7 @@
                         android:layout_gravity="center|center_vertical" />
 
                     <TextView
+                        style="@style/font_black_20_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|bottom"
@@ -141,6 +142,7 @@
                 </FrameLayout>
 
                 <TextView
+                    style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -159,14 +161,14 @@
                     android:minHeight="32dp"
                     app:full_text='@{user.petName + "가 " + user.nickName + "님을 기다렸어요!"}'
                     app:span_color="@{@color/colorPrimary}"
-                    app:span_text="@{user.nickName}" />
+                    app:span_text="@{user.petName}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="48dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="16dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -175,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:gravity="center|center_vertical"
-                        android:text="@{viewModel.showTodayString()}"
+                        android:text="오늘, 내 활동"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,6 +187,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="vertical"
+                        android:layout_marginTop="20dp"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -211,7 +214,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -230,7 +234,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|center_vertical"
-                        android:text=" 걸음 걸었어요!"
+                        android:text=" 걸음 걸었어요"
                         android:textColor="#689F38" />
 
                 </LinearLayout>
@@ -239,7 +243,7 @@
                     android:id="@+id/dashLayoutRelative1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="32dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -248,7 +252,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="16dp"
                         android:text="@string/dash_km_distance"
                         android:textColor="@color/h5" />
 
@@ -258,7 +262,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="16dp"
                         android:text="4.7KM" />
 
                 </RelativeLayout>
@@ -267,7 +271,7 @@
                     android:id="@+id/dashLayoutRelative2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="14dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -277,7 +281,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_gravity="left|center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="16dp"
                         android:text="@string/dash_diet_weight"
                         android:textColor="@color/h5" />
 
@@ -287,7 +291,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="16dp"
                         android:text="122CAL" />
 
                 </RelativeLayout>
@@ -296,8 +300,8 @@
                     android:id="@+id/dashLayoutWalk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginBottom="28dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="5">
@@ -305,10 +309,12 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/dashBtnWalkStart"
                         style="@style/font_semi_bold_16_one"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/box_dashboard_corner_f37520"
                         android:foreground="?selectableItemBackground"
+                        android:layout_marginLeft="28dp"
+                        android:layout_marginRight="28dp"
                         android:minWidth="272dp"
                         android:minHeight="52dp"
                         android:text="@string/dash_walk_play"
@@ -321,9 +327,9 @@
                 android:id="@+id/dashLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/box_dashboard_uppercorner_white"
                 android:gravity="center|center_vertical"
                 android:orientation="vertical"
@@ -334,7 +340,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -346,7 +352,7 @@
                             style="@style/font_semi_bold_20_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginLeft="16dp"
                             android:gravity="start"
                             android:text='@{todayWeather.temperatureCurrent + "ºC / " + todayWeather.weatherCode}' />
 
@@ -361,8 +367,8 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginBottom="24dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -370,8 +376,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="8dp"
                             android:text="@{viewModel.getDifferenceTemperature(todayWeather.temperatureCurrent, yesterdayWeather.temperatureCurrent)}"
                             android:textColor="@color/colorPrimary"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -383,7 +387,7 @@
                             style="@style/font_medium_12_one"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="4dp"
+                            android:layout_marginRight="2dp"
                             android:text='@{weatherDust.sidoName + " " + weatherDust.stationName}'
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintRight_toLeftOf="@id/dashIvDustStation"
@@ -408,116 +412,137 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="24dp"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="?attr/colorOnSurface"
                         android:gravity="center"
-                        android:padding="2dp">
+                        android:padding="2dp"
+                        android:layout_weight="1">
 
-                        <TableRow android:gravity="center">
-
+                        <TableRow
+                            android:gravity="center"
+                            android:background="@drawable/box_dashboard_uppercorner_f5f4f3">
                             <TextView
                                 style="@style/font_semi_bold_10_one"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="21dp"
                                 android:gravity="center"
-                                android:paddingHorizontal="24dp"
                                 android:text="자외선" />
                         </TableRow>
 
-                        <TableRow android:gravity="center">
+                        <TableRow
+                            android:gravity="center"
+                            android:background="@drawable/box_dashboard_lowercorner_f5f4f3">
 
                             <TextView
                                 style="@style/font_semi_bold_10_one"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/colorSurface"
+                                android:layout_height="21dp"
                                 android:gravity="center"
-                                android:paddingHorizontal="24dp"
                                 android:text="@{weatherDust.uvRay}" />
                         </TableRow>
                     </TableLayout>
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginBottom="8dp"
-                        android:background="?attr/colorOnSurface"
                         android:gravity="center"
-                        android:padding="2dp">
+                        android:padding="2dp"
+                        android:layout_weight="1">
 
-                        <TableRow>
+                        <TableRow
+                            android:gravity="center"
+                            android:background="@drawable/box_dashboard_uppercorner_f5f4f3">
 
                             <TextView
                                 style="@style/font_semi_bold_10_one"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="21dp"
                                 android:gravity="center"
-                                android:paddingHorizontal="24dp"
                                 android:text="미세먼지" />
                         </TableRow>
 
-                        <TableRow>
+                        <TableRow
+                            android:gravity="center"
+                            android:background="@drawable/box_dashboard_lowercorner_f5f4f3">
 
                             <TextView
                                 style="@style/font_semi_bold_10_one"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/colorSurface"
+                                android:layout_width="match_parent"
+                                android:layout_height="21dp"
                                 android:gravity="center"
-                                android:paddingHorizontal="24dp"
                                 android:text="@{weatherDust.pmDust}" />
                         </TableRow>
                     </TableLayout>
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="16dp"
                         android:layout_marginBottom="8dp"
-                        android:background="?attr/colorOnSurface"
                         android:gravity="center"
-                        android:padding="2dp">
+                        android:padding="2dp"
+                        android:layout_weight="1">
 
-                        <TableRow>
+                        <TableRow
+                            android:gravity="center"
+                            android:background="@drawable/box_dashboard_uppercorner_f5f4f3">
 
                             <TextView
                                 style="@style/font_semi_bold_10_one"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="21dp"
                                 android:gravity="center"
-                                android:paddingHorizontal="24dp"
                                 android:text="초미세먼지" />
                         </TableRow>
 
-                        <TableRow>
+                        <TableRow
+                            android:gravity="center"
+                            android:background="@drawable/box_dashboard_lowercorner_f5f4f3">
 
                             <TextView
                                 style="@style/font_semi_bold_10_one"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/colorSurface"
+                                android:layout_width="match_parent"
+                                android:layout_height="21dp"
                                 android:gravity="center"
-                                android:paddingHorizontal="24dp"
                                 android:text="@{weatherDust.pmSuperDust}" />
                         </TableRow>
+
                     </TableLayout>
 
                 </LinearLayout>
 
-                <TextView
-                    style="@style/font_semi_bold_10_one"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
-                    android:background="@drawable/box_dashboard_lowercorner_grey"
-                    android:text="@string/dash_show_detail" />
+                    android:background="@drawable/box_dashboard_lowercorner_grey">
+
+                    <TextView
+                        style="@style/font_semi_bold_10_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dash_show_detail"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="16dp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_dashboard_arrow"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -525,9 +550,9 @@
                 android:id="@+id/dashLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@drawable/box_dashboard_uppercorner_white"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashEndSpace"
@@ -538,16 +563,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="16dp"
                     android:paddingHorizontal="20dp"
-                    android:text="테마에 따라 걸어보세요" />
+                    android:text="테마를 골라 걸어보세요!" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/dashRVTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="28dp"
                     android:paddingHorizontal="20dp"
                     tools:listitem="@layout/item_dashboard_theme" />
 
