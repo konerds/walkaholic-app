@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -22,6 +23,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopDetailAdapter
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -59,6 +61,9 @@ class DashboardCharacterInfoDetailFragment(
                                         is Resource.Success -> {
                                             when (_statusUserCharacterInventoryItem.value.code) {
                                                 "200" -> {
+                                                    viewModel.getUserCharacterEquipStatus(
+                                                        _userResponse.value.data.first().id
+                                                    )
                                                     viewModel.userCharacterEquipStatusResponse.observe(
                                                         viewLifecycleOwner,
                                                         Observer { _userCharacterEquipStatusResponse ->
@@ -232,12 +237,16 @@ class DashboardCharacterInfoDetailFragment(
                                                                                     _dashCharacterInfoDetailRV.adapter as DashboardCharacterInfoDetailAdapter
                                                                                 val initData =
                                                                                     mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
-                                                                                Log.e(TAG, "${adapter.getData()} \n${_userCharacterEquipStatusResponse.value.data}")
                                                                                 adapter.getData()
                                                                                     .forEach { (_dataIndex1, _dataElement1) ->
                                                                                         _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex2, _dataElement2 ->
                                                                                             if (_dataElement1.second.itemId.toString() == _dataElement2.itemId &&
-                                                                                                _dataElement1.second.itemType == _dataElement2.itemType
+                                                                                                _dataElement1.second.itemType == _dataElement2.itemType &&
+                                                                                                _dataElement1.second.itemType == if (position == 0) {
+                                                                                                    "face"
+                                                                                                } else {
+                                                                                                    "hair"
+                                                                                                }
                                                                                             ) {
                                                                                                 initData[_dataIndex1] =
                                                                                                     Pair(
@@ -247,12 +256,16 @@ class DashboardCharacterInfoDetailFragment(
                                                                                             }
                                                                                         }
                                                                                     }
-                                                                                adapter.setData(
-                                                                                    initData
-                                                                                )
-                                                                                listener.onItemClick(
-                                                                                    initData
-                                                                                )
+                                                                                initData.forEach { _initDataIndex, _initDataElement ->
+                                                                                    if(_initDataElement.second.itemType == "face" || _initDataElement.second.itemType == "hair") {
+                                                                                        adapter.setData(
+                                                                                            initData
+                                                                                        )
+                                                                                        /*listener.onItemClick(
+                                                                                            initData
+                                                                                        )*/
+                                                                                    }
+                                                                                }
                                                                             }
                                                                         }
                                                                         "400" -> {

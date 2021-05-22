@@ -50,9 +50,7 @@ class FavoritePathFragment :
         tabLayout = binding.favoritePathTL
         viewPager = binding.favoritePathVP
 
-        val adapter = FavoritePathViewPagerAdapter(requireActivity())
-        adapter.addFragment(FavoritePathDetailFragment(0, this))
-        adapter.addFragment(FavoritePathDetailFragment(1, this))
+        val adapter = FavoritePathViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
         viewPager.adapter = adapter
         val tabName: ArrayList<String> = arrayListOf()
         tabName.add("테마")

@@ -32,6 +32,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewPagerAdapter
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
@@ -68,9 +69,7 @@ class DashboardCharacterShopFragment :
 
         binding.userCharacterItem = CharacterItemInfo("1", "비타씨")
 
-        val pagerAdapter = DashboardCharacterShopViewPagerAdapter(requireActivity())
-        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(0, this))
-        pagerAdapter.addFragment(DashboardCharacterShopDetailFragment(1, this))
+        val pagerAdapter = DashboardCharacterShopViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
         binding.dashCharacterShopVP.adapter = pagerAdapter
         TabLayoutMediator(
             binding.dashCharacterShopTL,

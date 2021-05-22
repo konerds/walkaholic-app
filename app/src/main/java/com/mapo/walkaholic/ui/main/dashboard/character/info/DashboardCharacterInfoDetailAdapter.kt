@@ -101,7 +101,9 @@ class DashboardCharacterInfoDetailAdapter(
 
     fun setData(selectedStatusEquip : MutableMap<Int, Pair<Boolean, ItemInfo>>) {
         for(i in 0 until arrayListItemInfo.size) {
-            selectedSlotInventoryMap[i] = selectedStatusEquip[i] as Pair<Boolean, ItemInfo>
+            if(selectedStatusEquip[i]?.second?.itemType != null && selectedStatusEquip[i]?.second?.itemId != null) {
+                selectedSlotInventoryMap[i] = selectedStatusEquip[i] as Pair<Boolean, ItemInfo>
+            }
         }
         Log.e(TAG,selectedSlotInventoryMap.toString())
         notifyDataSetChanged()

@@ -42,19 +42,6 @@ class ThemeDetailFragment(
             EventObserver(this@ThemeDetailFragment::showSnackbarEvent)
         )
         super.onViewCreated(view, savedInstanceState)
-        /*******************
-         * 테스트용 임시
-         */
-        binding.themeRVTheme.also { _themeRVTheme ->
-            _themeRVTheme.layoutManager = LinearLayoutManager(requireContext())
-            _themeRVTheme.setHasFixedSize(true)
-            val dummyData : ArrayList<Theme> = arrayListOf()
-            dummyData.add(Theme(1, "테마1 이름", "테마1 제목", "테마1 주소", "", "10", "1.5"))
-            dummyData.add(Theme(2, "테마2 이름", "테마2 제목", "테마2 주소", "", "20", "2.5"))
-            dummyData.add(Theme(3, "테마3 이름", "테마3 제목", "테마3 주소", "", "30", "3.5"))
-            _themeRVTheme.adapter = ThemeDetailAdapter(dummyData)
-        }
-        /************************/
         viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
             when (_themeResponse) {
                 is Resource.Success -> {

@@ -1,10 +1,12 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
+import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
@@ -64,9 +67,7 @@ class DashboardCharacterInfoFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(requireActivity())
-        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(0, this))
-        pagerAdapter.addFragment(DashboardCharacterInfoDetailFragment(1, this))
+        val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
         binding.dashCharacterInfoVP.adapter = pagerAdapter
         TabLayoutMediator(
             binding.dashCharacterInfoTL,
@@ -78,7 +79,20 @@ class DashboardCharacterInfoFragment :
                 else -> ""
             }
         }.attach()
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+        binding.dashCharacterInfoTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                binding.dashCharacterInfoVP.currentItem = tab!!.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+        viewModel.userResponse.observe(viewLifecycleOwner , Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
                     when (_userResponse.value.code) {
@@ -92,183 +106,181 @@ class DashboardCharacterInfoFragment :
                                         is Resource.Success -> {
                                             when (_userCharacterEquipStatusResponse.value.code) {
                                                 "200" -> {
-                                                    with(binding) {
-                                                        viewModel!!.getExpInformation(_userResponse.value.data.first().id)
-                                                        viewModel!!.expInformationResponse.observe(
-                                                            viewLifecycleOwner,
-                                                            Observer { _expInformationResponse ->
-                                                                when (_expInformationResponse) {
-                                                                    is Resource.Success -> {
-                                                                        when (_expInformationResponse.value.code) {
-                                                                            "200" -> {
-                                                                                binding.expInformation =
-                                                                                    _expInformationResponse.value.data.first()
-                                                                                val userCharacterEquipStatus =
-                                                                                    mutableMapOf<String, String>()
-                                                                                _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex, _dataElement ->
-                                                                                    if (_dataElement.itemType == "hair") {
-                                                                                        userCharacterEquipStatus["hair"] =
-                                                                                            _dataElement.itemId
-                                                                                    } else if (_dataElement.itemType == "face") {
-                                                                                        userCharacterEquipStatus["face"] =
-                                                                                            _dataElement.itemId
-                                                                                    }
-                                                                                    if ((_dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
-                                                                                        viewModel!!.getUserCharacterPreviewFilename(
-                                                                                            _userResponse.value.data.first().id,
-                                                                                            if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
-                                                                                                userCharacterEquipStatus["face"]
-                                                                                                    .toString()
-                                                                                            } else {
-                                                                                                ""
-                                                                                            },
-                                                                                            if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
-                                                                                                userCharacterEquipStatus["hair"]
-                                                                                                    .toString()
-                                                                                            } else {
-                                                                                                ""
-                                                                                            }
-                                                                                        )
-                                                                                        viewModel!!.userCharacterPreviewFilenameResponse.observe(
-                                                                                            viewLifecycleOwner,
-                                                                                            Observer { _userCharacterPreviewFilenameResponse ->
-                                                                                                when (_userCharacterPreviewFilenameResponse) {
-                                                                                                    is Resource.Success -> {
-                                                                                                        when (_userCharacterPreviewFilenameResponse.value.code) {
-                                                                                                            "200" -> {
-                                                                                                                var animationDrawable =
-                                                                                                                    AnimationDrawable()
-                                                                                                                animationDrawable.isOneShot =
-                                                                                                                    false
-                                                                                                                _userCharacterPreviewFilenameResponse.value.data.forEachIndexed { _filenameIndex, _filenameElement ->
-                                                                                                                    Glide.with(
-                                                                                                                        requireContext()
+                                                    viewModel!!.getExpInformation(_userResponse.value.data.first().id)
+                                                    viewModel!!.expInformationResponse.observe(
+                                                        viewLifecycleOwner,
+                                                        Observer { _expInformationResponse ->
+                                                            when (_expInformationResponse) {
+                                                                is Resource.Success -> {
+                                                                    when (_expInformationResponse.value.code) {
+                                                                        "200" -> {
+                                                                            binding.expInformation =
+                                                                                _expInformationResponse.value.data.first()
+                                                                            val userCharacterEquipStatus =
+                                                                                mutableMapOf<String, String>()
+                                                                            _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex, _dataElement ->
+                                                                                if (_dataElement.itemType == "hair") {
+                                                                                    userCharacterEquipStatus["hair"] =
+                                                                                        _dataElement.itemId
+                                                                                } else if (_dataElement.itemType == "face") {
+                                                                                    userCharacterEquipStatus["face"] =
+                                                                                        _dataElement.itemId
+                                                                                }
+                                                                                if ((_dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
+                                                                                    viewModel!!.getUserCharacterPreviewFilename(
+                                                                                        _userResponse.value.data.first().id,
+                                                                                        if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                            userCharacterEquipStatus["face"]
+                                                                                                .toString()
+                                                                                        } else {
+                                                                                            ""
+                                                                                        },
+                                                                                        if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                            userCharacterEquipStatus["hair"]
+                                                                                                .toString()
+                                                                                        } else {
+                                                                                            ""
+                                                                                        }
+                                                                                    )
+                                                                                    viewModel!!.userCharacterPreviewFilenameResponse.observe(
+                                                                                        viewLifecycleOwner,
+                                                                                        Observer { _userCharacterPreviewFilenameResponse ->
+                                                                                            when (_userCharacterPreviewFilenameResponse) {
+                                                                                                is Resource.Success -> {
+                                                                                                    when (_userCharacterPreviewFilenameResponse.value.code) {
+                                                                                                        "200" -> {
+                                                                                                            var animationDrawable =
+                                                                                                                AnimationDrawable()
+                                                                                                            animationDrawable.isOneShot =
+                                                                                                                false
+                                                                                                            _userCharacterPreviewFilenameResponse.value.data.forEachIndexed { _filenameIndex, _filenameElement ->
+                                                                                                                Glide.with(
+                                                                                                                    requireContext()
+                                                                                                                )
+                                                                                                                    .asBitmap()
+                                                                                                                    .load(
+                                                                                                                        "${viewModel!!.getResourceBaseUri()}${_filenameElement.filename}"
                                                                                                                     )
-                                                                                                                        .asBitmap()
-                                                                                                                        .load(
-                                                                                                                            "${viewModel!!.getResourceBaseUri()}${_filenameElement.filename}"
-                                                                                                                        )
-                                                                                                                        .diskCacheStrategy(
-                                                                                                                            DiskCacheStrategy.NONE
-                                                                                                                        )
-                                                                                                                        .skipMemoryCache(
-                                                                                                                            true
-                                                                                                                        )
-                                                                                                                        .into(
-                                                                                                                            object :
-                                                                                                                                CustomTarget<Bitmap>() {
-                                                                                                                                override fun onLoadCleared(
-                                                                                                                                    placeholder: Drawable?
-                                                                                                                                ) {
-                                                                                                                                }
+                                                                                                                    .diskCacheStrategy(
+                                                                                                                        DiskCacheStrategy.NONE
+                                                                                                                    )
+                                                                                                                    .skipMemoryCache(
+                                                                                                                        true
+                                                                                                                    )
+                                                                                                                    .into(
+                                                                                                                        object :
+                                                                                                                            CustomTarget<Bitmap>() {
+                                                                                                                            override fun onLoadCleared(
+                                                                                                                                placeholder: Drawable?
+                                                                                                                            ) {
+                                                                                                                            }
 
-                                                                                                                                override fun onResourceReady(
-                                                                                                                                    resource: Bitmap,
-                                                                                                                                    transition: Transition<in Bitmap>?
-                                                                                                                                ) {
-                                                                                                                                    val characterBitmap =
-                                                                                                                                        BitmapDrawable(
-                                                                                                                                            resource
-                                                                                                                                        )
-                                                                                                                                    animationDrawable.addFrame(
-                                                                                                                                        characterBitmap,
-                                                                                                                                        ANIMATION_DURATION
+                                                                                                                            override fun onResourceReady(
+                                                                                                                                resource: Bitmap,
+                                                                                                                                transition: Transition<in Bitmap>?
+                                                                                                                            ) {
+                                                                                                                                val characterBitmap =
+                                                                                                                                    BitmapDrawable(
+                                                                                                                                        resource
                                                                                                                                     )
-                                                                                                                                    if (animationDrawable.numberOfFrames == _userCharacterPreviewFilenameResponse.value.data.size) {
-                                                                                                                                        /*val charExp =
-                                                                                                                                            (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
-                                                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()*/
-                                                                                                                                        binding.dashCharacterInfoIvCharacter.minimumWidth =
-                                                                                                                                            resource.width * PIXELS_PER_METRE
-                                                                                                                                        binding.dashCharacterInfoIvCharacter.minimumHeight =
-                                                                                                                                            resource.height * PIXELS_PER_METRE
-                                                                                                                                        binding.dashCharacterInfoIvCharacter.setImageDrawable(
-                                                                                                                                            animationDrawable
-                                                                                                                                        )
-                                                                                                                                        animationDrawable =
-                                                                                                                                            binding.dashCharacterInfoIvCharacter.drawable as AnimationDrawable
-                                                                                                                                        animationDrawable.start()
-                                                                                                                                    }
+                                                                                                                                animationDrawable.addFrame(
+                                                                                                                                    characterBitmap,
+                                                                                                                                    ANIMATION_DURATION
+                                                                                                                                )
+                                                                                                                                if (animationDrawable.numberOfFrames == _userCharacterPreviewFilenameResponse.value.data.size) {
+                                                                                                                                    /*val charExp =
+                                                                                                                                        (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
+                                                                                                                                                / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()*/
+                                                                                                                                    binding.dashCharacterInfoIvCharacter.minimumWidth =
+                                                                                                                                        resource.width * PIXELS_PER_METRE
+                                                                                                                                    binding.dashCharacterInfoIvCharacter.minimumHeight =
+                                                                                                                                        resource.height * PIXELS_PER_METRE
+                                                                                                                                    binding.dashCharacterInfoIvCharacter.setImageDrawable(
+                                                                                                                                        animationDrawable
+                                                                                                                                    )
+                                                                                                                                    animationDrawable =
+                                                                                                                                        binding.dashCharacterInfoIvCharacter.drawable as AnimationDrawable
+                                                                                                                                    animationDrawable.start()
                                                                                                                                 }
-                                                                                                                            })
-                                                                                                                }
-                                                                                                            }
-                                                                                                            "400" -> {
-                                                                                                                // Error
-                                                                                                            }
-                                                                                                            else -> {
-                                                                                                                // Error
+                                                                                                                            }
+                                                                                                                        })
                                                                                                             }
                                                                                                         }
-                                                                                                    }
-                                                                                                    is Resource.Loading -> {
-                                                                                                        // Loading
-                                                                                                    }
-                                                                                                    is Resource.Failure -> {
-                                                                                                        handleApiError(
-                                                                                                            _userCharacterPreviewFilenameResponse
-                                                                                                        ) {
-                                                                                                            viewModel!!.getUserCharacterPreviewFilename(
-                                                                                                                _userResponse.value.data.first().id,
-                                                                                                                if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
-                                                                                                                    userCharacterEquipStatus.get(
-                                                                                                                        "face"
-                                                                                                                    )
-                                                                                                                        .toString()
-                                                                                                                } else {
-                                                                                                                    ""
-                                                                                                                },
-                                                                                                                if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
-                                                                                                                    userCharacterEquipStatus.get(
-                                                                                                                        "hair"
-                                                                                                                    )
-                                                                                                                        .toString()
-                                                                                                                } else {
-                                                                                                                    ""
-                                                                                                                }
-                                                                                                            )
+                                                                                                        "400" -> {
+                                                                                                            // Error
+                                                                                                        }
+                                                                                                        else -> {
+                                                                                                            // Error
                                                                                                         }
                                                                                                     }
                                                                                                 }
-                                                                                            })
-                                                                                    } else {
+                                                                                                is Resource.Loading -> {
+                                                                                                    // Loading
+                                                                                                }
+                                                                                                is Resource.Failure -> {
+                                                                                                    handleApiError(
+                                                                                                        _userCharacterPreviewFilenameResponse
+                                                                                                    ) {
+                                                                                                        viewModel!!.getUserCharacterPreviewFilename(
+                                                                                                            _userResponse.value.data.first().id,
+                                                                                                            if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                                                userCharacterEquipStatus.get(
+                                                                                                                    "face"
+                                                                                                                )
+                                                                                                                    .toString()
+                                                                                                            } else {
+                                                                                                                ""
+                                                                                                            },
+                                                                                                            if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                                                userCharacterEquipStatus.get(
+                                                                                                                    "hair"
+                                                                                                                )
+                                                                                                                    .toString()
+                                                                                                            } else {
+                                                                                                                ""
+                                                                                                            }
+                                                                                                        )
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        })
+                                                                                } else {
 
-                                                                                    }
                                                                                 }
                                                                             }
-                                                                            "400" -> {
-                                                                                Toast.makeText(
-                                                                                    requireContext(),
-                                                                                    getString(R.string.err_user),
-                                                                                    Toast.LENGTH_SHORT
-                                                                                ).show()
-                                                                                //logout()
-                                                                            }
-                                                                            else -> {
-                                                                                Toast.makeText(
-                                                                                    requireContext(),
-                                                                                    getString(R.string.err_user),
-                                                                                    Toast.LENGTH_SHORT
-                                                                                ).show()
-                                                                                //logout()
-                                                                            }
+                                                                        }
+                                                                        "400" -> {
+                                                                            Toast.makeText(
+                                                                                requireContext(),
+                                                                                getString(R.string.err_user),
+                                                                                Toast.LENGTH_SHORT
+                                                                            ).show()
+                                                                            //logout()
+                                                                        }
+                                                                        else -> {
+                                                                            Toast.makeText(
+                                                                                requireContext(),
+                                                                                getString(R.string.err_user),
+                                                                                Toast.LENGTH_SHORT
+                                                                            ).show()
+                                                                            //logout()
                                                                         }
                                                                     }
-                                                                    is Resource.Failure -> {
-                                                                        // Network Error
-                                                                        handleApiError(
-                                                                            _expInformationResponse
-                                                                        )
-                                                                        Toast.makeText(
-                                                                            requireContext(),
-                                                                            getString(R.string.err_user),
-                                                                            Toast.LENGTH_SHORT
-                                                                        ).show()
-                                                                        //logout()
-                                                                    }
                                                                 }
-                                                            })
-                                                    }
+                                                                is Resource.Failure -> {
+                                                                    // Network Error
+                                                                    handleApiError(
+                                                                        _expInformationResponse
+                                                                    )
+                                                                    Toast.makeText(
+                                                                        requireContext(),
+                                                                        getString(R.string.err_user),
+                                                                        Toast.LENGTH_SHORT
+                                                                    ).show()
+                                                                    //logout()
+                                                                }
+                                                            }
+                                                        })
                                                 }
                                                 "400" -> {
                                                     // Error
@@ -340,6 +352,9 @@ class DashboardCharacterInfoFragment :
             if (navDirection != null) {
                 findNavController().navigate(navDirection)
             }
+        }
+        binding.dashCharacterInfoBtnEquip.setOnClickListener {
+
         }
     }
 
@@ -433,5 +448,9 @@ class DashboardCharacterInfoFragment :
                 }
             }
         })
+    }
+
+    override fun getDash() {
+        viewModel.getDash()
     }
 }
