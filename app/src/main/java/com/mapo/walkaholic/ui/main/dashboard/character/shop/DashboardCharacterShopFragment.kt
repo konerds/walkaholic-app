@@ -117,9 +117,9 @@ class DashboardCharacterShopFragment :
                                                                             "200" -> {
                                                                                 binding.expInformation =
                                                                                     _expInformationResponse.value.data.first()
+                                                                                val userCharacterEquipStatus =
+                                                                                    mutableMapOf<String, String>()
                                                                                 _userCharacterEquipStatusResponse.value.data.forEachIndexed { dataIndex, dataElement ->
-                                                                                    val userCharacterEquipStatus =
-                                                                                        mutableMapOf<String, String>()
                                                                                     if (dataElement.itemType == "hair") {
                                                                                         userCharacterEquipStatus["hair"] =
                                                                                             dataElement.itemId
@@ -146,6 +146,10 @@ class DashboardCharacterShopFragment :
                                                                                         viewModel!!.userCharacterPreviewFilenameResponse.observe(
                                                                                             viewLifecycleOwner,
                                                                                             Observer { _userCharacterPreviewFilenameResponse ->
+                                                                                                Log.d(
+                                                                                                    TAG,
+                                                                                                    "Call Rest Preview Character"
+                                                                                                )
                                                                                                 when (_userCharacterPreviewFilenameResponse) {
                                                                                                     is Resource.Success -> {
                                                                                                         when (_userCharacterPreviewFilenameResponse.value.code) {
@@ -724,35 +728,36 @@ class DashboardCharacterShopFragment :
                     selectedSlotShopMapFace = selectedSlotShopMap
                 }
 
-                /*
-                val _lastSelectedFace : String =
-                    if(selectedSlotShopMap.filter { faceValue -> faceValue.value.third }.isNotEmpty()) {
-                        selectedSlotShopMap.filter { faceValue -> faceValue.value.third }[0]!!.second.itemId.toString()
-                    } else {
-                        if(selectedSlotShopMap.filter { faceValue -> faceValue.value.first }.isNotEmpty()) {
-                            selectedSlotShopMap.filter { faceValue -> faceValue.value.first }[0]!!.second.itemId.toString()
-                        } else {
-                            ""
-                        }
-                    }
-
-                val _lastSelectedHair : String =
-                    if(selectedSlotShopMap.filter { hairValue -> hairValue.value.third }.isNotEmpty()) {
-                        selectedSlotShopMap.filter { hairValue -> hairValue.value.third }[0]!!.second.itemId.toString()
-                    } else {
-                        if(selectedSlotShopMap.filter { hairValue -> hairValue.value.first }.isNotEmpty()) {
-                            selectedSlotShopMap.filter { hairValue -> hairValue.value.first }[0]!!.second.itemId.toString()
-                        } else {
-                            ""
-                        }
-                    }
-
                 viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
-                    when(_userResponse) {
+                    when (_userResponse) {
                         is Resource.Success -> {
-                            when(_userResponse.value.code) {
+                            when (_userResponse.value.code) {
                                 "200" -> {
-                                    viewModel.getUserCharacterPreviewFilename(_userResponse.value.data.first().id, _lastSelectedFace, _lastSelectedHair)
+                                    viewModel.getUserCharacterPreviewFilename(
+                                        _userResponse.value.data.first().id,
+                                        if (selectedSlotShopMapFace.filter { faceValue -> faceValue.value.third }
+                                                .isNotEmpty()) {
+                                            selectedSlotShopMapFace.filter { faceValue -> faceValue.value.third }.values.first().second.itemId.toString()
+                                        } else {
+                                            if (selectedSlotShopMapFace.filter { faceValue -> faceValue.value.first }
+                                                    .isNotEmpty()) {
+                                                selectedSlotShopMapFace.filter { faceValue -> faceValue.value.first }.values.first().second.itemId.toString()
+                                            } else {
+                                                ""
+                                            }
+                                        },
+                                        if (selectedSlotShopMapHair.filter { hairValue -> hairValue.value.third }
+                                                .isNotEmpty()) {
+                                            selectedSlotShopMapHair.filter { hairValue -> hairValue.value.third }.values.first().second.itemId.toString()
+                                        } else {
+                                            if (selectedSlotShopMapHair.filter { hairValue -> hairValue.value.first }
+                                                    .isNotEmpty()) {
+                                                selectedSlotShopMapHair.filter { hairValue -> hairValue.value.first }.values.first().second.itemId.toString()
+                                            } else {
+                                                ""
+                                            }
+                                        }
+                                    )
                                 }
                                 "400" -> {
                                     // Error
@@ -770,7 +775,7 @@ class DashboardCharacterShopFragment :
                             handleApiError(_userResponse)
                         }
                     }
-                })*/
+                })
 
                 if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
                     binding.dashCharacterShopTvIntro1.text =

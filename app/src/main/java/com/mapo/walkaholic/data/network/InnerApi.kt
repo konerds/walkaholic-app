@@ -37,8 +37,8 @@ interface InnerApi {
     @GET("user/{id}/item/view")
     suspend fun getUserCharacterPreviewFilename(
         @Path("id") id: String,
-        @Query("faceItemId") faceItemId : String,
-        @Query("headItemId") headItemId : String
+        @Query("faceItemId") faceItemId : String?,
+        @Query("headItemId") headItemId : String?
     ): UserCharacterPreviewFilenameResponse
 
     @GET("global/resource/weather/{code}")

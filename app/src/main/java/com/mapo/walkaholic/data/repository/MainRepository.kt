@@ -61,8 +61,18 @@ class MainRepository(
         faceItemId: String,
         headItemId: String
     ) = safeApiCall {
+
         api.getUserCharacterPreviewFilename(
-            userId.toString(), faceItemId, headItemId
+            userId.toString(),
+            if (faceItemId.isEmpty()) {
+                null
+            } else {
+                faceItemId
+            }, if (headItemId.isEmpty()) {
+                null
+            } else {
+                headItemId
+            }
         )
     }
 
