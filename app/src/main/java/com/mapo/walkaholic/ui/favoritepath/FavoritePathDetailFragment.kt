@@ -25,7 +25,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class FavoritePathDetailFragment(
-    private val position: Int
+    private val position: Int,
+    private val listener: FavoritePathClickListener
 ) : BaseSharedFragment<FavoritePathViewModel, FragmentDetailFavoritePathBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedViewModel: FavoritePathViewModel by viewModels {
@@ -113,10 +114,10 @@ class FavoritePathDetailFragment(
         when (position) {
             0 -> {
                 Log.e("냐옹", "냐옹")
-                binding.favoritePathRV.adapter = FavoritePathDetailAdapter(dummyArrayList)
+                binding.favoritePathRV.adapter = FavoritePathDetailAdapter(dummyArrayList, listener)
             }
             1 -> {
-                binding.favoritePathRV.adapter = FavoritePathDetailAdapter(dummyArrayList)
+                binding.favoritePathRV.adapter = FavoritePathDetailAdapter(dummyArrayList, listener)
             }
         }
     }
