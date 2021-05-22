@@ -48,7 +48,7 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     snackbar.show()
 }
 
-fun Fragment.handleApiError(
+/*fun Fragment.handleApiError(
     failure: Resource.Failure,
     retry: (() -> Unit)? = null
 ) {
@@ -97,6 +97,21 @@ fun Activity.handleApiError(
             window.decorView.snackbar(error)
         }
     }
+}*/
+
+
+fun Fragment.handleApiError(
+    failure: Resource.Failure,
+    retry: (() -> Unit)? = null
+) {
+
+}
+
+fun Activity.handleApiError(
+    failure: Resource.Failure,
+    retry: (() -> Unit)? = null
+) {
+
 }
 
 @BindingAdapter("app:full_text", "app:span_text", "app:span_color")
