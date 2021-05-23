@@ -6,7 +6,7 @@
         android:title="@string/main" />
     <item
         android:id="@+id/fragmentTheme"
-        android:icon="@drawable/ic_community"
+        android:icon="@drawable/ic_theme"
         android:title="@string/theme" />
     <item
         android:id="@+id/fragmentChallenge"
