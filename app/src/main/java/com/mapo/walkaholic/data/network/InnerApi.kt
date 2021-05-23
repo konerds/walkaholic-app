@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.data.network
 
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
+import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.*
 import okhttp3.ResponseBody
@@ -70,6 +71,22 @@ interface InnerApi {
         @Path("id") id: String,
         @Body buyItemInfo : BuyItemRequestBody
     ) : BuyItemResponse
+
+    @Headers(
+        "Accept:application/json, text/plain, */*",
+        "Content-Type:application/json;charset=UTF-8"
+    )
+    @PUT("user/{id}/item")
+    suspend fun equipItem(
+        @Path("id") id: String,
+        @Body equipItemInfo : EquipItemRequestBody
+    ) : EquipItemResponse
+
+    @DELETE("user/{id}/item/{itemId}")
+    suspend fun deleteItem(
+        @Path("id") id: String,
+        @Path("itemId") itemId: String
+    ) : DeleteItemResponse
 
     @FormUrlEncoded
     @POST("map")

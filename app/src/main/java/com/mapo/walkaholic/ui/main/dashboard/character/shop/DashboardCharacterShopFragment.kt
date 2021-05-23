@@ -19,7 +19,6 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.data.model.CharacterItemInfo
 import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -32,7 +31,6 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoViewPagerAdapter
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
 import kotlinx.coroutines.flow.first
@@ -67,9 +65,8 @@ class DashboardCharacterShopFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.userCharacterItem = CharacterItemInfo("1", "비타씨")
-
-        val pagerAdapter = DashboardCharacterShopViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
+        val pagerAdapter =
+            DashboardCharacterShopViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
         binding.dashCharacterShopVP.adapter = pagerAdapter
         TabLayoutMediator(
             binding.dashCharacterShopTL,
@@ -81,7 +78,7 @@ class DashboardCharacterShopFragment :
                 else -> ""
             }
         }.attach()
-
+        binding.dashCharacterShopVP.isUserInputEnabled = false
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -112,10 +109,10 @@ class DashboardCharacterShopFragment :
                                                                                 _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex, _dataElement ->
                                                                                     if (_dataElement.itemType == "hair") {
                                                                                         userCharacterEquipStatus["hair"] =
-                                                                                            _dataElement.itemId
+                                                                                            _dataElement.itemId.toString()
                                                                                     } else if (_dataElement.itemType == "face") {
                                                                                         userCharacterEquipStatus["face"] =
-                                                                                            _dataElement.itemId
+                                                                                            _dataElement.itemId.toString()
                                                                                     }
                                                                                     if ((_dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
                                                                                         viewModel!!.getUserCharacterPreviewFilename(
@@ -291,6 +288,34 @@ class DashboardCharacterShopFragment :
                                         }
                                     }
                                 })
+                            binding.dashCharacterShopBtnBuy.setOnClickListener {
+                                val filteredSelectedFace = selectedSlotShopMapFace.filter { _selectedSlotShopMapFace -> _selectedSlotShopMapFace.value.first }
+                                val filteredSelectedHair = selectedSlotShopMapHair.filter { _selectedSlotShopMapHair -> _selectedSlotShopMapHair.value.first }
+                                if (filteredSelectedFace.isNullOrEmpty()
+                                    && filteredSelectedHair.isNullOrEmpty()) {
+                                    showToastEvent("구매하실 아이템을 선택하세요")
+                                } else {
+                                    val arrayListSelectedItemId = arrayListOf<Int?>()
+                                    filteredSelectedFace.forEach { (_selectedSlotShopMapFaceIndex, _selectedSlotShopMapFaceElement) ->
+                                        if (_selectedSlotShopMapFaceElement.second.itemId != null) {
+                                            arrayListSelectedItemId.add(
+                                                _selectedSlotShopMapFaceElement.second.itemId
+                                            )
+                                        }
+                                    }
+                                    filteredSelectedHair.forEach { (_selectedSlotShopMapHairIndex, _selectedSlotShopMapHairElement) ->
+                                        if (_selectedSlotShopMapHairElement.second.itemId != null) {
+                                            arrayListSelectedItemId.add(
+                                                _selectedSlotShopMapHairElement.second.itemId
+                                            )
+                                        }
+                                    }
+                                    viewModel.buyItem(
+                                        _userResponse.value.data.first().id,
+                                        arrayListSelectedItemId
+                                    )
+                                }
+                            }
                         }
                         "400" -> {
                             Toast.makeText(
@@ -326,6 +351,34 @@ class DashboardCharacterShopFragment :
                 }
             }
         })
+        viewModel.buyItemResponse.observe(
+            viewLifecycleOwner,
+            Observer { _buyItemResponse ->
+                when (_buyItemResponse) {
+                    is Resource.Success -> {
+                        when (_buyItemResponse.value.code) {
+                            "200" -> {
+                                showToastEvent(_buyItemResponse.value.message)
+                                viewModel.getDash()
+                            }
+                            "400" -> {
+                                // Error
+                                showToastEvent(_buyItemResponse.value.message)
+                            }
+                            else -> {
+                                // Error
+                                showToastEvent(_buyItemResponse.value.message)
+                            }
+                        }
+                    }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        handleApiError(_buyItemResponse)
+                    }
+                }
+            })
         viewModel.getDash()
         binding.dashCharacterShopIvInfo.setOnClickListener {
             val navDirection: NavDirections? =

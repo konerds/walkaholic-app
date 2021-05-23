@@ -16,10 +16,6 @@
             type="com.mapo.walkaholic.data.model.User" />
 
         <variable
-            name="userCharacterItem"
-            type="com.mapo.walkaholic.data.model.CharacterItemInfo" />
-
-        <variable
             name="expInformation"
             type="com.mapo.walkaholic.data.model.response.ExpInformationResponse.ExpInformation" />
     </data>

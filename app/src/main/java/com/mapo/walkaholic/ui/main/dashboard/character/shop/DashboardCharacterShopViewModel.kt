@@ -70,9 +70,9 @@ class DashboardCharacterShopViewModel(
         }
     }
 
-    fun buyItem(userId: Long, faceItemId: Int?, hairItemId: Int?) {
+    fun buyItem(userId: Long, arrayListItemId: ArrayList<Int?>) {
         viewModelScope.launch {
-            _buyItemResponse.value = mainRepository.buyItem(userId, faceItemId, hairItemId)
+            _buyItemResponse.value = mainRepository.buyItem(userId, arrayListItemId)
         }
     }
 

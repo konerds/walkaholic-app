@@ -1,12 +1,10 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
-import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,7 +65,8 @@ class DashboardCharacterInfoFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        val pagerAdapter = DashboardCharacterInfoViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
+        val pagerAdapter =
+            DashboardCharacterInfoViewPagerAdapter(childFragmentManager, lifecycle, 2, this)
         binding.dashCharacterInfoVP.adapter = pagerAdapter
         TabLayoutMediator(
             binding.dashCharacterInfoTL,
@@ -79,9 +78,11 @@ class DashboardCharacterInfoFragment :
                 else -> ""
             }
         }.attach()
-        binding.dashCharacterInfoTL.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.dashCharacterInfoTL.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.dashCharacterInfoVP.currentItem = tab!!.position
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -92,7 +93,8 @@ class DashboardCharacterInfoFragment :
 
             }
         })
-        viewModel.userResponse.observe(viewLifecycleOwner , Observer { _userResponse ->
+        binding.dashCharacterInfoVP.isUserInputEnabled = false
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
                     when (_userResponse.value.code) {
@@ -121,10 +123,10 @@ class DashboardCharacterInfoFragment :
                                                                             _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex, _dataElement ->
                                                                                 if (_dataElement.itemType == "hair") {
                                                                                     userCharacterEquipStatus["hair"] =
-                                                                                        _dataElement.itemId
+                                                                                        _dataElement.itemId.toString()
                                                                                 } else if (_dataElement.itemType == "face") {
                                                                                     userCharacterEquipStatus["face"] =
-                                                                                        _dataElement.itemId
+                                                                                        _dataElement.itemId.toString()
                                                                                 }
                                                                                 if ((_dataIndex == _userCharacterEquipStatusResponse.value.data.size - 1) && _userCharacterEquipStatusResponse.value.data.size != 0) {
                                                                                     viewModel!!.getUserCharacterPreviewFilename(
@@ -281,6 +283,29 @@ class DashboardCharacterInfoFragment :
                                                                 }
                                                             }
                                                         })
+                                                    binding.dashCharacterInfoBtnEquip.setOnClickListener {
+                                                        val filteredSelectedFace =
+                                                            selectedSlotInfoMapFace.filter { _selectedSlotInfoMapFace -> _selectedSlotInfoMapFace.value.first }
+                                                        val filteredSelectedHair =
+                                                            selectedSlotInfoMapHair.filter { _selectedSlotInfoMapHair -> _selectedSlotInfoMapHair.value.first }
+                                                        viewModel.equipItem(
+                                                            _userResponse.value.data.first().id,
+                                                            if (filteredSelectedFace.filter { faceValue -> faceValue.value.first }
+                                                                    .isNullOrEmpty()) {
+                                                                null
+                                                                //_userCharacterEquipStatusResponse.value.data.first { _data -> _data.itemType == "face" }.itemId
+                                                            } else {
+                                                                filteredSelectedFace.values.first().second.itemId
+                                                            },
+                                                            if (filteredSelectedHair.filter { hairValue -> hairValue.value.first }
+                                                                    .isNullOrEmpty()) {
+                                                                null
+                                                                //_userCharacterEquipStatusResponse.value.data.first { _data -> _data.itemType == "hair" }.itemId
+                                                            } else {
+                                                                filteredSelectedHair.values.first().second.itemId
+                                                            }
+                                                        )
+                                                    }
                                                 }
                                                 "400" -> {
                                                     // Error
@@ -338,6 +363,65 @@ class DashboardCharacterInfoFragment :
                 }
             }
         })
+        viewModel.equipItemResponse.observe(
+            viewLifecycleOwner,
+            Observer { _equipItemResponse ->
+                when (_equipItemResponse) {
+                    is Resource.Success -> {
+                        when (_equipItemResponse.value.code) {
+                            "200" -> {
+                                showToastEvent(_equipItemResponse.value.message)
+                                viewModel.getDash()
+                            }
+                            "400" -> {
+                                // Error
+                                showToastEvent(_equipItemResponse.value.message)
+                            }
+                            else -> {
+                                // Error
+                                showToastEvent(_equipItemResponse.value.message)
+                            }
+                        }
+                    }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        handleApiError(_equipItemResponse)
+                    }
+                }
+            })
+        viewModel.deleteItemResponse.observe(viewLifecycleOwner, Observer { _deleteItemResponse ->
+            when(_deleteItemResponse) {
+                is Resource.Success -> {
+                    when(_deleteItemResponse.value.code) {
+                        "200" -> {
+                            showToastEvent(_deleteItemResponse.value.message)
+                            val navDirection: NavDirections? =
+                                DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoSelf()
+                            if (navDirection != null) {
+                                findNavController().navigate(navDirection)
+                            }
+                        }
+                        "400" -> {
+                            // Error
+                            showToastEvent(_deleteItemResponse.value.message)
+                        }
+                        else -> {
+                            // Error
+                            showToastEvent(_deleteItemResponse.value.message)
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_deleteItemResponse)
+                }
+            }
+        })
         viewModel.getDash()
         binding.dashCharacterInfoIvShop.setOnClickListener {
             val navDirection: NavDirections? =
@@ -352,9 +436,6 @@ class DashboardCharacterInfoFragment :
             if (navDirection != null) {
                 findNavController().navigate(navDirection)
             }
-        }
-        binding.dashCharacterInfoBtnEquip.setOnClickListener {
-
         }
     }
 
@@ -402,34 +483,66 @@ class DashboardCharacterInfoFragment :
     }
 
     override fun onItemClick(
-        selectedSlotInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>
+        selectedSlotInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>, isClear: Boolean
     ) {
         if (selectedSlotInfoMap[0]?.second?.itemType == "hair") {
             selectedSlotInfoMapHair = selectedSlotInfoMap
         } else if (selectedSlotInfoMap[0]?.second?.itemType == "face") {
             selectedSlotInfoMapFace = selectedSlotInfoMap
         }
-
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
                     when (_userResponse.value.code) {
                         "200" -> {
-                            viewModel.getUserCharacterPreviewFilename(
-                                _userResponse.value.data.first().id,
-                                if (selectedSlotInfoMapFace.filter { faceValue -> faceValue.value.first }
-                                        .isNotEmpty()) {
-                                    selectedSlotInfoMapFace.filter { faceValue -> faceValue.value.first }.values.first().second.itemId.toString()
-                                } else {
-                                    ""
-                                },
-                                if (selectedSlotInfoMapHair.filter { hairValue -> hairValue.value.first }
-                                        .isNotEmpty()) {
-                                    selectedSlotInfoMapHair.filter { hairValue -> hairValue.value.first }.values.first().second.itemId.toString()
-                                } else {
-                                    ""
-                                }
-                            )
+                            viewModel.userCharacterEquipStatusResponse.observe(
+                                viewLifecycleOwner,
+                                Observer { _userCharacterEquipStatusResponse ->
+                                    when (_userCharacterEquipStatusResponse) {
+                                        is Resource.Success -> {
+                                            when (_userCharacterEquipStatusResponse.value.code) {
+                                                "200" -> {
+                                                    viewModel.getUserCharacterPreviewFilename(
+                                                        _userResponse.value.data.first().id,
+                                                        if (isClear || selectedSlotInfoMapFace.isEmpty()) {
+                                                            _userCharacterEquipStatusResponse.value.data[1].itemId.toString()
+                                                        } else {
+                                                            if (!selectedSlotInfoMapFace.filter { faceValue -> faceValue.value.first }
+                                                                    .values.isNullOrEmpty()) {
+                                                                selectedSlotInfoMapFace.filter { faceValue -> faceValue.value.first }.values.first().second.itemId.toString()
+                                                            } else {
+                                                                ""
+                                                            }
+                                                        },
+                                                        if (isClear || selectedSlotInfoMapHair.isEmpty()) {
+                                                            _userCharacterEquipStatusResponse.value.data[0].itemId.toString()
+                                                        } else {
+                                                            if (!selectedSlotInfoMapHair.filter { hairValue -> hairValue.value.first }
+                                                                    .values.isNullOrEmpty()) {
+                                                                selectedSlotInfoMapHair.filter { hairValue -> hairValue.value.first }.values.first().second.itemId.toString()
+                                                            } else {
+                                                                ""
+                                                            }
+                                                        }
+                                                    )
+                                                }
+                                                "400" -> {
+                                                    // Error
+                                                }
+                                                else -> {
+                                                    // Error
+                                                }
+                                            }
+                                        }
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            // Network Error
+                                            handleApiError(_userCharacterEquipStatusResponse)
+                                        }
+                                    }
+                                })
                         }
                         "400" -> {
                             // Error
@@ -450,7 +563,30 @@ class DashboardCharacterInfoFragment :
         })
     }
 
-    override fun getDash() {
-        viewModel.getDash()
+    override fun discardItem(itemId: Int) {
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
+                is Resource.Success -> {
+                    when (_userResponse.value.code) {
+                        "200" -> {
+                            viewModel.deleteItem(_userResponse.value.data.first().id, itemId.toString())
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_userResponse)
+                }
+            }
+        })
     }
 }

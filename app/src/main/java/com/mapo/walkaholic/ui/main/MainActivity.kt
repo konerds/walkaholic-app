@@ -72,10 +72,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
         binding.mainDrawerLayout.addDrawerListener(drawerToggle)
         //drawerToggle.syncState()
         binding.mainToolbar.setNavigationOnClickListener {
-            if (binding.mainDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                binding.mainDrawerLayout.closeDrawer(Gravity.RIGHT)
+            if (binding.mainDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                binding.mainDrawerLayout.closeDrawer(Gravity.LEFT)
             } else {
-                binding.mainDrawerLayout.openDrawer(Gravity.RIGHT)
+                binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
             }
         }
         supportFragmentManager.addOnBackStackChangedListener {
@@ -83,10 +83,10 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             //drawerToggle.syncState()
             binding.mainToolbar.setNavigationOnClickListener {
-                if (binding.mainDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-                    binding.mainDrawerLayout.closeDrawer(Gravity.RIGHT)
+                if (binding.mainDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                    binding.mainDrawerLayout.closeDrawer(Gravity.LEFT)
                 } else {
-                    binding.mainDrawerLayout.openDrawer(Gravity.RIGHT)
+                    binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
                 }
             }
         }

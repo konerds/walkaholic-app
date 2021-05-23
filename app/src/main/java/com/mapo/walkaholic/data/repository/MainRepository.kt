@@ -2,6 +2,7 @@ package com.mapo.walkaholic.data.repository
 
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
+import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
@@ -14,6 +15,7 @@ import retrofit2.http.Body
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainRepository(
     private val api: InnerApi,
@@ -176,10 +178,23 @@ class MainRepository(
         api.getStatusShopSaleItem()
     }
 
-    suspend fun buyItem(userId: Long, faceItemId: Int?, hairItemId: Int?) = safeApiCall {
-        api.buyItem(userId.toString(), BuyItemRequestBody(
-            faceItemId, hairItemId
-        ))
+    suspend fun buyItem(userId: Long, arrayListItemId: ArrayList<Int?>) = safeApiCall {
+        api.buyItem(
+            userId.toString(), BuyItemRequestBody(
+                arrayListItemId
+            )
+        )
+    }
+
+    suspend fun equipItem(userId: Long, faceItemId: Int?, hairItemId: Int?) = safeApiCall {
+        api.equipItem(
+            userId.toString(),
+            EquipItemRequestBody(faceItemId, hairItemId)
+        )
+    }
+
+    suspend fun deleteItem(userId: Long, itemId: String) = safeApiCall {
+        api.deleteItem(userId.toString(), itemId)
     }
 
     suspend fun getCalendarDate(userId: Long, walkDate: String) = safeApiCall {
