@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.main
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +18,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
@@ -25,11 +29,14 @@ import com.mapo.walkaholic.data.network.*
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.ActivityMainBinding
 import com.mapo.walkaholic.databinding.NaviHamburgerHeaderBinding
+import com.mapo.walkaholic.ui.GuideActivity
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragmentDirections
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.first
@@ -78,7 +85,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
             }
         }
-        supportFragmentManager.addOnBackStackChangedListener {
+        /*supportFragmentManager.addOnBackStackChangedListener {
             //show hamburger
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             //drawerToggle.syncState()
@@ -89,30 +96,56 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                     binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
                 }
             }
-        }
+        }*/
         initNavigation()
         binding.mainNvHamburger.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.actionHbgProfile -> {
+                /*R.id.actionHbgProfile -> {
+                    val navDirection: NavDirections? =
+                        MainActivityDirections.actionGlobalActionBnvDashProfile()
+                    if (navDirection != null) {
+                        findNavController(binding.root.id).navigate(navDirection)
+                    }
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.actionHbgDashCharacterProfile -> {
+                    val navDirection: NavDirections? =
+                        MainActivityDirections.actionGlobalActionBnvDashCharacterInfo()
+                    if (navDirection != null) {
+                        findNavController(binding.root.id).navigate(navDirection)
+                    }
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.actionHbgDashCharacterShop -> {
+                    val navDirection: NavDirections? =
+                        MainActivityDirections.actionGlobalActionBnvDashCharacterShop()
+                    if (navDirection != null) {
+                        findNavController(binding.root.id).navigate(navDirection)
+                    }
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.actionHbgWalkRecord -> {
+                    val navDirection: NavDirections? =
+                        MainActivityDirections.actionGlobalActionBnvDashWalkRecord()
+                    if (navDirection != null) {
+                        findNavController(binding.root.id).navigate(navDirection)
+                    }
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.actionHbgFavorite -> {
+                    val navDirection: NavDirections? =
+                        MainActivityDirections.actionGlobalFavoritePathFragment()
+                    if (navDirection != null) {
+                        findNavController(binding.root.id).navigate(navDirection)
+                    }
                     return@setNavigationItemSelectedListener true
-                }
+                }*/
                 R.id.actionHbgTutorial -> {
+                    startNewActivity(GuideActivity::class.java)
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.actionHbgLogout -> {
-                    logout()
+                    //logout()
                     return@setNavigationItemSelectedListener true
                 }
                 else -> {
