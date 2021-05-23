@@ -64,6 +64,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dashProfileTILNickname"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -72,15 +73,17 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashProfileNicknameInfo">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <AutoCompleteTextView
                         style="@style/font_medium_16_one"
                         android:id="@+id/dashProfileEtNickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:completionThreshold="0"
                         android:hint="닉네임"
                         android:importantForAutofill="no"
                         android:inputType="number"
                         android:text="@{user.nickName}" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textview.MaterialTextView
@@ -177,6 +180,7 @@
                     app:layout_constraintTop_toBottomOf="@id/dashProfileHeightInfo">
 
                     <AutoCompleteTextView
+                        style="@style/font_medium_16_one"
                         android:id="@+id/dashProfileEtHeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -214,6 +218,7 @@
                     app:layout_constraintTop_toBottomOf="@id/dashProfileWeightInfo">
 
                     <AutoCompleteTextView
+                        style="@style/font_medium_16_one"
                         android:id="@+id/dashProfileEtWeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

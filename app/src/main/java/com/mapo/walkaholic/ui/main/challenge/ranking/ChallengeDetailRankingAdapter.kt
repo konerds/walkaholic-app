@@ -42,6 +42,7 @@ class ChallengeDetailRankingAdapter(
                 holder.binding.rankingCrown.setImageDrawable(crownImg)
 
                 holder.binding.challengeRankingUserTv.setTextColor(Color.parseColor("#F37520"))
+                holder.binding.challengeRankingUserTv2.setTextColor(Color.parseColor("#F37520"))
                 holder.binding.challengeRankingPointTv.setTextColor(Color.parseColor("#689F38"))
             }
             1 -> {

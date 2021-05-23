@@ -100,7 +100,7 @@
                         android:layout_marginBottom="1dp"
                         android:layout_marginTop="1dp"
                         android:background="@drawable/box_dashboard_corner_white"
-                        android:elevation="2dp"
+                        android:elevation="1dp"
                         android:orientation="vertical">
 
                         <LinearLayout

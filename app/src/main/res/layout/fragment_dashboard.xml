@@ -215,7 +215,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -243,7 +242,7 @@
                     android:id="@+id/dashLayoutRelative1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="28dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -271,7 +270,7 @@
                     android:id="@+id/dashLayoutRelative2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -321,6 +320,7 @@
                         android:textColor="@color/mdWhite1000" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -330,12 +330,13 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/box_dashboard_uppercorner_white"
+                android:background="@drawable/box_dashboard_corner_white"
                 android:gravity="center|center_vertical"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashLayout5"
                 app:layout_constraintTop_toBottomOf="@id/dashLayout1"
-                tools:layout_editor_absoluteX="24dp">
+                tools:layout_editor_absoluteX="24dp"
+                android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -553,8 +554,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/box_dashboard_uppercorner_white"
+                android:background="@drawable/box_dashboard_corner_white"
                 android:orientation="vertical"
+                android:elevation="1dp"
                 app:layout_constraintBottom_toTopOf="@id/dashEndSpace"
                 app:layout_constraintTop_toBottomOf="@id/dashLayout3">
 
@@ -564,8 +566,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginTop="28dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="18dp"
                     android:paddingHorizontal="20dp"
                     android:text="테마를 골라 걸어보세요!" />
 

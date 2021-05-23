@@ -10,56 +10,54 @@
             type="com.mapo.walkaholic.data.model.Theme" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardElevation="0dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
 
-        <FrameLayout
+        <ImageView
             android:layout_width="match_parent"
+            android:layout_height="114dp"
+            android:layout_gravity="center_horizontal"
+            app:setImage="@{themeItem.courseFilename}" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="328dp"
-                android:layout_height="114dp"
-                android:layout_gravity="center_horizontal"
-                app:setImage="@{themeItem.courseFilename}" />
-
-            <LinearLayout
+            <TextView
+                style="@style/font_semi_bold_14_one"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text='@{themeItem.courseTitle}'
+                android:textColor="@color/mdWhite1000" />
 
-                <TextView
-                    style="@style/font_semi_bold_14_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text='@{themeItem.courseTitle}'
-                    android:textColor="@color/mdWhite1000" />
+            <TextView
+                style="@style/font_black_20_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:gravity="center_horizontal"
+                android:text='@{themeItem.courseName}'
+                android:textColor="@color/mdWhite1000" />
 
-                <TextView
-                    style="@style/font_black_20_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text='@{themeItem.courseName}'
-                    android:textColor="@color/mdWhite1000" />
+            <TextView
+                style="@style/font_black_10_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text='@{themeItem.courseAddress + " | 걷는거리 " + themeItem.courseDistance + "KM | 소요시간 " + themeItem.courseTime}'
+                android:textColor="@color/mdWhite1000" />
 
-                <TextView
-                    style="@style/font_black_10_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text='@{themeItem.courseAddress + " | 걷는거리 " + themeItem.courseDistance + "KM | 소요시간 " + themeItem.courseTime}'
-                    android:textColor="@color/mdWhite1000" />
+        </LinearLayout>
 
-            </LinearLayout>
+    </FrameLayout>
 
-        </FrameLayout>
-
-    </androidx.cardview.widget.CardView>
 </layout>

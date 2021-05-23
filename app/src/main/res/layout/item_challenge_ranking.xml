@@ -38,7 +38,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="24dp"
-                    android:text='@{rankingItem.ranking + "위 " + rankingItem.rankerNicknme + " 님"}'
+                    android:text='@{rankingItem.ranking}'
+                    android:textColor="@color/color443f35" />
+
+                <TextView
+                    android:id="@+id/challenge_ranking_user_tv_2"
+                    style="@style/font_black_16_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text='@{"위 " + rankingItem.rankerNicknme + " 님"}'
+                    android:textStyle="bold"
                     android:textColor="@color/color443f35" />
 
                 <View

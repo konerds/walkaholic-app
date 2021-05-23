@@ -8,6 +8,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/favoritePathTL"
+        style="@style/TabText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"

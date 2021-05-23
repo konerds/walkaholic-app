@@ -33,7 +33,7 @@
     <string name="character_type2">파뿌리</string>
     <!-- 서비스 -->
     <string name="dash_walk_distance"><b>8,000 걸음</b> 걸었어요!</string>
-    <string name="dash_km_distance">이동거리</string>
+    <string name="dash_km_distance">이동 거리</string>
     <string name="dash_calendar_distance">거리(km)</string>
     <string name="dash_calendar_step_count">걸음수</string>
     <string name="dash_calendar_kcal">칼로리</string>
