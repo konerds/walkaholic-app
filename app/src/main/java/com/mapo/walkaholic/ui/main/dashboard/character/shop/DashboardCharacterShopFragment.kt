@@ -289,10 +289,13 @@ class DashboardCharacterShopFragment :
                                     }
                                 })
                             binding.dashCharacterShopBtnBuy.setOnClickListener {
-                                val filteredSelectedFace = selectedSlotShopMapFace.filter { _selectedSlotShopMapFace -> _selectedSlotShopMapFace.value.first }
-                                val filteredSelectedHair = selectedSlotShopMapHair.filter { _selectedSlotShopMapHair -> _selectedSlotShopMapHair.value.first }
+                                val filteredSelectedFace =
+                                    selectedSlotShopMapFace.filter { _selectedSlotShopMapFace -> _selectedSlotShopMapFace.value.first }
+                                val filteredSelectedHair =
+                                    selectedSlotShopMapHair.filter { _selectedSlotShopMapHair -> _selectedSlotShopMapHair.value.first }
                                 if (filteredSelectedFace.isNullOrEmpty()
-                                    && filteredSelectedHair.isNullOrEmpty()) {
+                                    && filteredSelectedHair.isNullOrEmpty()
+                                ) {
                                     showToastEvent("구매하실 아이템을 선택하세요")
                                 } else {
                                     val arrayListSelectedItemId = arrayListOf<Int?>()
@@ -491,21 +494,47 @@ class DashboardCharacterShopFragment :
         })
 
         if (selectedSlotShopMap[0]?.second?.itemType == "hair") {
-            binding.dashCharacterShopTvIntro1.text =
-                (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace?.filter { it.value.first }!!.size).toString()
-            binding.dashCharacterShopTvIntro2.text =
-                (selectedSlotShopMap.filter { it.value.first }
-                    .map { it.value.second.itemPrice!!.toInt() }
-                    .sum() + selectedSlotShopMapFace!!.filter { it.value.first }
-                    .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
+            if ((selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace?.filter { it.value.first }!!.size) == 0) {
+                binding.dashCharacterShopTvIntro1.text = "아이템을 구매해 보세요!"
+                binding.dashCharacterShopTvIntro2.text = ""
+                binding.dashCharacterShopTvIntro3.text = ""
+                binding.dashCharacterShopTvIntro4.text = ""
+                binding.dashCharacterShopTvIntro5.text = ""
+                binding.dashCharacterShopTvIntro6.text = ""
+            } else {
+                binding.dashCharacterShopTvIntro1.text = "선택아이템("
+                binding.dashCharacterShopTvIntro2.text =
+                    (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapFace?.filter { it.value.first }!!.size).toString()
+                binding.dashCharacterShopTvIntro3.text = ") 총"
+                binding.dashCharacterShopTvIntro4.text =
+                    (selectedSlotShopMap.filter { it.value.first }
+                        .map { it.value.second.itemPrice!!.toInt() }
+                        .sum() + selectedSlotShopMapFace!!.filter { it.value.first }
+                        .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
+                binding.dashCharacterShopTvIntro5.text = "P"
+                binding.dashCharacterShopTvIntro6.text = " 입니다."
+            }
         } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
-            binding.dashCharacterShopTvIntro1.text =
-                (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapHair?.filter { it.value.first }!!.size).toString()
-            binding.dashCharacterShopTvIntro2.text =
-                (selectedSlotShopMap.filter { it.value.first }
-                    .map { it.value.second.itemPrice!!.toInt() }
-                    .sum() + selectedSlotShopMapHair!!.filter { it.value.first }
-                    .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
+            if ((selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapHair?.filter { it.value.first }!!.size) == 0) {
+                binding.dashCharacterShopTvIntro1.text = "아이템을 구매해 보세요!"
+                binding.dashCharacterShopTvIntro2.text = ""
+                binding.dashCharacterShopTvIntro3.text = ""
+                binding.dashCharacterShopTvIntro4.text = ""
+                binding.dashCharacterShopTvIntro5.text = ""
+                binding.dashCharacterShopTvIntro6.text = ""
+            } else {
+                binding.dashCharacterShopTvIntro1.text = "선택아이템("
+                binding.dashCharacterShopTvIntro2.text =
+                    (selectedSlotShopMap.filter { it.value.first }.size + selectedSlotShopMapHair?.filter { it.value.first }!!.size).toString()
+                binding.dashCharacterShopTvIntro3.text = ") 총"
+                binding.dashCharacterShopTvIntro4.text =
+                    (selectedSlotShopMap.filter { it.value.first }
+                        .map { it.value.second.itemPrice!!.toInt() }
+                        .sum() + selectedSlotShopMapHair!!.filter { it.value.first }
+                        .map { it.value.second.itemPrice!!.toInt() }.sum()).toString()
+                binding.dashCharacterShopTvIntro5.text = "P"
+                binding.dashCharacterShopTvIntro6.text = " 입니다."
+            }
         }
     }
 }
