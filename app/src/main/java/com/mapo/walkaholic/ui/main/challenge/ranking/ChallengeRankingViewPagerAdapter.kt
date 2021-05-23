@@ -1,14 +1,14 @@
 package com.mapo.walkaholic.ui.main.challenge.ranking
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
-import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingFragment
 
-class ChallengeRankingViewPagerAdapter(fragment: BaseSharedFragment<*, *, *>, private val num_pages: Int) : FragmentStateAdapter(fragment) {
-    override fun getItemCount(): Int = num_pages
+class ChallengeRankingViewPagerAdapter(fragmentManager: FragmentManager,
+                                       lifecycle: Lifecycle,
+                                       private val fragmentSize: Int) : FragmentStateAdapter(fragmentManager, lifecycle) {
+    override fun getItemCount(): Int = fragmentSize
 
     override fun createFragment(position: Int): Fragment {
         return ChallengeDetailRankingFragment(position)

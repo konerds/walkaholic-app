@@ -44,7 +44,7 @@ class ChallengeFragment : BaseSharedFragment<ChallengeViewModel, FragmentChallen
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.challengeTL
         viewPager = binding.challengeVP
-        val adapter = ChallengeViewPagerAdapter(this, 3)
+        val adapter = ChallengeViewPagerAdapter(childFragmentManager, lifecycle, 3)
         viewPager.adapter = adapter
         val tabName : ArrayList<String> = arrayListOf()
         tabName.add("일일미션")

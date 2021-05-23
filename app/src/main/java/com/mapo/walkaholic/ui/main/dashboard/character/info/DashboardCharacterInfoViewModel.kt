@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.ItemInfo
 import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -30,9 +29,12 @@ class DashboardCharacterInfoViewModel(
     private val _statusUserCharacterInventoryItemResponse: MutableLiveData<Resource<UserInventoryItemStatusResponse>> = MutableLiveData()
     val statusUserCharacterInventoryItemResponse: LiveData<Resource<UserInventoryItemStatusResponse>>
         get() = _statusUserCharacterInventoryItemResponse
-    private val _selectedInventoryItem: MutableLiveData<Pair<Boolean, ItemInfo>> = MutableLiveData()
-    val selectedInventoryItem: LiveData<Pair<Boolean, ItemInfo>>
-        get() = _selectedInventoryItem
+    private val _equipItemResponse : MutableLiveData<Resource<EquipItemResponse>> = MutableLiveData()
+    val equipItemResponse: LiveData<Resource<EquipItemResponse>>
+        get() = _equipItemResponse
+    private val _deleteItemResponse : MutableLiveData<Resource<DeleteItemResponse>> = MutableLiveData()
+    val deleteItemResponse: LiveData<Resource<DeleteItemResponse>>
+        get() = _deleteItemResponse
 
     fun getDash() {
         progressBarVisibility.set(true)
@@ -68,6 +70,18 @@ class DashboardCharacterInfoViewModel(
     fun getStatusUserCharacterInventoryItem(userId : Long) {
         viewModelScope.launch {
             _statusUserCharacterInventoryItemResponse.value = mainRepository.getStatusUserCharacterInventoryItem(userId)
+        }
+    }
+
+    fun equipItem(userId: Long, faceItemId: Int?, hairItemId: Int?) {
+        viewModelScope.launch {
+            _equipItemResponse.value = mainRepository.equipItem(userId, faceItemId, hairItemId)
+        }
+    }
+
+    fun deleteItem(userId: Long, itemId: String) {
+        viewModelScope.launch {
+            _deleteItemResponse.value = mainRepository.deleteItem(userId, itemId)
         }
     }
 

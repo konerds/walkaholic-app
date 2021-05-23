@@ -16,10 +16,6 @@
             type="com.mapo.walkaholic.data.model.User" />
 
         <variable
-            name="userCharacterItem"
-            type="com.mapo.walkaholic.data.model.CharacterItemInfo" />
-
-        <variable
             name="expInformation"
             type="com.mapo.walkaholic.data.model.response.ExpInformationResponse.ExpInformation" />
     </data>
@@ -148,52 +144,23 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        style="@style/font_medium_16_one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center|center_vertical"
-                        android:text="선택아이템("
-                        android:textSize="14sp" />
-
-                    <TextView
                         android:id="@+id/dashCharacterShopTvIntro1"
                         style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical"
+                        android:text="아이템을 구매해 보세요!"
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/dashCharacterShopTvIntro2"
                         style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical"
-                        android:text=") 총"
                         android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/dashCharacterShopTvIntro2"
-                        style="@style/font_black_16_one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center|center_vertical"
-                        android:textColor="#F37520"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        style="@style/font_black_16_one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center|center_vertical"
-                        android:text="P"
-                        android:textColor="#F37520"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/dashCharacterShopTvIntro3"
@@ -202,7 +169,36 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center|center_vertical"
-                        android:text=" 입니다."
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/dashCharacterShopTvIntro4"
+                        style="@style/font_black_16_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical"
+                        android:textColor="#F37520"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/dashCharacterShopTvIntro5"
+                        style="@style/font_black_16_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical"
+                        android:textColor="#F37520"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/dashCharacterShopTvIntro6"
+                        style="@style/font_medium_16_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center|center_vertical"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -275,7 +271,7 @@
                 </LinearLayout>
 
             </LinearLayout>
-            
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/dashCharacterShopBtnBuy"
                 android:layout_width="match_parent"
@@ -283,15 +279,15 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/box_dashboard_corner_afd085"
                 android:elevation="4dp"
                 android:text="구매하기"
                 android:textColor="@color/mdWhite1000"
-                android:textStyle="bold"
                 android:textSize="16sp"
-                android:background="@drawable/box_dashboard_corner_afd085"
-                app:layout_constraintTop_toBottomOf="@id/dashCharacterShopLayout2"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-            
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dashCharacterShopLayout2" />
+
             <Space
                 android:id="@+id/dashCharacterShopEndSpace"
                 android:layout_width="match_parent"

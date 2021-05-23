@@ -48,40 +48,12 @@ class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, M
         tabLayout = binding.themeTL
         viewPager = binding.themeVP
 
-        /*******************
-         * 테스트용 임시
-         */
-        val adapter = ThemeViewPagerAdapter(this, 3)
-        viewPager.adapter = adapter
-        val dummyThemeArrayList : ArrayList<CategoryThemeResponse.CategoryTheme> = arrayListOf()
-        dummyThemeArrayList.add(CategoryThemeResponse.CategoryTheme("힐링"))
-        dummyThemeArrayList.add(CategoryThemeResponse.CategoryTheme("데이트"))
-        dummyThemeArrayList.add(CategoryThemeResponse.CategoryTheme("운동"))
-        val tabName : ArrayList<CategoryThemeResponse.CategoryTheme>? = dummyThemeArrayList
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabName?.get(position)?.themeName
-        }.attach()
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewPager.currentItem = tab!!.position
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-        })
-        /***********************/
-
         viewModel.categoryThemeResponse.observe(viewLifecycleOwner, Observer { _categoryThemeResponse ->
             when(_categoryThemeResponse) {
                 is Resource.Success -> {
                     when(_categoryThemeResponse.value.code) {
                         "200" -> {
-                            val adapter = ThemeViewPagerAdapter(this, _categoryThemeResponse.value.data.size)
+                            val adapter = ThemeViewPagerAdapter(childFragmentManager, lifecycle, 3)
                             viewPager.adapter = adapter
                             val tabName : ArrayList<CategoryThemeResponse.CategoryTheme>? = _categoryThemeResponse.value.data
                             TabLayoutMediator(tabLayout, viewPager) { tab, position ->

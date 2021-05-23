@@ -1,8 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +21,7 @@ import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
 import com.mapo.walkaholic.ui.snackbar
+import kotlinx.android.synthetic.main.fragment_detail_character_info.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -59,6 +58,9 @@ class DashboardCharacterInfoDetailFragment(
                                         is Resource.Success -> {
                                             when (_statusUserCharacterInventoryItem.value.code) {
                                                 "200" -> {
+                                                    viewModel.getUserCharacterEquipStatus(
+                                                        _userResponse.value.data.first().id
+                                                    )
                                                     viewModel.userCharacterEquipStatusResponse.observe(
                                                         viewLifecycleOwner,
                                                         Observer { _userCharacterEquipStatusResponse ->
@@ -232,12 +234,16 @@ class DashboardCharacterInfoDetailFragment(
                                                                                     _dashCharacterInfoDetailRV.adapter as DashboardCharacterInfoDetailAdapter
                                                                                 val initData =
                                                                                     mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
-                                                                                Log.e(TAG, "${adapter.getData()} \n${_userCharacterEquipStatusResponse.value.data}")
                                                                                 adapter.getData()
                                                                                     .forEach { (_dataIndex1, _dataElement1) ->
                                                                                         _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex2, _dataElement2 ->
-                                                                                            if (_dataElement1.second.itemId.toString() == _dataElement2.itemId &&
-                                                                                                _dataElement1.second.itemType == _dataElement2.itemType
+                                                                                            if (_dataElement1.second.itemId.toString() == _dataElement2.itemId.toString() &&
+                                                                                                _dataElement1.second.itemType == _dataElement2.itemType &&
+                                                                                                _dataElement1.second.itemType == (if (position == 0) {
+                                                                                                    "face"
+                                                                                                } else {
+                                                                                                    "hair"
+                                                                                                })
                                                                                             ) {
                                                                                                 initData[_dataIndex1] =
                                                                                                     Pair(
@@ -247,12 +253,16 @@ class DashboardCharacterInfoDetailFragment(
                                                                                             }
                                                                                         }
                                                                                     }
-                                                                                adapter.setData(
-                                                                                    initData
-                                                                                )
-                                                                                listener.onItemClick(
-                                                                                    initData
-                                                                                )
+                                                                                if (initData.filter { _initData -> !((_initData.value.second.itemType == "face") || (_initData.value.second.itemType == "hair")) }
+                                                                                        .isNullOrEmpty()) {
+                                                                                    adapter.setData(
+                                                                                        initData
+                                                                                    )
+                                                                                    listener.onItemClick(
+                                                                                        adapter.getData(),
+                                                                                        true
+                                                                                    )
+                                                                                }
                                                                             }
                                                                         }
                                                                         "400" -> {
@@ -310,7 +320,7 @@ class DashboardCharacterInfoDetailFragment(
                     }
                 }
                 is Resource.Loading -> {
-
+                    // Loading
                 }
                 is Resource.Failure -> {
                     // Network Error
@@ -320,12 +330,99 @@ class DashboardCharacterInfoDetailFragment(
         })
         viewModel.getDash()
         binding.dashCharacterInfoInitLayout.setOnClickListener { _dashCharacterInfoInitLayout ->
-            val adapter: DashboardCharacterInfoDetailAdapter =
-                binding.dashCharacterInfoDetailRV.adapter as DashboardCharacterInfoDetailAdapter
-            adapter.clearSelectedItem()
-            adapter.notifyDataSetChanged()
-            listener.onItemClick(adapter.getData())
+            initInventory()
         }
+    }
+
+    private fun initInventory() {
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+            when (_userResponse) {
+                is Resource.Success -> {
+                    when (_userResponse.value.code) {
+                        "200" -> {
+                            viewModel.getUserCharacterEquipStatus(
+                                _userResponse.value.data.first().id
+                            )
+                            viewModel.userCharacterEquipStatusResponse.observe(
+                                viewLifecycleOwner,
+                                Observer { _userCharacterEquipStatusResponse ->
+                                    when (_userCharacterEquipStatusResponse) {
+                                        is Resource.Success -> {
+                                            when (_userCharacterEquipStatusResponse.value.code) {
+                                                "200" -> {
+                                                    binding.dashCharacterInfoDetailRV.also { _dashCharacterInfoDetailRV ->
+                                                        val adapter =
+                                                            _dashCharacterInfoDetailRV.adapter as DashboardCharacterInfoDetailAdapter
+                                                        val initData =
+                                                            mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+                                                        adapter.getData()
+                                                            .forEach { (_dataIndex1, _dataElement1) ->
+                                                                _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex2, _dataElement2 ->
+                                                                    if (_dataElement1.second.itemId.toString() == _dataElement2.itemId.toString() &&
+                                                                        _dataElement1.second.itemType == _dataElement2.itemType &&
+                                                                        _dataElement1.second.itemType == (if (position == 0) {
+                                                                            "face"
+                                                                        } else {
+                                                                            "hair"
+                                                                        })
+                                                                    ) {
+                                                                        initData[_dataIndex1] =
+                                                                            Pair(
+                                                                                true,
+                                                                                _dataElement1.second
+                                                                            )
+                                                                    }
+                                                                }
+                                                            }
+                                                        if (initData.filter { _initData -> !((_initData.value.second.itemType == "face") || (_initData.value.second.itemType == "hair")) }
+                                                                .isNullOrEmpty()) {
+                                                            adapter.setData(
+                                                                initData
+                                                            )
+                                                            listener.onItemClick(
+                                                                adapter.getData(),
+                                                                true
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                                "400" -> {
+                                                    // Error
+                                                }
+                                                else -> {
+                                                    // Error
+                                                }
+                                            }
+                                        }
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            // Network Error
+                                            handleApiError(
+                                                _userCharacterEquipStatusResponse
+                                            )
+                                        }
+                                    }
+                                })
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
+                }
+                is Resource.Loading -> {
+                    // Loading
+                }
+                is Resource.Failure -> {
+                    // Network Error
+                    handleApiError(_userResponse)
+                }
+            }
+        })
     }
 
     private fun showToastEvent(contents: String) {

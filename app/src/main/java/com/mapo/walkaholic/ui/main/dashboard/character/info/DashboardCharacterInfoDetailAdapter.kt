@@ -1,7 +1,5 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +23,7 @@ class DashboardCharacterInfoDetailAdapter(
         val binding: ItemSlotInventoryBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun setItemInfo(itemInfo: ItemInfo?) {
-            if(itemInfo != null) {
+            if (itemInfo != null) {
                 binding.itemInfo = itemInfo
                 binding.itemInventoryIvBase.isSelected = isItemSelected(position)
                 binding.itemInventoryIvLowerCorner.isSelected = isItemSelected(position)
@@ -57,13 +55,20 @@ class DashboardCharacterInfoDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: DashboardCharacterInfoDetailViewHolder, position: Int) {
-        if(arrayListItemInfo[position].itemName.isNullOrEmpty()) {
+        if (arrayListItemInfo[position].itemName.isNullOrEmpty()) {
             holder.setItemInfo(null)
         } else {
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemInventoryLayout.setOnClickListener {
                 toggleItemSelected(position)
-                listener.onItemClick(selectedSlotInventoryMap)
+                listener.onItemClick(selectedSlotInventoryMap, false)
+            }
+            holder.binding.itemInventoryIvDiscard.setOnClickListener {
+                arrayListItemInfo[position].itemId?.let { _itemId ->
+                    listener.discardItem(
+                        _itemId
+                    )
+                }
             }
         }
     }
@@ -71,16 +76,19 @@ class DashboardCharacterInfoDetailAdapter(
     override fun getItemCount() = arrayListItemInfo.size
 
     private fun toggleItemSelected(position: Int) {
-        if(selectedSlotInventoryMap[position] != null) {
+        if (selectedSlotInventoryMap[position] != null) {
             if (selectedSlotInventoryMap[position]!!.first) {
                 clearSelectedItem()
-                selectedSlotInventoryMap[position] = Pair(false, selectedSlotInventoryMap[position]!!.second)
+                selectedSlotInventoryMap[position] =
+                    Pair(false, selectedSlotInventoryMap[position]!!.second)
             } else {
                 clearSelectedItem()
-                selectedSlotInventoryMap[position] = Pair(true, selectedSlotInventoryMap[position]!!.second)
+                selectedSlotInventoryMap[position] =
+                    Pair(true, selectedSlotInventoryMap[position]!!.second)
             }
             notifyDataSetChanged()
-        } else { }
+        } else {
+        }
     }
 
     private fun isItemSelected(position: Int): Boolean {
@@ -92,18 +100,19 @@ class DashboardCharacterInfoDetailAdapter(
     }
 
     fun clearSelectedItem() {
-        for(i in 0 until arrayListItemInfo.size) {
+        for (i in 0 until arrayListItemInfo.size) {
             selectedSlotInventoryMap[i] = Pair(false, arrayListItemInfo[i])
         }
     }
 
     fun getData() = selectedSlotInventoryMap
 
-    fun setData(selectedStatusEquip : MutableMap<Int, Pair<Boolean, ItemInfo>>) {
-        for(i in 0 until arrayListItemInfo.size) {
-            selectedSlotInventoryMap[i] = selectedStatusEquip[i] as Pair<Boolean, ItemInfo>
+    fun setData(selectedStatusEquip: MutableMap<Int, Pair<Boolean, ItemInfo>>) {
+        for (i in 0 until arrayListItemInfo.size) {
+            if (selectedStatusEquip[i]?.second?.itemType != null && selectedStatusEquip[i]?.second?.itemId != null) {
+                selectedSlotInventoryMap[i] = selectedStatusEquip[i] as Pair<Boolean, ItemInfo>
+            }
         }
-        Log.e(TAG,selectedSlotInventoryMap.toString())
         notifyDataSetChanged()
     }
 }

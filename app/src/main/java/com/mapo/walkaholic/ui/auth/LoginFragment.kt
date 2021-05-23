@@ -25,10 +25,6 @@ import kotlinx.coroutines.launch
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        /*************************************
-         * 테스트용 강제 이동
-         */
-        requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
         viewModel.let { binding.viewModel = it }
         lifecycleScope.launch {
             viewModel.saveIsFirst()
