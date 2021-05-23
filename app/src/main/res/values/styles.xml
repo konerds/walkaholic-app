@@ -6,6 +6,8 @@
         <item name="tabTextAppearance">@style/TextAppearance.App.CommonButton</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabIndicatorHeight">2dp</item>
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
         <item name="colorPrimary">#F9A25B</item>
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
@@ -82,6 +84,20 @@
         <item name="android:textColor">@color/mdWhite1000</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
+    </style>
+    <!-- Snack Bar Style -->
+    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+        <item name="actionTextColorAlpha">1</item>
+    </style>
+
+    <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/mdWhite1000</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorOnSurface">#000000</item>
     </style>
 
     <!-- Font Style-->
