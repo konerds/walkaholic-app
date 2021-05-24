@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
@@ -293,14 +294,12 @@ class DashboardCharacterInfoFragment :
                                                             if (filteredSelectedFace.filter { faceValue -> faceValue.value.first }
                                                                     .isNullOrEmpty()) {
                                                                 null
-                                                                //_userCharacterEquipStatusResponse.value.data.first { _data -> _data.itemType == "face" }.itemId
                                                             } else {
                                                                 filteredSelectedFace.values.first().second.itemId
                                                             },
                                                             if (filteredSelectedHair.filter { hairValue -> hairValue.value.first }
                                                                     .isNullOrEmpty()) {
                                                                 null
-                                                                //_userCharacterEquipStatusResponse.value.data.first { _data -> _data.itemType == "hair" }.itemId
                                                             } else {
                                                                 filteredSelectedHair.values.first().second.itemId
                                                             }
@@ -371,7 +370,11 @@ class DashboardCharacterInfoFragment :
                         when (_equipItemResponse.value.code) {
                             "200" -> {
                                 showToastEvent(_equipItemResponse.value.message)
-                                viewModel.getDash()
+                                val navDirection: NavDirections? =
+                                    DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoSelf()
+                                if (navDirection != null) {
+                                    findNavController().navigate(navDirection)
+                                }
                             }
                             "400" -> {
                                 // Error

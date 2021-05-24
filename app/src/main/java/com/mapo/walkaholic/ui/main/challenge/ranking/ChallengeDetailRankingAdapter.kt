@@ -61,6 +61,11 @@ class ChallengeDetailRankingAdapter(
                 )
                 holder.binding.rankingCrown.setImageDrawable(crownImg)
             }
+            else -> {
+                /*holder.binding.challengeRankingUserTv
+                holder.binding.challengeRankingUserTv2
+                holder.binding.challengeRankingPointTv*/
+            }
         }
     }
 

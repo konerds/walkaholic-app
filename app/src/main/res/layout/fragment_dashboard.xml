@@ -137,12 +137,12 @@
 
                 </FrameLayout>
 
-                <TextView
+                <!--<TextView
                     style="@style/font_semi_bold_10_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - expInformation.currentLevelNeedExp) + " / " + viewModel.toAnyToString(expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp)}' />
+                    android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - expInformation.currentLevelNeedExp) + " / " + viewModel.toAnyToString(expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp)}' />-->
 
                 <TextView
                     android:id="@+id/dashTvIntro"
@@ -150,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/box_dashboard_corner_feeadb"
                     android:gravity="center|center_vertical"
                     android:minWidth="220dp"
@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginRight="16dp"
                     android:orientation="horizontal">
 
@@ -326,7 +326,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/box_dashboard_corner_white"
+                android:background="@drawable/box_dashboard_corner_white_16dp"
                 android:gravity="center|center_vertical"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashLayout5"
@@ -337,7 +337,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -357,14 +357,14 @@
                             android:id="@+id/dashIvWeather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp" />
+                            android:layout_marginLeft="8dp" />
 
                     </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="24dp"
                         android:orientation="horizontal">
 
@@ -550,7 +550,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/box_dashboard_corner_white"
+                android:background="@drawable/box_dashboard_corner_white_16dp"
                 android:orientation="vertical"
                 android:elevation="1dp"
                 app:layout_constraintBottom_toTopOf="@id/dashEndSpace"
@@ -571,7 +571,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="28dp"
-                    android:paddingHorizontal="20dp"
+                    android:paddingHorizontal="12dp"
                     tools:listitem="@layout/item_dashboard_theme" />
 
             </LinearLayout>

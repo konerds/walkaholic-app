@@ -140,11 +140,11 @@ class DashboardViewModel(
         } else {
             val differenceTemperature = (todayTemperature.toInt() - yesterdayTemperature.toInt())
             if (differenceTemperature > 0) {
-                return "어제보다 ${differenceTemperature.absoluteValue}도 높아요"
+                return "어제보다 ${differenceTemperature.absoluteValue}º 높아요"
             } else if (differenceTemperature == 0) {
                 return "어제같은 날씨에요"
             } else if (differenceTemperature < 0) {
-                return "어제보다 ${differenceTemperature.absoluteValue}도 낮아요"
+                return "어제보다 ${differenceTemperature.absoluteValue}º 낮아요"
             } else {
                 return "오류"
             }

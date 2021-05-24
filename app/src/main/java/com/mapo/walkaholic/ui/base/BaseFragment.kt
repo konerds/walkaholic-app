@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
@@ -32,9 +33,9 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
     private lateinit var callback: OnBackPressedCallback
     protected val remoteDataSource = RemoteDataSource()
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         userPreferences = UserPreferences(requireContext())
         binding = getFragmentBinding(inflater, container)
@@ -57,9 +58,11 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
     }
 
     private fun showToastEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
+        when (contents) {
+            null -> {
+            }
+            "" -> {
+            }
             else -> {
                 Toast.makeText(
                     requireContext(),
@@ -71,9 +74,11 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
     }
 
     private fun showSnackbarEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
+        when (contents) {
+            null -> {
+            }
+            "" -> {
+            }
             else -> {
                 requireView().snackbar(contents)
             }

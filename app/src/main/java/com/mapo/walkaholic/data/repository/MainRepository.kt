@@ -197,8 +197,8 @@ class MainRepository(
         api.deleteItem(userId.toString(), itemId)
     }
 
-    suspend fun getCalendarDate(userId: Long, walkDate: String) = safeApiCall {
-        api.getCalendarDate(userId, walkDate)
+    suspend fun getWalkRecord(userId: Long, walkDate: String) = safeApiCall {
+        api.getWalkRecord(userId.toString(), walkDate)
     }
 
     suspend fun getCalendarMonth(userId: Long, walkMonth: String) = safeApiCall {

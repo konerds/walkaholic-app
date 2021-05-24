@@ -4,37 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="android.view.View" />
     </data>
 
-    <LinearLayout
+    <me.didik.component.StickyNestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/challengeTvIntro1"
-            style="@style/font_semi_bold_20_two"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/challengeTvIntro2"
-            style="@style/font_semi_bold_12_one"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/challengeTvIntro1"
+                style="@style/font_semi_bold_20_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
 
-        <me.didik.component.StickyNestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/challengeTvIntro2"
+                style="@style/font_semi_bold_12_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="24dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -49,7 +48,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="@drawable/box_dashboard_corner_white"
+                    android:background="@drawable/box_dashboard_corner_white_16dp"
                     android:elevation="1dp"
                     android:visibility="gone">
 
@@ -72,13 +71,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="1dp"
-                        android:background="@drawable/box_dashboard_corner_white"
-                        android:orientation="vertical"
-                        android:elevation="1dp">
+                        android:background="@drawable/box_dashboard_corner_white_16dp"
+                        android:elevation="1dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/challengeRankingTvIntro1"
@@ -88,7 +87,7 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="20dp"
                             android:text="유니님, 월별랭킹"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -112,7 +111,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="위"
                                 android:textColor="@color/color689f38"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/challengeRankingTvIntro2"
@@ -126,7 +125,7 @@
 
                         <TextView
                             android:id="@+id/challengeRankingTvIntro3"
-                            style="@style/font_semi_bold_10_one"
+                            style="@style/font_semi_bold_12_one"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
@@ -154,11 +153,11 @@
                         android:tag="sticky">
 
                         <com.google.android.material.tabs.TabLayout
-                            android:layout_gravity="bottom"
                             android:id="@+id/challengeRankingTL"
                             style="@style/Widget.App.TabLayout"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
+                            android:layout_gravity="bottom"
                             android:layout_marginTop="16dp"
                             app:tabBackground="@drawable/selector_tab_layout" />
 
@@ -173,8 +172,8 @@
 
             </LinearLayout>
 
-        </me.didik.component.StickyNestedScrollView>
+        </LinearLayout>
 
-    </LinearLayout>
+    </me.didik.component.StickyNestedScrollView>
 
 </layout>

@@ -20,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:visibility="visible"
+                app:navigationIcon="@drawable/ic_header_logo"
                 app:buttonGravity="center_vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

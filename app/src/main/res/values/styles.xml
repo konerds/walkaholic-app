@@ -6,6 +6,8 @@
         <item name="tabTextAppearance">@style/TextAppearance.App.CommonButton</item>
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabIndicatorHeight">2dp</item>
+        <item name="snackbarStyle">@style/Widget.App.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.App.SnackbarButton</item>
         <item name="colorPrimary">#F9A25B</item>
         <item name="colorPrimaryVariant">@color/mdWhite1000</item>
         <item name="colorSecondary">@color/mdWhite1000</item>
@@ -87,68 +89,68 @@
     <style name="TabText" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="fontFamily">@font/noto_sans_bold</item>
         <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+    <!-- Snack Bar Style -->
+    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+        <item name="actionTextColorAlpha">1</item>
+    </style>
+
+    <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/mdWhite1000</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorOnSurface">#000000</item>
     </style>
 
     <!-- Font Style-->
     <!-- black -->
     <!-- black one -->
-    <style name="font_black_10_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_10_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing">0.05</item>
         <item name="android:textColor">@color/h5</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="font_black_12_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_12_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.04</item>
         <item name="android:textColor">@color/h4</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="font_black_16_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_16_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textColor">@color/h3</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="font_black_20_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_20_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">0.03</item>
         <item name="android:textColor">@color/h2</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="font_black_24_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_24_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">24sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textColor">@color/h1</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="font_black_28_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_28_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">28sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textColor">@color/h1</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="font_black_30_one" parent="android:TextAppearance">
-        <item name="fontFamily">@font/noto_sans_black</item>
+    <style name="font_black_30_one" parent="">
         <item name="android:fontFamily">@font/noto_sans_black</item>
         <item name="android:textSize">30sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textColor">@color/h1</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
     <!-- black two -->
     <style name="font_black_10_two" parent="font_black_10_one">
