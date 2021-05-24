@@ -94,17 +94,15 @@ interface InnerApi {
         @Body body: MapRequestBody
     ): MapResponse
 
-    @FormUrlEncoded
     @GET("user/{id}/detail/walk-record")
     suspend fun getWalkRecord(
         @Path("id") id: String,
         @Query("date") date: String
     ): WalkRecordResponse
 
-    @FormUrlEncoded
-    @POST("user/{id}/walk-record")
+    @GET("user/{id}/walk-record")
     suspend fun getCalendarMonth(
-        @Path("id") userId: Long,
+        @Path("id") id: Long,
         @Query("date") date: String
     ): WalkRecordExistInMonthResponse
 

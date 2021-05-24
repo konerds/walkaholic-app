@@ -62,7 +62,7 @@ class DashboardCalendarFragment :
                     when(_calendarMonthResponse.value.code) {
                         "200" -> {
                             _calendarMonthResponse.value.data.forEachIndexed { index, walkRecord ->
-                                Log.e(TAG, walkRecord.toString())
+                                Log.e("calendarMonthResponse", walkRecord.toString())
                                 calendarDays.add(walkRecord.year?.let { it1 ->
                                     walkRecord.month?.let { it2 ->
                                         walkRecord.date?.let { it3 ->
@@ -143,90 +143,115 @@ class DashboardCalendarFragment :
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
-                    viewModel.getWalkRecord(
-                        _userResponse.value.data.first().id,
-                        SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(CalendarDay.today().date)
-                    )
-                    // 월 선택 리스너
-                    binding.calendarView.setOnMonthChangedListener { widget, date ->
-                        currentMonth = date.month
-                    }
-                    var _currentMonth = if (currentMonth in 1..9) {
-                        "0${currentMonth + 1}"
-                    } else {
-                        (currentMonth + 1).toString()
-                    }
-                    _currentMonth = currentYear.toString() + "-" + _currentMonth
-                    // 날짜 선택 리스너
-                    binding.calendarView.setOnDateChangedListener { widget, date, selected ->
-                        binding.textView.text = SimpleDateFormat(
-                            "MM월dd일, EE요일",
-                            Locale.KOREAN
-                        ).format(date.date)
-                        currentDate = date.date
-                        viewModel.getWalkRecord(
-                            _userResponse.value.data.first().id,
-                            SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date.date)
-                        )
-                    }
-                    viewModel.getCalendarMonth(_userResponse.value.data.first().id, _currentMonth)
-                    viewModel.calendarResponse.observe(
-                        viewLifecycleOwner,
-                        Observer { _calendarResponse ->
-                            binding.dashCalendarRV.also { _dashCalendarRV ->
-                                val linearLayoutManager =
-                                    LinearLayoutManager(requireContext())
-                                linearLayoutManager.orientation =
-                                    LinearLayoutManager.VERTICAL
-                                _dashCalendarRV.layoutManager = linearLayoutManager
-                                _dashCalendarRV.setHasFixedSize(true)
-                                when (_calendarResponse) {
-                                    is Resource.Success -> {
-                                        when (_calendarResponse.value.code) {
-                                            "200" -> {
-                                                _dashCalendarRV.adapter =
-                                                    _calendarResponse.value.data?.let { _walkRecord ->
-                                                        DashboardCalendarAdapter(_walkRecord)
+                    when(_userResponse.value.code) {
+                        "200" -> {
+                            viewModel.getWalkRecord(
+                                _userResponse.value.data.first().id,
+                                SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(CalendarDay.today().date)
+                            )
+
+                            // 월 선택 리스너
+                            binding.calendarView.setOnMonthChangedListener { widget, date ->
+                                currentMonth = date.month
+                            }
+                            var _currentMonth = if (currentMonth in 1..9) {
+                                "0${currentMonth + 1}"
+                            } else {
+                                (currentMonth + 1).toString()
+                            }
+                            _currentMonth = currentYear.toString() + "-" + _currentMonth
+                            // 날짜 선택 리스너
+                            binding.calendarView.setOnDateChangedListener { widget, date, selected ->
+                                binding.textView.text = SimpleDateFormat(
+                                    "MM월dd일, EE요일",
+                                    Locale.KOREAN
+                                ).format(date.date)
+                                currentDate = date.date
+                                viewModel.getWalkRecord(
+                                    _userResponse.value.data.first().id,
+                                    SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date.date)
+                                )
+                            }
+                            viewModel.getCalendarMonth(_userResponse.value.data.first().id, _currentMonth)
+                            viewModel.calendarResponse.observe(
+                                viewLifecycleOwner,
+                                Observer { _calendarResponse ->
+                                    binding.dashCalendarRV.also { _dashCalendarRV ->
+                                        val linearLayoutManager =
+                                            LinearLayoutManager(requireContext())
+                                        linearLayoutManager.orientation =
+                                            LinearLayoutManager.VERTICAL
+                                        _dashCalendarRV.layoutManager = linearLayoutManager
+                                        _dashCalendarRV.setHasFixedSize(true)
+                                        when (_calendarResponse) {
+                                            is Resource.Success -> {
+                                                when (_calendarResponse.value.code) {
+                                                    "200" -> {
+                                                        _dashCalendarRV.adapter =
+                                                            _calendarResponse.value.data?.let { _walkRecord ->
+                                                                DashboardCalendarAdapter(_walkRecord)
+                                                            }
+                                                        Log.e("calendarResponseData", _calendarResponse.value.data.toString())
+                                                        Log.e("calendarResponseTotal", _calendarResponse.value.totalRecord.toString())
+                                                        binding.dashCalendarTvTotalDate.text = SimpleDateFormat(
+                                                            "yyyy.MM.dd EE요일,",
+                                                            Locale.KOREAN
+                                                        ).format(currentDate)
+
+                                                        binding.dashCalendarTvTotalTime.text =
+                                                            _calendarResponse.value.totalRecord.totalWalkTime
+                                                        binding.dashCalendarTvTotalDistance.text =
+                                                            _calendarResponse.value.totalRecord.totalDistance
+                                                        binding.dashCalendarTvCalorie.text =
+                                                            _calendarResponse.value.totalRecord.totalWalkCalorie
+                                                        binding.dashCalendarTvWalkAmount.text =
+                                                            _calendarResponse.value.totalRecord.totalWalkCount
+
+                                                        /*var totalTime = 0
+                                                        var totalDistance = 0
+                                                        var totalCalorie = 0
+                                                        var totalWalkAmount = 0
+                                                        _calendarResponse.value.data.forEachIndexed { index, walkRecord ->
+                                                            Log.e("calendarResponse", walkRecord.toString())
+
+                                                            totalTime += walkRecord.walkTime?.toInt() ?: -1
+                                                            totalDistance += walkRecord.walkDistance?.toInt() ?: -1
+                                                            totalCalorie += walkRecord.walkCalorie?.toInt() ?: -1
+                                                        }
+                                                        binding.dashCalendarTvTotalTime.text =
+                                                            totalTime.toString()
+                                                        binding.dashCalendarTvTotalDistance.text =
+                                                            totalDistance.toString()
+                                                        binding.dashCalendarTvCalorie.text =
+                                                            totalCalorie.toString()
+                                                        binding.dashCalendarTvWalkAmount.text = "200"*/
+
                                                     }
-                                                binding.dashCalendarTvTotalDate.text = SimpleDateFormat(
-                                                    "yyyy.MM.dd EE요일,",
-                                                    Locale.KOREAN
-                                                ).format(currentDate)
-                                                var totalTime = 0
-                                                var totalDistance = 0
-                                                var totalCalorie = 0
-                                                var totalWalkAmount = 0
-                                                _calendarResponse.value.data.forEachIndexed { index, walkRecord ->
-                                                    totalTime += walkRecord.walkTime?.toInt() ?: -1
-                                                    totalDistance += walkRecord.walkDistance?.toInt() ?: -1
-                                                    totalCalorie += walkRecord.walkCalorie?.toInt() ?: -1
+                                                    "400" -> {
+                                                        // Error
+                                                    }
+                                                    else -> {
+                                                        // Error
+                                                    }
                                                 }
-                                                binding.dashCalendarTvTotalTime.text =
-                                                    totalTime.toString()
-                                                binding.dashCalendarTvTotalDistance.text =
-                                                    totalDistance.toString()
-                                                binding.dashCalendarTvCalorie.text =
-                                                    totalCalorie.toString()
-                                                binding.dashCalendarTvWalkAmount.text = "200"
+                                            }
+                                            is Resource.Loading -> {
 
                                             }
-                                            "400" -> {
-                                                // Error
-                                            }
-                                            else -> {
-                                                // Error
+                                            is Resource.Failure -> {
+                                                handleApiError(_calendarResponse)
                                             }
                                         }
                                     }
-                                    is Resource.Loading -> {
-
-                                    }
-                                    is Resource.Failure -> {
-                                        handleApiError(_calendarResponse)
-                                    }
-                                }
-                            }
-                        })
+                                })
+                        }
+                        "400" -> {
+                            // Error
+                        }
+                        else -> {
+                            // Error
+                        }
+                    }
                 }
                 is Resource.Loading -> {
 

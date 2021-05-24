@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginLeft="28dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="38dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="#57534A" />
 
@@ -56,8 +56,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="21dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginBottom="16dp"
                     app:mcv_leftArrowMask="@drawable/ic_btn_calendar_arrow_left"
                     app:mcv_rightArrowMask="@drawable/ic_btn_calendar_arrow_right"
                     app:mcv_showOtherDates="defaults" />
@@ -146,7 +147,7 @@
 
                         </LinearLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="72dp"
                             android:layout_gravity="center_vertical"
@@ -157,10 +158,10 @@
                                 android:id="@+id/dashCalendarRLDistance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_marginLeft="32dp"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginLeft="40dp"
+                                android:layout_marginTop="3dp"
                                 android:orientation="vertical"
-                                app:layout_constraintLeft_toLeftOf="parent">
+                                android:layout_alignParentLeft="true">
 
                                 <TextView
                                     android:id="@+id/dashCalendarTvTotalDistance"
@@ -174,7 +175,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="4dp"
                                     android:text="@string/dash_calendar_distance"
                                     android:textColor="@color/h4" />
 
@@ -184,10 +184,9 @@
                                 android:id="@+id/dashCalendarRLCalorie"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="3dp"
                                 android:orientation="vertical"
-                                app:layout_constraintLeft_toRightOf="@id/dashCalendarRLDistance"
-                                app:layout_constraintRight_toLeftOf="@id/dashCalendarRLWalkAmount">
+                                android:layout_centerHorizontal="true">
 
                                 <TextView
                                     android:id="@+id/dashCalendarTvCalorie"
@@ -201,7 +200,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="4dp"
                                     android:text="@string/dash_calendar_kcal"
                                     android:textColor="@color/h4" />
 
@@ -211,10 +209,10 @@
                                 android:id="@+id/dashCalendarRLWalkAmount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginRight="32dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginRight="40dp"
                                 android:orientation="vertical"
-                                app:layout_constraintRight_toRightOf="parent">
+                                android:layout_alignParentRight="true">
 
                                 <TextView
                                     android:id="@+id/dashCalendarTvWalkAmount"
@@ -229,13 +227,12 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="4dp"
                                     android:text="@string/dash_calendar_step_count"
                                     android:textColor="@color/colorf37520" />
 
                             </LinearLayout>
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -259,7 +256,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="14dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="6dp"
                         android:text="@string/detail_walk"
