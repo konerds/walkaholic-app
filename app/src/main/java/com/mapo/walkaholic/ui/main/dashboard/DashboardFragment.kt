@@ -564,13 +564,6 @@ class DashboardFragment :
                 findNavController().navigate(navDirection)
             }
         }
-        binding.dashTvcalorie.setOnClickListener {
-            val navDirection: NavDirections? =
-                DashboardFragmentDirections.actionActionBnvDashToActionStoragePath()
-            if (navDirection != null) {
-                findNavController().navigate(navDirection)
-            }
-        }
     }
 
     // 위도 경도 X, Y 좌표 변경

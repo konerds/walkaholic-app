@@ -99,7 +99,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="1dp"
                         android:layout_marginTop="1dp"
-                        android:background="@drawable/box_dashboard_corner_white"
+                        android:background="@drawable/box_dashboard_corner_white_16dp"
                         android:elevation="1dp"
                         android:orientation="vertical">
 

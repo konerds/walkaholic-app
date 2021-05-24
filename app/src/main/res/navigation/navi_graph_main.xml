@@ -37,15 +37,6 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
-        <!-- 찜한 경로 이동 -->
-        <action
-            android:id="@+id/action_actionBnvDash_to_actionStoragePath"
-            app:destination="@id/actionStoragePath"
-            app:enterAnim="@android:anim/slide_out_right"
-            app:exitAnim="@android:anim/slide_in_left"
-            app:popEnterAnim="@android:anim/slide_out_right"
-            app:popExitAnim="@android:anim/slide_in_left" />
     </fragment>
 
     <fragment
@@ -117,19 +108,10 @@
         tools:layout="@layout/fragment_map">
     </fragment>
 
-
-    <!-- 찜한 경로 이동 -->
     <fragment
-        android:id="@+id/actionStoragePath"
+        android:id="@+id/favoritePathFragment"
         android:name="com.mapo.walkaholic.ui.favoritepath.FavoritePathFragment"
-        tools:layout="@layout/fragment_favorite_path">
-        <action
-            android:id="@+id/action_actionStoragePath_to_actionBnvDash"
-            app:destination="@id/actionBnvDash"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
+        android:label="fragment_favorite_path"
+        tools:layout="@layout/fragment_favorite_path" />
 
 </navigation>

@@ -3,8 +3,12 @@ package com.mapo.walkaholic.ui
 import android.app.Activity
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -48,70 +52,58 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     snackbar.show()
 }
 
-/*fun Fragment.handleApiError(
-    failure: Resource.Failure,
-    retry: (() -> Unit)? = null
-) {
-    val error = failure.errorBody?.string().toString()
-    Log.i(
-        ContentValues.TAG, "Error : ${error}"
-    )
-    when {
-        failure.isNetworkError -> {
-            //val errCode = JSONObject(failure.errorCode.toString())
-            //val errBody = JSONObject(failure.errorBody?.string())
-            requireView().snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
-        }
-        failure.errorCode == 401 -> {
-            if (this is LoginFragment) {
-                requireView().snackbar("로그인할 수 없습니다")
-            } else {
-                //(this as BaseFragment<*, *, *>).logout()
-            }
-        }
-        else -> {
-            requireView().snackbar(error)
-        }
-    }
-}
-
-fun Activity.handleApiError(
-    failure: Resource.Failure,
-    retry: (() -> Unit)? = null
-) {
-    when {
-        failure.isNetworkError -> {
-            //val errCode = JSONObject(failure.errorCode.toString())
-            //val errBody = JSONObject(failure.errorBody?.string())
-            window.decorView.snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
-        }
-        failure.errorCode == 401 -> {
-            if (true) {
-
-            } else {
-                //(this as BaseFragment<*, *, *>).logout()
-            }
-        }
-        else -> {
-            val error = failure.errorBody?.string().toString()
-            window.decorView.snackbar(error)
-        }
-    }
-}*/
-
-
 fun Fragment.handleApiError(
     failure: Resource.Failure,
     retry: (() -> Unit)? = null
 ) {
-
+    val error = failure.errorBody?.string().toString()
+    when {
+        failure.isNetworkError -> {
+            if(!checkNetworkState(requireView().context)) {
+                requireView().snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
+            } else {
+                requireView().snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+            }
+        }
+        else -> {
+            requireView().snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+        }
+    }
 }
 
 fun Activity.handleApiError(
     failure: Resource.Failure,
     retry: (() -> Unit)? = null
 ) {
+    when {
+        failure.isNetworkError -> {
+            if(!checkNetworkState(window.decorView.context)) {
+                window.decorView.snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
+            } else {
+                window.decorView.snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+            }
+        }
+        else -> {
+            window.decorView.snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+        }
+    }
+}
 
+fun checkNetworkState(context : Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val nw = connectivityManager.activeNetwork ?: return false
+        val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+        return when {
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
+        }
+    } else {
+        val nwInfo = connectivityManager.activeNetworkInfo ?: return false
+        return nwInfo.isConnected
+    }
 }
 
 @BindingAdapter("app:full_text", "app:span_text", "app:span_color")

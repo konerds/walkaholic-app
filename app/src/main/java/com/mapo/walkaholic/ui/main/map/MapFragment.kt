@@ -19,6 +19,7 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -127,6 +128,9 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
             Toast.makeText(requireContext(), "${coord.longitude}, ${coord.latitude}",
                     Toast.LENGTH_SHORT).show()
         }
+        val marker = Marker()
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = mMap
     }
 
     private fun setupDataOnMap(naverMap: NaverMap) {
