@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.data.model.ItemInfo
@@ -15,35 +14,18 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
-import com.mapo.walkaholic.ui.base.EventObserver
-import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
 import com.mapo.walkaholic.ui.snackbar
-import kotlinx.android.synthetic.main.fragment_detail_character_info.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterInfoDetailFragment(
     private val position: Int,
     private val listener: CharacterInventorySlotClickListener
-) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
-
+) : BaseFragment<DashboardCharacterInfoDetailViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel: DashboardCharacterInfoViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoDetailFragment::showToastEvent)
-        )
-
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoDetailFragment::showSnackbarEvent)
-        )
         super.onViewCreated(view, savedInstanceState)
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
@@ -598,7 +580,7 @@ class DashboardCharacterInfoDetailFragment(
         }
     }
 
-    override fun getViewModel() = DashboardCharacterInfoViewModel::class.java
+    override fun getViewModel() = DashboardCharacterInfoDetailViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,

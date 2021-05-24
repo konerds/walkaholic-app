@@ -19,48 +19,4 @@ class ChallengeViewModel(
     override fun init() {
 
     }
-
-    private val _missionConditionResponse: MutableLiveData<Resource<MissionConditionResponse>> = MutableLiveData()
-    val missionConditionResponse: LiveData<Resource<MissionConditionResponse>>
-        get() = _missionConditionResponse
-    private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
-    val userResponse: LiveData<Resource<UserResponse>>
-        get() = _userResponse
-    private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> = MutableLiveData()
-    val missionProgressResponse: LiveData<Resource<MissionProgressResponse>>
-        get() = _missionProgressResponse
-    private val _rankingResponse: MutableLiveData<Resource<RankingResponse>> = MutableLiveData()
-    val rankingResponse: LiveData<Resource<RankingResponse>>
-        get() = _rankingResponse
-
-    fun getUser() {
-        progressBarVisibility.set(true)
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            viewModelScope.launch {
-                if (error != null) {
-                } else {
-                    _userResponse.value = tokenInfo?.id?.let { mainRepository.getUser(it) }
-                }
-                progressBarVisibility.set(false)
-            }
-        }
-    }
-
-    fun getMissionCondition(missionID: String) {
-        viewModelScope.launch {
-            _missionConditionResponse.value = mainRepository.getMissionCondition(missionID)
-        }
-    }
-
-    fun getMissionProgress(missionID: String, conditionId: String) {
-        viewModelScope.launch {
-            _missionProgressResponse.value = mainRepository.getMissionProgress(missionID, conditionId)
-        }
-    }
-
-    fun getRanking(rankingId: String) {
-        viewModelScope.launch {
-            _rankingResponse.value = mainRepository.getRanking(rankingId)
-        }
-    }
 }

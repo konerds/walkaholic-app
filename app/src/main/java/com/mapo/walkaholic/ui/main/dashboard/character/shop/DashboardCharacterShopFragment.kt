@@ -29,7 +29,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
 import com.mapo.walkaholic.ui.alertDialog
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
+import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.confirmDialog
@@ -44,7 +44,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
 class DashboardCharacterShopFragment :
-    BaseSharedFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>(),
+    BaseFragment<DashboardCharacterShopViewModel, FragmentDashboardCharacterShopBinding, MainRepository>(),
     CharacterShopSlotClickListener {
     companion object {
         private const val PIXELS_PER_METRE = 4

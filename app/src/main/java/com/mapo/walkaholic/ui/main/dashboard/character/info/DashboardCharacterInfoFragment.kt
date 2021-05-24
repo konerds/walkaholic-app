@@ -29,7 +29,7 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterInfoBinding
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
+import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
@@ -40,7 +40,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
 class DashboardCharacterInfoFragment :
-    BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>(),
+    BaseFragment<DashboardCharacterInfoViewModel, FragmentDashboardCharacterInfoBinding, MainRepository>(),
     CharacterInventorySlotClickListener {
     companion object {
         private const val PIXELS_PER_METRE = 4

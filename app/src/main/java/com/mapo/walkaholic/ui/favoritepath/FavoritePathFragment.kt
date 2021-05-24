@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,15 +13,12 @@ import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentFavoritePathBinding
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
-import com.mapo.walkaholic.ui.base.EventObserver
-import com.mapo.walkaholic.ui.base.ViewModelFactory
-import com.mapo.walkaholic.ui.snackbar
+import com.mapo.walkaholic.ui.base.BaseFragment
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class FavoritePathFragment :
-    BaseSharedFragment<FavoritePathViewModel, FragmentFavoritePathBinding, MainRepository>(),
+    BaseFragment<FavoritePathViewModel, FragmentFavoritePathBinding, MainRepository>(),
     FavoritePathClickListener {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
@@ -31,20 +26,6 @@ class FavoritePathFragment :
     private var checkedFavoritePathMap = mutableMapOf<Int, Pair<Boolean, Theme>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel: FavoritePathViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@FavoritePathFragment::showToastEvent)
-        )
-
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@FavoritePathFragment::showSnackbarEvent)
-        )
-
         super.onViewCreated(view, savedInstanceState)
 
         tabLayout = binding.favoritePathTL
@@ -72,34 +53,6 @@ class FavoritePathFragment :
 
             }
         })
-    }
-
-    private fun showToastEvent(contents: String) {
-        when (contents) {
-            null -> {
-            }
-            "" -> {
-            }
-            else -> {
-                Toast.makeText(
-                    requireContext(),
-                    contents,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun showSnackbarEvent(contents: String) {
-        when (contents) {
-            null -> {
-            }
-            "" -> {
-            }
-            else -> {
-                requireView().snackbar(contents)
-            }
-        }
     }
 
     override fun getViewModel() = FavoritePathViewModel::class.java

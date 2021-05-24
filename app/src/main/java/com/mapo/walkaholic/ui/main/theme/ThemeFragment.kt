@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui.main.theme
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentThemeBinding
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
+import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
@@ -26,7 +25,7 @@ import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class ThemeFragment : BaseSharedFragment<ThemeViewModel, FragmentThemeBinding, MainRepository>() {
+class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
