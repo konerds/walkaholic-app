@@ -89,7 +89,7 @@
     <style name="TabText" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="fontFamily">@font/noto_sans_bold</item>
         <item name="android:fontFamily">@font/noto_sans_bold</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
     <!-- Snack Bar Style -->

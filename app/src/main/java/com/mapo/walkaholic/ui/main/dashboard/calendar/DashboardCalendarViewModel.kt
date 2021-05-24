@@ -37,9 +37,9 @@ class DashboardCalendarViewModel(
         }
     }
 
-    fun getCalendarDate(userId: Long, walkDate: String) {
+    fun getWalkRecord(userId: Long, walkDate: String) {
         viewModelScope.launch {
-            _calendarDateResponse.value = mainRepository.getCalendarDate(userId, walkDate)
+            _calendarDateResponse.value = mainRepository.getWalkRecord(userId, walkDate)
         }
     }
 

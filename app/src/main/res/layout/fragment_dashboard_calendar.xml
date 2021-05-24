@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginLeft="28dp"
-                    android:layout_marginTop="58dp"
+                    android:layout_marginTop="50dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="#57534A" />
 
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginTop="9dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginRight="8dp"
                     app:mcv_leftArrowMask="@drawable/ic_btn_calendar_arrow_left"
                     app:mcv_rightArrowMask="@drawable/ic_btn_calendar_arrow_right"

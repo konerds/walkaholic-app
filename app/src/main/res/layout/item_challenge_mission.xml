@@ -78,12 +78,11 @@
                             android:textColor="@color/colorc9c3b9" />
 
                         <TextView
-                            style="@style/font_black_10_one"
+                            style="@style/font_black_12_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text='@{"현재 " + user.walkCount + "걸음 걸었어요!"}'
-                            android:textColor="@color/h3" />
+                            android:text='@{"현재 " + user.walkCount + "걸음 걸었어요"}' />
 
                     </LinearLayout>
 
