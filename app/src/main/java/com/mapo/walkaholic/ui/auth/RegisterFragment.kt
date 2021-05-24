@@ -12,10 +12,13 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isNotEmpty
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
@@ -26,6 +29,7 @@ import com.mapo.walkaholic.databinding.FragmentRegisterBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
+import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailFragmentDirections
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -297,6 +301,25 @@ class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding
                 }
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val navDirection: NavDirections? =
+                    RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+                if (navDirection != null) {
+                    findNavController().navigate(navDirection)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     override fun getViewModel() = RegisterViewModel::class.java

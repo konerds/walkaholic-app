@@ -1,15 +1,19 @@
 package com.mapo.walkaholic.ui.main.challenge
 
 import android.content.ContentValues
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -31,6 +35,7 @@ import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragmentDirections
 import com.mapo.walkaholic.ui.snackbar
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.coroutines.flow.first
@@ -165,7 +170,11 @@ class ChallengeDetailFragment(
                                                 tabLayout = binding.challengeRankingTL
                                                 viewPager = binding.challengeRankingVP
                                                 val adapter =
-                                                    ChallengeRankingViewPagerAdapter(childFragmentManager, lifecycle, 2)
+                                                    ChallengeRankingViewPagerAdapter(
+                                                        childFragmentManager,
+                                                        lifecycle,
+                                                        2
+                                                    )
                                                 viewPager.adapter = adapter
                                                 val tabName: ArrayList<String> = arrayListOf()
                                                 tabName.add("월별포인트")
