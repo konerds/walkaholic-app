@@ -60,16 +60,11 @@ class DashboardViewModel(
     val filenameThemeCategoryImageResponse: LiveData<Resource<FilenameThemeCategoryImageResponse>>
         get() = _filenameThemeCategoryImageResponse
 
-    fun getDash() {
+    fun getUser() {
         progressBarVisibility.set(true)
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            viewModelScope.launch {
-                if (error != null) {
-                } else {
-                    _userResponse.value = tokenInfo?.id?.let { mainRepository.getUser(it) }
-                }
-                progressBarVisibility.set(false)
-            }
+        viewModelScope.launch {
+            _userResponse.value = mainRepository.getUser()
+            progressBarVisibility.set(false)
         }
     }
 

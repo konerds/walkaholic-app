@@ -426,7 +426,7 @@ class DashboardCharacterInfoFragment :
                 }
             }
         })
-        viewModel.getDash()
+        viewModel.getUser()
         binding.dashCharacterInfoIvShop.setOnClickListener {
             val navDirection: NavDirections? =
                 DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDashCharacterShop()

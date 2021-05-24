@@ -392,7 +392,7 @@ class DashboardCharacterShopFragment :
                                     _buyItemResponse.value.message + stringAdditionalMessage,
                                     null
                                 )
-                                viewModel.getDash()
+                                viewModel.getUser()
                             }
                             "400" -> {
                                 // Error
@@ -418,7 +418,7 @@ class DashboardCharacterShopFragment :
                     }
                 }
             })
-        viewModel.getDash()
+        viewModel.getUser()
         binding.dashCharacterShopIvInfo.setOnClickListener {
             val navDirection: NavDirections? =
                 DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()

@@ -454,7 +454,7 @@ class DashboardCharacterInfoDetailFragment(
                 }
             }
         })
-        viewModel.getDash()
+        viewModel.getUser()
         binding.dashCharacterInfoInitLayout.setOnClickListener { _dashCharacterInfoInitLayout ->
             initInventory()
         }

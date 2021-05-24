@@ -20,14 +20,9 @@ class DashboardProfileViewModel(
 
     fun getUser() {
         progressBarVisibility.set(true)
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            viewModelScope.launch {
-                if (error != null) {
-                } else {
-                    _userResponse.value = tokenInfo?.id?.let { mainRepository.getUser(it) }
-                }
-                progressBarVisibility.set(false)
-            }
+        viewModelScope.launch {
+            _userResponse.value = mainRepository.getUser()
+            progressBarVisibility.set(false)
         }
     }
 
