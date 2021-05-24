@@ -110,6 +110,7 @@
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
                         app:selectionRequired="true"
                         app:singleSelection="true">
 
@@ -118,7 +119,7 @@
                             style="@style/Widget.MaterialComponents.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="138dp"
+                            android:layout_marginLeft="112dp"
                             android:checkable="true"
                             android:checked="false"
                             android:gravity="center_vertical"
