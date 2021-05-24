@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.ItemInfo
@@ -29,12 +28,13 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterShopBinding
+import com.mapo.walkaholic.ui.alertDialog
 import com.mapo.walkaholic.ui.base.BaseSharedFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragmentDirections
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.dialog_alert.view.*
 import kotlinx.android.synthetic.main.dialog_confirm.view.*
@@ -300,84 +300,44 @@ class DashboardCharacterShopFragment :
                                     .sum() + selectedSlotShopMapHair.filter { it.value.first }
                                     .map { it.value.second.itemPrice!!.toInt() }.sum()
                                 if (totalPrice <= 0) {
-                                    val confirmDialogLayout = LayoutInflater.from(context)
-                                        .inflate(R.layout.dialog_confirm, null, false)
-                                    val materialConfirmDialogBuilder =
-                                        MaterialAlertDialogBuilder(requireContext()).setView(
-                                            confirmDialogLayout
-                                        ).create()
-                                    materialConfirmDialogBuilder.setOnShowListener { _confirmDialog ->
-                                        confirmDialogLayout.dialogConfirmTv1.text =
-                                            "구매하실 아이템을 선택하세요"
-                                        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-                                            _confirmDialog.dismiss()
-                                        }
-                                    }
-                                    materialConfirmDialogBuilder.show()
+                                    confirmDialog("구매하실 아이템을 선택하세요", null)
                                 } else {
-                                    val alertDialogLayout = LayoutInflater.from(context)
-                                        .inflate(R.layout.dialog_alert, null, false)
-                                    val materialAlertDialogBuilder =
-                                        MaterialAlertDialogBuilder(requireContext()).setView(
-                                            alertDialogLayout
-                                        ).create()
-                                    materialAlertDialogBuilder.setOnShowListener { _alertDialog ->
-                                        alertDialogLayout.dialogAlertTv1.text =
-                                            "총 ${totalPrice}P 입니다. 구매하시겠습니까?"
-                                        alertDialogLayout.dialogAlertTvNo.setOnClickListener {
-                                            _alertDialog.dismiss()
-                                        }
-                                        alertDialogLayout.dialogAlertTvYes.setOnClickListener {
-                                            _alertDialog.dismiss()
-                                            val filteredSelectedFace =
-                                                selectedSlotShopMapFace.filter { _selectedSlotShopMapFace -> _selectedSlotShopMapFace.value.first }
-                                            val filteredSelectedHair =
-                                                selectedSlotShopMapHair.filter { _selectedSlotShopMapHair -> _selectedSlotShopMapHair.value.first }
-                                            if (filteredSelectedFace.isNullOrEmpty()
-                                                && filteredSelectedHair.isNullOrEmpty()
-                                            ) {
-                                                val confirmDialogLayout =
-                                                    LayoutInflater.from(context).inflate(
-                                                        R.layout.dialog_confirm,
-                                                        null,
-                                                        false
+                                    val onClickConfirm: () -> Unit? = {
+                                        val filteredSelectedFace =
+                                            selectedSlotShopMapFace.filter { _selectedSlotShopMapFace -> _selectedSlotShopMapFace.value.first }
+                                        val filteredSelectedHair =
+                                            selectedSlotShopMapHair.filter { _selectedSlotShopMapHair -> _selectedSlotShopMapHair.value.first }
+                                        if (filteredSelectedFace.isNullOrEmpty()
+                                            && filteredSelectedHair.isNullOrEmpty()
+                                        ) {
+                                            confirmDialog("구매하실 아이템을 선택하세요", null)
+                                        } else {
+                                            val arrayListSelectedItemId = arrayListOf<Int?>()
+                                            filteredSelectedFace.forEach { (_selectedSlotShopMapFaceIndex, _selectedSlotShopMapFaceElement) ->
+                                                if (_selectedSlotShopMapFaceElement.second.itemId != null) {
+                                                    arrayListSelectedItemId.add(
+                                                        _selectedSlotShopMapFaceElement.second.itemId
                                                     )
-                                                val materialConfirmDialogBuilder =
-                                                    MaterialAlertDialogBuilder(requireContext()).setView(
-                                                        confirmDialogLayout
-                                                    ).create()
-                                                materialConfirmDialogBuilder.setOnShowListener { _confirmDialog ->
-                                                    confirmDialogLayout.dialogConfirmTv1.text =
-                                                        "구매하실 아이템을 선택하세요"
-                                                    confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-                                                        _confirmDialog.dismiss()
-                                                    }
                                                 }
-                                                materialConfirmDialogBuilder.show()
-                                            } else {
-                                                val arrayListSelectedItemId = arrayListOf<Int?>()
-                                                filteredSelectedFace.forEach { (_selectedSlotShopMapFaceIndex, _selectedSlotShopMapFaceElement) ->
-                                                    if (_selectedSlotShopMapFaceElement.second.itemId != null) {
-                                                        arrayListSelectedItemId.add(
-                                                            _selectedSlotShopMapFaceElement.second.itemId
-                                                        )
-                                                    }
-                                                }
-                                                filteredSelectedHair.forEach { (_selectedSlotShopMapHairIndex, _selectedSlotShopMapHairElement) ->
-                                                    if (_selectedSlotShopMapHairElement.second.itemId != null) {
-                                                        arrayListSelectedItemId.add(
-                                                            _selectedSlotShopMapHairElement.second.itemId
-                                                        )
-                                                    }
-                                                }
-                                                viewModel.buyItem(
-                                                    _userResponse.value.data.first().id,
-                                                    arrayListSelectedItemId
-                                                )
                                             }
+                                            filteredSelectedHair.forEach { (_selectedSlotShopMapHairIndex, _selectedSlotShopMapHairElement) ->
+                                                if (_selectedSlotShopMapHairElement.second.itemId != null) {
+                                                    arrayListSelectedItemId.add(
+                                                        _selectedSlotShopMapHairElement.second.itemId
+                                                    )
+                                                }
+                                            }
+                                            viewModel.buyItem(
+                                                _userResponse.value.data.first().id,
+                                                arrayListSelectedItemId
+                                            )
                                         }
                                     }
-                                    materialAlertDialogBuilder.show()
+                                    alertDialog(
+                                        "총 ${totalPrice}P 입니다. 구매하시겠습니까?",
+                                        null,
+                                        onClickConfirm as (() -> Unit)
+                                    )
                                 }
                             }
                         }
@@ -420,75 +380,33 @@ class DashboardCharacterShopFragment :
             Observer { _buyItemResponse ->
                 when (_buyItemResponse) {
                     is Resource.Success -> {
+                        val stringAdditionalMessage =
+                            if (!_buyItemResponse.value.data.isNullOrEmpty() && _buyItemResponse.value.data.size != 0) {
+                                "\n" + _buyItemResponse.value.data.first().toString()
+                            } else {
+                                ""
+                            }
                         when (_buyItemResponse.value.code) {
                             "200" -> {
-                                val confirmDialogLayout = LayoutInflater.from(context)
-                                    .inflate(R.layout.dialog_confirm, null, false)
-                                val materialConfirmDialogBuilder =
-                                    MaterialAlertDialogBuilder(requireContext()).setView(
-                                        confirmDialogLayout
-                                    ).create()
-                                materialConfirmDialogBuilder.setOnShowListener { _confirmDialog ->
-                                    val stringAdditionalMessage =
-                                        if (!_buyItemResponse.value.data.isNullOrEmpty() && _buyItemResponse.value.data.size != 0) {
-                                            "\n" + _buyItemResponse.value.data!!.first().toString()
-                                        } else {
-                                            ""
-                                        }
-                                    confirmDialogLayout.dialogConfirmTv1.text =
-                                        _buyItemResponse.value.message + stringAdditionalMessage
-                                    confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-                                        _confirmDialog.dismiss()
-                                    }
-                                }
-                                materialConfirmDialogBuilder.show()
+                                confirmDialog(
+                                    _buyItemResponse.value.message + stringAdditionalMessage,
+                                    null
+                                )
                                 viewModel.getDash()
                             }
                             "400" -> {
                                 // Error
-                                val confirmDialogLayout = LayoutInflater.from(context)
-                                    .inflate(R.layout.dialog_confirm, null, false)
-                                val materialConfirmDialogBuilder =
-                                    MaterialAlertDialogBuilder(requireContext()).setView(
-                                        confirmDialogLayout
-                                    ).create()
-                                materialConfirmDialogBuilder.setOnShowListener { _confirmDialog ->
-                                    val stringAdditionalMessage =
-                                        if (!_buyItemResponse.value.data.isNullOrEmpty() && _buyItemResponse.value.data.size != 0) {
-                                            "\n" + _buyItemResponse.value.data.first().toString()
-                                        } else {
-                                            ""
-                                        }
-                                    confirmDialogLayout.dialogConfirmTv1.text =
-                                        _buyItemResponse.value.message + stringAdditionalMessage
-                                    confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-                                        _confirmDialog.dismiss()
-                                    }
-                                }
-                                materialConfirmDialogBuilder.show()
+                                confirmDialog(
+                                    _buyItemResponse.value.message + stringAdditionalMessage,
+                                    null
+                                )
                             }
                             else -> {
                                 // Error
-                                val confirmDialogLayout = LayoutInflater.from(context)
-                                    .inflate(R.layout.dialog_confirm, null, false)
-                                val materialConfirmDialogBuilder =
-                                    MaterialAlertDialogBuilder(requireContext()).setView(
-                                        confirmDialogLayout
-                                    ).create()
-                                materialConfirmDialogBuilder.setOnShowListener { _confirmDialog ->
-                                    val stringAdditionalMessage =
-                                        if (!_buyItemResponse.value.data.isNullOrEmpty() && _buyItemResponse.value.data.size != 0) {
-                                            "\n" + _buyItemResponse.value.data!!.first().toString()
-                                        } else {
-                                            ""
-                                        }
-                                    confirmDialogLayout.dialogConfirmTv1.text =
-                                        _buyItemResponse.value.message + stringAdditionalMessage
-                                    confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-                                        _confirmDialog.dismiss()
-                                    }
-                                }
-                                materialConfirmDialogBuilder.show()
+                                confirmDialog(
+                                    _buyItemResponse.value.message + stringAdditionalMessage,
+                                    null
+                                )
                             }
                         }
                     }
@@ -660,7 +578,8 @@ class DashboardCharacterShopFragment :
         super.onAttach(context)
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val navDirection: NavDirections? = DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()
+                val navDirection: NavDirections? =
+                    DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()
                 if (navDirection != null) {
                     findNavController().navigate(navDirection)
                 }

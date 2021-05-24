@@ -34,7 +34,7 @@ class ChallengeDetailRankingFragment(
     private val position: Int
 ) : BaseSharedFragment<ChallengeViewModel, FragmentDetailChallengeRankingBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel : ChallengeViewModel by viewModels {
+        val sharedViewModel: ChallengeViewModel by viewModels {
             ViewModelFactory(getFragmentRepository())
         }
         viewModel = sharedViewModel
@@ -99,7 +99,13 @@ class ChallengeDetailRankingFragment(
                 }
             }
         })
-        viewModel.getRanking(when(position) { 0 -> "00" 1 -> "01" else -> ""})
+        viewModel.getRanking(
+            when (position) {
+                0 -> "00"
+                1 -> "01"
+                else -> ""
+            }
+        )
 
         val layoutManger = LinearLayoutManager(requireContext())
         layoutManger.orientation = LinearLayoutManager.VERTICAL
@@ -118,9 +124,11 @@ class ChallengeDetailRankingFragment(
     }
 
     private fun showToastEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
+        when (contents) {
+            null -> {
+            }
+            "" -> {
+            }
             else -> {
                 Toast.makeText(
                     requireContext(),
@@ -132,9 +140,11 @@ class ChallengeDetailRankingFragment(
     }
 
     private fun showSnackbarEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
+        when (contents) {
+            null -> {
+            }
+            "" -> {
+            }
             else -> {
                 requireView().snackbar(contents)
             }

@@ -29,7 +29,6 @@ import com.mapo.walkaholic.databinding.FragmentRegisterBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
-import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailFragmentDirections
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
