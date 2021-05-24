@@ -64,7 +64,6 @@ class MainRepository(
         faceItemId: String,
         headItemId: String
     ) = safeApiCall {
-
         api.getUserCharacterPreviewFilename(
             userId.toString(),
             if (faceItemId.isEmpty()) {
@@ -189,7 +188,7 @@ class MainRepository(
     suspend fun equipItem(userId: Long, faceItemId: Int?, hairItemId: Int?) = safeApiCall {
         api.equipItem(
             userId.toString(),
-            EquipItemRequestBody(faceItemId, hairItemId)
+            EquipItemRequestBody(faceItemId ?: 0, hairItemId ?: 0)
         )
     }
 

@@ -1,26 +1,20 @@
 package com.mapo.walkaholic.ui.base
 
 import android.app.Activity
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
 import com.mapo.walkaholic.ui.auth.AuthActivity
-import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.snackbar
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
@@ -30,7 +24,7 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
     protected lateinit var userPreferences: UserPreferences
     protected lateinit var binding: B
     protected lateinit var viewModel: VM
-    private lateinit var callback: OnBackPressedCallback
+    protected lateinit var callback: OnBackPressedCallback
     protected val remoteDataSource = RemoteDataSource()
     override fun onCreateView(
         inflater: LayoutInflater,

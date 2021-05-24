@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.shop
 
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -32,6 +34,7 @@ import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragmentDirections
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.dialog_alert.view.*
 import kotlinx.android.synthetic.main.dialog_confirm.view.*
@@ -651,5 +654,23 @@ class DashboardCharacterShopFragment :
                 binding.dashCharacterShopTvIntro6.text = " 입니다."
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val navDirection: NavDirections? = DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()
+                if (navDirection != null) {
+                    findNavController().navigate(navDirection)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }

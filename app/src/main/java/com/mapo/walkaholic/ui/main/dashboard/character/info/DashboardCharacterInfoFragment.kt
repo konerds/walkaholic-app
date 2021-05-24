@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.character.info
 
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -17,7 +19,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.R
@@ -486,12 +487,14 @@ class DashboardCharacterInfoFragment :
     }
 
     override fun onItemClick(
-        selectedSlotInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>, isClear: Boolean
+        selectedSlotInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>, isClear: Boolean, selectedReverseInfoMap: MutableMap<Int, Pair<Boolean, ItemInfo>>
     ) {
         if (selectedSlotInfoMap[0]?.second?.itemType == "hair") {
             selectedSlotInfoMapHair = selectedSlotInfoMap
+            selectedSlotInfoMapFace = selectedReverseInfoMap
         } else if (selectedSlotInfoMap[0]?.second?.itemType == "face") {
             selectedSlotInfoMapFace = selectedSlotInfoMap
+            selectedSlotInfoMapHair = selectedReverseInfoMap
         }
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
@@ -591,5 +594,23 @@ class DashboardCharacterInfoFragment :
                 }
             }
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val navDirection: NavDirections? = DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDash()
+                    if (navDirection != null) {
+                        findNavController().navigate(navDirection)
+                    }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }

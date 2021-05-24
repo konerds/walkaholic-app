@@ -1,18 +1,29 @@
 package com.mapo.walkaholic.ui.base
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragment
+import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragmentDirections
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragment
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragmentDirections
 import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -64,8 +75,30 @@ abstract class BaseActivity<VM: BaseViewModel, B: ViewBinding, R:BaseRepository>
         }
     }
 
-    override fun onBackPressed() {
-        /*
+    /*override fun onBackPressed() {
+        var currentFragment : Fragment? = null
+        for (elementFragment in supportFragmentManager.fragments) {
+            if (elementFragment.isVisible) {
+                currentFragment = elementFragment
+            }
+        }
+        val navDirection: NavDirections? =
+        when(currentFragment) {
+            is DashboardCharacterShopFragment -> {
+                Log.e(TAG, (currentFragment is DashboardCharacterShopFragment).toString())
+                DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()
+            }
+            is DashboardCharacterInfoFragment -> {
+                Log.e(TAG, (currentFragment is DashboardCharacterInfoFragment).toString())
+                DashboardCharacterInfoFragmentDirections.actionActionBnvDashCharacterInfoToActionBnvDash()
+            }
+            else -> {
+                null
+            }
+        }
+    }*/
+
+    /*override fun onBackPressed() {
         if (System.currentTimeMillis() - mBackWait >= 2000) {
             if ((supportFragmentManager.backStackEntryCount == 0) || ((supportFragmentManager.backStackEntryCount == 0) && (GlobalApplication.activityList.size == 1))) {
                 Toast.makeText(this, getString(R.string.err_deny_prev), Toast.LENGTH_SHORT).show()
@@ -79,9 +112,8 @@ abstract class BaseActivity<VM: BaseViewModel, B: ViewBinding, R:BaseRepository>
             }
         }
         mBackWait = System.currentTimeMillis()
-         */
         super.onBackPressed()
-    }
+    }*/
 
     abstract fun getViewModel(): Class<VM>
     abstract fun getActivityRepository(): R
