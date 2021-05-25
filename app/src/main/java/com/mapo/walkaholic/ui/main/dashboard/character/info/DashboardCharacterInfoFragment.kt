@@ -29,12 +29,12 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterInfoBinding
+import com.mapo.walkaholic.ui.alertDialog
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
-import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
@@ -51,19 +51,6 @@ class DashboardCharacterInfoFragment :
     private var selectedSlotInfoMapHair = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel: DashboardCharacterInfoViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoFragment::showToastEvent)
-        )
-
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoFragment::showSnackbarEvent)
-        )
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -443,34 +430,6 @@ class DashboardCharacterInfoFragment :
         }
     }
 
-    private fun showToastEvent(contents: String) {
-        when (contents) {
-            null -> {
-            }
-            "" -> {
-            }
-            else -> {
-                Toast.makeText(
-                    requireContext(),
-                    contents,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun showSnackbarEvent(contents: String) {
-        when (contents) {
-            null -> {
-            }
-            "" -> {
-            }
-            else -> {
-                requireView().snackbar(contents)
-            }
-        }
-    }
-
     override fun getViewModel() = DashboardCharacterInfoViewModel::class.java
 
     override fun getFragmentBinding(
@@ -569,31 +528,34 @@ class DashboardCharacterInfoFragment :
         })
     }
 
-    override fun discardItem(itemId: Int) {
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
-            when (_userResponse) {
-                is Resource.Success -> {
-                    when (_userResponse.value.code) {
-                        "200" -> {
-                            viewModel.deleteItem(_userResponse.value.data.first().id, itemId.toString())
-                        }
-                        "400" -> {
-                            // Error
-                        }
-                        else -> {
-                            // Error
+    override fun discardItem(itemId: Int, itemName: String) {
+        val onClickYes: () -> Unit? = {
+            viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+                when (_userResponse) {
+                    is Resource.Success -> {
+                        when (_userResponse.value.code) {
+                            "200" -> {
+                                viewModel.deleteItem(_userResponse.value.data.first().id, itemId.toString())
+                            }
+                            "400" -> {
+                                // Error
+                            }
+                            else -> {
+                                // Error
+                            }
                         }
                     }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        // Network Error
+                        handleApiError(_userResponse)
+                    }
                 }
-                is Resource.Loading -> {
-                    // Loading
-                }
-                is Resource.Failure -> {
-                    // Network Error
-                    handleApiError(_userResponse)
-                }
-            }
-        })
+            })
+        }
+        alertDialog("$itemName 아이템을 버리시겠습니까?", null, onClickYes as (() -> Unit))
     }
 
     override fun onAttach(context: Context) {

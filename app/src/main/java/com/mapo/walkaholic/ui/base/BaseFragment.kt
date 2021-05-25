@@ -15,7 +15,6 @@ import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
 import com.mapo.walkaholic.ui.auth.AuthActivity
-import com.mapo.walkaholic.ui.snackbar
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -51,7 +50,7 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
         return binding.root
     }
 
-    private fun showToastEvent(contents: String) {
+    fun showToastEvent(contents: String) {
         when (contents) {
             null -> {
             }
@@ -74,7 +73,7 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
             "" -> {
             }
             else -> {
-                requireView().snackbar(contents)
+                /*requireView().snackbar(contents)*/
             }
         }
     }

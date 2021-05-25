@@ -35,7 +35,6 @@ import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
-import com.mapo.walkaholic.ui.snackbar
 import kotlinx.android.synthetic.main.dialog_alert.view.*
 import kotlinx.android.synthetic.main.dialog_confirm.view.*
 import kotlinx.android.synthetic.main.fragment_dashboard_character_shop.view.*
@@ -55,18 +54,6 @@ class DashboardCharacterShopFragment :
     private var selectedSlotShopMapHair = mutableMapOf<Int, Triple<Boolean, ItemInfo, Boolean>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel: DashboardCharacterShopViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterShopFragment::showToastEvent)
-        )
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterShopFragment::showSnackbarEvent)
-        )
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -424,34 +411,6 @@ class DashboardCharacterShopFragment :
                 DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()
             if (navDirection != null) {
                 findNavController().navigate(navDirection)
-            }
-        }
-    }
-
-    private fun showToastEvent(contents: String) {
-        when (contents) {
-            null -> {
-            }
-            "" -> {
-            }
-            else -> {
-                Toast.makeText(
-                    requireContext(),
-                    contents,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun showSnackbarEvent(contents: String) {
-        when (contents) {
-            null -> {
-            }
-            "" -> {
-            }
-            else -> {
-                requireView().snackbar(contents)
             }
         }
     }

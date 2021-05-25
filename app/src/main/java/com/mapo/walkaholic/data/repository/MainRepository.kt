@@ -2,6 +2,7 @@ package com.mapo.walkaholic.data.repository
 
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.model.AccessTokenInfo
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
@@ -12,6 +13,7 @@ import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
+import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.naver.maps.map.NaverMap
 import kotlinx.coroutines.launch
 import retrofit2.http.Body
@@ -51,21 +53,8 @@ class MainRepository(
     fun getNaverMap() = this.mMap
 
     suspend fun getUser() = safeApiCall {
-        var userId: Long? = null
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-            } else {
-                if (tokenInfo != null) {
-                    userId = tokenInfo.id
-                }
-            }
-        }
         api.getUser(
-            if (userId == null) {
-                ""
-            } else {
-                userId.toString()
-            }
+            GlobalApplication.kakaoTokenInfo?.id.toString()
         )
     }
 
