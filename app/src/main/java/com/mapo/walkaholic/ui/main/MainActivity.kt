@@ -1,27 +1,16 @@
 package com.mapo.walkaholic.ui.main
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import android.view.Gravity
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
@@ -35,16 +24,12 @@ import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
-import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragmentDirections
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-
-@RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainRepository>(),
     LifecycleOwner {
     private lateinit var bindingNavigationHeader: NaviHamburgerHeaderBinding
@@ -85,18 +70,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
             }
         }
-        /*supportFragmentManager.addOnBackStackChangedListener {
-            //show hamburger
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            //drawerToggle.syncState()
-            binding.mainToolbar.setNavigationOnClickListener {
-                if (binding.mainDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                    binding.mainDrawerLayout.closeDrawer(Gravity.LEFT)
-                } else {
-                    binding.mainDrawerLayout.openDrawer(Gravity.LEFT)
-                }
-            }
-        }*/
         initNavigation()
         binding.mainNvHamburger.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -153,6 +126,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                 }
             }
         }
+        viewModel.getUser()
         viewModel.userResponse.observe(this, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -162,37 +136,26 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                             /*lifecycleScope.launch {
                                 viewModel.saveJwtToken(it.value.jwtToken)
                             }*/
-                            Log.i(
-                                ContentValues.TAG, "${_userResponse.value.data.first()}"
-                            )
                         }
                         "400" -> {
-                            Toast.makeText(
-                                this,
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //logout()
+                            // Error
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                         }
                         else -> {
-                            Toast.makeText(
-                                this,
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //logout()
+                            // Error
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                         }
                     }
                 }
                 is Resource.Loading -> {
-
+                    // Loading
                 }
                 is Resource.Failure -> {
-                    handleApiError(_userResponse)
+                    // Network Error
+                    handleApiError(_userResponse) { viewModel.getUser() }
                 }
             }
         })
-        viewModel.getUser()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -203,30 +166,6 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.actionHbgFavorite -> {
-                return true
-            }
-            R.id.actionHbgDashCharacterProfile -> {
-                return true
-            }
-            R.id.actionHbgDashCharacterShop -> {
-                return true
-            }
-            R.id.actionHbgTutorial -> {
-                return true
-            }
-            R.id.actionHbgLogout -> {
-                logout()
-                return true
-            }
-            else -> {
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     fun logout() = lifecycleScope.launch {

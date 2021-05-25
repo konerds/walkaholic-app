@@ -28,7 +28,7 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.themeTL
         viewPager = binding.themeVP
-
+        viewModel.getCategoryTheme()
         viewModel.categoryThemeResponse.observe(viewLifecycleOwner, Observer { _categoryThemeResponse ->
             when(_categoryThemeResponse) {
                 is Resource.Success -> {
@@ -56,9 +56,11 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_categoryThemeResponse as Resource.Failure) { viewModel.getCategoryTheme() }
                         }
                         else -> {
                             // Error
+                            handleApiError(_categoryThemeResponse as Resource.Failure) { viewModel.getCategoryTheme() }
                         }
                     }
                 }
@@ -67,28 +69,10 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_categoryThemeResponse)
+                    handleApiError(_categoryThemeResponse) { viewModel.getCategoryTheme() }
                 }
             }
         })
-        viewModel.getCategoryTheme()
-
-        /*viewModel.themeEnumResponse.observe(viewLifecycleOwner, Observer {
-                when (it) {
-                    is Resource.Success -> {
-                        if (!it.value.error) {
-
-                        }
-                    }
-                    is Resource.Loading -> {
-
-                    }
-                    is Resource.Failure -> {
-                        handleApiError(it)
-                    }
-                }
-        })*/
-        /*viewModel.getThemeEnum()*/
     }
 
     override fun getViewModel() = ThemeViewModel::class.java

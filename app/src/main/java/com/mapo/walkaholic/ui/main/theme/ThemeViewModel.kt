@@ -19,19 +19,10 @@ class ThemeViewModel(
     private val _categoryThemeResponse: MutableLiveData<Resource<CategoryThemeResponse>> = MutableLiveData()
     val categoryThemeResponse: LiveData<Resource<CategoryThemeResponse>>
         get() = _categoryThemeResponse
-    private val _themeResponse: MutableLiveData<Resource<ThemeResponse>> = MutableLiveData()
-    val themeResponse: LiveData<Resource<ThemeResponse>>
-        get() = _themeResponse
 
     fun getCategoryTheme() {
         viewModelScope.launch {
             _categoryThemeResponse.value = mainRepository.getCategoryTheme()
-        }
-    }
-
-    fun getTheme(themeCode: String) {
-        viewModelScope.launch {
-            _themeResponse.value = mainRepository.getTheme(themeCode)
         }
     }
 }

@@ -50,9 +50,11 @@ class DashboardCharacterShopDetailFragment(
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_statusShopSaleItemResponse as Resource.Failure) { viewModel.getStatusShopSaleItem() }
                         }
                         else -> {
                             // Error
+                            handleApiError(_statusShopSaleItemResponse as Resource.Failure) { viewModel.getStatusShopSaleItem() }
                         }
                     }
                 }

@@ -29,9 +29,9 @@ class ThemeDetailViewModel(
         }
     }
 
-    fun getTheme(themeCode: String) {
+    fun getTheme(position: Int) {
         viewModelScope.launch {
-            _themeResponse.value = mainRepository.getTheme(themeCode)
+            _themeResponse.value = mainRepository.getTheme(position)
         }
     }
 }

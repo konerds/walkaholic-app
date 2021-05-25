@@ -1,14 +1,12 @@
 package com.mapo.walkaholic.ui.main.dashboard.profile
 
 import android.content.Context
-import android.graphics.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -22,24 +20,17 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardProfileBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragmentDirections
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlin.math.*
 
 class DashboardProfileFragment :
     BaseFragment<DashboardProfileViewModel, FragmentDashboardProfileBinding, MainRepository>() {
-    companion object {
-        private const val PIXELS_PER_METRE = 4
-        private const val ANIMATION_DURATION = 300
-        private const val CHARACTER_BETWEEN_CIRCLE_PADDING = PIXELS_PER_METRE * 30
-        private const val CHARACTER_EXP_CIRCLE_SIZE = PIXELS_PER_METRE * 30
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -55,21 +46,11 @@ class DashboardProfileFragment :
                             }
                         }
                         "400" -> {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //logout()
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                         else -> {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            //logout()
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                     }
@@ -77,18 +58,11 @@ class DashboardProfileFragment :
                 is Resource.Loading -> {
                 }
                 is Resource.Failure -> {
-                    handleApiError(_userResponse)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_user),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    //logout()
+                    handleApiError(_userResponse) { viewModel.getUser() }
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
         })
-        viewModel.getUser()
         val heightItems = mutableListOf<Int>()
         for (item in 100..300) {
             heightItems.add(item)

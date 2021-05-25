@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui.main.theme
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,7 @@ class ThemeDetailFragment(
 ) : BaseFragment<ThemeDetailViewModel, FragmentDetailThemeBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getTheme(position)
         viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
             when (_themeResponse) {
                 is Resource.Success -> {
@@ -37,35 +37,23 @@ class ThemeDetailFragment(
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_themeResponse as Resource.Failure) { viewModel.getTheme(position) }
                         }
                         else -> {
                             // Error
+                            handleApiError(_themeResponse as Resource.Failure) { viewModel.getTheme(position) }
                         }
                     }
-                    Log.e("Theme", _themeResponse.value.data.toString())
                 }
                 is Resource.Loading -> {
-
+                    // Loading
                 }
                 is Resource.Failure -> {
-                    _themeResponse.errorBody?.let { _errorBody ->
-                        Log.e(
-                            "Theme_Detail",
-                            _errorBody.string()
-                        )
-                    }
-                    handleApiError(_themeResponse)
+                    // Network Error
+                    handleApiError(_themeResponse) { viewModel.getTheme(position) }
                 }
             }
         })
-        viewModel.getTheme(
-            when (position) {
-                0 -> "001"
-                1 -> "002"
-                2 -> "003"
-                else -> ""
-            }
-        )
     }
 
     override fun getViewModel() = ThemeDetailViewModel::class.java

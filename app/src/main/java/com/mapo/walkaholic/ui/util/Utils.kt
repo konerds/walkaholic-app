@@ -66,12 +66,12 @@ fun View.toastMessage(message: String) {
     snackbar.show()
 }*/
 
-fun Fragment.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null) {
-    requireActivity().confirmDialog(message, onClickConfirm)
+fun Fragment.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null, confirmText: String?) {
+    requireActivity().confirmDialog(message, onClickConfirm, confirmText)
 }
 
-fun Fragment.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> Unit)) {
-    requireActivity().confirmDialog(message, onClickConfirm)
+fun Fragment.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> Unit), confirmText: String?) {
+    requireActivity().confirmDialog(message, onClickConfirm, confirmText)
 }
 
 fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onClickYes: () -> Unit) {
@@ -79,7 +79,11 @@ fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onCli
 }
 
 
-fun Activity.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null) {
+fun Activity.confirmDialog(
+    message: String,
+    onClickConfirm: (() -> Unit)? = null,
+    confirmText: String?
+) {
     val confirmDialogLayout = LayoutInflater.from(this)
         .inflate(R.layout.dialog_confirm, null, false)
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this).setView(
@@ -87,6 +91,9 @@ fun Activity.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null
     ).create()
     materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
         confirmDialogLayout.dialogConfirmTv1.text = message
+        if (!confirmText.isNullOrEmpty()) {
+            confirmDialogLayout.dialogConfirmTv2.text = confirmText
+        }
         confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
             if (onClickConfirm != null) {
                 onClickConfirm()
@@ -97,7 +104,11 @@ fun Activity.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null
     materialAlertDialogBuilder.show()
 }
 
-fun Activity.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> Unit)) {
+fun Activity.notCancelableConfirmDialog(
+    message: String,
+    onClickConfirm: (() -> Unit),
+    confirmText: String?
+) {
     val confirmDialogLayout = LayoutInflater.from(this)
         .inflate(R.layout.dialog_confirm, null, false)
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this).setView(
@@ -105,8 +116,10 @@ fun Activity.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> 
     ).setCancelable(false).create()
     materialAlertDialogBuilder.setCanceledOnTouchOutside(false)
     materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
-        confirmDialogLayout.dialogConfirmTv2.text = "재시도"
         confirmDialogLayout.dialogConfirmTv1.text = message
+        if (!confirmText.isNullOrEmpty()) {
+            confirmDialogLayout.dialogConfirmTv2.text = confirmText
+        }
         confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
             onClickConfirm()
             _confirmDialog.dismiss()
@@ -148,7 +161,7 @@ fun Activity.handleApiError(
     failure: Resource.Failure, action: (() -> Unit)? = null
 ) {
     val notNullErrorBody =
-        if(failure.errorBody != null && failure.errorBody.string() != "null") {
+        if (failure.errorBody != null && failure.errorBody.string() != "null") {
             "\n" + failure.errorBody.string()
         } else {
             ""
@@ -157,29 +170,24 @@ fun Activity.handleApiError(
         failure.isNetworkError -> {
             if (!checkNetworkState(window.decorView.context)) {
                 notCancelableConfirmDialog(
-                    "네트워크 연결을 확인해주세요${notNullErrorBody}",
-                    action!!
+                    "네트워크 연결 후 재시도해주세요${notNullErrorBody}",
+                    action!!,
+                    "재시도"
                 )
             } else {
-                if (action != null) {
-                    notCancelableConfirmDialog(
-                        "API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}",
-                        action
-                    )
-                } else {
-                    confirmDialog("API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}")
-                }
+                confirmDialog(
+                    "API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}",
+                    action,
+                    "재시도"
+                )
             }
         }
         else -> {
-            if (action != null) {
-                notCancelableConfirmDialog(
-                    "API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}",
-                    action
-                )
-            } else {
-                confirmDialog("API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}")
-            }
+            confirmDialog(
+                "API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}",
+                action,
+                "재시도"
+            )
         }
     }
 }

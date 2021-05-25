@@ -1,8 +1,6 @@
 package com.mapo.walkaholic.ui
 
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mapo.walkaholic.data.UserPreferences
@@ -15,9 +13,7 @@ import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.activity_guide.*
-import kotlinx.android.synthetic.main.item_guide.view.*
 
-@RequiresApi(Build.VERSION_CODES.M)
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // For Manage Activity Lifecycle
@@ -41,6 +37,10 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
          */
         binding.viewModel = viewModel
         /*
+            Call Rest Function in ViewModel
+         */
+        viewModel.getFilenameGuideImage()
+        /*
             Observe Resource of Tutorial Filename
          */
         viewModel.filenameGuideImageResponse.observe(this, Observer { _filenameGuideImageResponse ->
@@ -52,9 +52,11 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_filenameGuideImageResponse as Resource.Failure) { _filenameGuideImageResponse }
                         }
                         else -> {
                             // Error
+                            handleApiError(_filenameGuideImageResponse as Resource.Failure) { _filenameGuideImageResponse }
                         }
                     }
                 }
@@ -67,10 +69,6 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                 }
             }
         })
-        /*
-            Call Rest Function in ViewModel
-         */
-        viewModel.getFilenameGuideImage()
         binding.guideChipSkip.setOnClickListener {
             startNewActivity(AuthActivity::class.java)
         }
