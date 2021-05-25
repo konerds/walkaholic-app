@@ -38,9 +38,9 @@ class FavoritePathDetailViewModel(
         }
     }
 
-    fun getFavoritePath(userId: Long, id: String) {
+    fun getFavoritePath(userId: Long, position: Int) {
         viewModelScope.launch {
-            _favoritePathResponse.value = mainRepository.getFavoritePath(userId, id)
+            _favoritePathResponse.value = mainRepository.getFavoritePath(userId, position)
         }
     }
 

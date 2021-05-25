@@ -16,6 +16,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentThemeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -54,13 +55,15 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
                                 }
                             })
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_categoryThemeResponse as Resource.Failure) { viewModel.getCategoryTheme() }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_categoryThemeResponse as Resource.Failure) { viewModel.getCategoryTheme() }
+                            confirmDialog(
+                                _categoryThemeResponse.value.message,
+                                {
+                                    viewModel.getCategoryTheme()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }

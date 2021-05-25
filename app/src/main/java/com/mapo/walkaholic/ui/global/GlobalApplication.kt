@@ -20,7 +20,6 @@ class GlobalApplication : Application() {
         }
 
         val activityList: ArrayList<Activity> = ArrayList()
-        var kakaoTokenInfo: AccessTokenInfo? = null
 
         var currentLng: String = "37.535938297705925"
         var currentLat: String = "127.00464302761901"
@@ -32,14 +31,6 @@ class GlobalApplication : Application() {
         KakaoSdk.init(this, getString(R.string.kakao_app_key))
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient(getString(R.string.naver_client_id))
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-            } else {
-                if (tokenInfo != null) {
-                    kakaoTokenInfo = tokenInfo
-                }
-            }
-        }
     }
 
     override fun onTerminate() {

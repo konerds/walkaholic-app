@@ -9,8 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.KakaoSdkError
+import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.network.Resource
@@ -25,90 +29,179 @@ import kotlinx.coroutines.launch
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.let { binding.viewModel = it }
+        binding.viewModel = viewModel
         lifecycleScope.launch {
             viewModel.saveIsFirst()
         }
-        viewModel.filenameLogoImageResponse.observe(viewLifecycleOwner, Observer { _filenameLogoImageResponse ->
-            when(_filenameLogoImageResponse) {
-                is Resource.Success -> {
-                    when(_filenameLogoImageResponse.value.code) {
-                        "200" -> {
-                            binding.filenameLogoImage = _filenameLogoImageResponse.value.data.first()
-                        }
-                        "400" -> {
-                            // Error
-                        }
-                        else -> {
-                            // Error
-                        }
-                    }
-                }
-                is Resource.Loading -> {
-                    // Loading
-                }
-                is Resource.Failure -> {
-                    // Network Error
-                    handleApiError(_filenameLogoImageResponse) { viewModel.getFilenameTitleLogo() }
-                }
-            }
-        })
-        viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    when (it.value.code) {
-                        "200" -> {
-                            lifecycleScope.launch {
-                                Toast.makeText(
-                                    requireContext(),
-                                    it.value.message.trim(),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                /*viewModel.saveJwtToken(it.value.jwtToken)*/
-                                // Log.d(TAG, it.value.jwtToken)
-                                Log.d(TAG, it.value.message)
-                                requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
+        viewModel.getFilenameTitleLogo()
+        viewModel.filenameLogoImageResponse.observe(
+            viewLifecycleOwner,
+            Observer { _filenameLogoImageResponse ->
+                when (_filenameLogoImageResponse) {
+                    is Resource.Success -> {
+                        when (_filenameLogoImageResponse.value.code) {
+                            "200" -> {
+                                binding.filenameLogoImage =
+                                    _filenameLogoImageResponse.value.data.first()
+                            }
+                            else -> {
+                                // Error
+                                confirmDialog(
+                                    _filenameLogoImageResponse.value.message,
+                                    {
+                                        viewModel.getFilenameTitleLogo()
+                                    },
+                                    "재시도"
+                                )
                             }
                         }
-                        "400" -> {
-                            requireView().findNavController()
-                                .navigate(R.id.action_loginFragment_to_registerFragment)
-                        }
-                        else -> {
-                            Toast.makeText(
-                                requireContext(),
-                                it.value.message.trim(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        // Network Error
+                        handleApiError(_filenameLogoImageResponse) { viewModel.getFilenameTitleLogo() }
                     }
                 }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    handleApiError(it) { viewModel.login() }
-                }
-            }
-        })
+            })
         binding.loginBtnKakao.setOnClickListener {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
-                        .getString(R.string.err_auth))
+                    viewModel.showToastEvent(
+                        GlobalApplication.getGlobalApplicationContext()
+                            .getString(R.string.err_auth)
+                    )
                 } else if (token != null) {
-                    viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
-                        .getString(R.string.msg_success_auth))
+                    viewModel.showToastEvent(
+                        GlobalApplication.getGlobalApplicationContext()
+                            .getString(R.string.msg_success_auth)
+                    )
                     viewModel.login()
-                    //viewModel.login(token)
+                    viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
+                        when (_loginResponse) {
+                            is Resource.Success -> {
+                                when (_loginResponse.value.code) {
+                                    "200" -> {
+                                        lifecycleScope.launch {
+                                            showToastEvent(_loginResponse.value.message.trim())
+                                            /*viewModel.saveJwtToken(it.value.jwtToken)*/
+                                            // Log.d(TAG, it.value.jwtToken)
+                                            Log.d(TAG, _loginResponse.value.message)
+                                            requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
+                                        }
+                                    }
+                                    else -> {
+                                        confirmDialog(
+                                            _loginResponse.value.message,
+                                            {
+                                                viewModel.login()
+                                            },
+                                            "재시도"
+                                        )
+                                    }
+                                }
+                            }
+                            is Resource.Loading -> {
+                                // Loading
+                            }
+                            is Resource.Failure -> {
+                                // Network Error
+                                handleApiError(_loginResponse) { viewModel.login() }
+                            }
+                        }
+                    })
                 }
             }
-            viewModel.getAuth(callback)
+            if (AuthApiClient.instance.hasToken()) {
+                UserApiClient.instance.accessTokenInfo { _tokenInfo, _error ->
+                    if (_error != null) {
+                        if (_error is KakaoSdkError && _error.isInvalidTokenError()) {
+                            // Need Login
+                            if (UserApiClient.instance.isKakaoTalkLoginAvailable(GlobalApplication.getGlobalApplicationContext())) {
+                                UserApiClient.instance.loginWithKakaoTalk(
+                                    GlobalApplication.getGlobalApplicationContext(),
+                                    callback = callback
+                                )
+                            } else {
+                                UserApiClient.instance.loginWithKakaoAccount(
+                                    GlobalApplication.getGlobalApplicationContext(),
+                                    callback = callback
+                                )
+                            }
+                        } else {
+                            // Error
+                        }
+                    } else {
+                        // Token Existed (If need, Refresh)
+                        /*UserApiClient.instance.logout { error ->
+                            if (error != null) {
+                                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+                            }
+                            else {
+                                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                            }
+                        }*/
+
+                        /*******************
+                         * 임시 테스트용
+                         ******************/
+
+                        viewModel.login()
+                        viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
+                            when (_loginResponse) {
+                                is Resource.Success -> {
+                                    when (_loginResponse.value.code) {
+                                        "200" -> {
+                                            lifecycleScope.launch {
+                                                showToastEvent(_loginResponse.value.message.trim())
+                                                /*viewModel.saveJwtToken(it.value.jwtToken)*/
+                                                // Log.d(TAG, it.value.jwtToken)
+                                                Log.d(TAG, _loginResponse.value.message)
+                                                requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _loginResponse.value.message,
+                                                {
+                                                    viewModel.login()
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
+                                    // Loading
+                                }
+                                is Resource.Failure -> {
+                                    // Network Error
+                                    handleApiError(_loginResponse) { viewModel.login() }
+                                }
+                            }
+                        })
+
+                    }
+                }
+            } else {
+                // Need Login
+                if (UserApiClient.instance.isKakaoTalkLoginAvailable(GlobalApplication.getGlobalApplicationContext())) {
+                    UserApiClient.instance.loginWithKakaoTalk(
+                        GlobalApplication.getGlobalApplicationContext(),
+                        callback = callback
+                    )
+                } else {
+                    UserApiClient.instance.loginWithKakaoAccount(
+                        GlobalApplication.getGlobalApplicationContext(),
+                        callback = callback
+                    )
+                }
+            }
         }
         binding.loginBtnTutorial.setOnClickListener {
             requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
         }
-        viewModel.getFilenameTitleLogo()
     }
 
     override fun getViewModel() = LoginViewModel::class.java

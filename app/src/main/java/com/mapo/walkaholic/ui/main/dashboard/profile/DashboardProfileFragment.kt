@@ -19,6 +19,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardProfileBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -45,12 +46,14 @@ class DashboardProfileFragment :
                                 binding.dashProfileChipMale.isChecked = false
                             }
                         }
-                        "400" -> {
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                            //requireActivity().startNewActivity(AuthActivity::class.java)
-                        }
                         else -> {
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                     }

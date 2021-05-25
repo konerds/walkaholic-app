@@ -179,49 +179,29 @@ class DashboardCharacterShopFragment :
                                                                                                                             })
                                                                                                                 }
                                                                                                             }
-                                                                                                            "400" -> {
-                                                                                                                // Error
-                                                                                                                handleApiError(
-                                                                                                                    _userCharacterPreviewFilenameResponse as Resource.Failure
-                                                                                                                ) {
-                                                                                                                    viewModel!!.getUserCharacterPreviewFilename(
-                                                                                                                        _userResponse.value.data.first().id,
-                                                                                                                        if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
-                                                                                                                            userCharacterEquipStatus["face"]
-                                                                                                                                .toString()
-                                                                                                                        } else {
-                                                                                                                            ""
-                                                                                                                        },
-                                                                                                                        if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
-                                                                                                                            userCharacterEquipStatus["hair"]
-                                                                                                                                .toString()
-                                                                                                                        } else {
-                                                                                                                            ""
-                                                                                                                        }
-                                                                                                                    )
-                                                                                                                }
-                                                                                                            }
                                                                                                             else -> {
                                                                                                                 // Error
-                                                                                                                handleApiError(
-                                                                                                                    _userCharacterPreviewFilenameResponse as Resource.Failure
-                                                                                                                ) {
-                                                                                                                    viewModel!!.getUserCharacterPreviewFilename(
-                                                                                                                        _userResponse.value.data.first().id,
-                                                                                                                        if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
-                                                                                                                            userCharacterEquipStatus["face"]
-                                                                                                                                .toString()
-                                                                                                                        } else {
-                                                                                                                            ""
-                                                                                                                        },
-                                                                                                                        if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
-                                                                                                                            userCharacterEquipStatus["hair"]
-                                                                                                                                .toString()
-                                                                                                                        } else {
-                                                                                                                            ""
-                                                                                                                        }
-                                                                                                                    )
-                                                                                                                }
+                                                                                                                confirmDialog(
+                                                                                                                    _userCharacterPreviewFilenameResponse.value.message,
+                                                                                                                    {
+                                                                                                                        viewModel!!.getUserCharacterPreviewFilename(
+                                                                                                                            _userResponse.value.data.first().id,
+                                                                                                                            if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                                                                userCharacterEquipStatus["face"]
+                                                                                                                                    .toString()
+                                                                                                                            } else {
+                                                                                                                                ""
+                                                                                                                            },
+                                                                                                                            if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                                                                userCharacterEquipStatus["hair"]
+                                                                                                                                    .toString()
+                                                                                                                            } else {
+                                                                                                                                ""
+                                                                                                                            }
+                                                                                                                        )
+                                                                                                                    },
+                                                                                                                    "재시도"
+                                                                                                                )
                                                                                                             }
                                                                                                         }
                                                                                                     }
@@ -257,17 +237,17 @@ class DashboardCharacterShopFragment :
                                                                                     }
                                                                                 }
                                                                             }
-                                                                            "400" -> {
-                                                                                // Error
-                                                                                handleApiError(
-                                                                                    _expInformationResponse as Resource.Failure
-                                                                                ) { viewModel!!.getExpInformation(_userResponse.value.data.first().id) }
-                                                                            }
                                                                             else -> {
                                                                                 // Error
-                                                                                handleApiError(
-                                                                                    _expInformationResponse as Resource.Failure
-                                                                                ) { viewModel!!.getExpInformation(_userResponse.value.data.first().id) }
+                                                                                confirmDialog(
+                                                                                    _expInformationResponse.value.message,
+                                                                                    {
+                                                                                        viewModel!!.getExpInformation(
+                                                                                            _userResponse.value.data.first().id
+                                                                                        )
+                                                                                    },
+                                                                                    "재시도"
+                                                                                )
                                                                             }
                                                                         }
                                                                     }
@@ -275,27 +255,27 @@ class DashboardCharacterShopFragment :
                                                                         // Network Error
                                                                         handleApiError(
                                                                             _expInformationResponse
-                                                                        ) { viewModel!!.getExpInformation(_userResponse.value.data.first().id) }
+                                                                        ) {
+                                                                            viewModel!!.getExpInformation(
+                                                                                _userResponse.value.data.first().id
+                                                                            )
+                                                                        }
                                                                     }
                                                                 }
                                                             })
                                                     }
                                                 }
-                                                "400" -> {
-                                                    // Error
-                                                    handleApiError(_userCharacterEquipStatusResponse as Resource.Failure) {
-                                                        viewModel.getUserCharacterEquipStatus(
-                                                            _userResponse.value.data.first().id
-                                                        )
-                                                    }
-                                                }
                                                 else -> {
                                                     // Error
-                                                    handleApiError(_userCharacterEquipStatusResponse as Resource.Failure) {
-                                                        viewModel.getUserCharacterEquipStatus(
-                                                            _userResponse.value.data.first().id
-                                                        )
-                                                    }
+                                                    confirmDialog(
+                                                        _userCharacterEquipStatusResponse.value.message,
+                                                        {
+                                                            viewModel.getUserCharacterEquipStatus(
+                                                                _userResponse.value.data.first().id
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
                                                 }
                                             }
                                         }
@@ -370,23 +350,18 @@ class DashboardCharacterShopFragment :
                                                                     )
                                                                     viewModel.getUser()
                                                                 }
-                                                                "400" -> {
-                                                                    // Error
-                                                                    handleApiError(_buyItemResponse as Resource.Failure) {
-                                                                        viewModel.buyItem(
-                                                                            _userResponse.value.data.first().id,
-                                                                            arrayListSelectedItemId
-                                                                        )
-                                                                    }
-                                                                }
                                                                 else -> {
                                                                     // Error
-                                                                    handleApiError(_buyItemResponse as Resource.Failure) {
-                                                                        viewModel.buyItem(
-                                                                            _userResponse.value.data.first().id,
-                                                                            arrayListSelectedItemId
-                                                                        )
-                                                                    }
+                                                                    confirmDialog(
+                                                                        _buyItemResponse.value.message,
+                                                                        {
+                                                                            viewModel.buyItem(
+                                                                                _userResponse.value.data.first().id,
+                                                                                arrayListSelectedItemId
+                                                                            )
+                                                                        },
+                                                                        "재시도"
+                                                                    )
                                                                 }
                                                             }
                                                         }
@@ -413,15 +388,14 @@ class DashboardCharacterShopFragment :
                                 }
                             }
                         }
-                        "400" -> {
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                            //logout()
-                            //requireActivity().startNewActivity(AuthActivity::class.java)
-                        }
                         else -> {
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                            //logout()
-                            //requireActivity().startNewActivity(AuthActivity::class.java)
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }
@@ -429,7 +403,6 @@ class DashboardCharacterShopFragment :
                 }
                 is Resource.Failure -> {
                     handleApiError(_userResponse) { viewModel.getUser() }
-                    //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
@@ -466,7 +439,6 @@ class DashboardCharacterShopFragment :
         } else if (selectedSlotShopMap[0]?.second?.itemType == "face") {
             selectedSlotShopMapFace = selectedSlotShopMap
         }
-
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -498,11 +470,15 @@ class DashboardCharacterShopFragment :
                                 }
                             )
                         }
-                        "400" -> {
-                            // Error
-                        }
                         else -> {
                             // Error
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }
@@ -511,7 +487,7 @@ class DashboardCharacterShopFragment :
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_userResponse)
+                    handleApiError(_userResponse) { viewModel.getUser() }
                 }
             }
         })

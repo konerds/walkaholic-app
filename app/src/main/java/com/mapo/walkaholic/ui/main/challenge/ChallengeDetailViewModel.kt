@@ -14,24 +14,23 @@ import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
 class ChallengeDetailViewModel(
-        private val mainRepository: MainRepository
+    private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {
 
     }
 
-    private val _missionConditionResponse: MutableLiveData<Resource<MissionConditionResponse>> = MutableLiveData()
+    private val _missionConditionResponse: MutableLiveData<Resource<MissionConditionResponse>> =
+        MutableLiveData()
     val missionConditionResponse: LiveData<Resource<MissionConditionResponse>>
         get() = _missionConditionResponse
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
-    private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> = MutableLiveData()
+    private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> =
+        MutableLiveData()
     val missionProgressResponse: LiveData<Resource<MissionProgressResponse>>
         get() = _missionProgressResponse
-    private val _rankingResponse: MutableLiveData<Resource<RankingResponse>> = MutableLiveData()
-    val rankingResponse: LiveData<Resource<RankingResponse>>
-        get() = _rankingResponse
 
     fun getUser() {
         progressBarVisibility.set(true)
@@ -41,21 +40,16 @@ class ChallengeDetailViewModel(
         }
     }
 
-    fun getMissionCondition(missionID: String) {
+    fun getMissionCondition(position: Int) {
         viewModelScope.launch {
-            _missionConditionResponse.value = mainRepository.getMissionCondition(missionID)
+            _missionConditionResponse.value = mainRepository.getMissionCondition(position)
         }
     }
 
     fun getMissionProgress(missionID: String, conditionId: String) {
         viewModelScope.launch {
-            _missionProgressResponse.value = mainRepository.getMissionProgress(missionID, conditionId)
-        }
-    }
-
-    fun getRanking(rankingId: String) {
-        viewModelScope.launch {
-            _rankingResponse.value = mainRepository.getRanking(rankingId)
+            _missionProgressResponse.value =
+                mainRepository.getMissionProgress(missionID, conditionId)
         }
     }
 }

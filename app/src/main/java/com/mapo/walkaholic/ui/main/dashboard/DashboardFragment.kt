@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -28,6 +29,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.setImageUrl
@@ -57,6 +59,7 @@ class DashboardFragment :
                     when (_userResponse.value.code) {
                         "200" -> {
                             binding.user = _userResponse.value.data.first()
+                            Log.e(TAG, "User : " + _userResponse.value.data.first().toString())
                             viewModel.getUserCharacterFilename(_userResponse.value.data.first().id)
                             viewModel.userCharacterFilenameResponse.observe(
                                 viewLifecycleOwner,
@@ -217,26 +220,17 @@ class DashboardFragment :
                                                                                         })
                                                                                 }
                                                                             }
-                                                                            "400" -> {
-                                                                                // Error
-                                                                                handleApiError(
-                                                                                    _expInformationResponse as Resource.Failure
-                                                                                ) {
-                                                                                    viewModel!!.getExpInformation(
-                                                                                        _userResponse.value.data.first().id
-                                                                                    )
-                                                                                }
-                                                                                //logout()
-                                                                            }
                                                                             else -> {
                                                                                 // Error
-                                                                                handleApiError(
-                                                                                    _expInformationResponse as Resource.Failure
-                                                                                ) {
-                                                                                    viewModel!!.getExpInformation(
-                                                                                        _userResponse.value.data.first().id
-                                                                                    )
-                                                                                }
+                                                                                confirmDialog(
+                                                                                    _expInformationResponse.value.message,
+                                                                                    {
+                                                                                        viewModel!!.getExpInformation(
+                                                                                            _userResponse.value.data.first().id
+                                                                                        )
+                                                                                    },
+                                                                                    "재시도"
+                                                                                )
                                                                                 //logout()
                                                                             }
                                                                         }
@@ -259,21 +253,17 @@ class DashboardFragment :
                                                             })
                                                     }
                                                 }
-                                                "400" -> {
-                                                    // Error
-                                                    handleApiError(_userCharacterFilenameResponse as Resource.Failure) {
-                                                        viewModel.getUserCharacterFilename(
-                                                            _userResponse.value.data.first().id
-                                                        )
-                                                    }
-                                                }
                                                 else -> {
                                                     // Error
-                                                    handleApiError(_userCharacterFilenameResponse as Resource.Failure) {
-                                                        viewModel.getUserCharacterFilename(
-                                                            _userResponse.value.data.first().id
-                                                        )
-                                                    }
+                                                    confirmDialog(
+                                                        _userCharacterFilenameResponse.value.message,
+                                                        {
+                                                            viewModel.getUserCharacterFilename(
+                                                                _userResponse.value.data.first().id
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
                                                 }
                                             }
                                         }
@@ -291,14 +281,15 @@ class DashboardFragment :
                                     }
                                 })
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                            //requireActivity().startNewActivity(AuthActivity::class.java)
-                        }
                         else -> {
                             // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                     }
@@ -320,10 +311,6 @@ class DashboardFragment :
                 when (_sgisAccessTokenResponse) {
                     is Resource.Success -> {
                         if (!_sgisAccessTokenResponse.value.error) {
-                            Log.i(
-                                ContentValues.TAG,
-                                "현재 좌표 : ${GlobalApplication.currentLng} ${GlobalApplication.currentLat}"
-                            )
                             viewModel.getTmCoord(
                                 _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
                                 GlobalApplication.currentLat,
@@ -339,10 +326,6 @@ class DashboardFragment :
                                                     _tmCoordResponse.value.tmCoord.posX,
                                                     _tmCoordResponse.value.tmCoord.posY
                                                 )
-                                                Log.i(
-                                                    ContentValues.TAG,
-                                                    "TM 좌표 : ${_tmCoordResponse.value.tmCoord.posX} ${_tmCoordResponse.value.tmCoord.posY}"
-                                                )
                                                 viewModel.nearMsrstnResponse.observe(
                                                     viewLifecycleOwner,
                                                     Observer { _nearMsrstnResponse ->
@@ -352,34 +335,27 @@ class DashboardFragment :
                                                                     viewModel.getWeatherDust(
                                                                         _nearMsrstnResponse.value.nearMsrstn.sidoName
                                                                     )
-                                                                    Log.i(
-                                                                        ContentValues.TAG,
-                                                                        "처리 결과 : ${_nearMsrstnResponse.value.nearMsrstn.sidoName} ${_nearMsrstnResponse.value.nearMsrstn.stationName}"
-                                                                    )
                                                                     viewModel.weatherDustResponse.observe(
                                                                         viewLifecycleOwner,
                                                                         Observer { _weatherDustResponse ->
                                                                             when (_weatherDustResponse) {
                                                                                 is Resource.Success -> {
                                                                                     if (!_weatherDustResponse.value.error) {
-                                                                                        Log.i(
-                                                                                            ContentValues.TAG,
-                                                                                            "처리 결과 : ${_weatherDustResponse.value.weatherDust} ${_weatherDustResponse.value.weatherDust.singleOrNull { it3 -> it3.stationName == _nearMsrstnResponse.value.nearMsrstn.stationName }}"
-                                                                                        )
                                                                                         binding.weatherDust =
                                                                                             _weatherDustResponse.value.weatherDust.singleOrNull { it3 -> it3.stationName == _nearMsrstnResponse.value.nearMsrstn.stationName }
-                                                                                        Log.i(
-                                                                                            ContentValues.TAG,
-                                                                                            "weatherDust 값 : ${binding.weatherDust}"
-                                                                                        )
                                                                                         if (binding.weatherDust == null) {
                                                                                             binding.weatherDust =
                                                                                                 _weatherDustResponse.value.weatherDust.first()
                                                                                         }
                                                                                     } else {
-                                                                                        Log.i(
-                                                                                            ContentValues.TAG,
-                                                                                            "weatherDust 값 : ${binding.weatherDust}"
+                                                                                        confirmDialog(
+                                                                                            "공공 API 미세먼지 데이터를 호출하는 데 실패하였습니다",
+                                                                                            {
+                                                                                                viewModel.getWeatherDust(
+                                                                                                    _nearMsrstnResponse.value.nearMsrstn.sidoName
+                                                                                                )
+                                                                                            },
+                                                                                            "재시도"
                                                                                         )
                                                                                     }
                                                                                 }
@@ -390,20 +366,26 @@ class DashboardFragment :
                                                                                     // Network Error
                                                                                     handleApiError(
                                                                                         _weatherDustResponse
-                                                                                    ) { _weatherDustResponse }
+                                                                                    ) {
+                                                                                        viewModel.getWeatherDust(
+                                                                                            _nearMsrstnResponse.value.nearMsrstn.sidoName
+                                                                                        )
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         })
                                                                 } else {
                                                                     // Error
-                                                                    handleApiError(
-                                                                        _nearMsrstnResponse as Resource.Failure
-                                                                    ) {
-                                                                        viewModel.getNearMsrstn(
-                                                                            _tmCoordResponse.value.tmCoord.posX,
-                                                                            _tmCoordResponse.value.tmCoord.posY
-                                                                        )
-                                                                    }
+                                                                    confirmDialog(
+                                                                        "공공 API 미세먼지 데이터를 호출하는 데 실패하였습니다",
+                                                                        {
+                                                                            viewModel.getNearMsrstn(
+                                                                                _tmCoordResponse.value.tmCoord.posX,
+                                                                                _tmCoordResponse.value.tmCoord.posY
+                                                                            )
+                                                                        },
+                                                                        "재시도"
+                                                                    )
                                                                 }
                                                             }
                                                             is Resource.Loading -> {
@@ -422,16 +404,16 @@ class DashboardFragment :
                                                     })
                                             } else {
                                                 // Error
-                                                handleApiError(_tmCoordResponse as Resource.Failure) {
-                                                    viewModel.getTmCoord(
-                                                        _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
-                                                        GlobalApplication.currentLat,
-                                                        GlobalApplication.currentLng
-                                                    )
-                                                }
-                                                Log.i(
-                                                    ContentValues.TAG,
-                                                    "TM 좌표 변환 실패 : ${_tmCoordResponse.errorBody}"
+                                                confirmDialog(
+                                                    "통계청 API 데이터를 호출하는 데 실패하였습니다",
+                                                    {
+                                                        viewModel.getTmCoord(
+                                                            _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
+                                                            GlobalApplication.currentLat,
+                                                            GlobalApplication.currentLng
+                                                        )
+                                                    },
+                                                    "재시도"
                                                 )
                                             }
                                         }
@@ -452,7 +434,13 @@ class DashboardFragment :
                                 })
                         } else {
                             // Error
-                            handleApiError(_sgisAccessTokenResponse as Resource.Failure) { viewModel.getSGISAccessToken() }
+                            confirmDialog(
+                                "통계청 API 데이터를 호출하는 데 실패하였습니다",
+                                {
+                                    viewModel.getSGISAccessToken()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                     is Resource.Loading -> {
@@ -481,16 +469,20 @@ class DashboardFragment :
                                         DashboardThemeAdapter(_filenameThemeCategoryImageResponse.value.data)
                                 }
                             }
-                            "400" -> {
-                                // Error
-                            }
                             else -> {
                                 // Error
+                                confirmDialog(
+                                    _filenameThemeCategoryImageResponse.value.message,
+                                    {
+                                        viewModel.getFilenameThemeCategoryImage()
+                                    },
+                                    "재시도"
+                                )
                             }
                         }
                     }
                     is Resource.Loading -> {
-
+                        // Loading
                     }
                     is Resource.Failure -> {
                         // Network Error
@@ -512,17 +504,24 @@ class DashboardFragment :
                         if (!_yesterdayWeatherResponse.value.error) {
                             binding.yesterdayWeather =
                                 _yesterdayWeatherResponse.value.yesterdayWeather
-                            Log.i(
-                                ContentValues.TAG,
-                                "Yesterday Weather : ${_yesterdayWeatherResponse.value.yesterdayWeather}"
-                            )
                         } else {
+                            // Error
+                            confirmDialog(
+                                "공공 API 날씨 데이터를 호출하는 데 실패하였습니다",
+                                {
+                                    viewModel.getTodayWeather(
+                                        nXy.x.toInt().toString(), nXy.y.toInt().toString()
+                                    )
+                                },
+                                "재시도"
+                            )
                         }
                     }
                     is Resource.Loading -> {
-
+                        // Loading
                     }
                     is Resource.Failure -> {
+                        // Network Error
                         handleApiError(_yesterdayWeatherResponse) {
                             viewModel.getYesterdayWeather(
                                 nXy.x.toInt().toString(),
@@ -557,11 +556,17 @@ class DashboardFragment :
                                                         _filenameWeatherResponse.value.data.first().weatherFilename
                                                     )
                                                 }
-                                                "400" -> {
-                                                    // Error
-                                                }
                                                 else -> {
                                                     // Error
+                                                    confirmDialog(
+                                                        _filenameWeatherResponse.value.message,
+                                                        {
+                                                            viewModel.getFilenameWeather(
+                                                                _todayWeatherResponse.value.todayWeather.weatherCode
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
                                                 }
                                             }
                                         }
@@ -571,14 +576,21 @@ class DashboardFragment :
                                         is Resource.Failure -> {
                                             // Network Error
                                             handleApiError(_filenameWeatherResponse) {
-                                                viewModel.getFilenameWeather(
-                                                    _todayWeatherResponse.value.todayWeather.weatherCode
-                                                )
+                                                viewModel.getFilenameWeather(_todayWeatherResponse.value.todayWeather.weatherCode)
                                             }
                                         }
                                     }
                                 })
                         } else {
+                            confirmDialog(
+                                "공공 API 날씨 데이터를 호출하는 데 실패하였습니다",
+                                {
+                                    viewModel.getTodayWeather(
+                                        nXy.x.toInt().toString(), nXy.y.toInt().toString()
+                                    )
+                                },
+                                "재시도"
+                            )
                         }
                     }
                     is Resource.Loading -> {

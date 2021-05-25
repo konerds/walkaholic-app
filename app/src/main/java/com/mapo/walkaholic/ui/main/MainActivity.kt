@@ -22,6 +22,7 @@ import com.mapo.walkaholic.ui.GuideActivity
 import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.startNewActivity
@@ -137,13 +138,15 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
                                 viewModel.saveJwtToken(it.value.jwtToken)
                             }*/
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }

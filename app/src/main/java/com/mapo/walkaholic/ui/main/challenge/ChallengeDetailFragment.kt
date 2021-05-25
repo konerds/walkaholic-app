@@ -18,6 +18,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
@@ -46,6 +47,7 @@ class ChallengeDetailFragment(
         dummyArrayList.add(dummyMission3)
         dummyArrayList.add(dummyMission4)
 
+        viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             binding.challengeRVMission.also { _challengeRVMission ->
                 _challengeRVMission.layoutManager = LinearLayoutManager(requireContext())
@@ -54,13 +56,7 @@ class ChallengeDetailFragment(
                     is Resource.Success -> {
                         when (_userResponse.value.code) {
                             "200" -> {
-                                viewModel.getMissionCondition(
-                                    when (position) {
-                                        0 -> "00"
-                                        1 -> "01"
-                                        else -> ""
-                                    }
-                                )
+                                viewModel.getMissionCondition(position)
                                 viewModel.missionConditionResponse.observe(
                                     viewLifecycleOwner,
                                     Observer { _missionConditionResponse ->
@@ -181,24 +177,29 @@ class ChallengeDetailFragment(
                                         }
                                     })
                             }
-                            "400" -> {
-
-                            }
                             else -> {
-
+                                // Error
+                                confirmDialog(
+                                    _userResponse.value.message,
+                                    {
+                                        viewModel.getUser()
+                                    },
+                                    "재시도"
+                                )
                             }
                         }
                     }
                     is Resource.Loading -> {
-
+                        // Loading
                     }
                     is Resource.Failure -> {
-                        handleApiError(_userResponse)
+                        // Network Error
+                        handleApiError(_userResponse) { viewModel.getUser() }
                     }
                 }
             }
         })
-        viewModel.getUser()
+
     }
 
     override fun getViewModel() = ChallengeDetailViewModel::class.java
