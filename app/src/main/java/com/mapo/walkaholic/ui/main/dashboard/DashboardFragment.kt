@@ -11,7 +11,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -21,7 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.GridXy
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -52,6 +50,7 @@ class DashboardFragment :
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -61,14 +60,14 @@ class DashboardFragment :
                             viewModel.getUserCharacterFilename(_userResponse.value.data.first().id)
                             viewModel.userCharacterFilenameResponse.observe(
                                 viewLifecycleOwner,
-                                Observer { _userCharacterResponse ->
-                                    when (_userCharacterResponse) {
+                                Observer { _userCharacterFilenameResponse ->
+                                    when (_userCharacterFilenameResponse) {
                                         is Resource.Success -> {
-                                            when (_userCharacterResponse.value.code) {
+                                            when (_userCharacterFilenameResponse.value.code) {
                                                 "200" -> {
                                                     with(binding) {
-                                                        viewModel!!.getExpInformation(_userResponse.value.data.first().id)
-                                                        viewModel!!.expInformationResponse.observe(
+                                                        viewModel.getExpInformation(_userResponse.value.data.first().id)
+                                                        viewModel.expInformationResponse.observe(
                                                             viewLifecycleOwner,
                                                             Observer { _expInformationResponse ->
                                                                 when (_expInformationResponse) {
@@ -81,7 +80,7 @@ class DashboardFragment :
                                                                                     AnimationDrawable()
                                                                                 animationDrawable.isOneShot =
                                                                                     false
-                                                                                _userCharacterResponse.value.data.forEachIndexed { _characterUriIndex, _characterUriElement ->
+                                                                                _userCharacterFilenameResponse.value.data.forEachIndexed { _characterUriIndex, _characterUriElement ->
                                                                                     Glide.with(
                                                                                         requireContext()
                                                                                     )
@@ -117,7 +116,7 @@ class DashboardFragment :
                                                                                                     characterBitmap,
                                                                                                     ANIMATION_DURATION
                                                                                                 )
-                                                                                                if (animationDrawable.numberOfFrames == _userCharacterResponse.value.data.size) {
+                                                                                                if (animationDrawable.numberOfFrames == _userCharacterFilenameResponse.value.data.size) {
                                                                                                     val charExp =
                                                                                                         (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
                                                                                                                 / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
@@ -220,20 +219,24 @@ class DashboardFragment :
                                                                             }
                                                                             "400" -> {
                                                                                 // Error
-                                                                                Toast.makeText(
-                                                                                    requireContext(),
-                                                                                    getString(R.string.err_user),
-                                                                                    Toast.LENGTH_SHORT
-                                                                                ).show()
+                                                                                handleApiError(
+                                                                                    _expInformationResponse as Resource.Failure
+                                                                                ) {
+                                                                                    viewModel.getExpInformation(
+                                                                                        _userResponse.value.data.first().id
+                                                                                    )
+                                                                                }
                                                                                 //logout()
                                                                             }
                                                                             else -> {
                                                                                 // Error
-                                                                                Toast.makeText(
-                                                                                    requireContext(),
-                                                                                    getString(R.string.err_user),
-                                                                                    Toast.LENGTH_SHORT
-                                                                                ).show()
+                                                                                handleApiError(
+                                                                                    _expInformationResponse as Resource.Failure
+                                                                                ) {
+                                                                                    viewModel.getExpInformation(
+                                                                                        _userResponse.value.data.first().id
+                                                                                    )
+                                                                                }
                                                                                 //logout()
                                                                             }
                                                                         }
@@ -245,7 +248,11 @@ class DashboardFragment :
                                                                         // Network Error
                                                                         handleApiError(
                                                                             _expInformationResponse
-                                                                        ) { _expInformationResponse }
+                                                                        ) {
+                                                                            viewModel.getExpInformation(
+                                                                                _userResponse.value.data.first().id
+                                                                            )
+                                                                        }
                                                                         //logout()
                                                                     }
                                                                 }
@@ -254,9 +261,19 @@ class DashboardFragment :
                                                 }
                                                 "400" -> {
                                                     // Error
+                                                    handleApiError(_userCharacterFilenameResponse as Resource.Failure) {
+                                                        viewModel.getUserCharacterFilename(
+                                                            _userResponse.value.data.first().id
+                                                        )
+                                                    }
                                                 }
                                                 else -> {
                                                     // Error
+                                                    handleApiError(_userCharacterFilenameResponse as Resource.Failure) {
+                                                        viewModel.getUserCharacterFilename(
+                                                            _userResponse.value.data.first().id
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
@@ -265,28 +282,24 @@ class DashboardFragment :
                                         }
                                         is Resource.Failure -> {
                                             // Network Error
-                                            handleApiError(_userCharacterResponse) { _userCharacterResponse }
+                                            handleApiError(_userCharacterFilenameResponse) {
+                                                viewModel.getUserCharacterFilename(
+                                                    _userResponse.value.data.first().id
+                                                )
+                                            }
                                         }
                                     }
                                 })
                         }
                         "400" -> {
                             // Error
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                             //logout()
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                         else -> {
                             // Error
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                             //logout()
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
@@ -297,140 +310,232 @@ class DashboardFragment :
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_userResponse) { _userResponse }
+                    handleApiError(_userResponse) { viewModel.getUser() }
                     //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
         })
-        viewModel.sgisAccessTokenResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    if (!it.value.error) {
-                        Log.i(
-                            ContentValues.TAG,
-                            "현재 좌표 : ${GlobalApplication.currentLng} ${GlobalApplication.currentLat}"
-                        )
-                        viewModel.getTmCoord(
-                            it.value.sgisAccessToken.accessToken,
-                            GlobalApplication.currentLat,
-                            GlobalApplication.currentLng
-                        )
-                    } else {
-                        // Error
-                    }
-                }
-                is Resource.Loading -> {
-                    // Loading
-                }
-                is Resource.Failure -> {
-                    // Network Error
-                    handleApiError(it) { it }
-                    Log.i(
-                        ContentValues.TAG, "SGIS 인증 실패 : ${it.errorBody}"
-                    )
-                }
-            }
-        })
-        viewModel.tmCoordResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    if (!it.value.error) {
-                        viewModel.getNearMsrstn(it.value.tmCoord.posX, it.value.tmCoord.posY)
-                        Log.i(
-                            ContentValues.TAG,
-                            "TM 좌표 : ${it.value.tmCoord.posX} ${it.value.tmCoord.posY}"
-                        )
-                    } else {
-                        // Error
-                    }
-                }
-                is Resource.Loading -> {
-                    // Loading
-                }
-                is Resource.Failure -> {
-                    // Network Error
-                    handleApiError(it) { it }
-                    Log.i(
-                        ContentValues.TAG, "TM 좌표 변환 실패 : ${it.errorBody}"
-                    )
-                }
-            }
-        })
-        viewModel.nearMsrstnResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    if (!it.value.error) {
-                        viewModel.getWeatherDust(it.value.nearMsrstn.sidoName)
-                        Log.i(
-                            ContentValues.TAG,
-                            "처리 결과 : ${it.value.nearMsrstn.sidoName} ${it.value.nearMsrstn.stationName}"
-                        )
-                        viewModel.weatherDustResponse.observe(viewLifecycleOwner, Observer { it2 ->
-                            when (it2) {
-                                is Resource.Success -> {
-                                    if (!it2.value.error) {
-                                        Log.i(
-                                            ContentValues.TAG,
-                                            "처리 결과 : ${it2.value.weatherDust} ${it2.value.weatherDust.singleOrNull { it3 -> it3.stationName == it.value.nearMsrstn.stationName }}"
-                                        )
-                                        binding.weatherDust =
-                                            it2.value.weatherDust.singleOrNull { it3 -> it3.stationName == it.value.nearMsrstn.stationName }
-                                        Log.i(
-                                            ContentValues.TAG,
-                                            "weatherDust 값 : ${binding.weatherDust}"
-                                        )
-                                        if (binding.weatherDust == null) {
-                                            binding.weatherDust = it2.value.weatherDust.first()
+        viewModel.getSGISAccessToken()
+        viewModel.sgisAccessTokenResponse.observe(
+            viewLifecycleOwner,
+            Observer { _sgisAccessTokenResponse ->
+                when (_sgisAccessTokenResponse) {
+                    is Resource.Success -> {
+                        if (!_sgisAccessTokenResponse.value.error) {
+                            Log.i(
+                                ContentValues.TAG,
+                                "현재 좌표 : ${GlobalApplication.currentLng} ${GlobalApplication.currentLat}"
+                            )
+                            viewModel.getTmCoord(
+                                _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
+                                GlobalApplication.currentLat,
+                                GlobalApplication.currentLng
+                            )
+                            viewModel.tmCoordResponse.observe(
+                                viewLifecycleOwner,
+                                Observer { _tmCoordResponse ->
+                                    when (_tmCoordResponse) {
+                                        is Resource.Success -> {
+                                            if (!_tmCoordResponse.value.error) {
+                                                viewModel.getNearMsrstn(
+                                                    _tmCoordResponse.value.tmCoord.posX,
+                                                    _tmCoordResponse.value.tmCoord.posY
+                                                )
+                                                Log.i(
+                                                    ContentValues.TAG,
+                                                    "TM 좌표 : ${_tmCoordResponse.value.tmCoord.posX} ${_tmCoordResponse.value.tmCoord.posY}"
+                                                )
+                                                viewModel.nearMsrstnResponse.observe(
+                                                    viewLifecycleOwner,
+                                                    Observer { _nearMsrstnResponse ->
+                                                        when (_nearMsrstnResponse) {
+                                                            is Resource.Success -> {
+                                                                if (!_nearMsrstnResponse.value.error) {
+                                                                    viewModel.getWeatherDust(
+                                                                        _nearMsrstnResponse.value.nearMsrstn.sidoName
+                                                                    )
+                                                                    Log.i(
+                                                                        ContentValues.TAG,
+                                                                        "처리 결과 : ${_nearMsrstnResponse.value.nearMsrstn.sidoName} ${_nearMsrstnResponse.value.nearMsrstn.stationName}"
+                                                                    )
+                                                                    viewModel.weatherDustResponse.observe(
+                                                                        viewLifecycleOwner,
+                                                                        Observer { _weatherDustResponse ->
+                                                                            when (_weatherDustResponse) {
+                                                                                is Resource.Success -> {
+                                                                                    if (!_weatherDustResponse.value.error) {
+                                                                                        Log.i(
+                                                                                            ContentValues.TAG,
+                                                                                            "처리 결과 : ${_weatherDustResponse.value.weatherDust} ${_weatherDustResponse.value.weatherDust.singleOrNull { it3 -> it3.stationName == _nearMsrstnResponse.value.nearMsrstn.stationName }}"
+                                                                                        )
+                                                                                        binding.weatherDust =
+                                                                                            _weatherDustResponse.value.weatherDust.singleOrNull { it3 -> it3.stationName == _nearMsrstnResponse.value.nearMsrstn.stationName }
+                                                                                        Log.i(
+                                                                                            ContentValues.TAG,
+                                                                                            "weatherDust 값 : ${binding.weatherDust}"
+                                                                                        )
+                                                                                        if (binding.weatherDust == null) {
+                                                                                            binding.weatherDust =
+                                                                                                _weatherDustResponse.value.weatherDust.first()
+                                                                                        }
+                                                                                    } else {
+                                                                                        Log.i(
+                                                                                            ContentValues.TAG,
+                                                                                            "weatherDust 값 : ${binding.weatherDust}"
+                                                                                        )
+                                                                                    }
+                                                                                }
+                                                                                is Resource.Loading -> {
+                                                                                    // Loading
+                                                                                }
+                                                                                is Resource.Failure -> {
+                                                                                    // Network Error
+                                                                                    handleApiError(
+                                                                                        _weatherDustResponse
+                                                                                    ) { _weatherDustResponse }
+                                                                                }
+                                                                            }
+                                                                        })
+                                                                } else {
+                                                                    // Error
+                                                                    handleApiError(
+                                                                        _nearMsrstnResponse as Resource.Failure
+                                                                    ) {
+                                                                        viewModel.getNearMsrstn(
+                                                                            _tmCoordResponse.value.tmCoord.posX,
+                                                                            _tmCoordResponse.value.tmCoord.posY
+                                                                        )
+                                                                    }
+                                                                }
+                                                            }
+                                                            is Resource.Loading -> {
+                                                                // Loading
+                                                            }
+                                                            is Resource.Failure -> {
+                                                                // Network Error
+                                                                handleApiError(_nearMsrstnResponse) {
+                                                                    viewModel.getNearMsrstn(
+                                                                        _tmCoordResponse.value.tmCoord.posX,
+                                                                        _tmCoordResponse.value.tmCoord.posY
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                    })
+                                            } else {
+                                                // Error
+                                                handleApiError(_tmCoordResponse as Resource.Failure) {
+                                                    viewModel.getTmCoord(
+                                                        _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                }
+                                                Log.i(
+                                                    ContentValues.TAG,
+                                                    "TM 좌표 변환 실패 : ${_tmCoordResponse.errorBody}"
+                                                )
+                                            }
                                         }
-                                    } else {
-                                        Log.i(
-                                            ContentValues.TAG,
-                                            "weatherDust 값 : ${binding.weatherDust}"
-                                        )
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            // Network Error
+                                            handleApiError(_tmCoordResponse) {
+                                                viewModel.getTmCoord(
+                                                    _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
+                                                    GlobalApplication.currentLat,
+                                                    GlobalApplication.currentLng
+                                                )
+                                            }
+                                        }
                                     }
-                                }
-                                is Resource.Loading -> {
-                                    // Loading
-                                }
-                                is Resource.Failure -> {
-                                    // Network Error
-                                    handleApiError(it2) { it2 }
+                                })
+                        } else {
+                            // Error
+                            handleApiError(_sgisAccessTokenResponse as Resource.Failure) { viewModel.getSGISAccessToken() }
+                        }
+                    }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        // Network Error
+                        handleApiError(_sgisAccessTokenResponse) { viewModel.getSGISAccessToken() }
+                    }
+                }
+            })
+        viewModel.getFilenameThemeCategoryImage()
+        viewModel.filenameThemeCategoryImageResponse.observe(
+            viewLifecycleOwner,
+            Observer { _filenameThemeCategoryImageResponse ->
+                when (_filenameThemeCategoryImageResponse) {
+                    is Resource.Success -> {
+                        when (_filenameThemeCategoryImageResponse.value.code) {
+                            "200" -> {
+                                binding.dashRVTheme.also { _dashRVTheme ->
+                                    val linearLayoutManager = LinearLayoutManager(requireContext())
+                                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                                    _dashRVTheme.layoutManager = linearLayoutManager
+                                    _dashRVTheme.setHasFixedSize(true)
+                                    _dashRVTheme.adapter =
+                                        DashboardThemeAdapter(_filenameThemeCategoryImageResponse.value.data)
                                 }
                             }
-                        })
-                    } else {
-                        // Error
+                            "400" -> {
+                                // Error
+                            }
+                            else -> {
+                                // Error
+                            }
+                        }
                     }
-                }
-                is Resource.Loading -> {
-                    // Loading
-                }
-                is Resource.Failure -> {
-                    // Network Error
-                    handleApiError(it) { it }
-                }
-            }
-        })
-        viewModel.yesterdayWeatherResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    if (!it.value.error) {
-                        binding.yesterdayWeather = it.value.yesterdayWeather
-                        Log.i(
-                            ContentValues.TAG, "Yesterday Weather : ${it.value.yesterdayWeather}"
-                        )
-                    } else {
-                    }
-                }
-                is Resource.Loading -> {
+                    is Resource.Loading -> {
 
+                    }
+                    is Resource.Failure -> {
+                        // Network Error
+                        handleApiError(_filenameThemeCategoryImageResponse) { viewModel.getFilenameThemeCategoryImage() }
+                    }
                 }
-                is Resource.Failure -> {
-                    handleApiError(it) { it }
+            })
+        val nXy: GridXy = convertGridGps(
+            GlobalApplication.currentLng.toDouble(),
+            GlobalApplication.currentLat.toDouble()
+        )
+        Log.e(">>", "x = " + nXy.x.toString() + ", y = " + nXy.y.toString())
+        viewModel.getYesterdayWeather(nXy.x.toInt().toString(), nXy.y.toInt().toString())
+        viewModel.yesterdayWeatherResponse.observe(
+            viewLifecycleOwner,
+            Observer { _yesterdayWeatherResponse ->
+                when (_yesterdayWeatherResponse) {
+                    is Resource.Success -> {
+                        if (!_yesterdayWeatherResponse.value.error) {
+                            binding.yesterdayWeather =
+                                _yesterdayWeatherResponse.value.yesterdayWeather
+                            Log.i(
+                                ContentValues.TAG,
+                                "Yesterday Weather : ${_yesterdayWeatherResponse.value.yesterdayWeather}"
+                            )
+                        } else {
+                        }
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Failure -> {
+                        handleApiError(_yesterdayWeatherResponse) {
+                            viewModel.getYesterdayWeather(
+                                nXy.x.toInt().toString(),
+                                nXy.y.toInt().toString()
+                            )
+                        }
+                    }
                 }
-            }
-        })
+            })
+        viewModel.getTodayWeather(nXy.x.toInt().toString(), nXy.y.toInt().toString())
         viewModel.todayWeatherResponse.observe(
             viewLifecycleOwner,
             Observer { _todayWeatherResponse ->
@@ -468,7 +573,11 @@ class DashboardFragment :
                                         }
                                         is Resource.Failure -> {
                                             // Network Error
-                                            handleApiError(_filenameWeatherResponse) { _filenameWeatherResponse }
+                                            handleApiError(_filenameWeatherResponse) {
+                                                viewModel.getFilenameWeather(
+                                                    _todayWeatherResponse.value.todayWeather.weatherCode
+                                                )
+                                            }
                                         }
                                     }
                                 })
@@ -479,53 +588,14 @@ class DashboardFragment :
 
                     }
                     is Resource.Failure -> {
-                        handleApiError(_todayWeatherResponse) { _todayWeatherResponse }
-                    }
-                }
-            })
-        viewModel.filenameThemeCategoryImageResponse.observe(
-            viewLifecycleOwner,
-            Observer { _filenameThemeCategoryImageResponse ->
-                when (_filenameThemeCategoryImageResponse) {
-                    is Resource.Success -> {
-                        when (_filenameThemeCategoryImageResponse.value.code) {
-                            "200" -> {
-                                binding.dashRVTheme.also { _dashRVTheme ->
-                                    val linearLayoutManager = LinearLayoutManager(requireContext())
-                                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                                    _dashRVTheme.layoutManager = linearLayoutManager
-                                    _dashRVTheme.setHasFixedSize(true)
-                                    _dashRVTheme.adapter =
-                                        DashboardThemeAdapter(_filenameThemeCategoryImageResponse.value.data)
-                                }
-                            }
-                            "400" -> {
-                                // Error
-                            }
-                            else -> {
-                                // Error
-                            }
+                        handleApiError(_todayWeatherResponse) {
+                            viewModel.getTodayWeather(
+                                nXy.x.toInt().toString(), nXy.y.toInt().toString()
+                            )
                         }
                     }
-                    is Resource.Loading -> {
-
-                    }
-                    is Resource.Failure -> {
-                        // Network Error
-                        handleApiError(_filenameThemeCategoryImageResponse) { _filenameThemeCategoryImageResponse }
-                    }
                 }
             })
-        viewModel.getUser()
-        viewModel.getFilenameThemeCategoryImage()
-        viewModel.getSGISAccessToken()
-        val tmp: GridXy = convertGRID_GPS(
-            GlobalApplication.currentLng.toDouble(),
-            GlobalApplication.currentLat.toDouble()
-        )
-        Log.e(">>", "x = " + tmp.x.toString() + ", y = " + tmp.y.toString())
-        viewModel.getYesterdayWeather(tmp.x.toInt().toString(), tmp.y.toInt().toString())
-        viewModel.getTodayWeather(tmp.x.toInt().toString(), tmp.y.toInt().toString())
         binding.dashIvSetting.setOnClickListener {
             val navDirection: NavDirections? =
                 DashboardFragmentDirections.actionActionBnvDashToActionBnvDashCharacterInfo()
@@ -557,7 +627,7 @@ class DashboardFragment :
     }
 
     // 위도 경도 X, Y 좌표 변경
-    private fun convertGRID_GPS(lat: Double, lng: Double): GridXy {
+    private fun convertGridGps(lat: Double, lng: Double): GridXy {
         val RE = 6371.00877 // 지구 반경(km)
         val GRID = 5.0 // 격자 간격(km)
         val SLAT1 = 30.0 // 투영 위도1(degree)
