@@ -16,24 +16,79 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/challengeTvIntro1"
-                style="@style/font_semi_bold_20_two"
+            <LinearLayout
+                android:id="@+id/challengeMissionIntro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="visible">
 
-            <TextView
-                android:id="@+id/challengeTvIntro2"
-                style="@style/font_semi_bold_12_one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp"
-                android:visibility="gone" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/box_dashboard_corner_white_16dp"
+                    android:elevation="1dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/challengeTvIntro1"
+                        style="@style/font_black_20_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="20dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="6dp">
+
+                        <TextView
+                            android:id="@+id/challengeTvAchieve1"
+                            style="@style/font_black_24_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textColor="@color/color689f38"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/challengeTvAchieve2"
+                            style="@style/font_black_24_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/challengeTvIntro2"
+                        style="@style/font_semi_bold_12_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="20dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/challengeTvIntro3"
+                    style="@style/font_semi_bold_12_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:textColor="@color/h2" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"

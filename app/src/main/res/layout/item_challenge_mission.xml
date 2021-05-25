@@ -75,14 +75,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text='@{missionItem.mission_title}'
-                            android:textColor="@color/colorc9c3b9" />
-
-                        <TextView
-                            style="@style/font_black_12_one"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text='@{"현재 " + user.walkCount + "걸음 걸었어요"}' />
+                            android:textColor="@color/colore3e0db" />
 
                     </LinearLayout>
 
@@ -99,8 +92,8 @@
                     android:layout_height="40dp"
                     android:background="@drawable/selector_challenge_progress_btn"
                     android:text='@{missionItem.reward + "P 받기"}'
-                    android:textColor="@color/colorc9c3b9"
-                    android:fontFamily="@font/noto_sans_bold"
+                    android:textColor="@color/mdWhite1000"
+                    android:fontFamily="@font/noto_sans_black"
                     android:textSize="16dp"
                     android:textStyle="bold"
                     android:layout_gravity="center_vertical" />

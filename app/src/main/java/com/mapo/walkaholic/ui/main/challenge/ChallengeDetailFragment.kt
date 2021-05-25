@@ -91,17 +91,15 @@ class ChallengeDetailFragment(
                                         }
                                         when (position) {
                                             0 -> {
-                                                binding.challengeTvIntro1.text =
-                                                    "일일미션을 완료하고\n포인트를 받으세요!"
+                                                binding.challengeTvIntro1.text = "${_userResponse.value.data.first().nickName}님, 현재"
+                                                binding.challengeTvAchieve1.text = "${_userResponse.value.data.first().walkCount}"
+                                                binding.challengeTvAchieve2.text = "걸음 걸었어요!"
                                                 binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
-                                                binding.challengeTvIntro1.visibility = View.VISIBLE
-                                                binding.challengeTvIntro2.visibility = View.VISIBLE
-                                                binding.challengeLayoutRanking.visibility =
-                                                    View.GONE
-                                                binding.challengeLayoutRankingIntro.visibility =
-                                                    View.GONE
-                                                binding.challengeLayoutMission.visibility =
-                                                    View.VISIBLE
+                                                binding.challengeTvIntro3.text = "일일미션을 완료하고 포인트를 받으세요!"
+                                                binding.challengeMissionIntro.visibility = View.VISIBLE
+                                                binding.challengeLayoutMission.visibility = View.VISIBLE
+                                                binding.challengeLayoutRankingIntro.visibility = View.GONE
+                                                binding.challengeLayoutRanking.visibility = View.GONE
                                                 /*it.adapter = it3.value.missionCondition?.let { it3 ->
                                                     ChallengeDetailMissionAdapter(dummyArrayList)
                                                 }*/
@@ -109,18 +107,15 @@ class ChallengeDetailFragment(
                                                     ChallengeDetailMissionAdapter(dummyArrayList)
                                             }
                                             1 -> {
-                                                binding.challengeTvIntro1.text =
-                                                    "주간미션을 완료하고\n포인트를 받으세요!"
-                                                binding.challengeTvIntro2.text =
-                                                    "미션은 매주 월요일 자정에 갱신되어요"
-                                                binding.challengeTvIntro1.visibility = View.VISIBLE
-                                                binding.challengeTvIntro2.visibility = View.VISIBLE
-                                                binding.challengeLayoutRanking.visibility =
-                                                    View.GONE
-                                                binding.challengeLayoutRankingIntro.visibility =
-                                                    View.GONE
-                                                binding.challengeLayoutMission.visibility =
-                                                    View.VISIBLE
+                                                binding.challengeTvIntro1.text = "${_userResponse.value.data.first().nickName}님, 현재 일일미션"
+                                                binding.challengeTvAchieve1.text = "횟수"
+                                                binding.challengeTvAchieve2.text = "를 달성 했어요!"
+                                                binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
+                                                binding.challengeTvIntro3.text = "주간미션을 완료하고 포인트를 받으세요!"
+                                                binding.challengeMissionIntro.visibility = View.VISIBLE
+                                                binding.challengeLayoutMission.visibility = View.VISIBLE
+                                                binding.challengeLayoutRankingIntro.visibility = View.GONE
+                                                binding.challengeLayoutRanking.visibility = View.GONE
                                                 /*it.adapter = it3.value.missionCondition?.let { it3 ->
                                                     ChallengeDetailMissionAdapter(dummyArrayList)
                                                 }*/
@@ -128,12 +123,10 @@ class ChallengeDetailFragment(
                                                     ChallengeDetailMissionAdapter(dummyArrayList)
                                             }
                                             2 -> {
-                                                binding.challengeTvIntro1.visibility = View.GONE
-                                                binding.challengeTvIntro2.visibility = View.GONE
-                                                binding.challengeLayoutMission.visibility =
-                                                    View.GONE
-                                                binding.challengeLayoutRankingIntro.visibility =
-                                                    View.VISIBLE
+                                                binding.challengeMissionIntro.visibility = View.GONE
+                                                binding.challengeLayoutMission.visibility = View.GONE
+                                                binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
+                                                binding.challengeLayoutRanking.visibility = View.VISIBLE
                                                 tabLayout = binding.challengeRankingTL
                                                 viewPager = binding.challengeRankingVP
                                                 val adapter =
@@ -184,8 +177,6 @@ class ChallengeDetailFragment(
 
                                                     }
                                                 })
-                                                binding.challengeLayoutRanking.visibility =
-                                                    View.VISIBLE
                                             }
                                         }
                                     })

@@ -19,6 +19,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCalendarBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.CalendarDayDecorator
 import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.EventDayDecorator
@@ -193,14 +194,13 @@ class DashboardCalendarFragment :
                                         _dashCalendarRV.setHasFixedSize(true)
                                         when (_calendarResponse) {
                                             is Resource.Success -> {
-                                                _dashCalendarRV.adapter =
-                                                    _calendarResponse.value.data?.let { _walkRecord ->
-                                                        DashboardCalendarAdapter(_walkRecord) }
                                                 when (_calendarResponse.value.code) {
                                                     "200" -> {
-                                                        Log.e("calendarResponseData", _calendarResponse.value.data.toString())
-                                                        Log.e("calendarResponseTotal", _calendarResponse.value.totalRecord.toString())
-
+                                                        if(_calendarResponse.value.data.size != 0){
+                                                            _dashCalendarRV.adapter =
+                                                                _calendarResponse.value.data?.let { _walkRecord ->
+                                                                    DashboardCalendarAdapter(_walkRecord) }
+                                                        }
                                                         binding.dashCalendarTvTotalTime.text =
                                                             _calendarResponse.value.totalRecord.totalWalkTime
                                                         binding.dashCalendarTvTotalDistance.text =
@@ -230,22 +230,20 @@ class DashboardCalendarFragment :
                                                         binding.dashCalendarTvWalkAmount.text = "200"*/
 
                                                     }
-                                                    "400" -> {
-                                                        binding.dashCalendarTvTotalTime.text = "0"
-                                                        binding.dashCalendarTvTotalDistance.text = "0"
-                                                        binding.dashCalendarTvCalorie.text = "0"
-                                                        binding.dashCalendarTvWalkAmount.text = "0"
-                                                    }
                                                     else -> {
-                                                        // Error
+                                                        /*confirmDialog(
+                                                            "API 서버와의 통신이 원활하지 않습니다 ${_calendarResponse.value.message}",
+                                                            viewModel.getFilenameSplashImage(),
+                                                            "재시도")*/
                                                     }
                                                 }
                                             }
                                             is Resource.Loading -> {
-
+                                                // Loading
                                             }
                                             is Resource.Failure -> {
-                                                handleApiError(_calendarResponse)
+                                                // Network Error
+                                                handleApiError(_calendarResponse) {viewModel.calendarResponse}
                                             }
                                         }
                                     }
