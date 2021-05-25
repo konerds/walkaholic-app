@@ -57,7 +57,7 @@ class MainRepository(
         /******
          * 테스트용
          */
-        api.getUser("1710740016")
+        api.getUser("1693276776")
     }
 
     private fun setUserId() {

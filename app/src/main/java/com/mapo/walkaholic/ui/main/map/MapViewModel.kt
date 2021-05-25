@@ -35,6 +35,8 @@ class MapViewModel(
 
     private val tempMarkerList = ArrayList<Marker>()
 
+    fun getIsWalk(isWalk: Boolean) = isWalk
+
     fun getUser() {
         progressBarVisibility.set(true)
         viewModelScope.launch {

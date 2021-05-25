@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.LocationListener
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -29,9 +30,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     private lateinit var mapView: MapView
     private lateinit var locationSource: FusedLocationSource
     private lateinit var mMap: NaverMap
+    val mapArgs: MapFragmentArgs by navArgs()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        binding.viewModel = viewModel
+        binding.isWalk = mapArgs.isWalk
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         binding.mapView.getMapAsync(this)
     }
