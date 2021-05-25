@@ -245,12 +245,7 @@ class DashboardFragment :
                                                                         // Network Error
                                                                         handleApiError(
                                                                             _expInformationResponse
-                                                                        )
-                                                                        Toast.makeText(
-                                                                            requireContext(),
-                                                                            getString(R.string.err_user),
-                                                                            Toast.LENGTH_SHORT
-                                                                        ).show()
+                                                                        ) { _expInformationResponse }
                                                                         //logout()
                                                                     }
                                                                 }
@@ -270,7 +265,7 @@ class DashboardFragment :
                                         }
                                         is Resource.Failure -> {
                                             // Network Error
-                                            handleApiError(_userCharacterResponse)
+                                            handleApiError(_userCharacterResponse) { _userCharacterResponse }
                                         }
                                     }
                                 })
@@ -302,12 +297,7 @@ class DashboardFragment :
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_userResponse)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_user),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    handleApiError(_userResponse) { _userResponse }
                     //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
@@ -335,7 +325,7 @@ class DashboardFragment :
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(it)
+                    handleApiError(it) { it }
                     Log.i(
                         ContentValues.TAG, "SGIS 인증 실패 : ${it.errorBody}"
                     )
@@ -360,7 +350,7 @@ class DashboardFragment :
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(it)
+                    handleApiError(it) { it }
                     Log.i(
                         ContentValues.TAG, "TM 좌표 변환 실패 : ${it.errorBody}"
                     )
@@ -405,7 +395,7 @@ class DashboardFragment :
                                 }
                                 is Resource.Failure -> {
                                     // Network Error
-                                    handleApiError(it2)
+                                    handleApiError(it2) { it2 }
                                 }
                             }
                         })
@@ -418,7 +408,7 @@ class DashboardFragment :
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(it)
+                    handleApiError(it) { it }
                 }
             }
         })
@@ -437,7 +427,7 @@ class DashboardFragment :
 
                 }
                 is Resource.Failure -> {
-                    handleApiError(it)
+                    handleApiError(it) { it }
                 }
             }
         })
@@ -478,7 +468,7 @@ class DashboardFragment :
                                         }
                                         is Resource.Failure -> {
                                             // Network Error
-                                            handleApiError(_filenameWeatherResponse)
+                                            handleApiError(_filenameWeatherResponse) { _filenameWeatherResponse }
                                         }
                                     }
                                 })
@@ -489,7 +479,7 @@ class DashboardFragment :
 
                     }
                     is Resource.Failure -> {
-                        handleApiError(_todayWeatherResponse)
+                        handleApiError(_todayWeatherResponse) { _todayWeatherResponse }
                     }
                 }
             })
@@ -522,7 +512,7 @@ class DashboardFragment :
                     }
                     is Resource.Failure -> {
                         // Network Error
-                        handleApiError(_filenameThemeCategoryImageResponse) { viewModel.getFilenameThemeCategoryImage() }
+                        handleApiError(_filenameThemeCategoryImageResponse) { _filenameThemeCategoryImageResponse }
                     }
                 }
             })

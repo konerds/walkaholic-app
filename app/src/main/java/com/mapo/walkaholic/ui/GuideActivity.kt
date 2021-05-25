@@ -63,7 +63,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_filenameGuideImageResponse) { viewModel.getFilenameGuideImage() }
+                    handleApiError(_filenameGuideImageResponse) { _filenameGuideImageResponse }
                 }
             }
         })

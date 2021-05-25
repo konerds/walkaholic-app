@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -46,7 +47,16 @@ fun View.visible(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
 }
 
-fun View.snackbar(message: String, action: (() -> Unit)? = null) {
+fun View.toastMessage(message: String) {
+    val toast = Toast.makeText(
+        context,
+        message,
+        Toast.LENGTH_SHORT
+    )
+    toast.show()
+}
+
+/*fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
     action?.let {
         snackbar.setAction("재시도") {
@@ -54,12 +64,71 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
         }
     }
     snackbar.show()
-}
+}*/
 
 fun Fragment.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null) {
-    val confirmDialogLayout = LayoutInflater.from(requireContext())
+    requireActivity().confirmDialog(message, onClickConfirm)
+    /*val confirmDialogLayout = LayoutInflater.from(requireContext())
         .inflate(R.layout.dialog_confirm, null, false)
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
+        confirmDialogLayout
+    ).create()
+    materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
+        confirmDialogLayout.dialogConfirmTv1.text = message
+        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
+            _confirmDialog.dismiss()
+            if (onClickConfirm != null) {
+                onClickConfirm()
+            }
+        }
+    }
+    materialAlertDialogBuilder.show()*/
+}
+
+fun Fragment.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> Unit)) {
+    requireActivity().confirmDialog(message, onClickConfirm)
+    /*val confirmDialogLayout = LayoutInflater.from(requireContext())
+        .inflate(R.layout.dialog_confirm, null, false)
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
+        confirmDialogLayout
+    ).setCancelable(false).create()
+    materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
+        confirmDialogLayout.dialogConfirmTv1.text = message
+        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
+            onClickConfirm()
+        }
+    }
+    materialAlertDialogBuilder.show()*/
+}
+
+fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onClickYes: () -> Unit) {
+    requireActivity().alertDialog(message, onClickNo, onClickYes)
+    /*val alertDialogLayout = LayoutInflater.from(requireContext())
+        .inflate(R.layout.dialog_alert, null, false)
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
+        alertDialogLayout
+    ).create()
+    materialAlertDialogBuilder.setOnShowListener { _alertDialog ->
+        alertDialogLayout.dialogAlertTv1.text = message
+        alertDialogLayout.dialogAlertTvNo.setOnClickListener {
+            _alertDialog.dismiss()
+            if (onClickNo != null) {
+                onClickNo()
+            }
+        }
+        alertDialogLayout.dialogAlertTvYes.setOnClickListener {
+            _alertDialog.dismiss()
+            onClickYes()
+        }
+    }
+    materialAlertDialogBuilder.show()*/
+}
+
+
+fun Activity.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null) {
+    val confirmDialogLayout = LayoutInflater.from(this)
+        .inflate(R.layout.dialog_confirm, null, false)
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this).setView(
         confirmDialogLayout
     ).create()
     materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
@@ -74,10 +143,30 @@ fun Fragment.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null
     materialAlertDialogBuilder.show()
 }
 
-fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onClickYes: () -> Unit) {
-    val alertDialogLayout = LayoutInflater.from(requireContext())
+fun Activity.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> Unit)) {
+    val confirmDialogLayout = LayoutInflater.from(this)
+        .inflate(R.layout.dialog_confirm, null, false)
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this).setView(
+        confirmDialogLayout
+    ).setOnCancelListener {
+        onClickConfirm()
+    }.create()
+    materialAlertDialogBuilder.setCanceledOnTouchOutside(false)
+    materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
+        confirmDialogLayout.dialogConfirmTv2.text = "재시도"
+        confirmDialogLayout.dialogConfirmTv1.text = message
+        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
+            onClickConfirm()
+            _confirmDialog.dismiss()
+        }
+    }
+    materialAlertDialogBuilder.show()
+}
+
+fun Activity.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onClickYes: () -> Unit) {
+    val alertDialogLayout = LayoutInflater.from(this)
         .inflate(R.layout.dialog_alert, null, false)
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this).setView(
         alertDialogLayout
     ).create()
     materialAlertDialogBuilder.setOnShowListener { _alertDialog ->
@@ -96,48 +185,68 @@ fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onCli
     materialAlertDialogBuilder.show()
 }
 
+
 fun Fragment.handleApiError(
-    failure: Resource.Failure,
-    retry: (() -> Unit)? = null
+    failure: Resource.Failure, action: (() -> Unit)? = null
 ) {
-    val error = failure.errorBody?.string().toString()
+    requireActivity().handleApiError(failure, action)
+    /*val error = failure.errorBody?.string().toString()
     when {
         failure.isNetworkError -> {
             if (!checkNetworkState(requireView().context)) {
-                requireView().snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
+                if (action != null) {
+                    notCancelableConfirmDialog("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", action)
+                }
             } else {
-                requireView().snackbar(
-                    "API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}",
-                    retry
-                )
+                if (action != null) {
+                    notCancelableConfirmDialog("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", action)
+                }
             }
         }
         else -> {
-            requireView().snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+            if (action != null) {
+                notCancelableConfirmDialog("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", action)
+            }
         }
-    }
+    }*/
 }
 
 fun Activity.handleApiError(
-    failure: Resource.Failure,
-    retry: (() -> Unit)? = null
+    failure: Resource.Failure, action: (() -> Unit)? = null
 ) {
+    val notNullErrorBody =
+        if(failure.errorBody != null && failure.errorBody.string() != "null") {
+            "\n" + failure.errorBody.string()
+        } else {
+            ""
+        }
     when {
         failure.isNetworkError -> {
             if (!checkNetworkState(window.decorView.context)) {
-                window.decorView.snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
-            } else {
-                window.decorView.snackbar(
-                    "API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}",
-                    retry
+                notCancelableConfirmDialog(
+                    "네트워크 연결을 확인해주세요${notNullErrorBody}",
+                    action!!
                 )
+            } else {
+                if (action != null) {
+                    notCancelableConfirmDialog(
+                        "API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}",
+                        action
+                    )
+                } else {
+                    confirmDialog("API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}")
+                }
             }
         }
         else -> {
-            window.decorView.snackbar(
-                "API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}",
-                retry
-            )
+            if (action != null) {
+                notCancelableConfirmDialog(
+                    "API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}",
+                    action
+                )
+            } else {
+                confirmDialog("API 서버와의 통신이 원활하지 않습니다${notNullErrorBody}")
+            }
         }
     }
 }

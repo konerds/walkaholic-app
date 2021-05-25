@@ -24,7 +24,6 @@ import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterIn
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoFragmentDirections
 import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragment
 import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragmentDirections
-import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -70,7 +69,7 @@ abstract class BaseActivity<VM: BaseViewModel, B: ViewBinding, R:BaseRepository>
             null -> { }
             "" -> { }
             else -> {
-                 binding.root.snackbar(contents)
+                 /*binding.root.snackbar(contents)*/
             }
         }
     }

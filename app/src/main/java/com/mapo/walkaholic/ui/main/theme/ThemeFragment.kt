@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -18,10 +16,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentThemeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.base.EventObserver
-import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -30,19 +25,6 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
     private lateinit var viewPager: ViewPager2
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel : ThemeViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@ThemeFragment::showToastEvent)
-        )
-
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@ThemeFragment::showSnackbarEvent)
-        )
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.themeTL
         viewPager = binding.themeVP
@@ -85,7 +67,7 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_categoryThemeResponse) { viewModel.getCategoryTheme() }
+                    handleApiError(_categoryThemeResponse)
                 }
             }
         })
@@ -107,30 +89,6 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
                 }
         })*/
         /*viewModel.getThemeEnum()*/
-    }
-
-    private fun showToastEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
-            else -> {
-                Toast.makeText(
-                    requireContext(),
-                    contents,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun showSnackbarEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
-            else -> {
-                requireView().snackbar(contents)
-            }
-        }
     }
 
     override fun getViewModel() = ThemeViewModel::class.java
