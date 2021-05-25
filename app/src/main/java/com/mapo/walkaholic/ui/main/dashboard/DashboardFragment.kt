@@ -66,8 +66,8 @@ class DashboardFragment :
                                             when (_userCharacterFilenameResponse.value.code) {
                                                 "200" -> {
                                                     with(binding) {
-                                                        viewModel.getExpInformation(_userResponse.value.data.first().id)
-                                                        viewModel.expInformationResponse.observe(
+                                                        viewModel!!.getExpInformation(_userResponse.value.data.first().id)
+                                                        viewModel!!.expInformationResponse.observe(
                                                             viewLifecycleOwner,
                                                             Observer { _expInformationResponse ->
                                                                 when (_expInformationResponse) {
@@ -222,7 +222,7 @@ class DashboardFragment :
                                                                                 handleApiError(
                                                                                     _expInformationResponse as Resource.Failure
                                                                                 ) {
-                                                                                    viewModel.getExpInformation(
+                                                                                    viewModel!!.getExpInformation(
                                                                                         _userResponse.value.data.first().id
                                                                                     )
                                                                                 }
@@ -233,7 +233,7 @@ class DashboardFragment :
                                                                                 handleApiError(
                                                                                     _expInformationResponse as Resource.Failure
                                                                                 ) {
-                                                                                    viewModel.getExpInformation(
+                                                                                    viewModel!!.getExpInformation(
                                                                                         _userResponse.value.data.first().id
                                                                                     )
                                                                                 }
@@ -249,7 +249,7 @@ class DashboardFragment :
                                                                         handleApiError(
                                                                             _expInformationResponse
                                                                         ) {
-                                                                            viewModel.getExpInformation(
+                                                                            viewModel!!.getExpInformation(
                                                                                 _userResponse.value.data.first().id
                                                                             )
                                                                         }
