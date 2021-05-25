@@ -3,6 +3,7 @@ package com.mapo.walkaholic.ui.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.model.response.AuthResponse
@@ -26,10 +27,6 @@ class LoginViewModel(
     val loginResponse: LiveData<Resource<AuthResponse>>
         get() = _loginResponse
 
-    fun getAuth(callback: (OAuthToken?, Throwable?) -> Unit) {
-
-    }
-
     fun getFilenameTitleLogo() = viewModelScope.launch {
         _filenameLogoImageResponse.value = repository.getFilenameLogoImage()
     }
@@ -37,15 +34,8 @@ class LoginViewModel(
     fun login() {
         progressBarVisibility.set(true)
         viewModelScope.launch {
-            UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-                viewModelScope.launch {
-                    if (error != null) {
-                    } else {
-                        _loginResponse.value = tokenInfo?.id?.let { repository.login(it) }
-                    }
-                    progressBarVisibility.set(false)
-                }
-            }
+            _loginResponse.value = repository.login()
+            progressBarVisibility.set(false)
         }
     }
 

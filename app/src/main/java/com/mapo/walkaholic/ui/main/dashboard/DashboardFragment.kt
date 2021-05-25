@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -58,6 +59,7 @@ class DashboardFragment :
                     when (_userResponse.value.code) {
                         "200" -> {
                             binding.user = _userResponse.value.data.first()
+                            Log.e(TAG, "User : " + _userResponse.value.data.first().toString())
                             viewModel.getUserCharacterFilename(_userResponse.value.data.first().id)
                             viewModel.userCharacterFilenameResponse.observe(
                                 viewLifecycleOwner,

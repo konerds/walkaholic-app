@@ -1,8 +1,6 @@
 package com.mapo.walkaholic.data.repository
 
-import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
-import com.kakao.sdk.user.model.AccessTokenInfo
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
@@ -10,17 +8,15 @@ import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import com.mapo.walkaholic.data.network.ApisApi
-import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
-import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.mapo.walkaholic.data.network.SgisApi
 import com.naver.maps.map.NaverMap
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
 import retrofit2.http.Body
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainRepository(
     private val api: InnerApi,
@@ -46,6 +42,8 @@ class MainRepository(
 
     private var mMap: NaverMap? = null
 
+    private var userId : Long = 0
+
     fun setNaverMap(mMap: NaverMap) {
         this.mMap = mMap
     }
@@ -53,9 +51,25 @@ class MainRepository(
     fun getNaverMap() = this.mMap
 
     suspend fun getUser() = safeApiCall {
-        api.getUser(
-            GlobalApplication.kakaoTokenInfo?.id.toString()
-        )
+        /*setUserId()
+        api.getUser(userId.toString())*/
+
+        /******
+         * 테스트용
+         */
+        api.getUser("1710740016")
+    }
+
+    private fun setUserId() {
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                // Fail
+            }
+            else if (tokenInfo != null) {
+                // Success
+                userId = tokenInfo.id
+            }
+        }
     }
 
     suspend fun getUserCharacterFilename(userId: Long) = safeApiCall {
