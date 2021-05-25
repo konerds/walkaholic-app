@@ -136,6 +136,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                         }
                     } else {
                         // Token Existed (If need, Refresh)
+
                         /*UserApiClient.instance.logout { error ->
                             if (error != null) {
                                 Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
@@ -144,10 +145,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
                             }
                         }*/
-
-                        /*******************
-                         * 임시 테스트용
-                         ******************/
 
                         viewModel.login()
                         viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
@@ -183,7 +180,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 }
                             }
                         })
-
                     }
                 }
             } else {

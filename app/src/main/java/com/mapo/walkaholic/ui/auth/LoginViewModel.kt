@@ -33,9 +33,17 @@ class LoginViewModel(
 
     fun login() {
         progressBarVisibility.set(true)
-        viewModelScope.launch {
-            _loginResponse.value = repository.login()
-            progressBarVisibility.set(false)
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                // Fail
+            }
+            else if (tokenInfo != null) {
+                // Success
+                viewModelScope.launch {
+                    _loginResponse.value = repository.login(tokenInfo.id)
+                    progressBarVisibility.set(false)
+                }
+            }
         }
     }
 

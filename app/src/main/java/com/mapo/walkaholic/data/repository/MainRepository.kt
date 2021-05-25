@@ -40,9 +40,9 @@ class MainRepository(
         private const val SGIS_EPSG_BESSEL = "5181"
     }
 
-    private var mMap: NaverMap? = null
+    private var userId : String = ""
 
-    private var userId : Long = 0
+    private var mMap: NaverMap? = null
 
     fun setNaverMap(mMap: NaverMap) {
         this.mMap = mMap
@@ -51,23 +51,17 @@ class MainRepository(
     fun getNaverMap() = this.mMap
 
     suspend fun getUser() = safeApiCall {
-        /*setUserId()
-        api.getUser(userId.toString())*/
-
-        /******
-         * 테스트용
-         */
-        api.getUser("1693276776")
+        api.getUser(userId)
     }
 
-    private fun setUserId() {
+    fun setUser() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 // Fail
             }
             else if (tokenInfo != null) {
                 // Success
-                userId = tokenInfo.id
+                userId = tokenInfo.id.toString()
             }
         }
     }

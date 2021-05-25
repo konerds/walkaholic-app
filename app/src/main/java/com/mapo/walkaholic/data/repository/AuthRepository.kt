@@ -26,21 +26,8 @@ class AuthRepository(
         api.getTermPrivacy()
     }
 
-    suspend fun login() = safeApiCall {
-        setUserId()
+    suspend fun login(userId: Long) = safeApiCall {
         api.login(LoginRequestBody(userId))
-    }
-
-    private fun setUserId() {
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                // Fail
-            }
-            else if (tokenInfo != null) {
-                // Success
-                userId = tokenInfo.id
-            }
-        }
     }
 
     /*
