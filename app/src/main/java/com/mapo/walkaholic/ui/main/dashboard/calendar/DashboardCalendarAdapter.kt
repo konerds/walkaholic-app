@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.calendar
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -27,6 +28,7 @@ class DashboardCalendarAdapter(
 
     override fun onBindViewHolder(holder: DashboardCalendarViewHolder, position: Int) {
         holder.binding.recordItem = walkRecords[position]
+        Log.e("냐옹", "냐옹")
     }
 
     override fun getItemCount() = walkRecords.size

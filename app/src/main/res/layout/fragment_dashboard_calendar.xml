@@ -55,9 +55,9 @@
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="21dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginBottom="16dp"
                     app:mcv_leftArrowMask="@drawable/ic_btn_calendar_arrow_left"
                     app:mcv_rightArrowMask="@drawable/ic_btn_calendar_arrow_right"
@@ -271,7 +271,6 @@
                         android:id="@+id/dashCalendarRV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
                         tools:listitem="@layout/item_dashboard_calendar" />
 
                 </LinearLayout>

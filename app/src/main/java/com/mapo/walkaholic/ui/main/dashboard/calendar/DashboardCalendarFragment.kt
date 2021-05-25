@@ -171,6 +171,11 @@ class DashboardCalendarFragment :
                                     "MM월dd일, EE요일",
                                     Locale.KOREAN
                                 ).format(date.date)
+                                binding.dashCalendarTvTotalDate.text = SimpleDateFormat(
+                                    "yyyy.MM.dd EE요일,",
+                                    Locale.KOREAN
+                                ).format(date.date)
+
                                 currentDate = date.date
                                 viewModel.getWalkRecord(
                                     _userResponse.value.data.first().id,
@@ -190,18 +195,13 @@ class DashboardCalendarFragment :
                                         _dashCalendarRV.setHasFixedSize(true)
                                         when (_calendarResponse) {
                                             is Resource.Success -> {
+                                                _dashCalendarRV.adapter =
+                                                    _calendarResponse.value.data?.let { _walkRecord ->
+                                                        DashboardCalendarAdapter(_walkRecord) }
                                                 when (_calendarResponse.value.code) {
                                                     "200" -> {
-                                                        _dashCalendarRV.adapter =
-                                                            _calendarResponse.value.data?.let { _walkRecord ->
-                                                                DashboardCalendarAdapter(_walkRecord)
-                                                            }
                                                         Log.e("calendarResponseData", _calendarResponse.value.data.toString())
                                                         Log.e("calendarResponseTotal", _calendarResponse.value.totalRecord.toString())
-                                                        binding.dashCalendarTvTotalDate.text = SimpleDateFormat(
-                                                            "yyyy.MM.dd EE요일,",
-                                                            Locale.KOREAN
-                                                        ).format(currentDate)
 
                                                         binding.dashCalendarTvTotalTime.text =
                                                             _calendarResponse.value.totalRecord.totalWalkTime
@@ -233,7 +233,10 @@ class DashboardCalendarFragment :
 
                                                     }
                                                     "400" -> {
-                                                        // Error
+                                                        binding.dashCalendarTvTotalTime.text = "0"
+                                                        binding.dashCalendarTvTotalDistance.text = "0"
+                                                        binding.dashCalendarTvCalorie.text = "0"
+                                                        binding.dashCalendarTvWalkAmount.text = "0"
                                                     }
                                                     else -> {
                                                         // Error
