@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.data.model.ItemInfo
@@ -26,6 +25,7 @@ class DashboardCharacterInfoDetailFragment(
 ) : BaseFragment<DashboardCharacterInfoDetailViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -392,9 +392,23 @@ class DashboardCharacterInfoDetailFragment(
                                                                         }
                                                                         "400" -> {
                                                                             // Error
+                                                                            handleApiError(
+                                                                                _userCharacterEquipStatusResponse as Resource.Failure
+                                                                            ) {
+                                                                                viewModel.getUserCharacterEquipStatus(
+                                                                                    _userResponse.value.data.first().id
+                                                                                )
+                                                                            }
                                                                         }
                                                                         else -> {
                                                                             // Error
+                                                                            handleApiError(
+                                                                                _userCharacterEquipStatusResponse as Resource.Failure
+                                                                            ) {
+                                                                                viewModel.getUserCharacterEquipStatus(
+                                                                                    _userResponse.value.data.first().id
+                                                                                )
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -416,9 +430,19 @@ class DashboardCharacterInfoDetailFragment(
                                                 }
                                                 "400" -> {
                                                     // Error
+                                                    handleApiError(_statusUserCharacterInventoryItem as Resource.Failure) {
+                                                        viewModel.getStatusUserCharacterInventoryItem(
+                                                            _userResponse.value.data.first().id
+                                                        )
+                                                    }
                                                 }
                                                 else -> {
                                                     // Error
+                                                    handleApiError(_statusUserCharacterInventoryItem as Resource.Failure) {
+                                                        viewModel.getStatusUserCharacterInventoryItem(
+                                                            _userResponse.value.data.first().id
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
@@ -438,9 +462,11 @@ class DashboardCharacterInfoDetailFragment(
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                         }
                         else -> {
                             // Error
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                         }
                     }
                 }
@@ -449,11 +475,10 @@ class DashboardCharacterInfoDetailFragment(
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_userResponse) { }
+                    handleApiError(_userResponse) { viewModel.getUser() }
                 }
             }
         })
-        viewModel.getUser()
         binding.dashCharacterInfoInitLayout.setOnClickListener { _dashCharacterInfoInitLayout ->
             initInventory()
         }
@@ -514,9 +539,19 @@ class DashboardCharacterInfoDetailFragment(
                                                 }
                                                 "400" -> {
                                                     // Error
+                                                    handleApiError(
+                                                        _userCharacterEquipStatusResponse as Resource.Failure
+                                                    ) { viewModel.getUserCharacterEquipStatus(
+                                                        _userResponse.value.data.first().id
+                                                    ) }
                                                 }
                                                 else -> {
                                                     // Error
+                                                    handleApiError(
+                                                        _userCharacterEquipStatusResponse as Resource.Failure
+                                                    ) { viewModel.getUserCharacterEquipStatus(
+                                                        _userResponse.value.data.first().id
+                                                    ) }
                                                 }
                                             }
                                         }
@@ -527,16 +562,20 @@ class DashboardCharacterInfoDetailFragment(
                                             // Network Error
                                             handleApiError(
                                                 _userCharacterEquipStatusResponse
-                                            )
+                                            ) { viewModel.getUserCharacterEquipStatus(
+                                                _userResponse.value.data.first().id
+                                            ) }
                                         }
                                     }
                                 })
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                         }
                         else -> {
                             // Error
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                         }
                     }
                 }
@@ -545,7 +584,7 @@ class DashboardCharacterInfoDetailFragment(
                 }
                 is Resource.Failure -> {
                     // Network Error
-                    handleApiError(_userResponse)
+                    handleApiError(_userResponse) { viewModel.getUser() }
                 }
             }
         })

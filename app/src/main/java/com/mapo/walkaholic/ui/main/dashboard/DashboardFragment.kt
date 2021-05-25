@@ -294,13 +294,11 @@ class DashboardFragment :
                         "400" -> {
                             // Error
                             handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                            //logout()
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                         else -> {
                             // Error
                             handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                            //logout()
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                     }
@@ -311,7 +309,6 @@ class DashboardFragment :
                 is Resource.Failure -> {
                     // Network Error
                     handleApiError(_userResponse) { viewModel.getUser() }
-                    //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }

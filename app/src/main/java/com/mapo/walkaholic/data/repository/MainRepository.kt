@@ -211,8 +211,15 @@ class MainRepository(
         api.getCalendarMonth(userId, walkMonth)
     }
 
-    suspend fun getTheme(themeCode: String) = safeApiCall {
-        api.getTheme(themeCode)
+    suspend fun getTheme(position: Int) = safeApiCall {
+        api.getTheme(
+            when (position) {
+                0 -> "001"
+                1 -> "002"
+                2 -> "003"
+                else -> ""
+            }
+        )
     }
 
     suspend fun getMissionCondition(missionID: String) = safeApiCall {

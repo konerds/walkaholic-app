@@ -40,6 +40,10 @@ class SplashActivity :
          */
         binding.viewModel = viewModel
         /*
+            Call Rest Function in ViewModel
+         */
+        viewModel.getFilenameSplashImage()
+        /*
             Observe Resource of Splash Logo Filename
          */
         viewModel.filenameSplashImageResponse.observe(this, Observer { _responseSplash ->
@@ -74,9 +78,11 @@ class SplashActivity :
                         }
                         "400" -> {
                             // Error
+                            handleApiError(_responseSplash as Resource.Failure) { viewModel.getFilenameSplashImage() }
                         }
                         else -> {
                             // Error
+                            handleApiError(_responseSplash as Resource.Failure) { viewModel.getFilenameSplashImage() }
                         }
                     }
                 }
@@ -89,10 +95,6 @@ class SplashActivity :
                 }
             }
         })
-        /*
-            Call Rest Function in ViewModel
-         */
-        viewModel.getFilenameSplashImage()
     }
 
     override fun onDestroy() {
