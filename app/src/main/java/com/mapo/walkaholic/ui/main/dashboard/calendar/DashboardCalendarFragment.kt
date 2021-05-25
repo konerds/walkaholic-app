@@ -1,15 +1,19 @@
 package com.mapo.walkaholic.ui.main.dashboard.calendar
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.SgisApi
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -20,6 +24,7 @@ import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.CalendarDayDecor
 import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.EventDayDecorator
 import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.SeletedDayDecorator
 import com.mapo.walkaholic.ui.main.dashboard.calendar.decorator.TodayDecorator
+import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragmentDirections
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
@@ -262,6 +267,24 @@ class DashboardCalendarFragment :
             }
         })
         viewModel.getUser()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val navDirection: NavDirections? = DashboardCalendarFragmentDirections.actionActionBnvDashWalkRecordToActionBnvDash()
+                if (navDirection != null) {
+                    findNavController().navigate(navDirection)
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     override fun getViewModel() = DashboardCalendarViewModel::class.java

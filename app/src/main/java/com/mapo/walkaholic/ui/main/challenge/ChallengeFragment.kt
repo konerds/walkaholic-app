@@ -23,24 +23,11 @@ import com.mapo.walkaholic.ui.snackbar
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class ChallengeFragment : BaseSharedFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>() {
+class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel : ChallengeViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@ChallengeFragment::showToastEvent)
-        )
-
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@ChallengeFragment::showSnackbarEvent)
-        )
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.challengeTL
         viewPager = binding.challengeVP
@@ -66,30 +53,6 @@ class ChallengeFragment : BaseSharedFragment<ChallengeViewModel, FragmentChallen
 
             }
         })
-    }
-
-    private fun showToastEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
-            else -> {
-                Toast.makeText(
-                    requireContext(),
-                    contents,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    private fun showSnackbarEvent(contents: String) {
-        when(contents) {
-            null -> { }
-            "" -> { }
-            else -> {
-                requireView().snackbar(contents)
-            }
-        }
     }
 
     override fun getViewModel() = ChallengeViewModel::class.java

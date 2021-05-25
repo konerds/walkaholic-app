@@ -1,7 +1,6 @@
 package com.mapo.walkaholic.ui
 
 import android.app.Activity
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -14,6 +13,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -24,10 +24,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.ui.auth.LoginFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
+import kotlinx.android.synthetic.main.dialog_alert.view.*
+import kotlinx.android.synthetic.main.dialog_confirm.view.*
 
 private const val RESOURCE_BASE_URL = "http://15.164.103.223:8080/static/img/"
 
@@ -52,6 +56,46 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     snackbar.show()
 }
 
+fun Fragment.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null) {
+    val confirmDialogLayout = LayoutInflater.from(requireContext())
+        .inflate(R.layout.dialog_confirm, null, false)
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
+        confirmDialogLayout
+    ).create()
+    materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
+        confirmDialogLayout.dialogConfirmTv1.text = message
+        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
+            _confirmDialog.dismiss()
+            if (onClickConfirm != null) {
+                onClickConfirm()
+            }
+        }
+    }
+    materialAlertDialogBuilder.show()
+}
+
+fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onClickYes: () -> Unit) {
+    val alertDialogLayout = LayoutInflater.from(requireContext())
+        .inflate(R.layout.dialog_alert, null, false)
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
+        alertDialogLayout
+    ).create()
+    materialAlertDialogBuilder.setOnShowListener { _alertDialog ->
+        alertDialogLayout.dialogAlertTv1.text = message
+        alertDialogLayout.dialogAlertTvNo.setOnClickListener {
+            _alertDialog.dismiss()
+            if (onClickNo != null) {
+                onClickNo()
+            }
+        }
+        alertDialogLayout.dialogAlertTvYes.setOnClickListener {
+            _alertDialog.dismiss()
+            onClickYes()
+        }
+    }
+    materialAlertDialogBuilder.show()
+}
+
 fun Fragment.handleApiError(
     failure: Resource.Failure,
     retry: (() -> Unit)? = null
@@ -59,10 +103,13 @@ fun Fragment.handleApiError(
     val error = failure.errorBody?.string().toString()
     when {
         failure.isNetworkError -> {
-            if(!checkNetworkState(requireView().context)) {
+            if (!checkNetworkState(requireView().context)) {
                 requireView().snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
             } else {
-                requireView().snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+                requireView().snackbar(
+                    "API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}",
+                    retry
+                )
             }
         }
         else -> {
@@ -77,19 +124,25 @@ fun Activity.handleApiError(
 ) {
     when {
         failure.isNetworkError -> {
-            if(!checkNetworkState(window.decorView.context)) {
+            if (!checkNetworkState(window.decorView.context)) {
                 window.decorView.snackbar("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", retry)
             } else {
-                window.decorView.snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+                window.decorView.snackbar(
+                    "API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}",
+                    retry
+                )
             }
         }
         else -> {
-            window.decorView.snackbar("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", retry)
+            window.decorView.snackbar(
+                "API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}",
+                retry
+            )
         }
     }
 }
 
-fun checkNetworkState(context : Context): Boolean {
+fun checkNetworkState(context: Context): Boolean {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -140,7 +193,7 @@ fun formatText(textView: TextView, _fullText: String?, _spanText: String?, spanC
 
 @BindingAdapter("app:setImage")
 fun setImageUrl(view: ImageView, imageSrc: String?) {
-    if(!imageSrc.isNullOrEmpty()) {
+    if (!imageSrc.isNullOrEmpty()) {
         Glide.with(view.context)
             .load("${RESOURCE_BASE_URL}${imageSrc}")
             .diskCacheStrategy(DiskCacheStrategy.ALL)

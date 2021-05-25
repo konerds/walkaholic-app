@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.data.model.Point
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.MapResponse
+import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -20,6 +21,9 @@ class MapViewModel(
     private val markers = MutableLiveData<List<Marker>>()
     val points = MutableLiveData<List<Point>>()
     override fun init() {}
+    private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
+    val userResponse: LiveData<Resource<UserResponse>>
+        get() = _userResponse
 
     fun init(mMap: NaverMap) {
         this.mMap = mMap
@@ -30,6 +34,14 @@ class MapViewModel(
         get() = _mapResponse
 
     private val tempMarkerList = ArrayList<Marker>()
+
+    fun getUser() {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            _userResponse.value = mainRepository.getUser()
+            progressBarVisibility.set(false)
+        }
+    }
 
     fun getMarkers(zoom: Double?): LiveData<List<Marker>> {
         setMarkers(zoom)
@@ -52,7 +64,6 @@ class MapViewModel(
     ) = viewModelScope.launch {
         _mapResponse.value = mainRepository.getPoints(
             MapRequestBody(
-
                 // 카메라 경도, 위도
                 mMap!!.cameraPosition.target.longitude,
                 mMap!!.cameraPosition.target.latitude,

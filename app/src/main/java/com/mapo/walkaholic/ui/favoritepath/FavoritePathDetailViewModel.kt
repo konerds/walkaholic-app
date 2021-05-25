@@ -12,7 +12,7 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class FavoritePathViewModel(
+class FavoritePathDetailViewModel(
     private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {
@@ -37,7 +37,6 @@ class FavoritePathViewModel(
             progressBarVisibility.set(false)
         }
     }
-
 
     fun getFavoritePath(userId: Long, id: String) {
         viewModelScope.launch {

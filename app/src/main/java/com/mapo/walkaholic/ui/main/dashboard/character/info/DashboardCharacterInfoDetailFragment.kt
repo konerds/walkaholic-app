@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapo.walkaholic.data.model.ItemInfo
@@ -15,35 +14,18 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
-import com.mapo.walkaholic.ui.base.BaseSharedFragment
-import com.mapo.walkaholic.ui.base.EventObserver
-import com.mapo.walkaholic.ui.base.ViewModelFactory
+import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
 import com.mapo.walkaholic.ui.snackbar
-import kotlinx.android.synthetic.main.fragment_detail_character_info.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class DashboardCharacterInfoDetailFragment(
     private val position: Int,
     private val listener: CharacterInventorySlotClickListener
-) : BaseSharedFragment<DashboardCharacterInfoViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
-
+) : BaseFragment<DashboardCharacterInfoDetailViewModel, FragmentDetailCharacterInfoBinding, MainRepository>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedViewModel: DashboardCharacterInfoViewModel by viewModels {
-            ViewModelFactory(getFragmentRepository())
-        }
-        viewModel = sharedViewModel
-        viewModel.showToastEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoDetailFragment::showToastEvent)
-        )
-
-        viewModel.showSnackbarEvent.observe(
-            viewLifecycleOwner,
-            EventObserver(this@DashboardCharacterInfoDetailFragment::showSnackbarEvent)
-        )
         super.onViewCreated(view, savedInstanceState)
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
@@ -80,9 +62,143 @@ class DashboardCharacterInfoDetailFragment(
                                                                                 _dashCharacterInfoDetailRV.setHasFixedSize(
                                                                                     true
                                                                                 )
+                                                                                var filterReverseResult: ArrayList<ItemInfo>? =
+                                                                                    null
                                                                                 when (position) {
                                                                                     0 -> {
                                                                                         val filterResult =
+                                                                                            _statusUserCharacterInventoryItem.value.data.filter { _data -> _data.itemType == "face" } as ArrayList<ItemInfo>
+                                                                                        filterReverseResult =
+                                                                                            _statusUserCharacterInventoryItem.value.data.filter { _data -> _data.itemType == "hair" } as ArrayList<ItemInfo>
+                                                                                        when (filterResult.size) {
+                                                                                            0 -> {
+                                                                                                filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                            }
+                                                                                            1 -> {
+                                                                                                filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                            }
+                                                                                            2 -> {
+                                                                                                filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                            }
+                                                                                            else -> {
+                                                                                            }
+                                                                                        }
+                                                                                        _dashCharacterInfoDetailRV.adapter =
+                                                                                            DashboardCharacterInfoDetailAdapter(
+                                                                                                filterResult,
+                                                                                                filterReverseResult,
+                                                                                                listener
+                                                                                            )
+                                                                                    }
+                                                                                    1 -> {
+                                                                                        val filterResult =
+                                                                                            _statusUserCharacterInventoryItem.value.data.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
+                                                                                        filterReverseResult =
                                                                                             _statusUserCharacterInventoryItem.value.data.filter { _data -> _data.itemType == "face" } as ArrayList<ItemInfo>
                                                                                         when (filterResult.size) {
                                                                                             0 -> {
@@ -113,9 +229,7 @@ class DashboardCharacterInfoDetailFragment(
                                                                                                         null
                                                                                                     )
                                                                                                 )
-                                                                                            }
-                                                                                            1 -> {
-                                                                                                filterResult.add(
+                                                                                                filterReverseResult.add(
                                                                                                     ItemInfo(
                                                                                                         null,
                                                                                                         null,
@@ -124,7 +238,7 @@ class DashboardCharacterInfoDetailFragment(
                                                                                                         null
                                                                                                     )
                                                                                                 )
-                                                                                                filterResult.add(
+                                                                                                filterReverseResult.add(
                                                                                                     ItemInfo(
                                                                                                         null,
                                                                                                         null,
@@ -133,51 +247,7 @@ class DashboardCharacterInfoDetailFragment(
                                                                                                         null
                                                                                                     )
                                                                                                 )
-                                                                                            }
-                                                                                            2 -> {
-                                                                                                filterResult.add(
-                                                                                                    ItemInfo(
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null
-                                                                                                    )
-                                                                                                )
-                                                                                            }
-                                                                                            else -> {
-                                                                                            }
-                                                                                        }
-                                                                                        _dashCharacterInfoDetailRV.adapter =
-                                                                                            DashboardCharacterInfoDetailAdapter(
-                                                                                                filterResult,
-                                                                                                listener
-                                                                                            )
-                                                                                    }
-                                                                                    1 -> {
-                                                                                        val filterResult =
-                                                                                            _statusUserCharacterInventoryItem.value.data.filter { itemInfo -> itemInfo.itemType == "hair" } as ArrayList<ItemInfo>
-                                                                                        when (filterResult.size) {
-                                                                                            0 -> {
-                                                                                                filterResult.add(
-                                                                                                    ItemInfo(
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null
-                                                                                                    )
-                                                                                                )
-                                                                                                filterResult.add(
-                                                                                                    ItemInfo(
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null,
-                                                                                                        null
-                                                                                                    )
-                                                                                                )
-                                                                                                filterResult.add(
+                                                                                                filterReverseResult.add(
                                                                                                     ItemInfo(
                                                                                                         null,
                                                                                                         null,
@@ -206,9 +276,36 @@ class DashboardCharacterInfoDetailFragment(
                                                                                                         null
                                                                                                     )
                                                                                                 )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
                                                                                             }
                                                                                             2 -> {
                                                                                                 filterResult.add(
+                                                                                                    ItemInfo(
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null,
+                                                                                                        null
+                                                                                                    )
+                                                                                                )
+                                                                                                filterReverseResult.add(
                                                                                                     ItemInfo(
                                                                                                         null,
                                                                                                         null,
@@ -224,6 +321,7 @@ class DashboardCharacterInfoDetailFragment(
                                                                                         _dashCharacterInfoDetailRV.adapter =
                                                                                             DashboardCharacterInfoDetailAdapter(
                                                                                                 filterResult,
+                                                                                                filterReverseResult,
                                                                                                 listener
                                                                                             )
                                                                                     }
@@ -233,6 +331,8 @@ class DashboardCharacterInfoDetailFragment(
                                                                                 val adapter =
                                                                                     _dashCharacterInfoDetailRV.adapter as DashboardCharacterInfoDetailAdapter
                                                                                 val initData =
+                                                                                    mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+                                                                                val initReverseData =
                                                                                     mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
                                                                                 adapter.getData()
                                                                                     .forEach { (_dataIndex1, _dataElement1) ->
@@ -253,15 +353,41 @@ class DashboardCharacterInfoDetailFragment(
                                                                                             }
                                                                                         }
                                                                                     }
+                                                                                adapter.getReverseData()
+                                                                                    .forEach { (_dataIndex1, _dataElement1) ->
+                                                                                        _userCharacterEquipStatusResponse.value.data.forEachIndexed { _dataIndex2, _dataElement2 ->
+                                                                                            if (_dataElement1.second.itemId.toString() == _dataElement2.itemId.toString() &&
+                                                                                                _dataElement1.second.itemType == _dataElement2.itemType &&
+                                                                                                _dataElement1.second.itemType == (if (position == 0) {
+                                                                                                    "hair"
+                                                                                                } else {
+                                                                                                    "face"
+                                                                                                })
+                                                                                            ) {
+                                                                                                initReverseData[_dataIndex1] =
+                                                                                                    Pair(
+                                                                                                        true,
+                                                                                                        _dataElement1.second
+                                                                                                    )
+                                                                                            }
+                                                                                        }
+                                                                                    }
                                                                                 if (initData.filter { _initData -> !((_initData.value.second.itemType == "face") || (_initData.value.second.itemType == "hair")) }
                                                                                         .isNullOrEmpty()) {
-                                                                                    adapter.setData(
-                                                                                        initData
-                                                                                    )
-                                                                                    listener.onItemClick(
-                                                                                        adapter.getData(),
-                                                                                        true
-                                                                                    )
+                                                                                    if (initReverseData.filter { _initReverseData -> !((_initReverseData.value.second.itemType == "face") || (_initReverseData.value.second.itemType == "hair")) }
+                                                                                            .isNullOrEmpty()) {
+                                                                                        adapter.setData(
+                                                                                            initData
+                                                                                        )
+                                                                                        adapter.setReverseData(
+                                                                                            initReverseData
+                                                                                        )
+                                                                                        listener.onItemClick(
+                                                                                            adapter.getData(),
+                                                                                            true,
+                                                                                            adapter.getReverseData()
+                                                                                        )
+                                                                                    }
                                                                                 }
                                                                             }
                                                                         }
@@ -328,7 +454,7 @@ class DashboardCharacterInfoDetailFragment(
                 }
             }
         })
-        viewModel.getDash()
+        viewModel.getUser()
         binding.dashCharacterInfoInitLayout.setOnClickListener { _dashCharacterInfoInitLayout ->
             initInventory()
         }
@@ -381,7 +507,8 @@ class DashboardCharacterInfoDetailFragment(
                                                             )
                                                             listener.onItemClick(
                                                                 adapter.getData(),
-                                                                true
+                                                                true,
+                                                                adapter.getReverseData()
                                                             )
                                                         }
                                                     }
@@ -453,7 +580,7 @@ class DashboardCharacterInfoDetailFragment(
         }
     }
 
-    override fun getViewModel() = DashboardCharacterInfoViewModel::class.java
+    override fun getViewModel() = DashboardCharacterInfoDetailViewModel::class.java
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,

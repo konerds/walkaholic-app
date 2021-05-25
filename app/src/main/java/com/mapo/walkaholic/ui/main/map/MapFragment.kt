@@ -18,6 +18,7 @@ import com.mapo.walkaholic.databinding.FragmentMapBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
@@ -110,18 +111,17 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     override fun onMapReady(naverMap: NaverMap) {
         this.mMap = naverMap
         mMap.locationSource = locationSource
-        //naverMap.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(LatLng(35.231574, 129.084433), 12.0)))
+        mMap.moveCamera(CameraUpdate.toCameraPosition(CameraPosition(LatLng(35.231574, 129.084433), 12.0)))
         mMap.locationTrackingMode = LocationTrackingMode.Follow
         mMap.uiSettings.isLocationButtonEnabled = true
         mMap.uiSettings.logoGravity = Gravity.TOP + Gravity.RIGHT
         mMap.uiSettings.setLogoMargin(80, 80, 80, 80)
         mMap.minZoom = 5.0
         mMap.maxZoom = 18.0
-        //naverMap.extent = LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0))
-        viewModel.init(mMap)
-        mMap.addOnCameraIdleListener {
+        mMap.extent = LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0))
+        /*mMap.addOnCameraIdleListener {
             setupDataOnMap(mMap)
-        }
+        }*/
         mMap.addOnCameraChangeListener { reason, animated ->
         }
         mMap.setOnMapClickListener { point, coord ->

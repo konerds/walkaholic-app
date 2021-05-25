@@ -10,13 +10,16 @@ import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotCli
 
 class DashboardCharacterInfoDetailAdapter(
     private var arrayListItemInfo: ArrayList<ItemInfo>,
+    private var arrayListReverseItemInfo: ArrayList<ItemInfo>,
     private val listener: CharacterInventorySlotClickListener
 ) : RecyclerView.Adapter<DashboardCharacterInfoDetailAdapter.DashboardCharacterInfoDetailViewHolder>() {
 
     private val selectedSlotInventoryMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
+    private val selectedReverseSlotInventoryMap = mutableMapOf<Int, Pair<Boolean, ItemInfo>>()
 
     init {
         clearSelectedItem()
+        clearSelectedReverseItem()
     }
 
     inner class DashboardCharacterInfoDetailViewHolder(
@@ -61,7 +64,7 @@ class DashboardCharacterInfoDetailAdapter(
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemInventoryLayout.setOnClickListener {
                 toggleItemSelected(position)
-                listener.onItemClick(selectedSlotInventoryMap, false)
+                listener.onItemClick(selectedSlotInventoryMap, false, selectedReverseSlotInventoryMap)
             }
             holder.binding.itemInventoryIvDiscard.setOnClickListener {
                 arrayListItemInfo[position].itemId?.let { _itemId ->
@@ -105,12 +108,30 @@ class DashboardCharacterInfoDetailAdapter(
         }
     }
 
+    private fun clearSelectedReverseItem() {
+        for (i in 0 until arrayListReverseItemInfo.size) {
+            selectedReverseSlotInventoryMap[i] = Pair(false, arrayListReverseItemInfo[i])
+        }
+    }
+
     fun getData() = selectedSlotInventoryMap
+
+    fun getReverseData(): MutableMap<Int, Pair<Boolean, ItemInfo>> {
+        return selectedReverseSlotInventoryMap
+    }
 
     fun setData(selectedStatusEquip: MutableMap<Int, Pair<Boolean, ItemInfo>>) {
         for (i in 0 until arrayListItemInfo.size) {
             if (selectedStatusEquip[i]?.second?.itemType != null && selectedStatusEquip[i]?.second?.itemId != null) {
                 selectedSlotInventoryMap[i] = selectedStatusEquip[i] as Pair<Boolean, ItemInfo>
+            }
+        }
+        notifyDataSetChanged()
+    }
+    fun setReverseData(selectedReverseStatusEquip: MutableMap<Int, Pair<Boolean, ItemInfo>>) {
+        for (i in 0 until arrayListReverseItemInfo.size) {
+            if (selectedReverseStatusEquip[i]?.second?.itemType != null && selectedReverseStatusEquip[i]?.second?.itemId != null) {
+                selectedReverseSlotInventoryMap[i] = selectedReverseStatusEquip[i] as Pair<Boolean, ItemInfo>
             }
         }
         notifyDataSetChanged()

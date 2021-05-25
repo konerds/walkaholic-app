@@ -1,5 +1,7 @@
 package com.mapo.walkaholic.data.repository
 
+import androidx.lifecycle.viewModelScope
+import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
@@ -11,6 +13,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.naver.maps.map.NaverMap
+import kotlinx.coroutines.launch
 import retrofit2.http.Body
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
@@ -47,8 +50,23 @@ class MainRepository(
 
     fun getNaverMap() = this.mMap
 
-    suspend fun getUser(userId: Long) = safeApiCall {
-        api.getUser(userId.toString())
+    suspend fun getUser() = safeApiCall {
+        var userId: Long? = null
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+            } else {
+                if (tokenInfo != null) {
+                    userId = tokenInfo.id
+                }
+            }
+        }
+        api.getUser(
+            if (userId == null) {
+                ""
+            } else {
+                userId.toString()
+            }
+        )
     }
 
     suspend fun getUserCharacterFilename(userId: Long) = safeApiCall {
@@ -64,7 +82,6 @@ class MainRepository(
         faceItemId: String,
         headItemId: String
     ) = safeApiCall {
-
         api.getUserCharacterPreviewFilename(
             userId.toString(),
             if (faceItemId.isEmpty()) {
@@ -189,7 +206,7 @@ class MainRepository(
     suspend fun equipItem(userId: Long, faceItemId: Int?, hairItemId: Int?) = safeApiCall {
         api.equipItem(
             userId.toString(),
-            EquipItemRequestBody(faceItemId, hairItemId)
+            EquipItemRequestBody(faceItemId ?: 0, hairItemId ?: 0)
         )
     }
 

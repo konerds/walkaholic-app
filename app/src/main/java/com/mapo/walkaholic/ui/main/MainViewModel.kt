@@ -22,15 +22,13 @@ class MainViewModel(
     }
 
     fun getUser() {
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            viewModelScope.launch {
-                if (error != null) {
-                } else {
-                    _userResponse.value = tokenInfo?.id?.let { mainRepository.getUser(it) }
-                }
-            }
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            _userResponse.value = mainRepository.getUser()
+            progressBarVisibility.set(false)
         }
     }
+
 
     fun toAnyToString(any: Any) = any.toString().trim()
 }

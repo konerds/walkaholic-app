@@ -1,4 +1,4 @@
-package com.mapo.walkaholic.ui.main.dashboard.character.shop
+package com.mapo.walkaholic.ui.main.dashboard.character.info
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class DashboardCharacterShopViewModel(
+class DashboardCharacterInfoDetailViewModel(
         private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {}
@@ -26,12 +26,15 @@ class DashboardCharacterShopViewModel(
     private val _userCharacterEquipStatusResponse: MutableLiveData<Resource<UserCharacterEquipStatusResponse>> = MutableLiveData()
     val userCharacterEquipStatusResponse: LiveData<Resource<UserCharacterEquipStatusResponse>>
         get() = _userCharacterEquipStatusResponse
-    private val _statusShopSaleItemResponse: MutableLiveData<Resource<ShopSaleItemStatusResponse>> = MutableLiveData()
-    val statusShopSaleItemResponse: LiveData<Resource<ShopSaleItemStatusResponse>>
-        get() = _statusShopSaleItemResponse
-    private val _buyItemResponse: MutableLiveData<Resource<BuyItemResponse>> = MutableLiveData()
-    val buyItemResponse: LiveData<Resource<BuyItemResponse>>
-        get() = _buyItemResponse
+    private val _statusUserCharacterInventoryItemResponse: MutableLiveData<Resource<UserInventoryItemStatusResponse>> = MutableLiveData()
+    val statusUserCharacterInventoryItemResponse: LiveData<Resource<UserInventoryItemStatusResponse>>
+        get() = _statusUserCharacterInventoryItemResponse
+    private val _equipItemResponse : MutableLiveData<Resource<EquipItemResponse>> = MutableLiveData()
+    val equipItemResponse: LiveData<Resource<EquipItemResponse>>
+        get() = _equipItemResponse
+    private val _deleteItemResponse : MutableLiveData<Resource<DeleteItemResponse>> = MutableLiveData()
+    val deleteItemResponse: LiveData<Resource<DeleteItemResponse>>
+        get() = _deleteItemResponse
 
     fun getUser() {
         progressBarVisibility.set(true)
@@ -47,12 +50,6 @@ class DashboardCharacterShopViewModel(
         }
     }
 
-    fun getStatusShopSaleItem() {
-        viewModelScope.launch {
-            _statusShopSaleItemResponse.value = mainRepository.getStatusShopSaleItem()
-        }
-    }
-
     fun getUserCharacterEquipStatus(userId: Long) {
         viewModelScope.launch {
             _userCharacterEquipStatusResponse.value = mainRepository.getUserCharacterEquipStatus(userId)
@@ -65,9 +62,21 @@ class DashboardCharacterShopViewModel(
         }
     }
 
-    fun buyItem(userId: Long, arrayListItemId: ArrayList<Int?>) {
+    fun getStatusUserCharacterInventoryItem(userId : Long) {
         viewModelScope.launch {
-            _buyItemResponse.value = mainRepository.buyItem(userId, arrayListItemId)
+            _statusUserCharacterInventoryItemResponse.value = mainRepository.getStatusUserCharacterInventoryItem(userId)
+        }
+    }
+
+    fun equipItem(userId: Long, faceItemId: Int?, hairItemId: Int?) {
+        viewModelScope.launch {
+            _equipItemResponse.value = mainRepository.equipItem(userId, faceItemId, hairItemId)
+        }
+    }
+
+    fun deleteItem(userId: Long, itemId: String) {
+        viewModelScope.launch {
+            _deleteItemResponse.value = mainRepository.deleteItem(userId, itemId)
         }
     }
 

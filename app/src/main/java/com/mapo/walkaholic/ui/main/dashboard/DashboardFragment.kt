@@ -526,7 +526,7 @@ class DashboardFragment :
                     }
                 }
             })
-        viewModel.getDash()
+        viewModel.getUser()
         viewModel.getFilenameThemeCategoryImage()
         viewModel.getSGISAccessToken()
         val tmp: GridXy = convertGRID_GPS(

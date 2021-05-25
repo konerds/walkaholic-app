@@ -10,7 +10,7 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class DashboardCharacterShopViewModel(
+class DashboardCharacterShopDetailViewModel(
         private val mainRepository: MainRepository
 ) : BaseViewModel(mainRepository) {
     override fun init() {}
