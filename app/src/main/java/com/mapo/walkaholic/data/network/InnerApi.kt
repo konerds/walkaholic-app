@@ -119,11 +119,11 @@ interface InnerApi {
         @Field("condition_id") conditionId: String,
     ): MissionProgressResponse
 
-    @FormUrlEncoded
-    @POST("info/ranking")
-    suspend fun getRanking(
-        @Field("ranking_id") ranking_id: String
-    ): RankingResponse
+    @GET("user/rank/accumulate")
+    suspend fun getAccumulateRanking(): RankingAccumulateResponse
+
+    @GET("user/rank/month")
+    suspend fun getMonthRanking(): RankingMonthResponse
 
     @FormUrlEncoded
     @POST("info/favoritePath")

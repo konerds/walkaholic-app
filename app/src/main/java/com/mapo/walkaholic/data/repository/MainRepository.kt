@@ -250,14 +250,12 @@ class MainRepository(
         api.getMissionProgress(missionID, conditionId)
     }
 
-    suspend fun getRanking(position: Int) = safeApiCall {
-        api.getRanking(
-            when (position) {
-                0 -> "00"
-                1 -> "01"
-                else -> ""
-            }
-        )
+    suspend fun getAccumulateRanking() = safeApiCall {
+        api.getAccumulateRanking()
+    }
+
+    suspend fun getMonthRanking() = safeApiCall {
+        api.getMonthRanking()
     }
 
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {

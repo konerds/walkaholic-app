@@ -14,7 +14,9 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailChallengeRankingBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.theme.ThemeDetailAdapter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -50,17 +52,29 @@ class ChallengeDetailRankingFragment(
         dummyArrayList.add(dummyMission7)
         dummyArrayList.add(dummyMission8)
 
-        viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { _rankingResponse ->
+        viewModel.monthRankingResponse.observe(viewLifecycleOwner, Observer { _monthRankingResponse ->
             binding.challengeRVRanking.also { _challengeRVRanking ->
-                val layoutManger = LinearLayoutManager(requireContext())
-                layoutManger.orientation = LinearLayoutManager.VERTICAL
-                _challengeRVRanking.layoutManager = layoutManger
-                _challengeRVRanking.setHasFixedSize(true)
-                when (_rankingResponse) {
+                when (_monthRankingResponse) {
                     is Resource.Success -> {
-                        if (!_rankingResponse.value.error) {
-                            _challengeRVRanking.adapter =
-                                _rankingResponse.value.ranking?.let { _ranking -> ChallengeDetailRankingAdapter(_ranking) }
+                        when (_monthRankingResponse.value.code) {
+                            "200" -> {
+                                binding.challengeRVRanking.also { _monthRankingRV ->
+                                    _monthRankingRV.layoutManager = LinearLayoutManager(requireContext())
+                                    _monthRankingRV.setHasFixedSize(true)
+                                    _monthRankingRV.adapter =
+                                        ChallengeDetailRankingAdapter(_monthRankingResponse.value.data)
+                                }
+                            }
+                            else -> {
+                                confirmDialog(
+                                    _monthRankingResponse.value.message,
+                                    {
+                                        viewModel.getMonthRanking()
+                                    },
+                                    "재시도"
+                                )
+                            }
+                            }
                         }
                     }
                     is Resource.Loading -> {
@@ -68,7 +82,7 @@ class ChallengeDetailRankingFragment(
                     }
                     is Resource.Failure -> {
                         // Network Error
-                        handleApiError(_rankingResponse)
+                        handleApiError(_monthRankingResponse) { viewModel.getMonthRanking() }
                     }
                 }
             }

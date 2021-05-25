@@ -149,14 +149,16 @@ class ChallengeDetailFragment(
                                                             0 -> {
                                                                 binding.challengeRankingTvIntro1.text =
                                                                     "${_userResponse.value.data.first().nickName}님, 월별랭킹"
-                                                                // binding. ~~ 순위
+                                                                //레벨
+                                                                // binding.challengeRankingTvRankNum.text = "${_userResponse.value.data.first().nickName}"
                                                                 binding.challengeRankingTvIntro3.text =
                                                                     "월별랭킹은 매월 1일 자정에 갱신되어요"
                                                             }
                                                             1 -> {
                                                                 binding.challengeRankingTvIntro1.text =
                                                                     "${_userResponse.value.data.first().nickName}님, 누적랭킹"
-                                                                // binding. ~~ 순위
+                                                                //레벨
+                                                                // binding.challengeRankingTvRankNum.text = "${_userResponse.value.data.first().nickName}"
                                                                 binding.challengeRankingTvIntro3.text =
                                                                     "서비스 시작일(2021년 05월 17일)부터 현재까지"
                                                             }
