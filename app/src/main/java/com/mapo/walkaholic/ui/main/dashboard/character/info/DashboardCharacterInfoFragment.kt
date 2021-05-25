@@ -29,6 +29,7 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardCharacterInfoBinding
+import com.mapo.walkaholic.ui.alertDialog
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.base.EventObserver
 import com.mapo.walkaholic.ui.base.ViewModelFactory
@@ -569,31 +570,34 @@ class DashboardCharacterInfoFragment :
         })
     }
 
-    override fun discardItem(itemId: Int) {
-        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
-            when (_userResponse) {
-                is Resource.Success -> {
-                    when (_userResponse.value.code) {
-                        "200" -> {
-                            viewModel.deleteItem(_userResponse.value.data.first().id, itemId.toString())
-                        }
-                        "400" -> {
-                            // Error
-                        }
-                        else -> {
-                            // Error
+    override fun discardItem(itemId: Int, itemName: String) {
+        val onClickYes: () -> Unit? = {
+            viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+                when (_userResponse) {
+                    is Resource.Success -> {
+                        when (_userResponse.value.code) {
+                            "200" -> {
+                                viewModel.deleteItem(_userResponse.value.data.first().id, itemId.toString())
+                            }
+                            "400" -> {
+                                // Error
+                            }
+                            else -> {
+                                // Error
+                            }
                         }
                     }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        // Network Error
+                        handleApiError(_userResponse)
+                    }
                 }
-                is Resource.Loading -> {
-                    // Loading
-                }
-                is Resource.Failure -> {
-                    // Network Error
-                    handleApiError(_userResponse)
-                }
-            }
-        })
+            })
+        }
+        alertDialog("$itemName 아이템을 버리시겠습니까?", null, onClickYes as (() -> Unit))
     }
 
     override fun onAttach(context: Context) {

@@ -64,13 +64,20 @@ class DashboardCharacterInfoDetailAdapter(
             holder.setItemInfo(arrayListItemInfo[position])
             holder.binding.itemInventoryLayout.setOnClickListener {
                 toggleItemSelected(position)
-                listener.onItemClick(selectedSlotInventoryMap, false, selectedReverseSlotInventoryMap)
+                listener.onItemClick(
+                    selectedSlotInventoryMap,
+                    false,
+                    selectedReverseSlotInventoryMap
+                )
             }
             holder.binding.itemInventoryIvDiscard.setOnClickListener {
                 arrayListItemInfo[position].itemId?.let { _itemId ->
-                    listener.discardItem(
-                        _itemId
-                    )
+                    arrayListItemInfo[position].itemName?.let { _itemName ->
+                        listener.discardItem(
+                            _itemId,
+                            _itemName
+                        )
+                    }
                 }
             }
         }
@@ -128,10 +135,12 @@ class DashboardCharacterInfoDetailAdapter(
         }
         notifyDataSetChanged()
     }
+
     fun setReverseData(selectedReverseStatusEquip: MutableMap<Int, Pair<Boolean, ItemInfo>>) {
         for (i in 0 until arrayListReverseItemInfo.size) {
             if (selectedReverseStatusEquip[i]?.second?.itemType != null && selectedReverseStatusEquip[i]?.second?.itemId != null) {
-                selectedReverseSlotInventoryMap[i] = selectedReverseStatusEquip[i] as Pair<Boolean, ItemInfo>
+                selectedReverseSlotInventoryMap[i] =
+                    selectedReverseStatusEquip[i] as Pair<Boolean, ItemInfo>
             }
         }
         notifyDataSetChanged()
