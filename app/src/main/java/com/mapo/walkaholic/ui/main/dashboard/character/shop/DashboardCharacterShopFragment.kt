@@ -72,6 +72,7 @@ class DashboardCharacterShopFragment :
             }
         }.attach()
         binding.dashCharacterShopVP.isUserInputEnabled = false
+        viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
                 is Resource.Success -> {
@@ -189,9 +190,47 @@ class DashboardCharacterShopFragment :
                                                                                                             }
                                                                                                             "400" -> {
                                                                                                                 // Error
+                                                                                                                handleApiError(
+                                                                                                                    _userCharacterPreviewFilenameResponse as Resource.Failure
+                                                                                                                ) {
+                                                                                                                    viewModel!!.getUserCharacterPreviewFilename(
+                                                                                                                        _userResponse.value.data.first().id,
+                                                                                                                        if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                                                            userCharacterEquipStatus["face"]
+                                                                                                                                .toString()
+                                                                                                                        } else {
+                                                                                                                            ""
+                                                                                                                        },
+                                                                                                                        if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                                                            userCharacterEquipStatus["hair"]
+                                                                                                                                .toString()
+                                                                                                                        } else {
+                                                                                                                            ""
+                                                                                                                        }
+                                                                                                                    )
+                                                                                                                }
                                                                                                             }
                                                                                                             else -> {
                                                                                                                 // Error
+                                                                                                                handleApiError(
+                                                                                                                    _userCharacterPreviewFilenameResponse as Resource.Failure
+                                                                                                                ) {
+                                                                                                                    viewModel!!.getUserCharacterPreviewFilename(
+                                                                                                                        _userResponse.value.data.first().id,
+                                                                                                                        if (!userCharacterEquipStatus["face"].isNullOrEmpty()) {
+                                                                                                                            userCharacterEquipStatus["face"]
+                                                                                                                                .toString()
+                                                                                                                        } else {
+                                                                                                                            ""
+                                                                                                                        },
+                                                                                                                        if (!userCharacterEquipStatus["hair"].isNullOrEmpty()) {
+                                                                                                                            userCharacterEquipStatus["hair"]
+                                                                                                                                .toString()
+                                                                                                                        } else {
+                                                                                                                            ""
+                                                                                                                        }
+                                                                                                                    )
+                                                                                                                }
                                                                                                             }
                                                                                                         }
                                                                                                     }
@@ -199,6 +238,7 @@ class DashboardCharacterShopFragment :
                                                                                                         // Loading
                                                                                                     }
                                                                                                     is Resource.Failure -> {
+                                                                                                        // Network Error
                                                                                                         handleApiError(
                                                                                                             _userCharacterPreviewFilenameResponse
                                                                                                         ) {
@@ -227,20 +267,16 @@ class DashboardCharacterShopFragment :
                                                                                 }
                                                                             }
                                                                             "400" -> {
-                                                                                Toast.makeText(
-                                                                                    requireContext(),
-                                                                                    getString(R.string.err_user),
-                                                                                    Toast.LENGTH_SHORT
-                                                                                ).show()
-                                                                                //logout()
+                                                                                // Error
+                                                                                handleApiError(
+                                                                                    _expInformationResponse as Resource.Failure
+                                                                                ) { viewModel!!.getExpInformation(_userResponse.value.data.first().id) }
                                                                             }
                                                                             else -> {
-                                                                                Toast.makeText(
-                                                                                    requireContext(),
-                                                                                    getString(R.string.err_user),
-                                                                                    Toast.LENGTH_SHORT
-                                                                                ).show()
-                                                                                //logout()
+                                                                                // Error
+                                                                                handleApiError(
+                                                                                    _expInformationResponse as Resource.Failure
+                                                                                ) { viewModel!!.getExpInformation(_userResponse.value.data.first().id) }
                                                                             }
                                                                         }
                                                                     }
@@ -248,13 +284,7 @@ class DashboardCharacterShopFragment :
                                                                         // Network Error
                                                                         handleApiError(
                                                                             _expInformationResponse
-                                                                        )
-                                                                        Toast.makeText(
-                                                                            requireContext(),
-                                                                            getString(R.string.err_user),
-                                                                            Toast.LENGTH_SHORT
-                                                                        ).show()
-                                                                        //logout()
+                                                                        ) { viewModel!!.getExpInformation(_userResponse.value.data.first().id) }
                                                                     }
                                                                 }
                                                             })
@@ -262,9 +292,19 @@ class DashboardCharacterShopFragment :
                                                 }
                                                 "400" -> {
                                                     // Error
+                                                    handleApiError(_userCharacterEquipStatusResponse as Resource.Failure) {
+                                                        viewModel.getUserCharacterEquipStatus(
+                                                            _userResponse.value.data.first().id
+                                                        )
+                                                    }
                                                 }
                                                 else -> {
                                                     // Error
+                                                    handleApiError(_userCharacterEquipStatusResponse as Resource.Failure) {
+                                                        viewModel.getUserCharacterEquipStatus(
+                                                            _userResponse.value.data.first().id
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
@@ -287,7 +327,7 @@ class DashboardCharacterShopFragment :
                                     .sum() + selectedSlotShopMapHair.filter { it.value.first }
                                     .map { it.value.second.itemPrice!!.toInt() }.sum()
                                 if (totalPrice <= 0) {
-                                    confirmDialog("구매하실 아이템을 선택하세요", null)
+                                    confirmDialog("구매하실 아이템을 선택하세요", null, null)
                                 } else {
                                     val onClickConfirm: () -> Unit? = {
                                         val filteredSelectedFace =
@@ -297,7 +337,7 @@ class DashboardCharacterShopFragment :
                                         if (filteredSelectedFace.isNullOrEmpty()
                                             && filteredSelectedHair.isNullOrEmpty()
                                         ) {
-                                            confirmDialog("구매하실 아이템을 선택하세요", null)
+                                            confirmDialog("구매하실 아이템을 선택하세요", null, null)
                                         } else {
                                             val arrayListSelectedItemId = arrayListOf<Int?>()
                                             filteredSelectedFace.forEach { (_selectedSlotShopMapFaceIndex, _selectedSlotShopMapFaceElement) ->
@@ -318,6 +358,60 @@ class DashboardCharacterShopFragment :
                                                 _userResponse.value.data.first().id,
                                                 arrayListSelectedItemId
                                             )
+                                            viewModel.buyItemResponse.observe(
+                                                viewLifecycleOwner,
+                                                Observer { _buyItemResponse ->
+                                                    when (_buyItemResponse) {
+                                                        is Resource.Success -> {
+                                                            val stringAdditionalMessage =
+                                                                if (!_buyItemResponse.value.data.isNullOrEmpty() && _buyItemResponse.value.data.size != 0) {
+                                                                    "\n" + _buyItemResponse.value.data.first()
+                                                                        .toString()
+                                                                } else {
+                                                                    ""
+                                                                }
+                                                            when (_buyItemResponse.value.code) {
+                                                                "200" -> {
+                                                                    confirmDialog(
+                                                                        _buyItemResponse.value.message + stringAdditionalMessage,
+                                                                        null,
+                                                                        null
+                                                                    )
+                                                                    viewModel.getUser()
+                                                                }
+                                                                "400" -> {
+                                                                    // Error
+                                                                    handleApiError(_buyItemResponse as Resource.Failure) {
+                                                                        viewModel.buyItem(
+                                                                            _userResponse.value.data.first().id,
+                                                                            arrayListSelectedItemId
+                                                                        )
+                                                                    }
+                                                                }
+                                                                else -> {
+                                                                    // Error
+                                                                    handleApiError(_buyItemResponse as Resource.Failure) {
+                                                                        viewModel.buyItem(
+                                                                            _userResponse.value.data.first().id,
+                                                                            arrayListSelectedItemId
+                                                                        )
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        is Resource.Loading -> {
+                                                            // Loading
+                                                        }
+                                                        is Resource.Failure -> {
+                                                            handleApiError(_buyItemResponse) {
+                                                                viewModel.buyItem(
+                                                                    _userResponse.value.data.first().id,
+                                                                    arrayListSelectedItemId
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                })
                                         }
                                     }
                                     alertDialog(
@@ -329,20 +423,12 @@ class DashboardCharacterShopFragment :
                             }
                         }
                         "400" -> {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                             //logout()
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
                         else -> {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.err_user),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
                             //logout()
                             //requireActivity().startNewActivity(AuthActivity::class.java)
                         }
@@ -351,61 +437,12 @@ class DashboardCharacterShopFragment :
                 is Resource.Loading -> {
                 }
                 is Resource.Failure -> {
-                    handleApiError(_userResponse)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.err_user),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    handleApiError(_userResponse) { viewModel.getUser() }
                     //logout()
                     //requireActivity().startNewActivity(AuthActivity::class.java)
                 }
             }
         })
-        viewModel.buyItemResponse.observe(
-            viewLifecycleOwner,
-            Observer { _buyItemResponse ->
-                when (_buyItemResponse) {
-                    is Resource.Success -> {
-                        val stringAdditionalMessage =
-                            if (!_buyItemResponse.value.data.isNullOrEmpty() && _buyItemResponse.value.data.size != 0) {
-                                "\n" + _buyItemResponse.value.data.first().toString()
-                            } else {
-                                ""
-                            }
-                        when (_buyItemResponse.value.code) {
-                            "200" -> {
-                                confirmDialog(
-                                    _buyItemResponse.value.message + stringAdditionalMessage,
-                                    null
-                                )
-                                viewModel.getUser()
-                            }
-                            "400" -> {
-                                // Error
-                                confirmDialog(
-                                    _buyItemResponse.value.message + stringAdditionalMessage,
-                                    null
-                                )
-                            }
-                            else -> {
-                                // Error
-                                confirmDialog(
-                                    _buyItemResponse.value.message + stringAdditionalMessage,
-                                    null
-                                )
-                            }
-                        }
-                    }
-                    is Resource.Loading -> {
-                        // Loading
-                    }
-                    is Resource.Failure -> {
-                        handleApiError(_buyItemResponse)
-                    }
-                }
-            })
-        viewModel.getUser()
         binding.dashCharacterShopIvInfo.setOnClickListener {
             val navDirection: NavDirections? =
                 DashboardCharacterShopFragmentDirections.actionActionBnvDashCharacterShopToActionBnvDashCharacterInfo()
