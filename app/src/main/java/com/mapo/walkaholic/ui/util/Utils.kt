@@ -68,60 +68,14 @@ fun View.toastMessage(message: String) {
 
 fun Fragment.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null) {
     requireActivity().confirmDialog(message, onClickConfirm)
-    /*val confirmDialogLayout = LayoutInflater.from(requireContext())
-        .inflate(R.layout.dialog_confirm, null, false)
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
-        confirmDialogLayout
-    ).create()
-    materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
-        confirmDialogLayout.dialogConfirmTv1.text = message
-        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-            _confirmDialog.dismiss()
-            if (onClickConfirm != null) {
-                onClickConfirm()
-            }
-        }
-    }
-    materialAlertDialogBuilder.show()*/
 }
 
 fun Fragment.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> Unit)) {
     requireActivity().confirmDialog(message, onClickConfirm)
-    /*val confirmDialogLayout = LayoutInflater.from(requireContext())
-        .inflate(R.layout.dialog_confirm, null, false)
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
-        confirmDialogLayout
-    ).setCancelable(false).create()
-    materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
-        confirmDialogLayout.dialogConfirmTv1.text = message
-        confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-            onClickConfirm()
-        }
-    }
-    materialAlertDialogBuilder.show()*/
 }
 
 fun Fragment.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onClickYes: () -> Unit) {
     requireActivity().alertDialog(message, onClickNo, onClickYes)
-    /*val alertDialogLayout = LayoutInflater.from(requireContext())
-        .inflate(R.layout.dialog_alert, null, false)
-    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext()).setView(
-        alertDialogLayout
-    ).create()
-    materialAlertDialogBuilder.setOnShowListener { _alertDialog ->
-        alertDialogLayout.dialogAlertTv1.text = message
-        alertDialogLayout.dialogAlertTvNo.setOnClickListener {
-            _alertDialog.dismiss()
-            if (onClickNo != null) {
-                onClickNo()
-            }
-        }
-        alertDialogLayout.dialogAlertTvYes.setOnClickListener {
-            _alertDialog.dismiss()
-            onClickYes()
-        }
-    }
-    materialAlertDialogBuilder.show()*/
 }
 
 
@@ -134,10 +88,10 @@ fun Activity.confirmDialog(message: String, onClickConfirm: (() -> Unit)? = null
     materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
         confirmDialogLayout.dialogConfirmTv1.text = message
         confirmDialogLayout.dialogConfirmTv2.setOnClickListener {
-            _confirmDialog.dismiss()
             if (onClickConfirm != null) {
                 onClickConfirm()
             }
+            _confirmDialog.dismiss()
         }
     }
     materialAlertDialogBuilder.show()
@@ -148,9 +102,7 @@ fun Activity.notCancelableConfirmDialog(message: String, onClickConfirm: (() -> 
         .inflate(R.layout.dialog_confirm, null, false)
     val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this).setView(
         confirmDialogLayout
-    ).setOnCancelListener {
-        onClickConfirm()
-    }.create()
+    ).setCancelable(false).create()
     materialAlertDialogBuilder.setCanceledOnTouchOutside(false)
     materialAlertDialogBuilder.setOnShowListener { _confirmDialog ->
         confirmDialogLayout.dialogConfirmTv2.text = "재시도"
@@ -172,10 +124,10 @@ fun Activity.alertDialog(message: String, onClickNo: (() -> Unit)? = null, onCli
     materialAlertDialogBuilder.setOnShowListener { _alertDialog ->
         alertDialogLayout.dialogAlertTv1.text = message
         alertDialogLayout.dialogAlertTvNo.setOnClickListener {
-            _alertDialog.dismiss()
             if (onClickNo != null) {
                 onClickNo()
             }
+            _alertDialog.dismiss()
         }
         alertDialogLayout.dialogAlertTvYes.setOnClickListener {
             _alertDialog.dismiss()
@@ -190,25 +142,6 @@ fun Fragment.handleApiError(
     failure: Resource.Failure, action: (() -> Unit)? = null
 ) {
     requireActivity().handleApiError(failure, action)
-    /*val error = failure.errorBody?.string().toString()
-    when {
-        failure.isNetworkError -> {
-            if (!checkNetworkState(requireView().context)) {
-                if (action != null) {
-                    notCancelableConfirmDialog("네트워크 연결을 확인해주세요\n${failure.errorBody?.string()}", action)
-                }
-            } else {
-                if (action != null) {
-                    notCancelableConfirmDialog("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", action)
-                }
-            }
-        }
-        else -> {
-            if (action != null) {
-                notCancelableConfirmDialog("API 서버와의 통신이 원활하지 않습니다\n${failure.errorBody?.string()}", action)
-            }
-        }
-    }*/
 }
 
 fun Activity.handleApiError(
