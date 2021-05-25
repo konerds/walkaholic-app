@@ -1,9 +1,11 @@
 package com.mapo.walkaholic.ui.main.challenge
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -13,6 +15,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -46,6 +49,21 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
 
             }
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                confirmDialog(getString(com.mapo.walkaholic.R.string.err_deny_prev), null, null)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     override fun getViewModel() = ChallengeViewModel::class.java

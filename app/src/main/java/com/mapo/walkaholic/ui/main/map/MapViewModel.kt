@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.data.model.Point
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.MapResponse
+import com.mapo.walkaholic.data.model.response.ThemeCourseResponse
 import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
@@ -24,6 +25,9 @@ class MapViewModel(
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
+    private val _themeCourseResponse: MutableLiveData<Resource<ThemeCourseResponse>> = MutableLiveData()
+    val themeCourseResponse: LiveData<Resource<ThemeCourseResponse>>
+        get() = _themeCourseResponse
 
     fun init(mMap: NaverMap) {
         this.mMap = mMap
@@ -34,8 +38,6 @@ class MapViewModel(
         get() = _mapResponse
 
     private val tempMarkerList = ArrayList<Marker>()
-
-    fun getIsWalk(isWalk: Boolean) = isWalk
 
     fun getUser() {
         progressBarVisibility.set(true)
@@ -87,5 +89,11 @@ class MapViewModel(
 
     fun getPoints() : LiveData<List<Point>> {
         return this.points
+    }
+
+    fun getThemeCourse(id : Int) {
+        viewModelScope.launch {
+            _themeCourseResponse.value = mainRepository.getThemeCourse(id)
+        }
     }
 }

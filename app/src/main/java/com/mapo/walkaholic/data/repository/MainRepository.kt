@@ -34,8 +34,8 @@ class MainRepository(
         private const val APIS_WEATHER_DATE_FORMAT = "yyyyMMdd"
         private const val APIS_WEATHER_TIME_FORMAT = "HHmm"
         private const val TIME_ZONE = "Asia/Seoul"
-        private const val SGIS_API_CONSUMER_KEY = "67ad057e051144d2a09a"
-        private const val SGIS_API_SECRET_KEY = "5b4ac1c4c89c4ad8bc41"
+        private const val SGIS_API_CONSUMER_KEY = "70ae3222d3e94dd5a9e5"
+        private const val SGIS_API_SECRET_KEY = "638a9b5ec41b40f2ba5a"
         private const val SGIS_EPSG_WGS = "4326"
         private const val SGIS_EPSG_BESSEL = "5181"
     }
@@ -234,6 +234,10 @@ class MainRepository(
                 else -> ""
             }
         )
+    }
+
+    suspend fun getThemeCourse(id : Int) = safeApiCall {
+        api.getThemeCourse(id.toString())
     }
 
     suspend fun getMissionCondition(position: Int) = safeApiCall {

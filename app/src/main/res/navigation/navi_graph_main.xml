@@ -107,7 +107,23 @@
     <fragment
         android:id="@+id/actionBnvTheme"
         android:name="com.mapo.walkaholic.ui.main.theme.ThemeFragment"
-        tools:layout="@layout/fragment_theme"></fragment>
+        tools:layout="@layout/fragment_theme">
+        <action
+            android:id="@+id/action_actionBnvTheme_to_actionBnvMap"
+            app:destination="@id/actionBnvMap"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="isWalk"
+                android:defaultValue="false"
+                app:argType="boolean" />
+            <argument
+                android:name="themeId"
+                app:argType="integer" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/actionBnvChallenge"
@@ -120,8 +136,19 @@
         tools:layout="@layout/fragment_map">
         <argument
             android:name="isWalk"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <argument
+            android:name="themeId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_actionBnvMap_to_actionBnvTheme"
+            app:destination="@id/actionBnvTheme"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -129,22 +156,5 @@
         android:name="com.mapo.walkaholic.ui.favoritepath.FavoritePathFragment"
         android:label="fragment_favorite_path"
         tools:layout="@layout/fragment_favorite_path" />
-    <fragment
-        android:id="@+id/themeDetailFragment"
-        android:name="com.mapo.walkaholic.ui.main.theme.ThemeDetailFragment"
-        android:label="ThemeDetailFragment" >
-        <action
-            android:id="@+id/action_themeDetailFragment_to_actionBnvMap"
-            app:destination="@id/actionBnvMap"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" >
-            <argument
-                android:name="isWalk"
-                app:argType="boolean"
-                android:defaultValue="false" />
-        </action>
-    </fragment>
 
 </navigation>

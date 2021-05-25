@@ -2,11 +2,13 @@ package com.mapo.walkaholic.ui.auth
 
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -202,6 +204,21 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
         binding.loginBtnTutorial.setOnClickListener {
             requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                confirmDialog(getString(com.mapo.walkaholic.R.string.err_deny_prev), null, null)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     override fun getViewModel() = LoginViewModel::class.java

@@ -80,7 +80,7 @@ class ThemeDetailFragment(
 
     override fun onItemClick(position: Int, themeItemInfo: Theme) {
         val navDirection: NavDirections? =
-            ThemeDetailFragmentDirections.actionThemeDetailFragmentToActionBnvMap()
+            ThemeFragmentDirections.actionActionBnvThemeToActionBnvMap(themeItemInfo.courseId)
         if (navDirection != null) {
             findNavController().navigate(navDirection)
         }

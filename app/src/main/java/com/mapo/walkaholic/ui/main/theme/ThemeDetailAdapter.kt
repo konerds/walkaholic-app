@@ -32,6 +32,9 @@ class ThemeDetailAdapter(
 
     override fun onBindViewHolder(holder: ItemThemeViewHolder, position: Int) {
         holder.setThemeItem(arrayListTheme[position])
+        holder.binding.itemThemeFL.setOnClickListener {
+            listener.onItemClick(position, arrayListTheme[position])
+        }
     }
 
     override fun getItemCount() = arrayListTheme.size

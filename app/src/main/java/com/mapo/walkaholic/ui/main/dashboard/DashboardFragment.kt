@@ -2,6 +2,7 @@ package com.mapo.walkaholic.ui.main.dashboard
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -12,6 +13,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -672,6 +674,21 @@ class DashboardFragment :
         theta *= sn
 
         return GridXy(floor(ra * sin(theta) + XO + 0.5), floor(ro - ra * cos(theta) + YO + 0.5))
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                confirmDialog(getString(com.mapo.walkaholic.R.string.err_deny_prev), null, null)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     override fun getViewModel() = DashboardViewModel::class.java
