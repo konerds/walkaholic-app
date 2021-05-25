@@ -50,13 +50,15 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
                         "200" -> {
                             binding.guideVp.adapter = GuideAdapter(_filenameGuideImageResponse.value.data)
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_filenameGuideImageResponse as Resource.Failure) { _filenameGuideImageResponse }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_filenameGuideImageResponse as Resource.Failure) { _filenameGuideImageResponse }
+                            confirmDialog(
+                                _filenameGuideImageResponse.value.message,
+                                {
+                                    viewModel.getFilenameGuideImage()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }

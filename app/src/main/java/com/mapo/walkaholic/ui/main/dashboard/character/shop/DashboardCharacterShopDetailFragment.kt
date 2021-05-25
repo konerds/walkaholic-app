@@ -14,6 +14,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterShopBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterShopSlotClickListener
 import kotlinx.coroutines.flow.first
@@ -48,13 +49,15 @@ class DashboardCharacterShopDetailFragment(
                                 }
                             }
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_statusShopSaleItemResponse as Resource.Failure) { viewModel.getStatusShopSaleItem() }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_statusShopSaleItemResponse as Resource.Failure) { viewModel.getStatusShopSaleItem() }
+                            confirmDialog(
+                                _statusShopSaleItemResponse.value.message,
+                                {
+                                    viewModel.getStatusShopSaleItem()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }

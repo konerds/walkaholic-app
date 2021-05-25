@@ -14,7 +14,10 @@ import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
+import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.activity_splashscreen.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SplashActivity :
     BaseActivity<SplashViewModel, ActivitySplashscreenBinding, SplashRepository>() {
@@ -76,13 +79,15 @@ class SplashActivity :
                                     })
                             }
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_responseSplash as Resource.Failure) { viewModel.getFilenameSplashImage() }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_responseSplash as Resource.Failure) { viewModel.getFilenameSplashImage() }
+                            confirmDialog(
+                                _responseSplash.value.message,
+                                {
+                                    viewModel.getFilenameSplashImage()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }

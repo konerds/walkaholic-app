@@ -27,9 +27,9 @@ class FavoritePathDetailFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val dummyMission1 =
-            Theme(0,"소나무 숲길", "소나무 숲길", "피톤치드", "강북구","90", "1.8")
+            Theme(0, "소나무 숲길", "소나무 숲길", "피톤치드", "강북구", "90", "1.8")
         val dummyMission2 =
-            Theme(0, "경의선 숲길", "경의선 숲길", "피톤치드", "마포구","90", "4.8")
+            Theme(0, "경의선 숲길", "경의선 숲길", "피톤치드", "마포구", "90", "4.8")
         val dummyArrayList: ArrayList<Theme> = ArrayList()
         dummyArrayList.add(dummyMission1)
         dummyArrayList.add(dummyMission2)
@@ -39,51 +39,53 @@ class FavoritePathDetailFragment(
             when (_userResponse) {
                 is Resource.Success -> {
                     //userid와 position으로 해당 종류에 유저가 갖고 있는 목록 조회
-                    viewModel.getFavoritePath(_userResponse.value.data.first().id, when(position) { 0 -> "00" 1 -> "01" else -> ""})
-                    viewModel.favoritePathResponse.observe(viewLifecycleOwner, Observer { _favoritePathResponse ->
-                        when (_favoritePathResponse) {
-                            is Resource.Success -> {
-                                //조회된 코스 목록의 아이디를 이용해 코스 상세 정보 조회
-                                //viewModel.getThemeDetail(_favoritePathResponse.value.FavoritePath.course_id)
-                                /*viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
-                                    binding.favoritePathRV.also {
-                                        it.layoutManager = LinearLayoutManager(requireContext())
-                                        it.setHasFixedSize(true)
-                                        when (_themeResponse) {
-                                            is Resource.Success -> {
-                                                if (!_themeResponse.value.error) {
-                                                    it.adapter =
-                                                        _themeResponse.value.theme?.let { _themeResponse -> FavoritePathDetailAdapter(_themeResponse) }
+                    viewModel.getFavoritePath(_userResponse.value.data.first().id, position)
+                    viewModel.favoritePathResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _favoritePathResponse ->
+                            when (_favoritePathResponse) {
+                                is Resource.Success -> {
+                                    //조회된 코스 목록의 아이디를 이용해 코스 상세 정보 조회
+                                    //viewModel.getThemeDetail(_favoritePathResponse.value.FavoritePath.course_id)
+                                    /*viewModel.themeResponse.observe(viewLifecycleOwner, Observer { _themeResponse ->
+                                        binding.favoritePathRV.also {
+                                            it.layoutManager = LinearLayoutManager(requireContext())
+                                            it.setHasFixedSize(true)
+                                            when (_themeResponse) {
+                                                is Resource.Success -> {
+                                                    if (!_themeResponse.value.error) {
+                                                        it.adapter =
+                                                            _themeResponse.value.theme?.let { _themeResponse -> FavoritePathDetailAdapter(_themeResponse) }
+                                                    }
+                                                    Log.e("Theme_Detail", _themeResponse.value.theme.toString())
                                                 }
-                                                Log.e("Theme_Detail", _themeResponse.value.theme.toString())
-                                            }
-                                            is Resource.Loading -> {
+                                                is Resource.Loading -> {
 
-                                            }
-                                            is Resource.Failure -> {
-                                                _themeResponse.errorBody?.let { _themeResponse -> Log.e("Theme_Detail", _themeResponse.string()) }
-                                                handleApiError(_themeResponse)
+                                                }
+                                                is Resource.Failure -> {
+                                                    _themeResponse.errorBody?.let { _themeResponse -> Log.e("Theme_Detail", _themeResponse.string()) }
+                                                    handleApiError(_themeResponse)
+                                                }
                                             }
                                         }
-                                    }
-                                })*/
+                                    })*/
+                                }
+                                is Resource.Loading -> {
+                                    // Loading
+                                }
+                                is Resource.Failure -> {
+                                    // Network Error
+                                    handleApiError(_favoritePathResponse)
+                                }
                             }
-                            is Resource.Loading -> {
-
-                            }
-                            is Resource.Failure -> {
-                                _favoritePathResponse.errorBody?.let { _favoritePathResponse -> Log.e("FavoritePath", _favoritePathResponse.string()) }
-                                handleApiError(_favoritePathResponse)
-                            }
-                        }
-                    })
+                        })
                 }
                 is Resource.Loading -> {
-
+                    // Loading
                 }
                 is Resource.Failure -> {
-                    _userResponse.errorBody?.let { _userResponse -> Log.e("user", _userResponse.string()) }
-                    handleApiError(_userResponse)
+                    // Network Error
+                    handleApiError(_userResponse) { viewModel.getUser() }
                 }
             }
         })

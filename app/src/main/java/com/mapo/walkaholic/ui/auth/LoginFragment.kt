@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.GuestApi
 import com.mapo.walkaholic.data.network.Resource
@@ -25,10 +26,11 @@ import kotlinx.coroutines.launch
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.let { binding.viewModel = it }
+        binding.viewModel = viewModel
         lifecycleScope.launch {
             viewModel.saveIsFirst()
         }
+        viewModel.getFilenameTitleLogo()
         viewModel.filenameLogoImageResponse.observe(viewLifecycleOwner, Observer { _filenameLogoImageResponse ->
             when(_filenameLogoImageResponse) {
                 is Resource.Success -> {
@@ -36,11 +38,15 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                         "200" -> {
                             binding.filenameLogoImage = _filenameLogoImageResponse.value.data.first()
                         }
-                        "400" -> {
-                            // Error
-                        }
                         else -> {
                             // Error
+                            confirmDialog(
+                                _filenameLogoImageResponse.value.message,
+                                {
+                                    viewModel.getFilenameTitleLogo()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }
@@ -53,44 +59,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                 }
             }
         })
-        viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is Resource.Success -> {
-                    when (it.value.code) {
-                        "200" -> {
-                            lifecycleScope.launch {
-                                Toast.makeText(
-                                    requireContext(),
-                                    it.value.message.trim(),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                /*viewModel.saveJwtToken(it.value.jwtToken)*/
-                                // Log.d(TAG, it.value.jwtToken)
-                                Log.d(TAG, it.value.message)
-                                requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
-                            }
-                        }
-                        "400" -> {
-                            requireView().findNavController()
-                                .navigate(R.id.action_loginFragment_to_registerFragment)
-                        }
-                        else -> {
-                            Toast.makeText(
-                                requireContext(),
-                                it.value.message.trim(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    handleApiError(it) { viewModel.login() }
-                }
-            }
-        })
         binding.loginBtnKakao.setOnClickListener {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
@@ -100,15 +68,61 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                     viewModel.showToastEvent(GlobalApplication.getGlobalApplicationContext()
                         .getString(R.string.msg_success_auth))
                     viewModel.login()
+                    viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
+                        when (_loginResponse) {
+                            is Resource.Success -> {
+                                when (_loginResponse.value.code) {
+                                    "200" -> {
+                                        lifecycleScope.launch {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                _loginResponse.value.message.trim(),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            /*viewModel.saveJwtToken(it.value.jwtToken)*/
+                                            // Log.d(TAG, it.value.jwtToken)
+                                            Log.d(TAG, _loginResponse.value.message)
+                                            requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
+                                        }
+                                    }
+                                    else -> {
+                                        confirmDialog(
+                                            _loginResponse.value.message,
+                                            {
+                                                viewModel.login()
+                                            },
+                                            "재시도"
+                                        )
+                                    }
+                                }
+                            }
+                            is Resource.Loading -> {
+                                // Loading
+                            }
+                            is Resource.Failure -> {
+                                // Network Error
+                                handleApiError(_loginResponse) { viewModel.login() }
+                            }
+                        }
+                    })
                     //viewModel.login(token)
                 }
             }
-            viewModel.getAuth(callback)
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(GlobalApplication.getGlobalApplicationContext())) {
+                UserApiClient.instance.loginWithKakaoTalk(
+                    GlobalApplication.getGlobalApplicationContext(),
+                    callback = callback
+                )
+            } else {
+                UserApiClient.instance.loginWithKakaoAccount(
+                    GlobalApplication.getGlobalApplicationContext(),
+                    callback = callback
+                )
+            }
         }
         binding.loginBtnTutorial.setOnClickListener {
             requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
         }
-        viewModel.getFilenameTitleLogo()
     }
 
     override fun getViewModel() = LoginViewModel::class.java

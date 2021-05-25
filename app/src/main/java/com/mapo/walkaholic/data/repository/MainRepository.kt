@@ -222,24 +222,42 @@ class MainRepository(
         )
     }
 
-    suspend fun getMissionCondition(missionID: String) = safeApiCall {
-        api.getMissionCondition(missionID)
+    suspend fun getMissionCondition(position: Int) = safeApiCall {
+        api.getMissionCondition(
+            when (position) {
+                0 -> "00"
+                1 -> "01"
+                else -> ""
+            }
+        )
     }
 
     suspend fun getMissionProgress(missionID: String, conditionId: String) = safeApiCall {
         api.getMissionProgress(missionID, conditionId)
     }
 
-    suspend fun getRanking(rankingId: String) = safeApiCall {
-        api.getRanking(rankingId)
+    suspend fun getRanking(position: Int) = safeApiCall {
+        api.getRanking(
+            when (position) {
+                0 -> "00"
+                1 -> "01"
+                else -> ""
+            }
+        )
     }
 
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
         api.getPoints(body)
     }
 
-    suspend fun getFavoritePath(userId: Long, id: String) = safeApiCall {
-        api.getFavoritePath(userId, id)
+    suspend fun getFavoritePath(userId: Long, position: Int) = safeApiCall {
+        api.getFavoritePath(
+            userId, when (position) {
+                0 -> "00"
+                1 -> "01"
+                else -> ""
+            }
+        )
     }
 
 

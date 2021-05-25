@@ -26,18 +26,8 @@ class LoginViewModel(
     val loginResponse: LiveData<Resource<AuthResponse>>
         get() = _loginResponse
 
-    fun getAuth(callback: (OAuthToken?, Throwable?) -> Unit) = viewModelScope.launch {
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(GlobalApplication.getGlobalApplicationContext())) {
-            UserApiClient.instance.loginWithKakaoTalk(
-                GlobalApplication.getGlobalApplicationContext(),
-                callback = callback
-            )
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(
-                GlobalApplication.getGlobalApplicationContext(),
-                callback = callback
-            )
-        }
+    fun getAuth(callback: (OAuthToken?, Throwable?) -> Unit) {
+
     }
 
     fun getFilenameTitleLogo() = viewModelScope.launch {

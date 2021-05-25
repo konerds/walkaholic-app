@@ -20,6 +20,7 @@ import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterSh
 import com.mapo.walkaholic.ui.main.dashboard.profile.DashboardProfileViewModel
 import com.mapo.walkaholic.ui.favoritepath.FavoritePathViewModel
 import com.mapo.walkaholic.ui.main.challenge.ChallengeDetailViewModel
+import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeDetailRankingViewModel
 import com.mapo.walkaholic.ui.main.dashboard.character.info.DashboardCharacterInfoDetailViewModel
 import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopDetailViewModel
 import com.mapo.walkaholic.ui.main.map.MapViewModel
@@ -71,6 +72,9 @@ class ViewModelFactory(
                     repository as MainRepository
                 )
                 isAssignableFrom(ChallengeDetailViewModel::class.java) -> ChallengeDetailViewModel(
+                    repository as MainRepository
+                )
+                isAssignableFrom(ChallengeDetailRankingViewModel::class.java) -> ChallengeDetailRankingViewModel(
                     repository as MainRepository
                 )
                 isAssignableFrom(FavoritePathViewModel::class.java) -> FavoritePathViewModel(

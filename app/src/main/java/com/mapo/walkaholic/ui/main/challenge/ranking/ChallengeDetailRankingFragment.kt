@@ -50,37 +50,30 @@ class ChallengeDetailRankingFragment(
         dummyArrayList.add(dummyMission7)
         dummyArrayList.add(dummyMission8)
 
-        viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { it2 ->
-            binding.challengeRVRanking.also {
+        viewModel.rankingResponse.observe(viewLifecycleOwner, Observer { _rankingResponse ->
+            binding.challengeRVRanking.also { _challengeRVRanking ->
                 val layoutManger = LinearLayoutManager(requireContext())
                 layoutManger.orientation = LinearLayoutManager.VERTICAL
-                it.layoutManager = layoutManger
-                it.setHasFixedSize(true)
-                when (it2) {
+                _challengeRVRanking.layoutManager = layoutManger
+                _challengeRVRanking.setHasFixedSize(true)
+                when (_rankingResponse) {
                     is Resource.Success -> {
-                        if (!it2.value.error) {
-                            it.adapter =
-                                it2.value.ranking?.let { it3 -> ChallengeDetailRankingAdapter(it3) }
+                        if (!_rankingResponse.value.error) {
+                            _challengeRVRanking.adapter =
+                                _rankingResponse.value.ranking?.let { _ranking -> ChallengeDetailRankingAdapter(_ranking) }
                         }
-                        //Log.e("Ranking", it2.value.ranking.toString())
                     }
                     is Resource.Loading -> {
-
+                        // Loading
                     }
                     is Resource.Failure -> {
-                        //it2.errorBody?.let { it1 -> Log.e("Ranking", it1.string()) }
-                        handleApiError(it2)
+                        // Network Error
+                        handleApiError(_rankingResponse)
                     }
                 }
             }
         })
-        viewModel.getRanking(
-            when (position) {
-                0 -> "00"
-                1 -> "01"
-                else -> ""
-            }
-        )
+        viewModel.getRanking(position)
 
         val layoutManger = LinearLayoutManager(requireContext())
         layoutManger.orientation = LinearLayoutManager.VERTICAL

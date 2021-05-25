@@ -14,6 +14,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailCharacterInfoBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.dashboard.character.CharacterInventorySlotClickListener
 import kotlinx.coroutines.flow.first
@@ -390,25 +391,17 @@ class DashboardCharacterInfoDetailFragment(
                                                                                 }
                                                                             }
                                                                         }
-                                                                        "400" -> {
-                                                                            // Error
-                                                                            handleApiError(
-                                                                                _userCharacterEquipStatusResponse as Resource.Failure
-                                                                            ) {
-                                                                                viewModel.getUserCharacterEquipStatus(
-                                                                                    _userResponse.value.data.first().id
-                                                                                )
-                                                                            }
-                                                                        }
                                                                         else -> {
                                                                             // Error
-                                                                            handleApiError(
-                                                                                _userCharacterEquipStatusResponse as Resource.Failure
-                                                                            ) {
-                                                                                viewModel.getUserCharacterEquipStatus(
-                                                                                    _userResponse.value.data.first().id
-                                                                                )
-                                                                            }
+                                                                            confirmDialog(
+                                                                                _userCharacterEquipStatusResponse.value.message,
+                                                                                {
+                                                                                    viewModel.getUserCharacterEquipStatus(
+                                                                                        _userResponse.value.data.first().id
+                                                                                    )
+                                                                                },
+                                                                                "재시도"
+                                                                            )
                                                                         }
                                                                     }
                                                                 }
@@ -428,21 +421,17 @@ class DashboardCharacterInfoDetailFragment(
                                                             }
                                                         })
                                                 }
-                                                "400" -> {
-                                                    // Error
-                                                    handleApiError(_statusUserCharacterInventoryItem as Resource.Failure) {
-                                                        viewModel.getStatusUserCharacterInventoryItem(
-                                                            _userResponse.value.data.first().id
-                                                        )
-                                                    }
-                                                }
                                                 else -> {
                                                     // Error
-                                                    handleApiError(_statusUserCharacterInventoryItem as Resource.Failure) {
-                                                        viewModel.getStatusUserCharacterInventoryItem(
-                                                            _userResponse.value.data.first().id
-                                                        )
-                                                    }
+                                                    confirmDialog(
+                                                        _statusUserCharacterInventoryItem.value.message,
+                                                        {
+                                                            viewModel.getStatusUserCharacterInventoryItem(
+                                                                _userResponse.value.data.first().id
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
                                                 }
                                             }
                                         }
@@ -460,13 +449,15 @@ class DashboardCharacterInfoDetailFragment(
                                     }
                                 })
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }
@@ -537,21 +528,17 @@ class DashboardCharacterInfoDetailFragment(
                                                         }
                                                     }
                                                 }
-                                                "400" -> {
-                                                    // Error
-                                                    handleApiError(
-                                                        _userCharacterEquipStatusResponse as Resource.Failure
-                                                    ) { viewModel.getUserCharacterEquipStatus(
-                                                        _userResponse.value.data.first().id
-                                                    ) }
-                                                }
                                                 else -> {
                                                     // Error
-                                                    handleApiError(
-                                                        _userCharacterEquipStatusResponse as Resource.Failure
-                                                    ) { viewModel.getUserCharacterEquipStatus(
-                                                        _userResponse.value.data.first().id
-                                                    ) }
+                                                    confirmDialog(
+                                                        _userCharacterEquipStatusResponse.value.message,
+                                                        {
+                                                            viewModel.getUserCharacterEquipStatus(
+                                                                _userResponse.value.data.first().id
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
                                                 }
                                             }
                                         }
@@ -569,13 +556,15 @@ class DashboardCharacterInfoDetailFragment(
                                     }
                                 })
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_userResponse as Resource.Failure) { viewModel.getUser() }
+                            confirmDialog(
+                                _userResponse.value.message,
+                                {
+                                    viewModel.getUser()
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }

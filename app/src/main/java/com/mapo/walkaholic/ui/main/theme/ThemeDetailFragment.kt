@@ -13,6 +13,7 @@ import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDetailThemeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -35,13 +36,15 @@ class ThemeDetailFragment(
                                     ThemeDetailAdapter(_themeResponse.value.data)
                             }
                         }
-                        "400" -> {
-                            // Error
-                            handleApiError(_themeResponse as Resource.Failure) { viewModel.getTheme(position) }
-                        }
                         else -> {
                             // Error
-                            handleApiError(_themeResponse as Resource.Failure) { viewModel.getTheme(position) }
+                            confirmDialog(
+                                _themeResponse.value.message,
+                                {
+                                    viewModel.getTheme(position)
+                                },
+                                "재시도"
+                            )
                         }
                     }
                 }
