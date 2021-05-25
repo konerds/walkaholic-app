@@ -33,20 +33,6 @@ class ChallengeDetailFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dummyMission1 =
-            MissionCondition("00", "01", "3,000 걸음", "3000", "100")
-        val dummyMission2 =
-            MissionCondition("00", "02", "5,000 걸음", "5000", "200")
-        val dummyMission3 =
-            MissionCondition("01", "01", "일일미션 5회", "5", "500")
-        val dummyMission4 =
-            MissionCondition("01", "02", "일일미션 10회", "10", "1000")
-        val dummyArrayList: ArrayList<MissionCondition> = ArrayList()
-        dummyArrayList.add(dummyMission1)
-        dummyArrayList.add(dummyMission2)
-        dummyArrayList.add(dummyMission3)
-        dummyArrayList.add(dummyMission4)
-
         viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             binding.challengeRVMission.also { _challengeRVMission ->
@@ -56,128 +42,212 @@ class ChallengeDetailFragment(
                     is Resource.Success -> {
                         when (_userResponse.value.code) {
                             "200" -> {
-                                viewModel.getMissionCondition(position)
-                                viewModel.missionConditionResponse.observe(
-                                    viewLifecycleOwner,
-                                    Observer { _missionConditionResponse ->
-                                        _challengeRVMission.layoutManager =
-                                            LinearLayoutManager(requireContext())
-                                        // 동일한 크기의 아이템 항목을 사용자에게 리스트로 보여주기 위해 크기가 변경되지 않음을 명시
-                                        _challengeRVMission.setHasFixedSize(true)
-                                        when (_missionConditionResponse) {
-                                            is Resource.Success -> {
-                                                // @TODO GET DATA WHEN REST EXECUTE SUCCESSFUL
-                                                Log.e(
-                                                    "missionCondition",
-                                                    _missionConditionResponse.value.missionCondition.toString()
-                                                )
-                                            }
-                                            is Resource.Loading -> {
-
-                                            }
-                                            is Resource.Failure -> {
-                                                _missionConditionResponse.errorBody?.let { it1 ->
+                                viewModel.getMission(_userResponse.value.data.first().id, position)
+                                viewModel.missionResponse.observe(viewLifecycleOwner, Observer { _missionResponse ->
+                                    when (_missionResponse) {
+                                        is Resource.Success -> {
+                                            when (_missionResponse.value.code) {
+                                                "200" -> {
+                                                    _challengeRVMission.adapter =
+                                                        ChallengeDetailMissionAdapter(_missionResponse.value.data)
                                                     Log.e(
-                                                        "missionCondition",
-                                                        it1.string()
+                                                        "mission",
+                                                        _missionResponse.value.data.toString()
                                                     )
                                                 }
-                                                handleApiError(_missionConditionResponse)
+                                                else -> {
+                                                    // Error
+                                                    confirmDialog(
+                                                        _missionResponse.value.message,
+                                                        {
+                                                            viewModel.getMission(
+                                                                _userResponse.value.data.first().id,
+                                                                position
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
+                                                }
                                             }
                                         }
-                                        when (position) {
-                                            0 -> {
-                                                binding.challengeTvIntro1.text = "${_userResponse.value.data.first().nickName}님, 현재"
-                                                binding.challengeTvAchieve1.text = "${_userResponse.value.data.first().walkCount}"
-                                                binding.challengeTvAchieve2.text = "걸음 걸었어요!"
-                                                binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
-                                                binding.challengeTvIntro3.text = "일일미션을 완료하고 포인트를 받으세요!"
-                                                binding.challengeMissionIntro.visibility = View.VISIBLE
-                                                binding.challengeLayoutMission.visibility = View.VISIBLE
-                                                binding.challengeLayoutRankingIntro.visibility = View.GONE
-                                                binding.challengeLayoutRanking.visibility = View.GONE
-                                                /*it.adapter = it3.value.missionCondition?.let { it3 ->
-                                                    ChallengeDetailMissionAdapter(dummyArrayList)
-                                                }*/
-                                                _challengeRVMission.adapter =
-                                                    ChallengeDetailMissionAdapter(dummyArrayList)
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            // Network Error
+                                            handleApiError(_missionResponse) {
+                                                viewModel.getMission(
+                                                    _userResponse.value.data.first().id,
+                                                    position
+                                                )
                                             }
-                                            1 -> {
-                                                binding.challengeTvIntro1.text = "${_userResponse.value.data.first().nickName}님, 현재 일일미션"
-                                                binding.challengeTvAchieve1.text = "횟수"
-                                                binding.challengeTvAchieve2.text = "를 달성 했어요!"
-                                                binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
-                                                binding.challengeTvIntro3.text = "주간미션을 완료하고 포인트를 받으세요!"
-                                                binding.challengeMissionIntro.visibility = View.VISIBLE
-                                                binding.challengeLayoutMission.visibility = View.VISIBLE
-                                                binding.challengeLayoutRankingIntro.visibility = View.GONE
-                                                binding.challengeLayoutRanking.visibility = View.GONE
-                                                /*it.adapter = it3.value.missionCondition?.let { it3 ->
-                                                    ChallengeDetailMissionAdapter(dummyArrayList)
-                                                }*/
-                                                _challengeRVMission.adapter =
-                                                    ChallengeDetailMissionAdapter(dummyArrayList)
-                                            }
-                                            2 -> {
-                                                binding.challengeMissionIntro.visibility = View.GONE
-                                                binding.challengeLayoutMission.visibility = View.GONE
-                                                binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
-                                                binding.challengeLayoutRanking.visibility = View.VISIBLE
-                                                tabLayout = binding.challengeRankingTL
-                                                viewPager = binding.challengeRankingVP
-                                                val adapter =
-                                                    ChallengeRankingViewPagerAdapter(
-                                                        childFragmentManager,
-                                                        lifecycle,
-                                                        2
-                                                    )
-                                                viewPager.adapter = adapter
-                                                val tabName: ArrayList<String> = arrayListOf()
-                                                tabName.add("월별포인트")
-                                                tabName.add("누적포인트")
-                                                TabLayoutMediator(
-                                                    tabLayout,
-                                                    viewPager
-                                                ) { tab, position ->
-                                                    tab.text = tabName?.get(position)
-                                                }.attach()
-                                                tabLayout.addOnTabSelectedListener(object :
-                                                    TabLayout.OnTabSelectedListener {
-                                                    override fun onTabSelected(tab: TabLayout.Tab?) {
-                                                        viewPager.currentItem = tab!!.position
-                                                        when (tab!!.position) {
-                                                            0 -> {
-                                                                binding.challengeRankingTvIntro1.text =
-                                                                    "${_userResponse.value.data.first().nickName}님, 월별랭킹"
-                                                                //레벨
-                                                                // binding.challengeRankingTvRankNum.text = "${_userResponse.value.data.first().nickName}"
-                                                                binding.challengeRankingTvIntro3.text =
-                                                                    "월별랭킹은 매월 1일 자정에 갱신되어요"
-                                                            }
-                                                            1 -> {
-                                                                binding.challengeRankingTvIntro1.text =
-                                                                    "${_userResponse.value.data.first().nickName}님, 누적랭킹"
-                                                                //레벨
-                                                                // binding.challengeRankingTvRankNum.text = "${_userResponse.value.data.first().nickName}"
-                                                                binding.challengeRankingTvIntro3.text =
-                                                                    "서비스 시작일(2021년 05월 17일)부터 현재까지"
-                                                            }
-                                                            else -> {
-                                                            }
+                                        }
+                                    }
+                                })
+                                when (position) {
+                                    0 -> {
+                                        binding.challengeTvIntro1.text =
+                                            "${_userResponse.value.data.first().nickName}님, 현재"
+                                        binding.challengeTvAchieve1.text =
+                                            "${_userResponse.value.data.first().walkCount}"
+                                        binding.challengeTvAchieve2.text = " 걸음 걸었어요!"
+                                        binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
+                                        binding.challengeTvIntro3.text = "일일미션을 완료하고 포인트를 받으세요!"
+                                        binding.challengeMissionIntro.visibility = View.VISIBLE
+                                        binding.challengeLayoutMission.visibility = View.VISIBLE
+                                        binding.challengeLayoutRankingIntro.visibility = View.GONE
+                                        binding.challengeLayoutRanking.visibility = View.GONE
+                                        /*it.adapter = it3.value.missionCondition?.let { it3 ->
+                                            ChallengeDetailMissionAdapter(dummyArrayList)
+                                        }*/
+                                    }
+                                    1 -> {
+                                        binding.challengeTvIntro1.text =
+                                            "${_userResponse.value.data.first().nickName}님, 현재 일일미션"
+                                        binding.challengeTvAchieve1.text = "횟수"
+                                        binding.challengeTvAchieve2.text = "를 달성 했어요!"
+                                        binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
+                                        binding.challengeTvIntro3.text = "주간미션을 완료하고 포인트를 받으세요!"
+                                        binding.challengeMissionIntro.visibility = View.VISIBLE
+                                        binding.challengeLayoutMission.visibility = View.VISIBLE
+                                        binding.challengeLayoutRankingIntro.visibility = View.GONE
+                                        binding.challengeLayoutRanking.visibility = View.GONE
+                                        /*it.adapter = it3.value.missionCondition?.let { it3 ->
+                                            ChallengeDetailMissionAdapter(dummyArrayList)
+                                        }*/
+                                    }
+                                    2 -> {
+                                        binding.challengeMissionIntro.visibility = View.GONE
+                                        binding.challengeLayoutMission.visibility = View.GONE
+                                        binding.challengeLayoutRankingIntro.visibility = View.VISIBLE
+                                        binding.challengeLayoutRanking.visibility = View.VISIBLE
+                                        tabLayout = binding.challengeRankingTL
+                                        viewPager = binding.challengeRankingVP
+                                        val adapter =
+                                            ChallengeRankingViewPagerAdapter(
+                                                childFragmentManager,
+                                                lifecycle,
+                                                2
+                                            )
+                                        viewPager.adapter = adapter
+                                        val tabName: ArrayList<String> = arrayListOf()
+                                        tabName.add("월별포인트")
+                                        tabName.add("누적포인트")
+                                        TabLayoutMediator(
+                                            tabLayout,
+                                            viewPager
+                                        ) { tab, position ->
+                                            tab.text = tabName?.get(position)
+                                        }.attach()
+
+                                        var rankingPositionOneTvIntro1: String = "1"
+                                        var rankingPositionOneRankNum: String = "2"
+                                        var rankingPositionOneTvIntro3: String = "3"
+
+                                        viewModel.getMonthRanking(_userResponse.value.data.first().id)
+                                        viewModel.monthRankingResponse.observe(viewLifecycleOwner, Observer { _monthRankingResponse ->
+                                            when (_monthRankingResponse) {
+                                                is Resource.Success -> {
+                                                    when (_monthRankingResponse.value.code) {
+                                                        "200" -> {
+                                                            binding.challengeRankingTvIntro1.text =
+                                                                "${_userResponse.value.data.first().nickName}님, 월별랭킹"
+                                                            binding.challengeRankingTvRankNum.text = "${_monthRankingResponse.value.data.first().rank}"
+                                                            binding.challengeRankingTvIntro3.text =
+                                                                "월별랭킹은 매월 1일 자정에 갱신되어요"
+
+                                                            rankingPositionOneTvIntro1 = "${_userResponse.value.data.first().nickName}님, 월별랭킹"
+                                                            rankingPositionOneRankNum = "${_monthRankingResponse.value.data.first().rank}"
+                                                            rankingPositionOneTvIntro3 = "월별랭킹은 매월 1일 자정에 갱신되어요"
+                                                        }
+                                                        else -> {
+                                                            // Error
+                                                            confirmDialog(
+                                                                _monthRankingResponse.value.message,
+                                                                {
+                                                                    viewModel.getMonthRanking(
+                                                                        _userResponse.value.data.first().id
+                                                                    )
+                                                                },
+                                                                "재시도")
                                                         }
                                                     }
-
-                                                    override fun onTabUnselected(tab: TabLayout.Tab?) {
-
+                                                }
+                                                is Resource.Loading -> {
+                                                    // Loading
+                                                }
+                                                is Resource.Failure -> {
+                                                    // Network Error
+                                                    handleApiError(_monthRankingResponse) {
+                                                        viewModel.getMonthRanking(
+                                                            _userResponse.value.data.first().id)
                                                     }
-
-                                                    override fun onTabReselected(tab: TabLayout.Tab?) {
-
-                                                    }
-                                                })
+                                                }
                                             }
-                                        }
-                                    })
+                                        })
+
+                                        tabLayout.addOnTabSelectedListener(object :
+                                            TabLayout.OnTabSelectedListener {
+                                            override fun onTabSelected(tab: TabLayout.Tab?) {
+                                                viewPager.currentItem = tab!!.position
+                                                when (tab!!.position) {
+                                                    0 -> {
+                                                        binding.challengeRankingTvIntro1.text = rankingPositionOneTvIntro1
+                                                        binding.challengeRankingTvRankNum.text = rankingPositionOneRankNum
+                                                        binding.challengeRankingTvIntro3.text = rankingPositionOneTvIntro3
+                                                    }
+                                                    1 -> {
+                                                        viewModel.getAccumulateRanking(_userResponse.value.data.first().id)
+                                                        viewModel.accumulateRankingResponse.observe(viewLifecycleOwner, Observer { _accumulateRankingResponse ->
+                                                            when (_accumulateRankingResponse) {
+                                                                is Resource.Success -> {
+                                                                    when (_accumulateRankingResponse.value.code) {
+                                                                        "200" -> {
+                                                                            binding.challengeRankingTvIntro1.text =
+                                                                                "${_userResponse.value.data.first().nickName}님, 누적랭킹"
+                                                                            //레벨
+                                                                            binding.challengeRankingTvRankNum.text = "${_accumulateRankingResponse.value.data.first().rank}"
+                                                                            binding.challengeRankingTvIntro3.text =
+                                                                                "서비스 시작일(2021년 05월 17일)부터 현재까지"
+                                                                        }
+                                                                        else -> {
+                                                                            // Error
+                                                                            confirmDialog(
+                                                                                _accumulateRankingResponse.value.message,
+                                                                                {
+                                                                                    viewModel.getAccumulateRanking(
+                                                                                        _userResponse.value.data.first().id
+                                                                                    )
+                                                                                },
+                                                                                "재시도")
+                                                                        }
+                                                                    }
+                                                                }
+                                                                is Resource.Loading -> {
+                                                                    // Loading
+                                                                }
+                                                                is Resource.Failure -> {
+                                                                    // Network Error
+                                                                    handleApiError(_accumulateRankingResponse) {
+                                                                        viewModel.getAccumulateRanking(
+                                                                            _userResponse.value.data.first().id)
+                                                                    }
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+                                            }
+
+                                            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+                                            }
+                                        })
+                                    }
+                                }
                             }
                             else -> {
                                 // Error
@@ -201,7 +271,6 @@ class ChallengeDetailFragment(
                 }
             }
         })
-
     }
 
     override fun getViewModel() = ChallengeDetailViewModel::class.java

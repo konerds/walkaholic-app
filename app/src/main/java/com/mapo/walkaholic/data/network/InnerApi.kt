@@ -106,23 +106,27 @@ interface InnerApi {
         @Query("date") date: String
     ): WalkRecordExistInMonthResponse
 
-    @FormUrlEncoded
-    @POST("info/missionCondition")
-    suspend fun getMissionCondition(
-        @Field("mission_id") missionId: String,
-    ): MissionConditionResponse
-
-    @FormUrlEncoded
-    @POST("info/missionProgress")
-    suspend fun getMissionProgress(
-        @Field("mission_id") missionId: String,
-        @Field("condition_id") conditionId: String,
-    ): MissionProgressResponse
+    @GET("user/{id}/mission/{type}")
+    suspend fun getMission(
+        @Path("id") id: String,
+        @Path("type") type: String,
+    ): MissionResponse
+    
 
     @GET("user/rank/{type}")
     suspend fun getRanking(
         @Path("type") type: Int
     ): RankingResponse
+
+    @GET("user/{id}/rank/month")
+    suspend fun getMonthRanking(
+        @Path("id") id: String,
+    ): MonthRankingResponse
+
+    @GET("user/{id}/rank/accumulate")
+    suspend fun getAccumulateRanking(
+        @Path("id") id: String,
+    ): AccumulateRankingResponse
 
     @FormUrlEncoded
     @POST("info/favoritePath")

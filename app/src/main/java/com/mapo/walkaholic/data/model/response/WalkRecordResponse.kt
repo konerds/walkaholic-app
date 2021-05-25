@@ -1,7 +1,5 @@
 package com.mapo.walkaholic.data.model.response
 
-import com.google.gson.annotations.SerializedName
-
 data class WalkRecordResponse(
         val code: String,
         val message: String,

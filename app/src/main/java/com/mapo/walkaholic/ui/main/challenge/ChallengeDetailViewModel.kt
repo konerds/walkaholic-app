@@ -3,9 +3,7 @@ package com.mapo.walkaholic.ui.main.challenge
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mapo.walkaholic.data.model.response.MissionConditionResponse
-import com.mapo.walkaholic.data.model.response.MissionProgressResponse
-import com.mapo.walkaholic.data.model.response.UserResponse
+import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -18,17 +16,22 @@ class ChallengeDetailViewModel(
 
     }
 
-    private val _missionConditionResponse: MutableLiveData<Resource<MissionConditionResponse>> =
-        MutableLiveData()
-    val missionConditionResponse: LiveData<Resource<MissionConditionResponse>>
-        get() = _missionConditionResponse
     private val _userResponse: MutableLiveData<Resource<UserResponse>> = MutableLiveData()
     val userResponse: LiveData<Resource<UserResponse>>
         get() = _userResponse
-    private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> =
+    private val _missionResponse: MutableLiveData<Resource<MissionResponse>> =
         MutableLiveData()
+    val missionResponse: LiveData<Resource<MissionResponse>>
+        get() = _missionResponse
+    private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> = MutableLiveData()
     val missionProgressResponse: LiveData<Resource<MissionProgressResponse>>
         get() = _missionProgressResponse
+    private val _monthRankingResponse: MutableLiveData<Resource<MonthRankingResponse>> = MutableLiveData()
+    val monthRankingResponse: LiveData<Resource<MonthRankingResponse>>
+        get() = _monthRankingResponse
+    private val _accumulateRankingResponse: MutableLiveData<Resource<AccumulateRankingResponse>> = MutableLiveData()
+    val accumulateRankingResponse: LiveData<Resource<AccumulateRankingResponse>>
+        get() = _accumulateRankingResponse
 
     fun getUser() {
         progressBarVisibility.set(true)
@@ -38,9 +41,21 @@ class ChallengeDetailViewModel(
         }
     }
 
-    fun getMissionCondition(position: Int) {
+    fun getMission(userId: Long, missionType: Int) {
         viewModelScope.launch {
-            _missionConditionResponse.value = mainRepository.getMissionCondition(position)
+            _missionResponse.value = mainRepository.getMission(userId, missionType)
+        }
+    }
+
+    fun getMonthRanking(userId: Long) {
+        viewModelScope.launch {
+            _monthRankingResponse.value = mainRepository.getMonthRanking(userId)
+        }
+    }
+
+    fun getAccumulateRanking(userId: Long) {
+        viewModelScope.launch {
+            _accumulateRankingResponse.value = mainRepository.getAccumulateRanking(userId)
         }
     }
 

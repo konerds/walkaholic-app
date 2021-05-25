@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.challenge.mission
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,11 @@ import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.model.MissionCondition
 import com.mapo.walkaholic.data.model.MissionDaily
 import com.mapo.walkaholic.data.model.Theme
+import com.mapo.walkaholic.data.model.response.MissionResponse
 import com.mapo.walkaholic.databinding.ItemChallengeMissionBinding
 
 class ChallengeDetailMissionAdapter(
-    private val missions: ArrayList<MissionCondition>
+    private val missions: ArrayList<MissionResponse.Mission>
 ) : RecyclerView.Adapter<ChallengeDetailMissionAdapter.ItemChallengeMissionViewHolder>() {
     inner class ItemChallengeMissionViewHolder(
         val binding: ItemChallengeMissionBinding
@@ -39,30 +41,67 @@ class ChallengeDetailMissionAdapter(
 
         when (position) {
             0 -> {
-                holder.binding.challengeMissionBar.setBackgroundResource(
-                    R.drawable.selector_challenge_progress_top
-                )
                 holder.binding.missionStartTv.visibility = View.VISIBLE
+                when (missions[position].completeYN) {
+                    "0" -> {
+                        holder.binding.missionBtn.setEnabled(false)
+                        holder.binding.challengeMissionBar.setBackgroundResource(
+                            R.drawable.box_challenge_uppercorner_c9c3b9)
+                    }
+
+                    "1" -> {
+                        holder.binding.missionBtn.setEnabled(true)
+                        holder.binding.challengeMissionBar.setBackgroundResource(
+                            R.drawable.box_challenge_uppercorner_f9a25b)
+                        holder.binding.missionNameTv.setTextColor(Color.parseColor("#443F35"))
+                    }
+                }
             }
             3 -> {
-                //Drawable 설정 둘 다 가능
-                // holder.binding.challengeMissionBar.setBackgroundResource(
-                //                    R.drawable.selector_challenge_progress)
-                val myImage: Drawable? = ResourcesCompat.getDrawable(
+                 /*Drawable 설정 둘 다 가능
+                 holder.binding.challengeMissionBar.setBackgroundResource(
+                                    R.drawable.selector_challenge_progress)
+                 val myImage: Drawable? = ResourcesCompat.getDrawable(
                     holder.binding.root.resources,
-                    R.drawable.selector_challenge_progress_bottom,
-                    null
-                )
-                holder.binding.challengeMissionBar.background = myImage
+                    R.drawable.selector_challenge_progress_bottom, null)
+                  holder.binding.challengeMissionBar.background = myImage
+                 */
+
                 holder.binding.challengeMissionBottomBar.visibility = View.GONE
+                holder.binding.missionBtn.text = "모든 P 받기"
+
+                when (missions[position].completeYN) {
+                    "0" -> {
+                        holder.binding.missionBtn.setEnabled(false)
+                        holder.binding.challengeMissionBar.setBackgroundResource(
+                            R.drawable.box_challenge_lowercorner_c9c3b9)
+                    }
+
+                    "1" -> {
+                        holder.binding.missionBtn.setEnabled(true)
+                        holder.binding.challengeMissionBar.setBackgroundResource(
+                            R.drawable.box_challenge_lowercorner_f9a25b)
+                        holder.binding.missionNameTv.setTextColor(Color.parseColor("#443F35"))
+                    }
+                }
             }
             else -> {
-                holder.binding.challengeMissionBar.setBackgroundResource(
-                    R.drawable.selector_challenge_progress
-                )
+                when (missions[position].completeYN) {
+                    "0" -> {
+                        holder.binding.missionBtn.setEnabled(false)
+                        holder.binding.challengeMissionBar.setBackgroundResource(
+                            R.drawable.box_challenge_c9c3b9)
+                    }
+
+                    "1" -> {
+                        holder.binding.missionBtn.setEnabled(true)
+                        holder.binding.challengeMissionBar.setBackgroundResource(
+                            R.drawable.box_challenge_f9a25b)
+                        holder.binding.missionNameTv.setTextColor(Color.parseColor("#443F35"))
+                    }
+                }
             }
         }
-
     }
 
     override fun getItemCount() = missions.size

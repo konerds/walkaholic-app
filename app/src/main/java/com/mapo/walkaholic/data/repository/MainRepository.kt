@@ -236,14 +236,8 @@ class MainRepository(
         )
     }
 
-    suspend fun getMissionCondition(position: Int) = safeApiCall {
-        api.getMissionCondition(
-            when (position) {
-                0 -> "00"
-                1 -> "01"
-                else -> ""
-            }
-        )
+    suspend fun getMission(userId: Long, missionType: Int) = safeApiCall {
+        api.getMission(userId.toString(), missionType.toString())
     }
 
     suspend fun getMissionProgress(missionID: String, conditionId: String) = safeApiCall {
@@ -252,6 +246,14 @@ class MainRepository(
 
     suspend fun getRanking(position: Int) = safeApiCall {
         api.getRanking(position)
+    }
+
+    suspend fun getMonthRanking(userId: Long) = safeApiCall {
+        api.getMonthRanking(userId.toString())
+    }
+
+    suspend fun getAccumulateRanking(userId: Long) = safeApiCall {
+        api.getAccumulateRanking(userId.toString())
     }
 
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {

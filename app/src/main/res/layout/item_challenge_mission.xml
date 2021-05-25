@@ -16,7 +16,7 @@
 
         <variable
             name="missionItem"
-            type="com.mapo.walkaholic.data.model.MissionCondition" />
+            type="com.mapo.walkaholic.data.model.response.MissionResponse.Mission" />
 
         <variable
             name="missionProgress"
@@ -41,7 +41,7 @@
                 android:layout_width="10dp"
                 android:layout_height="122dp"
                 android:orientation="vertical"
-                android:background="@drawable/selector_challenge_progress_top" />
+                android:background="@drawable/box_challenge_uppercorner_c9c3b9" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -71,10 +71,11 @@
                         android:layout_centerVertical="true">
 
                         <TextView
+                            android:id="@+id/mission_name_tv"
                             style="@style/font_semi_bold_24_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text='@{missionItem.mission_title}'
+                            android:text='@{missionItem.missionName}'
                             android:textColor="@color/colore3e0db" />
 
                     </LinearLayout>
@@ -87,16 +88,18 @@
                     android:layout_weight="1"/>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/mission_btn"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:background="@drawable/selector_challenge_progress_btn"
-                    android:text='@{missionItem.reward + "P 받기"}'
+                    android:text='@{missionItem.missionReward + "P 받기"}'
                     android:textColor="@color/mdWhite1000"
                     android:fontFamily="@font/noto_sans_black"
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:layout_gravity="center_vertical" />
+                    android:layout_gravity="center_vertical"
+                    android:enabled="false"/>
 
             </LinearLayout>
 

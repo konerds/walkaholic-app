@@ -183,8 +183,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="20dp"
-                            android:text="월별랭킹은 매월 1일 자정에 갱신되어요" />
+                            android:layout_marginBottom="20dp" />
 
                     </LinearLayout>
 

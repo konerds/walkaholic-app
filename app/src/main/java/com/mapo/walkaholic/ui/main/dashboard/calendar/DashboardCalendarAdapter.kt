@@ -28,7 +28,6 @@ class DashboardCalendarAdapter(
 
     override fun onBindViewHolder(holder: DashboardCalendarViewHolder, position: Int) {
         holder.binding.recordItem = walkRecords[position]
-        Log.e("냐옹", "냐옹")
     }
 
     override fun getItemCount() = walkRecords.size

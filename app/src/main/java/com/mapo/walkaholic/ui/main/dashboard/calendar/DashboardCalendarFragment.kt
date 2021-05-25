@@ -119,19 +119,29 @@ class DashboardCalendarFragment :
                                         is Resource.Success -> {
                                             when (_calendarResponse.value.code) {
                                                 "200" -> {
-                                                    binding.dashCalendarTvTotalTime.text =
-                                                        _calendarResponse.value.totalRecord.totalWalkTime
-                                                    binding.dashCalendarTvTotalDistance.text =
-                                                        _calendarResponse.value.totalRecord.totalDistance
-                                                    binding.dashCalendarTvCalorie.text =
-                                                        _calendarResponse.value.totalRecord.totalWalkCalorie
-                                                    binding.dashCalendarTvWalkAmount.text =
-                                                        _calendarResponse.value.totalRecord.totalWalkCount
-                                                    if(_calendarResponse.value.data.size != 0) {
-                                                        binding.dashCalendarRV.adapter =
-                                                            _calendarResponse.value.data.let { _walkRecord ->
-                                                                DashboardCalendarAdapter(_walkRecord)
-                                                            }
+                                                    binding.dashCalendarRV.also { _calendarRV ->
+                                                        _calendarRV.layoutManager = LinearLayoutManager(requireContext())
+                                                        _calendarRV.setHasFixedSize(true)
+
+                                                        binding.dashCalendarTvTotalTime.text =
+                                                            _calendarResponse.value.totalRecord.totalWalkTime
+                                                        binding.dashCalendarTvTotalDistance.text =
+                                                            _calendarResponse.value.totalRecord.totalDistance
+                                                        binding.dashCalendarTvCalorie.text =
+                                                            _calendarResponse.value.totalRecord.totalWalkCalorie
+                                                        binding.dashCalendarTvWalkAmount.text =
+                                                            _calendarResponse.value.totalRecord.totalWalkCount
+
+                                                        Log.e("기록", _calendarResponse.value.data.size.toString())
+                                                        if(_calendarResponse.value.data.size != 0) {
+                                                            binding.dashCalendarRV.adapter =
+                                                                _calendarResponse.value.data.let { _walkRecord ->
+                                                                    DashboardCalendarAdapter(_walkRecord)
+                                                                }
+                                                        }
+                                                        else {
+                                                            binding.dashCalendarRV.adapter = null
+                                                        }
                                                     }
                                                 }
                                                 else -> {
