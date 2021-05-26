@@ -7,6 +7,7 @@ import android.app.Application
 import android.content.Context
 import android.location.Location
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.gun0912.tedpermission.PermissionListener
@@ -19,7 +20,8 @@ import com.mapo.walkaholic.ui.confirmDialog
 import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.util.FusedLocationSource
 
-class GlobalApplication : Application() {
+class GlobalApplication : Application(), GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener {
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
