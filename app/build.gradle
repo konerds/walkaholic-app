@@ -93,4 +93,7 @@ dependencies {
 
     // Sticky NestedScrollView
     implementation 'com.github.didikk:sticky-nestedscrollview:1.0.1'
+
+    // Ted Permission
+    implementation 'gun0912.ted:tedpermission:2.2.3'
 }

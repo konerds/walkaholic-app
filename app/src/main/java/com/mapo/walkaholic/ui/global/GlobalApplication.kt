@@ -5,24 +5,24 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.user.UserApiClient
-import com.kakao.sdk.user.model.AccessTokenInfo
 import com.mapo.walkaholic.R
 import com.naver.maps.map.NaverMapSdk
 
 class GlobalApplication : Application() {
     companion object {
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
         @SuppressLint("StaticFieldLeak")
         private var instance: GlobalApplication? = null
         fun getGlobalApplicationContext(): Context {
             checkNotNull(instance) { "Not inherited from GlobalApplication!" }
             return instance!!.applicationContext
         }
+        val mActivityList: ArrayList<Activity> = ArrayList()
 
-        val activityList: ArrayList<Activity> = ArrayList()
-
-        var currentLng: String = "37.535938297705925"
-        var currentLat: String = "127.00464302761901"
+        // Initiation To Mapo
+        var currentLng: String = "126.901609"
+        var currentLat: String = "37.566168"
     }
 
     override fun onCreate() {

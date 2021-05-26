@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_guide.*
 class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // For Manage Activity Lifecycle
-        GlobalApplication.activityList.add(this)
+        GlobalApplication.mActivityList.add(this)
         // Call Parent Function
         super.onCreate(savedInstanceState)
         /*
@@ -89,7 +89,7 @@ class GuideActivity : BaseActivity<GuideViewModel, ActivityGuideBinding, GuideRe
 
     override fun onDestroy() {
         // For Manage Activity Lifecycle
-        GlobalApplication.activityList.remove(this)
+        GlobalApplication.mActivityList.remove(this)
         super.onDestroy()
     }
 

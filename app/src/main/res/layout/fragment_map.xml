@@ -121,7 +121,6 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="산책기록"
-                    android:textColor="@color/selector_map_tab"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -132,7 +131,6 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="편의시설"
-                    android:textColor="@color/selector_map_tab"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -143,7 +141,6 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="코스추천"
-                    android:textColor="@color/selector_map_tab"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -160,22 +157,19 @@
                     android:id="@+id/mapViewWalkRecord"
                     android:layout_width="0dp"
                     android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/selector_map_tab" />
+                    android:layout_weight="1" />
 
                 <View
                     android:id="@+id/mapViewFacilities"
                     android:layout_width="0dp"
                     android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/selector_map_tab" />
+                    android:layout_weight="1" />
 
                 <View
                     android:id="@+id/mapViewCourse"
                     android:layout_width="0dp"
                     android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/selector_map_tab" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -191,7 +185,6 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="56dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal"
                     android:orientation="vertical">
@@ -240,7 +233,6 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="57dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal"
                     android:orientation="vertical">
@@ -288,7 +280,7 @@
                 android:layout_height="104dp"
                 android:background="#FFFFFFFF"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:layout_width="match_parent"
@@ -364,7 +356,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{"소요시간 " + themeCourse.courseTitle}'
+                        android:text='@{"소요시간 " + themeCourse.courseTime}'
                         android:textColor="#9B9790"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -373,7 +365,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="10dp"
-                        android:text="길산초교 삼거리 - 오금교 - 신정교 - 오목교 - 신목동역"
+                        android:text="@{themeCourse.courseRouteInfo}"
                         android:textColor="#9B9790"
                         android:textSize="10dp"
                         android:textStyle="bold" />
@@ -387,7 +379,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
-                        android:text="이곳은 하천보다 높은 제방 산책로에 늘어져있어 안양천을 바라보며 산책할 수 있어서 더욱 운치를 더한다."
+                        android:text="@{themeCourse.courseContents}"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 

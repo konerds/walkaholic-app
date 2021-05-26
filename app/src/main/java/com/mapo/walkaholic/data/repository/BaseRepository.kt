@@ -44,4 +44,8 @@ abstract class BaseRepository(
     suspend fun saveIsFirst(isFirst: Boolean) {
         preferences.saveIsFirst(isFirst)
     }
+
+    suspend fun saveIsLocationGranted(isLocationGranted : Boolean) {
+        preferences.saveIsLocationGranted(isLocationGranted)
+    }
 }

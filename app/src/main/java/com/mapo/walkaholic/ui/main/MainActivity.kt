@@ -36,7 +36,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
     private lateinit var bindingNavigationHeader: NaviHamburgerHeaderBinding
     private lateinit var drawerToggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
-        GlobalApplication.activityList.add(this)
+        GlobalApplication.mActivityList.add(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -192,7 +192,7 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
     }
 
     override fun onDestroy() {
-        GlobalApplication.activityList.remove(this)
+        GlobalApplication.mActivityList.remove(this)
         super.onDestroy()
     }
 

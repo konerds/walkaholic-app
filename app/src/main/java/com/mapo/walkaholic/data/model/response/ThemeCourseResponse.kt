@@ -8,8 +8,10 @@ data class ThemeCourseResponse(
         data class DataThemeCourse(
                 val courseId : Int,
                 val courseName : String,
-                val courseTitle : String,
+                val courseContents : String,
+                val courseRouteInfo : String,
                 val courseAddress : String,
+                val courseFilename : String,
                 val courseTime : String,
                 val courseDistance : String,
                 val coursePoint : String

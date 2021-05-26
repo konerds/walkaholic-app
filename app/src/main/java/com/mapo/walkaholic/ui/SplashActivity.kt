@@ -14,16 +14,13 @@ import com.mapo.walkaholic.ui.auth.AuthActivity
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.prolificinteractive.materialcalendarview.CalendarDay
 import kotlinx.android.synthetic.main.activity_splashscreen.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SplashActivity :
     BaseActivity<SplashViewModel, ActivitySplashscreenBinding, SplashRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // For Manage Activity Lifecycle
-        GlobalApplication.activityList.add(this)
+        GlobalApplication.mActivityList.add(this)
         // Call Parent Function
         super.onCreate(savedInstanceState)
         /*
@@ -104,7 +101,7 @@ class SplashActivity :
 
     override fun onDestroy() {
         // For Manage Activity Lifecycle
-        GlobalApplication.activityList.remove(this)
+        GlobalApplication.mActivityList.remove(this)
         super.onDestroy()
     }
 
