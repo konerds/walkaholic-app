@@ -75,6 +75,8 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         binding.mapView.getMapAsync(this)
         when (mapArgs.isWalk) {
             true -> {
+                binding.mapWalkControllerLayout.visible(true)
+                binding.mapWalkControllerLayout2.visible(false)
                 binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#F37520"))
                 binding.mapViewFacilities.setBackgroundColor(Color.parseColor("#E3E0DB"))
                 binding.mapViewCourse.setBackgroundColor(Color.parseColor("#E3E0DB"))
@@ -169,8 +171,21 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     binding.mapNavigationLayoutFacilities.visible(false)
                     binding.mapNavigationLayoutCourse.visible(true)
                 }
+                binding.mapIvWalkStart.setOnClickListener {
+                    binding.mapWalkControllerLayout.visible(false)
+                    binding.mapWalkControllerLayout2.visible(true)
+                }
+                binding.mapIvWalkPause.setOnClickListener {
+                    // Flag 필요
+                }
+                binding.mapIvWalkStop.setOnClickListener {
+                    binding.mapWalkControllerLayout.visible(true)
+                    binding.mapWalkControllerLayout2.visible(false)
+                }
             }
             false -> {
+                binding.mapWalkControllerLayout.visible(false)
+                binding.mapWalkControllerLayout2.visible(false)
                 viewModel.getThemeCourse(mapArgs.themeId)
                 viewModel.themeCourseResponse.observe(
                     viewLifecycleOwner,
