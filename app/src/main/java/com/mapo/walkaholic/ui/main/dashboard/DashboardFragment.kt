@@ -728,6 +728,14 @@ class DashboardFragment :
         binding.dashLayoutLocationSetting.setOnClickListener {
             setCurrentLocation()
         }
+
+        binding.showWeatherDetail.setOnClickListener {
+            val navDirection: NavDirections? =
+                DashboardFragmentDirections.actionActionBnvDashToActionBnvDashWeatherDetail()
+            if (navDirection != null) {
+                findNavController().navigate(navDirection)
+            }
+        }
     }
 
     private fun setCurrentLocation() {
