@@ -23,7 +23,7 @@ class MapFacilitiesAdapter(
     private val mSelectedMapFacilitiesItems = SparseBooleanArray(itemCount)
 
     private fun toggleItemSelected(position: Int) {
-        if(mSelectedMapFacilitiesItems.get(position, false)) {
+        if (mSelectedMapFacilitiesItems.get(position, false)) {
             mSelectedMapFacilitiesItems.delete(position)
             notifyItemChanged(position)
         } else {
@@ -53,7 +53,11 @@ class MapFacilitiesAdapter(
         holder.binding.itemMapFacilitiesLayout.setOnClickListener {
             toggleItemSelected(position)
             holder.binding.itemMapFacilitiesIv.isSelected = isItemSelected(position)
-            listener.onItemClick(position, arrayListFacilities[position].facilitiesId)
+            listener.onItemClick(
+                position,
+                arrayListFacilities[position].facilitiesId,
+                isItemSelected(position)
+            )
         }
     }
 

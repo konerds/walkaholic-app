@@ -33,7 +33,10 @@ import com.mapo.walkaholic.ui.visible
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
+import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.fragment_map.view.*
 import kotlinx.coroutines.flow.first
@@ -407,25 +410,475 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 
-    override fun onItemClick(position: Int, facilitiesId: Int) {
+    override fun onItemClick(position: Int, facilitiesId: Int, isSelected: Boolean) {
         when (facilitiesId) {
             1 -> {
+                val arrayListToiletMarker = arrayListOf<Marker>()
+                if (!isSelected) {
+                    viewModel.getMarkerToilet(
+                        facilitiesId,
+                        GlobalApplication.currentLat,
+                        GlobalApplication.currentLng
+                    )
+                    viewModel.markerToiletResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _markerToiletResponse ->
+                            when (_markerToiletResponse) {
+                                is Resource.Success -> {
+                                    when (_markerToiletResponse.value.code) {
+                                        "200" -> {
+                                            _markerToiletResponse.value.data.forEachIndexed { _ToiletIndex, _ToiletElement ->
+                                                val infoWindow = InfoWindow()
+                                                infoWindow.adapter = object :
+                                                    InfoWindow.DefaultTextAdapter(requireContext()) {
+                                                    override fun getText(infoWindow: InfoWindow): CharSequence {
+                                                        return _ToiletElement.name + "\n" + _ToiletElement.address
+                                                    }
+                                                }
+                                                infoWindow.alpha = 0.5f
+                                                val marker = Marker()
+                                                marker.position = LatLng(
+                                                    _ToiletElement.x.toDouble(),
+                                                    _ToiletElement.y.toDouble()
+                                                )
+                                                marker.icon =
+                                                    OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_toilet)
+                                                marker.width = 20
+                                                marker.height = 20
+                                                marker.zIndex = facilitiesId
+                                                marker.isHideCollidedSymbols = true
+                                                marker.setOnClickListener {
+                                                    infoWindow.open(marker)
+                                                    true
+                                                }
+                                                arrayListToiletMarker.add(marker)
+                                                marker.map = mMap
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _markerToiletResponse.value.message,
+                                                {
+                                                    viewModel.getMarkerToilet(
+                                                        facilitiesId,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(_markerToiletResponse) {
+                                        viewModel.getMarkerToilet(
+                                            facilitiesId,
+                                            GlobalApplication.currentLat,
+                                            GlobalApplication.currentLng
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                } else {
+                    arrayListToiletMarker.forEachIndexed { _markerIndex, _markerElement ->
+                        _markerElement.map = null
+                    }
+                }
             }
             2 -> {
+                val arrayListStoreMarker = arrayListOf<Marker>()
+                if (!isSelected) {
+                    viewModel.getMarkerStore(
+                        facilitiesId,
+                        GlobalApplication.currentLat,
+                        GlobalApplication.currentLng
+                    )
+                    viewModel.markerStoreResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _markerStoreResponse ->
+                            when (_markerStoreResponse) {
+                                is Resource.Success -> {
+                                    when (_markerStoreResponse.value.code) {
+                                        "200" -> {
+                                            _markerStoreResponse.value.data.forEachIndexed { _StoreIndex, _StoreElement ->
+                                                val infoWindow = InfoWindow()
+                                                infoWindow.adapter = object :
+                                                    InfoWindow.DefaultTextAdapter(requireContext()) {
+                                                    override fun getText(infoWindow: InfoWindow): CharSequence {
+                                                        return _StoreElement.name + "\n" + _StoreElement.address
+                                                    }
+                                                }
+                                                infoWindow.alpha = 0.5f
+                                                val marker = Marker()
+                                                marker.position = LatLng(
+                                                    _StoreElement.x.toDouble(),
+                                                    _StoreElement.y.toDouble()
+                                                )
+                                                marker.icon =
+                                                    OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_store)
+                                                marker.width = 20
+                                                marker.height = 20
+                                                marker.zIndex = facilitiesId
+                                                marker.isHideCollidedSymbols = true
+                                                marker.setOnClickListener {
+                                                    infoWindow.open(marker)
+                                                    true
+                                                }
+                                                arrayListStoreMarker.add(marker)
+                                                marker.map = mMap
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _markerStoreResponse.value.message,
+                                                {
+                                                    viewModel.getMarkerStore(
+                                                        facilitiesId,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(_markerStoreResponse) {
+                                        viewModel.getMarkerStore(
+                                            facilitiesId,
+                                            GlobalApplication.currentLat,
+                                            GlobalApplication.currentLng
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                } else {
+                    arrayListStoreMarker.forEachIndexed { _markerIndex, _markerElement ->
+                        _markerElement.map = null
+                    }
+                }
             }
             3 -> {
+                val arrayListCafeMarker = arrayListOf<Marker>()
+                if (!isSelected) {
+                    viewModel.getMarkerCafe(
+                        facilitiesId,
+                        GlobalApplication.currentLat,
+                        GlobalApplication.currentLng
+                    )
+                    viewModel.markerCafeResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _markerCafeResponse ->
+                            when (_markerCafeResponse) {
+                                is Resource.Success -> {
+                                    when (_markerCafeResponse.value.code) {
+                                        "200" -> {
+                                            _markerCafeResponse.value.data.forEachIndexed { _CafeIndex, _CafeElement ->
+                                                val infoWindow = InfoWindow()
+                                                infoWindow.adapter = object :
+                                                    InfoWindow.DefaultTextAdapter(requireContext()) {
+                                                    override fun getText(infoWindow: InfoWindow): CharSequence {
+                                                        return _CafeElement.name + "\n" + _CafeElement.address
+                                                    }
+                                                }
+                                                infoWindow.alpha = 0.5f
+                                                val marker = Marker()
+                                                marker.position = LatLng(
+                                                    _CafeElement.x.toDouble(),
+                                                    _CafeElement.y.toDouble()
+                                                )
+                                                marker.icon =
+                                                    OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_cafe)
+                                                marker.width = 20
+                                                marker.height = 20
+                                                marker.zIndex = facilitiesId
+                                                marker.isHideCollidedSymbols = true
+                                                marker.setOnClickListener {
+                                                    infoWindow.open(marker)
+                                                    true
+                                                }
+                                                arrayListCafeMarker.add(marker)
+                                                marker.map = mMap
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _markerCafeResponse.value.message,
+                                                {
+                                                    viewModel.getMarkerCafe(
+                                                        facilitiesId,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(_markerCafeResponse) {
+                                        viewModel.getMarkerCafe(
+                                            facilitiesId,
+                                            GlobalApplication.currentLat,
+                                            GlobalApplication.currentLng
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                } else {
+                    arrayListCafeMarker.forEachIndexed { _markerIndex, _markerElement ->
+                        _markerElement.map = null
+                    }
+                }
             }
             4 -> {
+                val arrayListPharmacyMarker = arrayListOf<Marker>()
+                if (!isSelected) {
+                    viewModel.getMarkerPharmacy(
+                        facilitiesId,
+                        GlobalApplication.currentLat,
+                        GlobalApplication.currentLng
+                    )
+                    viewModel.markerPharmacyResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _markerPharmacyResponse ->
+                            when (_markerPharmacyResponse) {
+                                is Resource.Success -> {
+                                    when (_markerPharmacyResponse.value.code) {
+                                        "200" -> {
+                                            _markerPharmacyResponse.value.data.forEachIndexed { _PharmacyIndex, _PharmacyElement ->
+                                                val infoWindow = InfoWindow()
+                                                infoWindow.adapter = object :
+                                                    InfoWindow.DefaultTextAdapter(requireContext()) {
+                                                    override fun getText(infoWindow: InfoWindow): CharSequence {
+                                                        return _PharmacyElement.name + "\n" + _PharmacyElement.address
+                                                    }
+                                                }
+                                                infoWindow.alpha = 0.5f
+                                                val marker = Marker()
+                                                marker.position = LatLng(
+                                                    _PharmacyElement.x.toDouble(),
+                                                    _PharmacyElement.y.toDouble()
+                                                )
+                                                marker.icon =
+                                                    OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_pharmacy)
+                                                marker.width = 20
+                                                marker.height = 20
+                                                marker.zIndex = facilitiesId
+                                                marker.isHideCollidedSymbols = true
+                                                marker.setOnClickListener {
+                                                    infoWindow.open(marker)
+                                                    true
+                                                }
+                                                arrayListPharmacyMarker.add(marker)
+                                                marker.map = mMap
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _markerPharmacyResponse.value.message,
+                                                {
+                                                    viewModel.getMarkerPharmacy(
+                                                        facilitiesId,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(_markerPharmacyResponse) {
+                                        viewModel.getMarkerPharmacy(
+                                            facilitiesId,
+                                            GlobalApplication.currentLat,
+                                            GlobalApplication.currentLng
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                } else {
+                    arrayListPharmacyMarker.forEachIndexed { _markerIndex, _markerElement ->
+                        _markerElement.map = null
+                    }
+                }
             }
             5 -> {
+                val arrayListBicycleMarker = arrayListOf<Marker>()
+                if (!isSelected) {
+                    viewModel.getMarkerBicycle(
+                        facilitiesId,
+                        GlobalApplication.currentLat,
+                        GlobalApplication.currentLng
+                    )
+                    viewModel.markerBicycleResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _markerBicycleResponse ->
+                            when (_markerBicycleResponse) {
+                                is Resource.Success -> {
+                                    when (_markerBicycleResponse.value.code) {
+                                        "200" -> {
+                                            _markerBicycleResponse.value.data.forEachIndexed { _BicycleIndex, _BicycleElement ->
+                                                val infoWindow = InfoWindow()
+                                                infoWindow.adapter = object :
+                                                    InfoWindow.DefaultTextAdapter(requireContext()) {
+                                                    override fun getText(infoWindow: InfoWindow): CharSequence {
+                                                        return _BicycleElement.name + "\n" + _BicycleElement.address
+                                                    }
+                                                }
+                                                infoWindow.alpha = 0.5f
+                                                val marker = Marker()
+                                                marker.position = LatLng(
+                                                    _BicycleElement.x.toDouble(),
+                                                    _BicycleElement.y.toDouble()
+                                                )
+                                                marker.icon =
+                                                    OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_bicycle)
+                                                marker.width = 20
+                                                marker.height = 20
+                                                marker.zIndex = facilitiesId
+                                                marker.isHideCollidedSymbols = true
+                                                marker.setOnClickListener {
+                                                    infoWindow.open(marker)
+                                                    true
+                                                }
+                                                arrayListBicycleMarker.add(marker)
+                                                marker.map = mMap
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _markerBicycleResponse.value.message,
+                                                {
+                                                    viewModel.getMarkerBicycle(
+                                                        facilitiesId,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(_markerBicycleResponse) {
+                                        viewModel.getMarkerBicycle(
+                                            facilitiesId,
+                                            GlobalApplication.currentLat,
+                                            GlobalApplication.currentLng
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                } else {
+                    arrayListBicycleMarker.forEachIndexed { _markerIndex, _markerElement ->
+                        _markerElement.map = null
+                    }
+                }
             }
             6 -> {
+                val arrayListPoliceMarker = arrayListOf<Marker>()
+                if (!isSelected) {
+                    viewModel.getMarkerPolice(
+                        facilitiesId,
+                        GlobalApplication.currentLat,
+                        GlobalApplication.currentLng
+                    )
+                    viewModel.markerPoliceResponse.observe(
+                        viewLifecycleOwner,
+                        Observer { _markerPoliceResponse ->
+                            when (_markerPoliceResponse) {
+                                is Resource.Success -> {
+                                    when (_markerPoliceResponse.value.code) {
+                                        "200" -> {
+                                            _markerPoliceResponse.value.data.forEachIndexed { _policeIndex, _policeElement ->
+                                                val infoWindow = InfoWindow()
+                                                infoWindow.adapter = object :
+                                                    InfoWindow.DefaultTextAdapter(requireContext()) {
+                                                    override fun getText(infoWindow: InfoWindow): CharSequence {
+                                                        return _policeElement.name + "\n" + _policeElement.address
+                                                    }
+                                                }
+                                                infoWindow.alpha = 0.5f
+                                                val marker = Marker()
+                                                marker.position = LatLng(
+                                                    _policeElement.x.toDouble(),
+                                                    _policeElement.y.toDouble()
+                                                )
+                                                marker.icon =
+                                                    OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_police)
+                                                marker.width = 20
+                                                marker.height = 20
+                                                marker.zIndex = facilitiesId
+                                                marker.isHideCollidedSymbols = true
+                                                marker.setOnClickListener {
+                                                    infoWindow.open(marker)
+                                                    true
+                                                }
+                                                arrayListPoliceMarker.add(marker)
+                                                marker.map = mMap
+                                            }
+                                        }
+                                        else -> {
+                                            confirmDialog(
+                                                _markerPoliceResponse.value.message,
+                                                {
+                                                    viewModel.getMarkerPolice(
+                                                        facilitiesId,
+                                                        GlobalApplication.currentLat,
+                                                        GlobalApplication.currentLng
+                                                    )
+                                                },
+                                                "재시도"
+                                            )
+                                        }
+                                    }
+                                }
+                                is Resource.Loading -> {
 
+                                }
+                                is Resource.Failure -> {
+                                    handleApiError(_markerPoliceResponse) {
+                                        viewModel.getMarkerPolice(
+                                            facilitiesId,
+                                            GlobalApplication.currentLat,
+                                            GlobalApplication.currentLng
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                } else {
+                    arrayListPoliceMarker.forEachIndexed { _markerIndex, _markerElement ->
+                        _markerElement.map = null
+                    }
+                }
             }
         }
     }

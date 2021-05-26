@@ -11,8 +11,6 @@ import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
-import com.naver.maps.map.NaverMap
-import kotlinx.coroutines.coroutineScope
 import retrofit2.http.Body
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
@@ -41,14 +39,6 @@ class MainRepository(
     }
 
     private var userId : String = ""
-
-    private var mMap: NaverMap? = null
-
-    fun setNaverMap(mMap: NaverMap) {
-        this.mMap = mMap
-    }
-
-    fun getNaverMap() = this.mMap
 
     suspend fun getUser() = safeApiCall {
         //setUser()
@@ -270,4 +260,9 @@ class MainRepository(
             }
         )
     }
+
+    suspend fun getMarker(type:Int, latitude: String, longitude: String) = safeApiCall {
+        api.getMarker(type.toString(), latitude, longitude)
+    }
+
 }
