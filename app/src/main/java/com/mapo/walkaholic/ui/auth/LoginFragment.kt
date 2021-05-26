@@ -2,11 +2,13 @@ package com.mapo.walkaholic.ui.auth
 
 import android.app.Activity
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -134,6 +136,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                         }
                     } else {
                         // Token Existed (If need, Refresh)
+
                         /*UserApiClient.instance.logout { error ->
                             if (error != null) {
                                 Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
@@ -142,10 +145,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
                             }
                         }*/
-
-                        /*******************
-                         * 임시 테스트용
-                         ******************/
 
                         viewModel.login()
                         viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
@@ -181,7 +180,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 }
                             }
                         })
-
                     }
                 }
             } else {
@@ -202,6 +200,21 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
         binding.loginBtnTutorial.setOnClickListener {
             requireActivity().startNewActivity(GuideActivity::class.java as Class<Activity>)
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                confirmDialog(getString(com.mapo.walkaholic.R.string.err_deny_prev), null, null)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 
     override fun getViewModel() = LoginViewModel::class.java

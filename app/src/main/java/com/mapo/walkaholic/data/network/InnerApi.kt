@@ -34,14 +34,14 @@ interface InnerApi {
     @GET("user/{id}/item/view")
     suspend fun getUserCharacterPreviewFilename(
         @Path("id") id: String,
-        @Query("faceItemId") faceItemId : String?,
-        @Query("headItemId") headItemId : String?
+        @Query("faceItemId") faceItemId: String?,
+        @Query("headItemId") headItemId: String?
     ): UserCharacterPreviewFilenameResponse
 
     @GET("global/resource/weather/{code}")
     suspend fun getFilenameWeather(
         @Path("code") code: String
-    ) : FilenameWeatherResponse
+    ): FilenameWeatherResponse
 
     @GET("global/resource/theme/name")
     suspend fun getCategoryTheme(): CategoryThemeResponse
@@ -57,10 +57,10 @@ interface InnerApi {
     @GET("user/{id}/item")
     suspend fun getStatusUserCharacterInventoryItem(
         @Path("id") id: String
-    ) : UserInventoryItemStatusResponse
+    ): UserInventoryItemStatusResponse
 
     @GET("item")
-    suspend fun getStatusShopSaleItem() : ShopSaleItemStatusResponse
+    suspend fun getStatusShopSaleItem(): ShopSaleItemStatusResponse
 
     @Headers(
         "Accept:application/json, text/plain, */*",
@@ -69,8 +69,8 @@ interface InnerApi {
     @POST("user/{id}/item")
     suspend fun buyItem(
         @Path("id") id: String,
-        @Body buyItemInfo : BuyItemRequestBody
-    ) : BuyItemResponse
+        @Body buyItemInfo: BuyItemRequestBody
+    ): BuyItemResponse
 
     @Headers(
         "Accept:application/json, text/plain, */*",
@@ -79,20 +79,25 @@ interface InnerApi {
     @PUT("user/{id}/item")
     suspend fun equipItem(
         @Path("id") id: String,
-        @Body equipItemInfo : EquipItemRequestBody
-    ) : EquipItemResponse
+        @Body equipItemInfo: EquipItemRequestBody
+    ): EquipItemResponse
 
     @DELETE("user/{id}/item/{itemId}")
     suspend fun deleteItem(
         @Path("id") id: String,
         @Path("itemId") itemId: String
-    ) : DeleteItemResponse
+    ): DeleteItemResponse
 
     @FormUrlEncoded
     @POST("map")
     suspend fun getPoints(
         @Body body: MapRequestBody
     ): MapResponse
+
+    @GET("course/theme/{id}")
+    suspend fun getThemeCourse(
+        @Path("id") id: String
+    ): ThemeCourseResponse
 
     @GET("user/{id}/detail/walk-record")
     suspend fun getWalkRecord(

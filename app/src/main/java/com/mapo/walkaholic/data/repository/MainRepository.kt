@@ -34,15 +34,15 @@ class MainRepository(
         private const val APIS_WEATHER_DATE_FORMAT = "yyyyMMdd"
         private const val APIS_WEATHER_TIME_FORMAT = "HHmm"
         private const val TIME_ZONE = "Asia/Seoul"
-        private const val SGIS_API_CONSUMER_KEY = "67ad057e051144d2a09a"
-        private const val SGIS_API_SECRET_KEY = "5b4ac1c4c89c4ad8bc41"
+        private const val SGIS_API_CONSUMER_KEY = "70ae3222d3e94dd5a9e5"
+        private const val SGIS_API_SECRET_KEY = "638a9b5ec41b40f2ba5a"
         private const val SGIS_EPSG_WGS = "4326"
         private const val SGIS_EPSG_BESSEL = "5181"
     }
 
-    private var mMap: NaverMap? = null
+    private var userId: String = ""
 
-    private var userId : Long = 0
+    private var mMap: NaverMap? = null
 
     fun setNaverMap(mMap: NaverMap) {
         this.mMap = mMap
@@ -51,23 +51,17 @@ class MainRepository(
     fun getNaverMap() = this.mMap
 
     suspend fun getUser() = safeApiCall {
-        /*setUserId()
-        api.getUser(userId.toString())*/
-
-        /******
-         * 테스트용
-         */
-        api.getUser("1710740016")
+        setUser()
+        api.getUser(userId)
     }
 
-    private fun setUserId() {
+    fun setUser() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 // Fail
-            }
-            else if (tokenInfo != null) {
+            } else if (tokenInfo != null) {
                 // Success
-                userId = tokenInfo.id
+                userId = tokenInfo.id.toString()
             }
         }
     }
@@ -240,6 +234,10 @@ class MainRepository(
         api.getMission(userId.toString(), missionType.toString())
     }
 
+    suspend fun getThemeCourse(id: Int) = safeApiCall {
+        api.getThemeCourse(id.toString())
+    }
+
     suspend fun getRanking(position: Int) = safeApiCall {
         api.getRanking(position)
     }
@@ -265,13 +263,4 @@ class MainRepository(
             }
         )
     }
-
-
-/*    suspend fun getMissionDaily(missionID:String) = safeApiCall {
-        api.getMissionDaily(missionID)
-    }
-
-    suspend fun getMissionWeekly(missionID:String) = safeApiCall {
-        api.getMissionWeekly(missionID)
-    }*/
 }

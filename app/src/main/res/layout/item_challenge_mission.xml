@@ -11,6 +11,10 @@
             type="com.mapo.walkaholic.ui.main.challenge.ChallengeViewModel" />
 
         <variable
+            name="isAvailable"
+            type="Boolean" />
+
+        <variable
             name="user"
             type="com.mapo.walkaholic.data.model.User" />
 

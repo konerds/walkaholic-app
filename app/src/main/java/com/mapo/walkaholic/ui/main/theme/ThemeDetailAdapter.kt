@@ -7,7 +7,8 @@ import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.databinding.ItemThemeBinding
 
 class ThemeDetailAdapter(
-    private val arrayListTheme: ArrayList<Theme>
+    private val arrayListTheme: ArrayList<Theme>,
+    private val listener: ThemeItemClickListener
 ) : RecyclerView.Adapter<ThemeDetailAdapter.ItemThemeViewHolder>() {
     inner class ItemThemeViewHolder(
         val binding: ItemThemeBinding
@@ -31,6 +32,9 @@ class ThemeDetailAdapter(
 
     override fun onBindViewHolder(holder: ItemThemeViewHolder, position: Int) {
         holder.setThemeItem(arrayListTheme[position])
+        holder.binding.itemThemeFL.setOnClickListener {
+            listener.onItemClick(position, arrayListTheme[position])
+        }
     }
 
     override fun getItemCount() = arrayListTheme.size

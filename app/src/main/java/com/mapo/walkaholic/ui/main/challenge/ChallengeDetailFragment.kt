@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mapo.walkaholic.data.model.MissionCondition
+import com.mapo.walkaholic.data.model.response.MissionResponse
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
@@ -50,6 +51,15 @@ class ChallengeDetailFragment(
                                                 "200" -> {
                                                     _challengeRVMission.adapter =
                                                         ChallengeDetailMissionAdapter(_missionResponse.value.data)
+                                                    /*val filteredData = _missionResponse.value.data
+                                                    filteredData.add(when(position) {
+                                                        0 -> {
+                                                            MissionResponse.Mission()
+                                                        }
+                                                            1-> {
+                                                                MissionResponse.Mission()
+                                                            }
+                                                    })*/
                                                     Log.e(
                                                         "mission",
                                                         _missionResponse.value.data.toString()
@@ -140,9 +150,9 @@ class ChallengeDetailFragment(
                                             tab.text = tabName?.get(position)
                                         }.attach()
 
-                                        var rankingPositionOneTvIntro1: String = "1"
+                                        /*var rankingPositionOneTvIntro1: String = "1"
                                         var rankingPositionOneRankNum: String = "2"
-                                        var rankingPositionOneTvIntro3: String = "3"
+                                        var rankingPositionOneTvIntro3: String = "3"*/
 
                                         viewModel.getMonthRanking(_userResponse.value.data.first().id)
                                         viewModel.monthRankingResponse.observe(viewLifecycleOwner, Observer { _monthRankingResponse ->
@@ -156,9 +166,9 @@ class ChallengeDetailFragment(
                                                             binding.challengeRankingTvIntro3.text =
                                                                 "월별랭킹은 매월 1일 자정에 갱신되어요"
 
-                                                            rankingPositionOneTvIntro1 = "${_userResponse.value.data.first().nickName}님, 월별랭킹"
+                                                            /*rankingPositionOneTvIntro1 = "${_userResponse.value.data.first().nickName}님, 월별랭킹"
                                                             rankingPositionOneRankNum = "${_monthRankingResponse.value.data.first().rank}"
-                                                            rankingPositionOneTvIntro3 = "월별랭킹은 매월 1일 자정에 갱신되어요"
+                                                            rankingPositionOneTvIntro3 = "월별랭킹은 매월 1일 자정에 갱신되어요"*/
                                                         }
                                                         else -> {
                                                             // Error
@@ -186,55 +196,54 @@ class ChallengeDetailFragment(
                                             }
                                         })
 
+                                        viewModel.accumulateRankingResponse.observe(viewLifecycleOwner, Observer { _accumulateRankingResponse ->
+                                            when (_accumulateRankingResponse) {
+                                                is Resource.Success -> {
+                                                    when (_accumulateRankingResponse.value.code) {
+                                                        "200" -> {
+                                                            binding.challengeRankingTvIntro1.text =
+                                                                "${_userResponse.value.data.first().nickName}님, 누적랭킹"
+                                                            //레벨
+                                                            binding.challengeRankingTvRankNum.text = "${_accumulateRankingResponse.value.data.first().rank}"
+                                                            binding.challengeRankingTvIntro3.text =
+                                                                "서비스 시작일(2021년 05월 17일)부터 현재까지"
+                                                        }
+                                                        else -> {
+                                                            // Error
+                                                            confirmDialog(
+                                                                _accumulateRankingResponse.value.message,
+                                                                {
+                                                                    viewModel.getAccumulateRanking(
+                                                                        _userResponse.value.data.first().id
+                                                                    )
+                                                                },
+                                                                "재시도")
+                                                        }
+                                                    }
+                                                }
+                                                is Resource.Loading -> {
+                                                    // Loading
+                                                }
+                                                is Resource.Failure -> {
+                                                    // Network Error
+                                                    handleApiError(_accumulateRankingResponse) {
+                                                        viewModel.getAccumulateRanking(
+                                                            _userResponse.value.data.first().id)
+                                                    }
+                                                }
+                                            }
+                                        })
+
                                         tabLayout.addOnTabSelectedListener(object :
                                             TabLayout.OnTabSelectedListener {
                                             override fun onTabSelected(tab: TabLayout.Tab?) {
                                                 viewPager.currentItem = tab!!.position
                                                 when (tab!!.position) {
                                                     0 -> {
-                                                        binding.challengeRankingTvIntro1.text = rankingPositionOneTvIntro1
-                                                        binding.challengeRankingTvRankNum.text = rankingPositionOneRankNum
-                                                        binding.challengeRankingTvIntro3.text = rankingPositionOneTvIntro3
+                                                        viewModel.getMonthRanking(_userResponse.value.data.first().id)
                                                     }
                                                     1 -> {
                                                         viewModel.getAccumulateRanking(_userResponse.value.data.first().id)
-                                                        viewModel.accumulateRankingResponse.observe(viewLifecycleOwner, Observer { _accumulateRankingResponse ->
-                                                            when (_accumulateRankingResponse) {
-                                                                is Resource.Success -> {
-                                                                    when (_accumulateRankingResponse.value.code) {
-                                                                        "200" -> {
-                                                                            binding.challengeRankingTvIntro1.text =
-                                                                                "${_userResponse.value.data.first().nickName}님, 누적랭킹"
-                                                                            //레벨
-                                                                            binding.challengeRankingTvRankNum.text = "${_accumulateRankingResponse.value.data.first().rank}"
-                                                                            binding.challengeRankingTvIntro3.text =
-                                                                                "서비스 시작일(2021년 05월 17일)부터 현재까지"
-                                                                        }
-                                                                        else -> {
-                                                                            // Error
-                                                                            confirmDialog(
-                                                                                _accumulateRankingResponse.value.message,
-                                                                                {
-                                                                                    viewModel.getAccumulateRanking(
-                                                                                        _userResponse.value.data.first().id
-                                                                                    )
-                                                                                },
-                                                                                "재시도")
-                                                                        }
-                                                                    }
-                                                                }
-                                                                is Resource.Loading -> {
-                                                                    // Loading
-                                                                }
-                                                                is Resource.Failure -> {
-                                                                    // Network Error
-                                                                    handleApiError(_accumulateRankingResponse) {
-                                                                        viewModel.getAccumulateRanking(
-                                                                            _userResponse.value.data.first().id)
-                                                                    }
-                                                                }
-                                                            }
-                                                        })
                                                     }
                                                 }
                                             }
