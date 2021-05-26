@@ -58,11 +58,4 @@ class ChallengeDetailViewModel(
             _accumulateRankingResponse.value = mainRepository.getAccumulateRanking(userId)
         }
     }
-
-    fun getMissionProgress(missionID: String, conditionId: String) {
-        viewModelScope.launch {
-            _missionProgressResponse.value =
-                mainRepository.getMissionProgress(missionID, conditionId)
-        }
-    }
 }

@@ -240,10 +240,6 @@ class MainRepository(
         api.getMission(userId.toString(), missionType.toString())
     }
 
-    suspend fun getMissionProgress(missionID: String, conditionId: String) = safeApiCall {
-        api.getMissionProgress(missionID, conditionId)
-    }
-
     suspend fun getRanking(position: Int) = safeApiCall {
         api.getRanking(position)
     }
