@@ -16,10 +16,12 @@ import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.confirmDialog
+import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionListener
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>() {
+class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBinding, MainRepository>()
+{
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 

@@ -223,32 +223,28 @@ class MainRepository(
         )
     }
 
-    suspend fun getThemeCourse(id : Int) = safeApiCall {
+    suspend fun getMission(userId: Long, missionType: Int) = safeApiCall {
+        api.getMission(userId.toString(), missionType.toString())
+    }
+
+    suspend fun getMissionReward(userId: Long, missionId: String) = safeApiCall {
+        api.getMissionReward(userId.toString(), missionId)
+    }
+
+    suspend fun getThemeCourse(id: Int) = safeApiCall {
         api.getThemeCourse(id.toString())
     }
 
-    suspend fun getMissionCondition(position: Int) = safeApiCall {
-        api.getMissionCondition(
-            when (position) {
-                0 -> "00"
-                1 -> "01"
-                else -> ""
-            }
-        )
-    }
-
-    suspend fun getMissionProgress(missionID: String, conditionId: String) = safeApiCall {
-        api.getMissionProgress(missionID, conditionId)
-    }
-
     suspend fun getRanking(position: Int) = safeApiCall {
-        api.getRanking(
-            when (position) {
-                0 -> "00"
-                1 -> "01"
-                else -> ""
-            }
-        )
+        api.getRanking(position)
+    }
+
+    suspend fun getMonthRanking(userId: Long) = safeApiCall {
+        api.getMonthRanking(userId.toString())
+    }
+
+    suspend fun getAccumulateRanking(userId: Long) = safeApiCall {
+        api.getAccumulateRanking(userId.toString())
     }
 
     suspend fun getPoints(@Body body: MapRequestBody) = safeApiCall {
@@ -269,11 +265,4 @@ class MainRepository(
         api.getMarker(type.toString(), latitude, longitude)
     }
 
-/*    suspend fun getMissionDaily(missionID:String) = safeApiCall {
-        api.getMissionDaily(missionID)
-    }
-
-    suspend fun getMissionWeekly(missionID:String) = safeApiCall {
-        api.getMissionWeekly(missionID)
-    }*/
 }

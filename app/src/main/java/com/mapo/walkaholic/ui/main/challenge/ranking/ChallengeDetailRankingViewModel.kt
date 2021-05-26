@@ -37,4 +37,6 @@ class ChallengeDetailRankingViewModel(
             _rankingResponse.value = mainRepository.getRanking(position)
         }
     }
+
+
 }

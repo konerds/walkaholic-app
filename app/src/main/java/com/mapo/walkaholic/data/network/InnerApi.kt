@@ -111,24 +111,32 @@ interface InnerApi {
         @Query("date") date: String
     ): WalkRecordExistInMonthResponse
 
-    @FormUrlEncoded
-    @POST("info/missionCondition")
-    suspend fun getMissionCondition(
-        @Field("mission_id") missionId: String,
-    ): MissionConditionResponse
+    @GET("user/{id}/mission/{type}")
+    suspend fun getMission(
+        @Path("id") id: String,
+        @Path("type") type: String,
+    ): MissionResponse
 
-    @FormUrlEncoded
-    @POST("info/missionProgress")
-    suspend fun getMissionProgress(
-        @Field("mission_id") missionId: String,
-        @Field("condition_id") conditionId: String,
-    ): MissionProgressResponse
+    @PUT("user/{id}/reward/{missionId}")
+    suspend fun getMissionReward(
+        @Path("id") id: String,
+        @Path("missionId") missionId: String,
+    ): MissionRewardResponse
 
-    @FormUrlEncoded
-    @POST("info/ranking")
+    @GET("user/rank/{type}")
     suspend fun getRanking(
-        @Field("ranking_id") ranking_id: String
+        @Path("type") type: Int
     ): RankingResponse
+
+    @GET("user/{id}/rank/month")
+    suspend fun getMonthRanking(
+        @Path("id") id: String,
+    ): MonthRankingResponse
+
+    @GET("user/{id}/rank/accumulate")
+    suspend fun getAccumulateRanking(
+        @Path("id") id: String,
+    ): AccumulateRankingResponse
 
     @FormUrlEncoded
     @POST("info/favoritePath")
@@ -143,16 +151,4 @@ interface InnerApi {
         @Query("x") x: String,
         @Query("y") y: String
     ): MarkerLatLngResponse
-
-    /*@FormUrlEncoded
-    @POST("info/missionDaily")
-    suspend fun getMissionDaily(
-        @Field("mission_id") missionId: String,
-    ): MissionDailyResponse
-
-    @FormUrlEncoded
-    @POST("info/missionWeekly")
-    suspend fun getMissionWeekly(
-        @Field("mission_id") missionId: String,
-    ): MissionWeeklyResponse*/
 }

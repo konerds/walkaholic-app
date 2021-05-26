@@ -526,6 +526,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/showWeatherDetail"
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
                     android:background="@drawable/box_dashboard_lowercorner_grey">

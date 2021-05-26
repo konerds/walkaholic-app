@@ -1,13 +1,13 @@
 package com.mapo.walkaholic.data.model.response
 
-data class RankingResponse (
+data class MonthRankingResponse(
     val code: String,
     val message: String,
-    val data: ArrayList<Ranking>
+    val data: ArrayList<MonthRanking>
 ) {
-    data class Ranking(
+    data class MonthRanking(
         val nickName: String,
         val rank: String,
-        val point: String
+        val monthPoint: String
     )
 }
