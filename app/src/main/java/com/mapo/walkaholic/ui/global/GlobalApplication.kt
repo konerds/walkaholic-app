@@ -1,27 +1,14 @@
 package com.mapo.walkaholic.ui.global
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.location.Location
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.user.UserApiClient
-import com.kakao.sdk.user.model.AccessTokenInfo
 import com.mapo.walkaholic.R
-import com.mapo.walkaholic.ui.confirmDialog
 import com.naver.maps.map.NaverMapSdk
-import com.naver.maps.map.util.FusedLocationSource
 
-class GlobalApplication : Application(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener {
+class GlobalApplication : Application() {
     companion object {
         const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 

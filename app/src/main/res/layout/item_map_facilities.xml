@@ -4,26 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="mapFacilitiesItem"
+            type="com.mapo.walkaholic.data.model.MapFacilities" />
     </data>
 
     <LinearLayout
+        android:id="@+id/itemMapFacilitiesLayout"
         android:layout_width="44dp"
         android:layout_height="60dp"
         android:layout_marginRight="24dp"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/itemShopIvBase"
+            android:id="@+id/itemMapFacilitiesIv"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:elevation="4dp"
-            android:background="@drawable/selector_dashboard_character_shop_base" />
+            android:elevation="4dp" />
 
         <TextView
+            android:id="@+id/itemMapFacilitiesTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="화장실"
+            android:text="@{mapFacilitiesItem.facilitiesName}"
             android:textSize="12sp"
             android:textColor="#6C6B67"
             android:layout_gravity="center"/>

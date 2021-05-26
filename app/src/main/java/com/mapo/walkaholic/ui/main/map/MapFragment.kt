@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.LocationListener
+import com.mapo.walkaholic.data.model.MapFacilities
 import com.mapo.walkaholic.data.model.response.ThemeCourseResponse
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -28,7 +29,6 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.main.dashboard.character.shop.DashboardCharacterShopFragmentDirections
 import com.mapo.walkaholic.ui.visible
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepository>(),
-    OnMapReadyCallback, LocationListener {
+    OnMapReadyCallback, LocationListener, MapFacilitiesClickListener {
     private lateinit var mapView: MapView
     private lateinit var mMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
@@ -87,15 +87,9 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     binding.mapTvWalkRecord.setTextColor(Color.parseColor("#F37520"))
                     binding.mapTvFacilities.setTextColor(Color.parseColor("#E3E0DB"))
                     binding.mapTvCourse.setTextColor(Color.parseColor("#E3E0DB"))
-                    /*binding.mapTvWalkRecord.isSelected = true
-                    binding.mapTvFacilities.isSelected = false
-                    binding.mapTvCourse.isSelected = false
-                    binding.mapViewWalkRecord.isSelected = true
-                    binding.mapViewFacilities.isSelected = false
-                    binding.mapViewCourse.isSelected = false*/
                     binding.mapNavigationLayoutWalkRecord.visible(true)
-                    binding.mapNavigationLayoutCourse.visible(false)
                     binding.mapNavigationLayoutFacilities.visible(false)
+                    binding.mapNavigationLayoutCourse.visible(false)
                 }
                 binding.mapTvFacilities.setOnClickListener {
                     binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#E3E0DB"))
@@ -104,15 +98,62 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     binding.mapTvWalkRecord.setTextColor(Color.parseColor("#E3E0DB"))
                     binding.mapTvFacilities.setTextColor(Color.parseColor("#F37520"))
                     binding.mapTvCourse.setTextColor(Color.parseColor("#E3E0DB"))
-                    /*binding.mapTvWalkRecord.isSelected = false
-                    binding.mapTvFacilities.isSelected = true
-                    binding.mapTvCourse.isSelected = false
-                    binding.mapViewWalkRecord.isSelected = false
-                    binding.mapViewFacilities.isSelected = true
-                    binding.mapViewCourse.isSelected = false*/
                     binding.mapNavigationLayoutWalkRecord.visible(false)
-                    binding.mapNavigationLayoutCourse.visible(true)
-                    binding.mapNavigationLayoutFacilities.visible(false)
+                    binding.mapNavigationLayoutFacilities.visible(true)
+                    binding.mapNavigationLayoutCourse.visible(false)
+                    binding.mapRVFacilities.also { _mapRVFacilities ->
+                        val arrayListMapFacilities = arrayListOf<MapFacilities>()
+                        arrayListMapFacilities.add(
+                            MapFacilities(
+                                com.mapo.walkaholic.R.drawable.selector_map_toilet,
+                                "화장실",
+                                1
+                            )
+                        )
+                        arrayListMapFacilities.add(
+                            MapFacilities(
+                                com.mapo.walkaholic.R.drawable.selector_map_store,
+                                "편의점",
+                                2
+                            )
+                        )
+                        arrayListMapFacilities.add(
+                            MapFacilities(
+                                com.mapo.walkaholic.R.drawable.selector_map_cafe,
+                                "까페",
+                                3
+                            )
+                        )
+                        arrayListMapFacilities.add(
+                            MapFacilities(
+                                com.mapo.walkaholic.R.drawable.selector_map_pharmacy,
+                                "약국",
+                                4
+                            )
+                        )
+                        arrayListMapFacilities.add(
+                            MapFacilities(
+                                com.mapo.walkaholic.R.drawable.selector_map_bicycle,
+                                "따릉이",
+                                5
+                            )
+                        )
+                        arrayListMapFacilities.add(
+                            MapFacilities(
+                                com.mapo.walkaholic.R.drawable.selector_map_police,
+                                "경찰서",
+                                6
+                            )
+                        )
+                        val linearLayoutManager =
+                            LinearLayoutManager(requireContext())
+                        linearLayoutManager.orientation =
+                            LinearLayoutManager.HORIZONTAL
+                        _mapRVFacilities.layoutManager = linearLayoutManager
+                        _mapRVFacilities.setHasFixedSize(true)
+                        _mapRVFacilities.adapter =
+                            MapFacilitiesAdapter(arrayListMapFacilities, this)
+                    }
                 }
                 binding.mapTvCourse.setOnClickListener {
                     binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#E3E0DB"))
@@ -121,15 +162,9 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     binding.mapTvWalkRecord.setTextColor(Color.parseColor("#E3E0DB"))
                     binding.mapTvFacilities.setTextColor(Color.parseColor("#E3E0DB"))
                     binding.mapTvCourse.setTextColor(Color.parseColor("#F37520"))
-                    /*binding.mapTvWalkRecord.isSelected = false
-                    binding.mapTvFacilities.isSelected = false
-                    binding.mapTvCourse.isSelected = true
-                    binding.mapViewWalkRecord.isSelected = false
-                    binding.mapViewFacilities.isSelected = false
-                    binding.mapViewCourse.isSelected = true*/
                     binding.mapNavigationLayoutWalkRecord.visible(false)
-                    binding.mapNavigationLayoutCourse.visible(false)
-                    binding.mapNavigationLayoutFacilities.visible(true)
+                    binding.mapNavigationLayoutFacilities.visible(false)
+                    binding.mapNavigationLayoutCourse.visible(true)
                 }
             }
             false -> {
@@ -268,18 +303,16 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         }
 
         mMap?.let {
-            val coord = LatLng(location)
-
-            GlobalApplication.currentLng = coord.latitude.toString()
-            GlobalApplication.currentLat = coord.longitude.toString()
-            Log.e("현재 위치 : ", "${coord.longitude}, ${coord.latitude}")
+            val currentLatLng = LatLng(location)
+            GlobalApplication.currentLng = currentLatLng.latitude.toString()
+            GlobalApplication.currentLat = currentLatLng.longitude.toString()
 
             val locationOverlay = it.locationOverlay
             locationOverlay.isVisible = true
-            locationOverlay.position = coord
+            locationOverlay.position = currentLatLng
             locationOverlay.bearing = location.bearing
 
-            it.moveCamera(CameraUpdate.scrollTo(coord))
+            it.moveCamera(CameraUpdate.scrollTo(currentLatLng))
         }
     }
 
@@ -317,10 +350,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         mMap.addOnCameraChangeListener { reason, animated ->
         }
         mMap.setOnMapClickListener { point, coord ->
-            Toast.makeText(
-                requireContext(), "${coord.longitude}, ${coord.latitude}",
-                Toast.LENGTH_SHORT
-            ).show()
         }
         val marker = Marker()
         marker.position = LatLng(37.5670135, 126.9783740)
@@ -376,5 +405,28 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
+    }
+
+    override fun onItemClick(position: Int, facilitiesId: Int) {
+        when (facilitiesId) {
+            1 -> {
+
+            }
+            2 -> {
+
+            }
+            3 -> {
+
+            }
+            4 -> {
+
+            }
+            5 -> {
+
+            }
+            6 -> {
+
+            }
+        }
     }
 }

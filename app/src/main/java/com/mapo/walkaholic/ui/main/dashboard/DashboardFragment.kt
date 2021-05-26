@@ -2,9 +2,7 @@ package com.mapo.walkaholic.ui.main.dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
@@ -13,14 +11,12 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
-import android.provider.Settings
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -44,11 +40,12 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
-import com.mapo.walkaholic.ui.*
+import com.mapo.walkaholic.ui.alertDialog
 import com.mapo.walkaholic.ui.base.BaseFragment
+import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.util.FusedLocationSource
+import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.setImageUrl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -65,16 +62,79 @@ class DashboardFragment :
     }
 
     private val dashboardArgs: DashboardFragmentArgs by navArgs()
+    private lateinit var mLocationRequest: LocationRequest
+    private lateinit var mCurrentLocation: Location
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private var currentProvider: String = ""
 
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        if (dashboardArgs.locationProvider.isEmpty()) {
-            /*setCurrentLocation()*/
-        } else {
-
-        }
+        userPreferences.isPermissionLocation.asLiveData()
+            .observe(viewLifecycleOwner, Observer { _isPermissionLocation ->
+                if (_isPermissionLocation == null) {
+                    if (dashboardArgs.locationProvider.isEmpty()) {
+                        setCurrentLocation()
+                    } else {
+                        currentProvider = dashboardArgs.locationProvider
+                    }
+                } else if (!_isPermissionLocation) {
+                    setCurrentLocation()
+                } else {
+                    currentProvider = getCurrentProvider()
+                }
+                if (currentProvider.isNotEmpty()) {
+                    mLocationRequest = LocationRequest.create().apply {
+                        priority =
+                            if (currentProvider.equals(
+                                    LocationManager.GPS_PROVIDER,
+                                    ignoreCase = true
+                                )
+                            ) {
+                                LocationRequest.PRIORITY_HIGH_ACCURACY
+                            } else {
+                                LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+                            }
+                        interval = 100
+                        fastestInterval = 50
+                        numUpdates = 1
+                        priority = if (currentProvider.equals(
+                                LocationManager.GPS_PROVIDER,
+                                ignoreCase = true
+                            )
+                        ) {
+                            LocationRequest.PRIORITY_HIGH_ACCURACY
+                        } else {
+                            LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+                        }
+                    }
+                    val builder = LocationSettingsRequest.Builder().apply {
+                        addLocationRequest(mLocationRequest)
+                    }
+                    val mSettingsClient = LocationServices.getSettingsClient(requireActivity())
+                    val mLocationSettingsRequest = builder.build()
+                    val locationResponse =
+                        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                    mFusedLocationClient =
+                        LocationServices.getFusedLocationProviderClient(requireActivity())
+                    with(locationResponse) {
+                        addOnSuccessListener {
+                            mFusedLocationClient.requestLocationUpdates(
+                                mLocationRequest,
+                                mLocationCallback,
+                                Looper.getMainLooper()
+                            )
+                        }
+                        addOnFailureListener { e ->
+                            val exception = e as ApiException
+                        }
+                    }
+                } else {
+                    confirmDialog("위치 정보 권한 설정에 실패하였습니다", { setCurrentLocation() }, "재시도")
+                }
+            })
         viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
@@ -82,7 +142,6 @@ class DashboardFragment :
                     when (_userResponse.value.code) {
                         "200" -> {
                             binding.user = _userResponse.value.data.first()
-                            Log.e(TAG, "User : " + _userResponse.value.data.first().toString())
                             viewModel.getUserCharacterFilename(_userResponse.value.data.first().id)
                             viewModel.userCharacterFilenameResponse.observe(
                                 viewLifecycleOwner,
@@ -92,7 +151,9 @@ class DashboardFragment :
                                             when (_userCharacterFilenameResponse.value.code) {
                                                 "200" -> {
                                                     with(binding) {
-                                                        viewModel!!.getExpInformation(_userResponse.value.data.first().id)
+                                                        viewModel!!.getExpInformation(
+                                                            _userResponse.value.data.first().id
+                                                        )
                                                         viewModel!!.expInformationResponse.observe(
                                                             viewLifecycleOwner,
                                                             Observer { _expInformationResponse ->
@@ -122,125 +183,126 @@ class DashboardFragment :
                                                                                             (Target.SIZE_ORIGINAL.toFloat() * DASH_CHARACTER_RATE.toFloat()).toInt(),
                                                                                             (Target.SIZE_ORIGINAL.toFloat() * DASH_CHARACTER_RATE.toFloat()).toInt()
                                                                                         )
-                                                                                        .into(object :
-                                                                                            CustomTarget<Bitmap>() {
-                                                                                            override fun onLoadCleared(
-                                                                                                placeholder: Drawable?
-                                                                                            ) {
-                                                                                            }
+                                                                                        .into(
+                                                                                            object :
+                                                                                                CustomTarget<Bitmap>() {
+                                                                                                override fun onLoadCleared(
+                                                                                                    placeholder: Drawable?
+                                                                                                ) {
+                                                                                                }
 
-                                                                                            override fun onResourceReady(
-                                                                                                resource: Bitmap,
-                                                                                                transition: Transition<in Bitmap>?
-                                                                                            ) {
-                                                                                                val characterBitmap =
-                                                                                                    BitmapDrawable(
-                                                                                                        resource
-                                                                                                    )
-                                                                                                characterBitmap
-                                                                                                animationDrawable.addFrame(
-                                                                                                    characterBitmap,
-                                                                                                    ANIMATION_DURATION
-                                                                                                )
-                                                                                                if (animationDrawable.numberOfFrames == _userCharacterFilenameResponse.value.data.size) {
-                                                                                                    val charExp =
-                                                                                                        (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
-                                                                                                                / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
-                                                                                                    val radius =
-                                                                                                        CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
-                                                                                                    val bitmapInfoSheet =
-                                                                                                        Bitmap.createBitmap(
-                                                                                                            (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
-                                                                                                            (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
-                                                                                                            Bitmap.Config.ARGB_8888
+                                                                                                override fun onResourceReady(
+                                                                                                    resource: Bitmap,
+                                                                                                    transition: Transition<in Bitmap>?
+                                                                                                ) {
+                                                                                                    val characterBitmap =
+                                                                                                        BitmapDrawable(
+                                                                                                            resource
                                                                                                         )
-                                                                                                    val canvasInfo =
-                                                                                                        Canvas(
+                                                                                                    characterBitmap
+                                                                                                    animationDrawable.addFrame(
+                                                                                                        characterBitmap,
+                                                                                                        ANIMATION_DURATION
+                                                                                                    )
+                                                                                                    if (animationDrawable.numberOfFrames == _userCharacterFilenameResponse.value.data.size) {
+                                                                                                        val charExp =
+                                                                                                            (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
+                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
+                                                                                                        val radius =
+                                                                                                            CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
+                                                                                                        val bitmapInfoSheet =
+                                                                                                            Bitmap.createBitmap(
+                                                                                                                (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
+                                                                                                                (radius * 2 + CHARACTER_EXP_CIRCLE_SIZE),
+                                                                                                                Bitmap.Config.ARGB_8888
+                                                                                                            )
+                                                                                                        val canvasInfo =
+                                                                                                            Canvas(
+                                                                                                                bitmapInfoSheet
+                                                                                                            )
+                                                                                                        val startAngle =
+                                                                                                            135F
+                                                                                                        val sweepAngle =
+                                                                                                            270F
+                                                                                                        val paint =
+                                                                                                            Paint()
+                                                                                                        paint.isAntiAlias =
+                                                                                                            true
+                                                                                                        paint.color =
+                                                                                                            Color.parseColor(
+                                                                                                                "#C9C9C9"
+                                                                                                            )
+                                                                                                        paint.style =
+                                                                                                            Paint.Style.FILL
+                                                                                                        var oval =
+                                                                                                            RectF(
+                                                                                                                0.toFloat(),
+                                                                                                                0.toFloat(),
+                                                                                                                canvasInfo.width.toFloat(),
+                                                                                                                canvasInfo.height.toFloat()
+                                                                                                            )
+                                                                                                        canvasInfo.drawArc(
+                                                                                                            oval,
+                                                                                                            startAngle,
+                                                                                                            sweepAngle,
+                                                                                                            true,
+                                                                                                            paint
+                                                                                                        )
+                                                                                                        paint.color =
+                                                                                                            Color.parseColor(
+                                                                                                                "#F9A25B"
+                                                                                                            )
+                                                                                                        canvasInfo.drawArc(
+                                                                                                            oval,
+                                                                                                            startAngle,
+                                                                                                            2.7F * charExp,
+                                                                                                            true,
+                                                                                                            paint
+                                                                                                        )
+                                                                                                        paint.xfermode =
+                                                                                                            PorterDuffXfermode(
+                                                                                                                PorterDuff.Mode.CLEAR
+                                                                                                            )
+                                                                                                        oval =
+                                                                                                            RectF(
+                                                                                                                ((canvasInfo.width / 2) - radius).toFloat(),
+                                                                                                                ((canvasInfo.height / 2) - radius).toFloat(),
+                                                                                                                ((canvasInfo.width / 2) + radius).toFloat(),
+                                                                                                                ((canvasInfo.height / 2) + radius).toFloat()
+                                                                                                            )
+                                                                                                        canvasInfo.drawArc(
+                                                                                                            oval,
+                                                                                                            startAngle,
+                                                                                                            sweepAngle,
+                                                                                                            true,
+                                                                                                            paint
+                                                                                                        )
+                                                                                                        binding.dashIvCharacterInfo.setImageBitmap(
                                                                                                             bitmapInfoSheet
                                                                                                         )
-                                                                                                    val startAngle =
-                                                                                                        135F
-                                                                                                    val sweepAngle =
-                                                                                                        270F
-                                                                                                    val paint =
-                                                                                                        Paint()
-                                                                                                    paint.isAntiAlias =
-                                                                                                        true
-                                                                                                    paint.color =
-                                                                                                        Color.parseColor(
-                                                                                                            "#C9C9C9"
+                                                                                                        binding.dashIvCharacter.minimumWidth =
+                                                                                                            TypedValue.applyDimension(
+                                                                                                                TypedValue.COMPLEX_UNIT_DIP,
+                                                                                                                resource.width.toFloat(),
+                                                                                                                GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                                                                                                            )
+                                                                                                                .toInt()
+                                                                                                        binding.dashIvCharacter.minimumHeight =
+                                                                                                            TypedValue.applyDimension(
+                                                                                                                TypedValue.COMPLEX_UNIT_DIP,
+                                                                                                                resource.height.toFloat(),
+                                                                                                                GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
+                                                                                                            )
+                                                                                                                .toInt()
+                                                                                                        binding.dashIvCharacter.setImageDrawable(
+                                                                                                            animationDrawable
                                                                                                         )
-                                                                                                    paint.style =
-                                                                                                        Paint.Style.FILL
-                                                                                                    var oval =
-                                                                                                        RectF(
-                                                                                                            0.toFloat(),
-                                                                                                            0.toFloat(),
-                                                                                                            canvasInfo.width.toFloat(),
-                                                                                                            canvasInfo.height.toFloat()
-                                                                                                        )
-                                                                                                    canvasInfo.drawArc(
-                                                                                                        oval,
-                                                                                                        startAngle,
-                                                                                                        sweepAngle,
-                                                                                                        true,
-                                                                                                        paint
-                                                                                                    )
-                                                                                                    paint.color =
-                                                                                                        Color.parseColor(
-                                                                                                            "#F9A25B"
-                                                                                                        )
-                                                                                                    canvasInfo.drawArc(
-                                                                                                        oval,
-                                                                                                        startAngle,
-                                                                                                        2.7F * charExp,
-                                                                                                        true,
-                                                                                                        paint
-                                                                                                    )
-                                                                                                    paint.xfermode =
-                                                                                                        PorterDuffXfermode(
-                                                                                                            PorterDuff.Mode.CLEAR
-                                                                                                        )
-                                                                                                    oval =
-                                                                                                        RectF(
-                                                                                                            ((canvasInfo.width / 2) - radius).toFloat(),
-                                                                                                            ((canvasInfo.height / 2) - radius).toFloat(),
-                                                                                                            ((canvasInfo.width / 2) + radius).toFloat(),
-                                                                                                            ((canvasInfo.height / 2) + radius).toFloat()
-                                                                                                        )
-                                                                                                    canvasInfo.drawArc(
-                                                                                                        oval,
-                                                                                                        startAngle,
-                                                                                                        sweepAngle,
-                                                                                                        true,
-                                                                                                        paint
-                                                                                                    )
-                                                                                                    binding.dashIvCharacterInfo.setImageBitmap(
-                                                                                                        bitmapInfoSheet
-                                                                                                    )
-                                                                                                    binding.dashIvCharacter.minimumWidth =
-                                                                                                        TypedValue.applyDimension(
-                                                                                                            TypedValue.COMPLEX_UNIT_DIP,
-                                                                                                            resource.width.toFloat(),
-                                                                                                            GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
-                                                                                                        )
-                                                                                                            .toInt()
-                                                                                                    binding.dashIvCharacter.minimumHeight =
-                                                                                                        TypedValue.applyDimension(
-                                                                                                            TypedValue.COMPLEX_UNIT_DIP,
-                                                                                                            resource.height.toFloat(),
-                                                                                                            GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
-                                                                                                        )
-                                                                                                            .toInt()
-                                                                                                    binding.dashIvCharacter.setImageDrawable(
-                                                                                                        animationDrawable
-                                                                                                    )
-                                                                                                    animationDrawable =
-                                                                                                        binding.dashIvCharacter.drawable as AnimationDrawable
-                                                                                                    animationDrawable.start()
+                                                                                                        animationDrawable =
+                                                                                                            binding.dashIvCharacter.drawable as AnimationDrawable
+                                                                                                        animationDrawable.start()
+                                                                                                    }
                                                                                                 }
-                                                                                            }
-                                                                                        })
+                                                                                            })
                                                                                 }
                                                                             }
                                                                             else -> {
@@ -336,8 +398,8 @@ class DashboardFragment :
                         if (!_sgisAccessTokenResponse.value.error) {
                             viewModel.getTmCoord(
                                 _sgisAccessTokenResponse.value.sgisAccessToken.accessToken,
-                                GlobalApplication.currentLat,
-                                GlobalApplication.currentLng
+                                GlobalApplication.currentLng,
+                                GlobalApplication.currentLat
                             )
                             viewModel.tmCoordResponse.observe(
                                 viewLifecycleOwner,
@@ -365,7 +427,7 @@ class DashboardFragment :
                                                                                 is Resource.Success -> {
                                                                                     if (!_weatherDustResponse.value.error) {
                                                                                         binding.weatherDust =
-                                                                                            _weatherDustResponse.value.weatherDust.singleOrNull { it3 -> it3.stationName == _nearMsrstnResponse.value.nearMsrstn.stationName }
+                                                                                            _weatherDustResponse.value.weatherDust.singleOrNull { _weatherDust -> _weatherDust.stationName == _nearMsrstnResponse.value.nearMsrstn.stationName }
                                                                                         if (binding.weatherDust == null) {
                                                                                             binding.weatherDust =
                                                                                                 _weatherDustResponse.value.weatherDust.first()
@@ -416,7 +478,9 @@ class DashboardFragment :
                                                             }
                                                             is Resource.Failure -> {
                                                                 // Network Error
-                                                                handleApiError(_nearMsrstnResponse) {
+                                                                handleApiError(
+                                                                    _nearMsrstnResponse
+                                                                ) {
                                                                     viewModel.getNearMsrstn(
                                                                         _tmCoordResponse.value.tmCoord.posX,
                                                                         _tmCoordResponse.value.tmCoord.posY
@@ -484,12 +548,16 @@ class DashboardFragment :
                         when (_filenameThemeCategoryImageResponse.value.code) {
                             "200" -> {
                                 binding.dashRVTheme.also { _dashRVTheme ->
-                                    val linearLayoutManager = LinearLayoutManager(requireContext())
-                                    linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                                    val linearLayoutManager =
+                                        LinearLayoutManager(requireContext())
+                                    linearLayoutManager.orientation =
+                                        LinearLayoutManager.HORIZONTAL
                                     _dashRVTheme.layoutManager = linearLayoutManager
                                     _dashRVTheme.setHasFixedSize(true)
                                     _dashRVTheme.adapter =
-                                        DashboardThemeAdapter(_filenameThemeCategoryImageResponse.value.data)
+                                        DashboardThemeAdapter(
+                                            _filenameThemeCategoryImageResponse.value.data
+                                        )
                                 }
                             }
                             else -> {
@@ -514,10 +582,9 @@ class DashboardFragment :
                 }
             })
         val nXy: GridXy = convertGridGps(
-            GlobalApplication.currentLng.toDouble(),
-            GlobalApplication.currentLat.toDouble()
+            GlobalApplication.currentLat.toDouble(),
+            GlobalApplication.currentLng.toDouble()
         )
-        Log.e(">>", "x = " + nXy.x.toString() + ", y = " + nXy.y.toString())
         viewModel.getYesterdayWeather(nXy.x.toInt().toString(), nXy.y.toInt().toString())
         viewModel.yesterdayWeatherResponse.observe(
             viewLifecycleOwner,
@@ -571,9 +638,9 @@ class DashboardFragment :
                                             when (_filenameWeatherResponse.value.code) {
                                                 "200" -> {
                                                     /*
-                                                        날씨 코드 관련
-                                                        1 맑음, 2 구름, 3 흐림, 4 비, 5 진눈개비, 6 눈, 7 오류
-                                                    */
+                                                    날씨 코드 관련
+                                                    1 맑음, 2 구름, 3 흐림, 4 비, 5 진눈개비, 6 눈, 7 오류
+                                                */
                                                     setImageUrl(
                                                         binding.dashIvWeather,
                                                         _filenameWeatherResponse.value.data.first().weatherFilename
@@ -599,7 +666,9 @@ class DashboardFragment :
                                         is Resource.Failure -> {
                                             // Network Error
                                             handleApiError(_filenameWeatherResponse) {
-                                                viewModel.getFilenameWeather(_todayWeatherResponse.value.todayWeather.weatherCode)
+                                                viewModel.getFilenameWeather(
+                                                    _todayWeatherResponse.value.todayWeather.weatherCode
+                                                )
                                             }
                                         }
                                     }
@@ -656,23 +725,77 @@ class DashboardFragment :
                 findNavController().navigate(navDirection)
             }
         }
-        /*binding.dashLayoutLocationSetting.setOnClickListener {
+        binding.dashLayoutLocationSetting.setOnClickListener {
             setCurrentLocation()
-        }*/
+        }
     }
 
-    /*private fun setCurrentLocation() {
+    private fun setCurrentLocation() {
         alertDialog("현재 위치를 설정하시겠습니까?", {
             confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
         }, {
-            GlobalApplication.setLocationSource(
-                FusedLocationSource(
-                    this,
-                    GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE
-                )
-            )
+            checkPermissionLocation()
         })
-    }*/
+    }
+
+    private fun getCurrentProvider(): String {
+        val mListener =
+            requireActivity().getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
+        val isGPSLocation = mListener.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val isNetworkLocation = mListener.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        return when {
+            isGPSLocation -> {
+                LocationManager.GPS_PROVIDER
+            }
+            isNetworkLocation -> {
+                LocationManager.NETWORK_PROVIDER
+            }
+            else -> {
+                ""
+            }
+        }
+    }
+
+    private val permissionListener = object : PermissionListener {
+        override fun onPermissionGranted() {
+            lifecycleScope.launch {
+                viewModel.saveIsLocationGranted()
+                val navDirection: NavDirections? =
+                    DashboardFragmentDirections.actionActionBnvDashSelf(getCurrentProvider())
+                if (navDirection != null) {
+                    findNavController().navigate(navDirection)
+                }
+            }
+        }
+
+        override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+            confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
+        }
+    }
+
+    private fun checkPermissionLocation() {
+        TedPermission.with(requireContext())
+            .setPermissionListener(permissionListener)
+            .setRationaleMessage("실시간 위치 정보를 반영하기 위한 접근 권한이 필요합니다")
+            .setPermissions(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            .check()
+    }
+
+    private val mLocationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            mCurrentLocation = locationResult.locations[0]
+            GlobalApplication.currentLat = mCurrentLocation.latitude.toString()
+            GlobalApplication.currentLng = mCurrentLocation.longitude.toString()
+            mLocationRequest.numUpdates = 1
+            mFusedLocationClient.removeLocationUpdates(this)
+        }
+
+        override fun onLocationAvailability(availability: LocationAvailability) {}
+    }
 
     // 위도 경도 X, Y 좌표 변경
     private fun convertGridGps(lat: Double, lng: Double): GridXy {
@@ -684,32 +807,24 @@ class DashboardFragment :
         val OLAT = 38.0 // 기준점 위도(degree)
         val XO = 43.0 // 기준점 X좌표(GRID)
         val YO = 136.0 // 기준점 Y좌표(GRID)
-
         val DEGRAD: Double = Math.PI / 180.0
-
-        Log.e(">>", DEGRAD.toString())
-
         val re: Double = RE / GRID
         val slat1: Double = SLAT1 * DEGRAD
         val slat2: Double = SLAT2 * DEGRAD
         val olon: Double = OLON * DEGRAD
         val olat: Double = OLAT * DEGRAD
-
         var sn: Double = tan(Math.PI * 0.25 + slat2 * 0.5) / tan(Math.PI * 0.25 + slat1 * 0.5)
         sn = ln(cos(slat1) / cos(slat2)) / ln(sn)
         var sf: Double = tan(Math.PI * 0.25 + slat1 * 0.5)
         sf = sf.pow(sn) * cos(slat1) / sn
         var ro: Double = tan(Math.PI * 0.25 + olat * 0.5)
         ro = re * sf / ro.pow(sn)
-
         var ra: Double = (tan(Math.PI * 0.25 + (lat) * DEGRAD * 0.5))
         ra = re * sf / ra.pow(sn)
-
         var theta: Double = lng * DEGRAD - olon
         if (theta > Math.PI) theta -= 2.0 * Math.PI
         if (theta < -Math.PI) theta += 2.0 * Math.PI
         theta *= sn
-
         return GridXy(floor(ra * sin(theta) + XO + 0.5), floor(ro - ra * cos(theta) + YO + 0.5))
     }
 
@@ -728,6 +843,13 @@ class DashboardFragment :
         callback.remove()
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (this::mFusedLocationClient.isInitialized) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+        }
+    }
+
     override fun getViewModel() = DashboardViewModel::class.java
 
     override fun getFragmentBinding(
@@ -742,55 +864,4 @@ class DashboardFragment :
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
-
-    /*override fun onLocationChanged(location: Location) {
-        if (location == null) {
-            return
-        } else {
-            GlobalApplication.currentLat = location.latitude.toString()
-            GlobalApplication.currentLng = location.longitude.toString()
-        }
-    }*/
-
-    /*override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-*//*        when(requestCode) {
-            GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    lifecycleScope.launch {
-                        viewModel.saveIsLocationGranted()
-                    }
-                } else {
-                    confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
-                }
-            }
-            else -> {
-
-            }
-        }*//*
-        val currentLocationSource = GlobalApplication.getLocationSource()
-        if (currentLocationSource != null) {
-            if (currentLocationSource.onRequestPermissionsResult(
-                    requestCode, permissions,
-                    grantResults
-                )
-            ) {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    lifecycleScope.launch {
-                        viewModel.saveIsLocationGranted()
-                    }
-                } else {
-                    confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
-                }
-                if (!currentLocationSource.isActivated) {
-
-                }
-                return
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }*/
 }
