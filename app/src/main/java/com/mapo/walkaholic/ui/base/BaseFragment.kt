@@ -2,6 +2,7 @@ package com.mapo.walkaholic.ui.base
 
 import android.app.Activity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,17 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.RemoteDataSource
 import com.mapo.walkaholic.data.repository.BaseRepository
+import com.mapo.walkaholic.ui.alertDialog
 import com.mapo.walkaholic.ui.auth.AuthActivity
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -82,6 +88,10 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewBinding, R : BaseReposit
         viewModel.logout()
         userPreferences.removeJwtToken()
         requireActivity().startNewActivity(AuthActivity::class.java as Class<Activity>)
+    }
+
+    fun deleteIsLocationGranted() = lifecycleScope.launch {
+        userPreferences.removeIsLocationGranted()
     }
 
     abstract fun getViewModel(): Class<VM>

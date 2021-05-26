@@ -1,13 +1,7 @@
 package com.mapo.walkaholic.ui.auth
 
-import android.app.Activity
-import android.content.ContentValues
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Base64
-import android.util.Base64.NO_WRAP
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.LinearLayout
@@ -15,9 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isNotEmpty
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
@@ -28,17 +20,13 @@ import com.mapo.walkaholic.databinding.ActivityAuthBinding
 import com.mapo.walkaholic.ui.base.BaseActivity
 import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.main.MainActivity
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*
-import kotlinx.coroutines.runBlocking
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 @RequiresApi(Build.VERSION_CODES.M)
 class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthRepository>() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        GlobalApplication.activityList.add(this)
+        GlobalApplication.mActivityList.add(this)
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -90,7 +78,7 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
     }
 
     override fun onDestroy() {
-        GlobalApplication.activityList.remove(this)
+        GlobalApplication.mActivityList.remove(this)
         super.onDestroy()
     }
 

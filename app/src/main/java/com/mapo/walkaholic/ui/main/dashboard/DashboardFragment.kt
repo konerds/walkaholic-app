@@ -1,28 +1,42 @@
 package com.mapo.walkaholic.ui.main.dashboard
 
-import android.content.ContentValues
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.location.*
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.mapo.walkaholic.data.model.GridXy
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -30,12 +44,13 @@ import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.databinding.FragmentDashboardBinding
+import com.mapo.walkaholic.ui.*
 import com.mapo.walkaholic.ui.base.BaseFragment
-import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.global.GlobalApplication
-import com.mapo.walkaholic.ui.handleApiError
-import com.mapo.walkaholic.ui.setImageUrl
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
@@ -49,11 +64,17 @@ class DashboardFragment :
         private const val CHARACTER_EXP_CIRCLE_SIZE = 99
     }
 
+    private val dashboardArgs: DashboardFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        if (dashboardArgs.locationProvider.isEmpty()) {
+            /*setCurrentLocation()*/
+        } else {
 
+        }
         viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             when (_userResponse) {
@@ -635,7 +656,23 @@ class DashboardFragment :
                 findNavController().navigate(navDirection)
             }
         }
+        /*binding.dashLayoutLocationSetting.setOnClickListener {
+            setCurrentLocation()
+        }*/
     }
+
+    /*private fun setCurrentLocation() {
+        alertDialog("현재 위치를 설정하시겠습니까?", {
+            confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
+        }, {
+            GlobalApplication.setLocationSource(
+                FusedLocationSource(
+                    this,
+                    GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE
+                )
+            )
+        })
+    }*/
 
     // 위도 경도 X, Y 좌표 변경
     private fun convertGridGps(lat: Double, lng: Double): GridXy {
@@ -705,4 +742,55 @@ class DashboardFragment :
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
+
+    /*override fun onLocationChanged(location: Location) {
+        if (location == null) {
+            return
+        } else {
+            GlobalApplication.currentLat = location.latitude.toString()
+            GlobalApplication.currentLng = location.longitude.toString()
+        }
+    }*/
+
+    /*override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+*//*        when(requestCode) {
+            GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    lifecycleScope.launch {
+                        viewModel.saveIsLocationGranted()
+                    }
+                } else {
+                    confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
+                }
+            }
+            else -> {
+
+            }
+        }*//*
+        val currentLocationSource = GlobalApplication.getLocationSource()
+        if (currentLocationSource != null) {
+            if (currentLocationSource.onRequestPermissionsResult(
+                    requestCode, permissions,
+                    grantResults
+                )
+            ) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    lifecycleScope.launch {
+                        viewModel.saveIsLocationGranted()
+                    }
+                } else {
+                    confirmDialog("위치 정보 권한을 허용해야만 현재 위치가 갱신됩니다", null, null)
+                }
+                if (!currentLocationSource.isActivated) {
+
+                }
+                return
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }*/
 }

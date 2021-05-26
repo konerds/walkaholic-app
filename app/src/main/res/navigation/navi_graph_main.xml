@@ -9,6 +9,10 @@
         android:id="@+id/actionBnvDash"
         android:name="com.mapo.walkaholic.ui.main.dashboard.DashboardFragment"
         tools:layout="@layout/fragment_dashboard">
+        <argument
+            android:name="locationProvider"
+            android:defaultValue=""
+            app:argType="string" />
         <action
             android:id="@+id/action_actionBnvDash_to_actionBnvDashWalkRecord"
             app:destination="@id/actionBnvDashWalkRecord"
@@ -37,6 +41,17 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_actionBnvDash_self"
+            app:destination="@id/actionBnvDash"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="locationProvider"
+                app:argType="string" />
+        </action>
     </fragment>
 
     <fragment

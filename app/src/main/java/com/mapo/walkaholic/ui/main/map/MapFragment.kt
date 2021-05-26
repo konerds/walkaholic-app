@@ -1,6 +1,7 @@
 package com.mapo.walkaholic.ui.main.map
 
 import android.content.Context
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -41,8 +42,8 @@ import kotlinx.coroutines.runBlocking
 class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepository>(),
     OnMapReadyCallback, LocationListener {
     private lateinit var mapView: MapView
-    private lateinit var locationSource: FusedLocationSource
     private lateinit var mMap: NaverMap
+    private lateinit var locationSource: FusedLocationSource
     val mapArgs: MapFragmentArgs by navArgs()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,43 +51,82 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         binding.viewModel = viewModel
         binding.isWalk = mapArgs.isWalk
         if (mapArgs.themeId == -1) {
-            binding.themeCourse = ThemeCourseResponse.DataThemeCourse(-1, "오류", "오류", "오류", "오류", "오류", "오류")
+            binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
+                -1,
+                "오류",
+                "오류",
+                "오류",
+                "오류",
+                "오류",
+                "오류",
+                "오류",
+                "오류"
+            )
         }
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+        locationSource =
+            FusedLocationSource(
+                this,
+                GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE
+            )
+
         binding.mapView.getMapAsync(this)
         when (mapArgs.isWalk) {
             true -> {
+                binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#F37520"))
+                binding.mapViewFacilities.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                binding.mapViewCourse.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                binding.mapTvWalkRecord.setTextColor(Color.parseColor("#F37520"))
+                binding.mapTvFacilities.setTextColor(Color.parseColor("#E3E0DB"))
+                binding.mapTvCourse.setTextColor(Color.parseColor("#E3E0DB"))
                 binding.mapTvWalkRecord.mapTvWalkRecord.isSelected = true
                 binding.mapNavigationLayoutWalkRecord.visible(true)
                 binding.mapTvWalkRecord.setOnClickListener {
-                    binding.mapTvWalkRecord.isSelected = true
+                    binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#F37520"))
+                    binding.mapViewFacilities.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                    binding.mapViewCourse.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                    binding.mapTvWalkRecord.setTextColor(Color.parseColor("#F37520"))
+                    binding.mapTvFacilities.setTextColor(Color.parseColor("#E3E0DB"))
+                    binding.mapTvCourse.setTextColor(Color.parseColor("#E3E0DB"))
+                    /*binding.mapTvWalkRecord.isSelected = true
                     binding.mapTvFacilities.isSelected = false
                     binding.mapTvCourse.isSelected = false
                     binding.mapViewWalkRecord.isSelected = true
                     binding.mapViewFacilities.isSelected = false
-                    binding.mapViewCourse.isSelected = false
+                    binding.mapViewCourse.isSelected = false*/
                     binding.mapNavigationLayoutWalkRecord.visible(true)
                     binding.mapNavigationLayoutCourse.visible(false)
                     binding.mapNavigationLayoutFacilities.visible(false)
                 }
                 binding.mapTvFacilities.setOnClickListener {
-                    binding.mapTvWalkRecord.isSelected = false
+                    binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                    binding.mapViewFacilities.setBackgroundColor(Color.parseColor("#F37520"))
+                    binding.mapViewCourse.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                    binding.mapTvWalkRecord.setTextColor(Color.parseColor("#E3E0DB"))
+                    binding.mapTvFacilities.setTextColor(Color.parseColor("#F37520"))
+                    binding.mapTvCourse.setTextColor(Color.parseColor("#E3E0DB"))
+                    /*binding.mapTvWalkRecord.isSelected = false
                     binding.mapTvFacilities.isSelected = true
                     binding.mapTvCourse.isSelected = false
                     binding.mapViewWalkRecord.isSelected = false
                     binding.mapViewFacilities.isSelected = true
-                    binding.mapViewCourse.isSelected = false
+                    binding.mapViewCourse.isSelected = false*/
                     binding.mapNavigationLayoutWalkRecord.visible(false)
                     binding.mapNavigationLayoutCourse.visible(true)
                     binding.mapNavigationLayoutFacilities.visible(false)
                 }
                 binding.mapTvCourse.setOnClickListener {
-                    binding.mapTvWalkRecord.isSelected = false
+                    binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                    binding.mapViewFacilities.setBackgroundColor(Color.parseColor("#E3E0DB"))
+                    binding.mapViewCourse.setBackgroundColor(Color.parseColor("#F37520"))
+                    binding.mapTvWalkRecord.setTextColor(Color.parseColor("#E3E0DB"))
+                    binding.mapTvFacilities.setTextColor(Color.parseColor("#E3E0DB"))
+                    binding.mapTvCourse.setTextColor(Color.parseColor("#F37520"))
+                    /*binding.mapTvWalkRecord.isSelected = false
                     binding.mapTvFacilities.isSelected = false
                     binding.mapTvCourse.isSelected = true
                     binding.mapViewWalkRecord.isSelected = false
                     binding.mapViewFacilities.isSelected = false
-                    binding.mapViewCourse.isSelected = true
+                    binding.mapViewCourse.isSelected = true*/
                     binding.mapNavigationLayoutWalkRecord.visible(false)
                     binding.mapNavigationLayoutCourse.visible(false)
                     binding.mapNavigationLayoutFacilities.visible(true)
@@ -104,7 +144,17 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                         binding.themeCourse = _themeCourseResponse.value.data
                                     }
                                     else -> {
-                                        binding.themeCourse = ThemeCourseResponse.DataThemeCourse(-1, "오류", "오류", "오류", "오류", "오류", "오류")
+                                        binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
+                                            -1,
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류"
+                                        )
                                         // Error
                                         confirmDialog(
                                             _themeCourseResponse.value.message,
@@ -120,7 +170,17 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 // Loading
                             }
                             is Resource.Failure -> {
-                                binding.themeCourse = ThemeCourseResponse.DataThemeCourse(-1, "오류", "오류", "오류", "오류", "오류", "오류")
+                                binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
+                                    -1,
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류"
+                                )
                                 // Network Error
                                 handleApiError(_themeCourseResponse) {
                                     viewModel.getThemeCourse(
@@ -156,6 +216,19 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
             }
             return
         }
+        /*val currentLocationSource = GlobalApplication.getLocationSource()
+        if (currentLocationSource != null) {
+            if (currentLocationSource.onRequestPermissionsResult(
+                    requestCode, permissions,
+                    grantResults
+                )
+            ) {
+                if (!currentLocationSource.isActivated) {
+                    mMap.locationTrackingMode = LocationTrackingMode.None
+                }
+                return
+            }
+        }*/
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
@@ -303,9 +376,5 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
-    }
-
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 }

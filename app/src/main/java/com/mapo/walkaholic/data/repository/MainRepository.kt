@@ -51,10 +51,13 @@ class MainRepository(
     fun getNaverMap() = this.mMap
 
     suspend fun getUser() = safeApiCall {
-        api.getUser(userId)
+        //setUser()
+        //api.getUser(userId)
+
+        api.getUser("1693276776")
     }
 
-    fun setUser() {
+    private fun setUser() {
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 // Fail
