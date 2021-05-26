@@ -116,7 +116,12 @@ interface InnerApi {
         @Path("id") id: String,
         @Path("type") type: String,
     ): MissionResponse
-    
+
+    @PUT("user/{id}/reward/{missionId}")
+    suspend fun getMissionReward(
+        @Path("id") id: String,
+        @Path("missionId") missionId: String,
+    ): MissionRewardResponse
 
     @GET("user/rank/{type}")
     suspend fun getRanking(
@@ -140,15 +145,4 @@ interface InnerApi {
         @Field("id") id: String
     ): FavoritePathResponse
 
-    /*@FormUrlEncoded
-    @POST("info/missionDaily")
-    suspend fun getMissionDaily(
-        @Field("mission_id") missionId: String,
-    ): MissionDailyResponse
-
-    @FormUrlEncoded
-    @POST("info/missionWeekly")
-    suspend fun getMissionWeekly(
-        @Field("mission_id") missionId: String,
-    ): MissionWeeklyResponse*/
 }

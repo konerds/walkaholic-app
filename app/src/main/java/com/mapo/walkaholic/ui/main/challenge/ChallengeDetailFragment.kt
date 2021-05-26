@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.mapo.walkaholic.data.model.MissionCondition
 import com.mapo.walkaholic.data.model.response.MissionResponse
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
@@ -31,6 +30,7 @@ class ChallengeDetailFragment(
 ) : BaseFragment<ChallengeDetailViewModel, FragmentDetailChallengeBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,21 +49,28 @@ class ChallengeDetailFragment(
                                         is Resource.Success -> {
                                             when (_missionResponse.value.code) {
                                                 "200" -> {
+                                                    ChallengeDetailMissionAdapter(_missionResponse.value.data).setItemClickListener(object :
+                                                        ChallengeDetailMissionAdapter.ChallengeDetailMissionClickListener{
+                                                        override fun onItemClick(view: View, position: Int) {
+                                                            Log.e("냐옹", "냐옹")
+                                                            //viewModel.getMissionReward(_userResponse.value.data.first().id, _missionResponse.value.data.first().missionId)
+                                                        }
+                                                    })
+
                                                     _challengeRVMission.adapter =
                                                         ChallengeDetailMissionAdapter(_missionResponse.value.data)
-                                                    /*val filteredData = _missionResponse.value.data
+
+                                                    val filteredData = _missionResponse.value.data
                                                     filteredData.add(when(position) {
                                                         0 -> {
-                                                            MissionResponse.Mission()
+                                                            MissionResponse.Mission("7", "모든미션완료", "0", "0", "모든 ")
                                                         }
-                                                            1-> {
-                                                                MissionResponse.Mission()
-                                                            }
-                                                    })*/
-                                                    Log.e(
-                                                        "mission",
-                                                        _missionResponse.value.data.toString()
-                                                    )
+                                                        else -> {
+                                                            MissionResponse.Mission("8", "모든미션완료", "0", "0", "모든 ")
+                                                        }
+                                                    })
+                                                    _challengeRVMission.adapter =
+                                                        ChallengeDetailMissionAdapter(filteredData)
                                                 }
                                                 else -> {
                                                     // Error
@@ -114,7 +121,7 @@ class ChallengeDetailFragment(
                                     1 -> {
                                         binding.challengeTvIntro1.text =
                                             "${_userResponse.value.data.first().nickName}님, 현재 일일미션"
-                                        binding.challengeTvAchieve1.text = "횟수"
+                                        binding.challengeTvAchieve1.text = "${_userResponse.value.data.first().weeklyMissionAchievement.toString()}회"
                                         binding.challengeTvAchieve2.text = "를 달성 했어요!"
                                         binding.challengeTvIntro2.text = "미션은 매일 자정에 갱신되어요"
                                         binding.challengeTvIntro3.text = "주간미션을 완료하고 포인트를 받으세요!"
@@ -165,10 +172,6 @@ class ChallengeDetailFragment(
                                                             binding.challengeRankingTvRankNum.text = "${_monthRankingResponse.value.data.first().rank}"
                                                             binding.challengeRankingTvIntro3.text =
                                                                 "월별랭킹은 매월 1일 자정에 갱신되어요"
-
-                                                            /*rankingPositionOneTvIntro1 = "${_userResponse.value.data.first().nickName}님, 월별랭킹"
-                                                            rankingPositionOneRankNum = "${_monthRankingResponse.value.data.first().rank}"
-                                                            rankingPositionOneTvIntro3 = "월별랭킹은 매월 1일 자정에 갱신되어요"*/
                                                         }
                                                         else -> {
                                                             // Error

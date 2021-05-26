@@ -14,5 +14,6 @@ data class User(
     val levelId: Int,
     val currentPoint: Int,
     val birth: String,
-    val petName: String
+    val petName: String,
+    val weeklyMissionAchievement: Int
 )

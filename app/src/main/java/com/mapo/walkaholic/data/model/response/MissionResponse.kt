@@ -12,7 +12,6 @@ data class MissionResponse (
         val missionName: String,
         val completeYN: String,
         val takeRewardYN: String,
-        val missionReward: String,
-        val currentAchievement: String,
+        val missionReward: String
     )
 }

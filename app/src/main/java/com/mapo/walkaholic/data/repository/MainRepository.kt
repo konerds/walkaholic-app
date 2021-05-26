@@ -234,6 +234,10 @@ class MainRepository(
         api.getMission(userId.toString(), missionType.toString())
     }
 
+    suspend fun getMissionReward(userId: Long, missionId: String) = safeApiCall {
+        api.getMissionReward(userId.toString(), missionId)
+    }
+
     suspend fun getThemeCourse(id: Int) = safeApiCall {
         api.getThemeCourse(id.toString())
     }

@@ -2,6 +2,7 @@ package com.mapo.walkaholic.ui.main.challenge.mission
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +16,17 @@ import com.mapo.walkaholic.data.model.MissionDaily
 import com.mapo.walkaholic.data.model.Theme
 import com.mapo.walkaholic.data.model.response.MissionResponse
 import com.mapo.walkaholic.databinding.ItemChallengeMissionBinding
+import com.mapo.walkaholic.ui.favoritepath.FavoritePathClickListener
 
 class ChallengeDetailMissionAdapter(
-    private val missions: ArrayList<MissionResponse.Mission>
+    private val missions: ArrayList<MissionResponse.Mission>,
+    private val listener: ChallengeDetailMissionListener
 ) : RecyclerView.Adapter<ChallengeDetailMissionAdapter.ItemChallengeMissionViewHolder>() {
+
+    fun setItemClickListener(listener: listener) {
+        this.listener = listener
+    }
+
     inner class ItemChallengeMissionViewHolder(
         val binding: ItemChallengeMissionBinding
     ) : RecyclerView.ViewHolder(binding.root)
@@ -38,6 +46,10 @@ class ChallengeDetailMissionAdapter(
     override fun onBindViewHolder(holder: ItemChallengeMissionViewHolder, position: Int) {
         holder.binding.missionItem = missions[position]
         holder.binding.viewModel
+
+        holder.binding.missionBtn.setOnClickListener {
+            listener?.onItemClick(it, position)
+        }
 
         when (position) {
             0 -> {

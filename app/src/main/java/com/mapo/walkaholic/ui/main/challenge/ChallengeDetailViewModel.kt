@@ -23,9 +23,9 @@ class ChallengeDetailViewModel(
         MutableLiveData()
     val missionResponse: LiveData<Resource<MissionResponse>>
         get() = _missionResponse
-    private val _missionProgressResponse: MutableLiveData<Resource<MissionProgressResponse>> = MutableLiveData()
-    val missionProgressResponse: LiveData<Resource<MissionProgressResponse>>
-        get() = _missionProgressResponse
+    private val _missionRewardResponse: MutableLiveData<Resource<MissionRewardResponse>> = MutableLiveData()
+    val missionRewardResponse: LiveData<Resource<MissionRewardResponse>>
+        get() = _missionRewardResponse
     private val _monthRankingResponse: MutableLiveData<Resource<MonthRankingResponse>> = MutableLiveData()
     val monthRankingResponse: LiveData<Resource<MonthRankingResponse>>
         get() = _monthRankingResponse
@@ -44,6 +44,12 @@ class ChallengeDetailViewModel(
     fun getMission(userId: Long, missionType: Int) {
         viewModelScope.launch {
             _missionResponse.value = mainRepository.getMission(userId, missionType)
+        }
+    }
+
+    fun getMissionReward(userId: Long, missionId: String) {
+        viewModelScope.launch {
+            _missionRewardResponse.value = mainRepository.getMissionReward(userId, missionId)
         }
     }
 
