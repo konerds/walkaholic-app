@@ -137,6 +137,13 @@ interface InnerApi {
         @Field("id") id: String
     ): FavoritePathResponse
 
+    @GET("amenity/{type}")
+    suspend fun getMarker(
+        @Path("type") type: String,
+        @Query("x") x: String,
+        @Query("y") y: String
+    ): MarkerLatLngResponse
+
     /*@FormUrlEncoded
     @POST("info/missionDaily")
     suspend fun getMissionDaily(

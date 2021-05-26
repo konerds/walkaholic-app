@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.data.model.Point
 import com.mapo.walkaholic.data.model.request.MapRequestBody
 import com.mapo.walkaholic.data.model.response.MapResponse
+import com.mapo.walkaholic.data.model.response.MarkerLatLngResponse
 import com.mapo.walkaholic.data.model.response.ThemeCourseResponse
 import com.mapo.walkaholic.data.model.response.UserResponse
 import com.mapo.walkaholic.data.network.Resource
@@ -28,6 +29,24 @@ class MapViewModel(
     private val _themeCourseResponse: MutableLiveData<Resource<ThemeCourseResponse>> = MutableLiveData()
     val themeCourseResponse: LiveData<Resource<ThemeCourseResponse>>
         get() = _themeCourseResponse
+    private val _markerToiletResponse: MutableLiveData<Resource<MarkerLatLngResponse>> = MutableLiveData()
+    val markerToiletResponse: LiveData<Resource<MarkerLatLngResponse>>
+        get() = _markerToiletResponse
+    private val _markerStoreResponse: MutableLiveData<Resource<MarkerLatLngResponse>> = MutableLiveData()
+    val markerStoreResponse: LiveData<Resource<MarkerLatLngResponse>>
+        get() = _markerStoreResponse
+    private val _markerCafeResponse: MutableLiveData<Resource<MarkerLatLngResponse>> = MutableLiveData()
+    val markerCafeResponse: LiveData<Resource<MarkerLatLngResponse>>
+        get() = _markerCafeResponse
+    private val _markerPharmacyResponse: MutableLiveData<Resource<MarkerLatLngResponse>> = MutableLiveData()
+    val markerPharmacyResponse: LiveData<Resource<MarkerLatLngResponse>>
+        get() = _markerPharmacyResponse
+    private val _markerBicycleResponse: MutableLiveData<Resource<MarkerLatLngResponse>> = MutableLiveData()
+    val markerBicycleResponse: LiveData<Resource<MarkerLatLngResponse>>
+        get() = _markerBicycleResponse
+    private val _markerPoliceResponse: MutableLiveData<Resource<MarkerLatLngResponse>> = MutableLiveData()
+    val markerPoliceResponse: LiveData<Resource<MarkerLatLngResponse>>
+        get() = _markerPoliceResponse
 
     fun init(mMap: NaverMap) {
         this.mMap = mMap
@@ -44,6 +63,42 @@ class MapViewModel(
         viewModelScope.launch {
             _userResponse.value = mainRepository.getUser()
             progressBarVisibility.set(false)
+        }
+    }
+
+    fun getMarkerToilet(type:Int, latitude: String, longitude: String) {
+        viewModelScope.launch {
+            _markerToiletResponse.value = mainRepository.getMarker(type, latitude, longitude)
+        }
+    }
+
+    fun getMarkerStore(type:Int, latitude: String, longitude: String) {
+        viewModelScope.launch {
+            _markerStoreResponse.value = mainRepository.getMarker(type, latitude, longitude)
+        }
+    }
+
+    fun getMarkerCafe(type:Int, latitude: String, longitude: String) {
+        viewModelScope.launch {
+            _markerCafeResponse.value = mainRepository.getMarker(type, latitude, longitude)
+        }
+    }
+
+    fun getMarkerPharmacy(type:Int, latitude: String, longitude: String) {
+        viewModelScope.launch {
+            _markerPharmacyResponse.value = mainRepository.getMarker(type, latitude, longitude)
+        }
+    }
+
+    fun getMarkerBicycle(type:Int, latitude: String, longitude: String) {
+        viewModelScope.launch {
+            _markerBicycleResponse.value = mainRepository.getMarker(type, latitude, longitude)
+        }
+    }
+
+    fun getMarkerPolice(type:Int, latitude: String, longitude: String) {
+        viewModelScope.launch {
+            _markerPoliceResponse.value = mainRepository.getMarker(type, latitude, longitude)
         }
     }
 
