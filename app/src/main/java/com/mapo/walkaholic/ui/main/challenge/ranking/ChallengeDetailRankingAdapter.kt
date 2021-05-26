@@ -31,8 +31,8 @@ class ChallengeDetailRankingAdapter(
     override fun onBindViewHolder(holder: ItemChallengeRankingViewHolder, position: Int) {
         holder.binding.rankingItem = rankings[position]
 
-        when (position) {
-            0 -> {
+        when (rankings[position].rank) {
+            "1" -> {
                 val crownImg: Drawable? = ResourcesCompat.getDrawable(
                     holder.binding.root.resources,
                     R.drawable.ic_challenge_crown_gold,
@@ -40,11 +40,11 @@ class ChallengeDetailRankingAdapter(
                 )
                 holder.binding.rankingCrown.setImageDrawable(crownImg)
 
-                holder.binding.challengeRankingUserTv.setTextColor(Color.parseColor("#F37520"))
+                /*holder.binding.challengeRankingUserTv.setTextColor(Color.parseColor("#F37520"))
                 holder.binding.challengeRankingUserTv2.setTextColor(Color.parseColor("#F37520"))
-                holder.binding.challengeRankingPointTv.setTextColor(Color.parseColor("#689F38"))
+                holder.binding.challengeRankingPointTv.setTextColor(Color.parseColor("#689F38"))*/
             }
-            1 -> {
+            "2" -> {
                 val crownImg: Drawable? = ResourcesCompat.getDrawable(
                     holder.binding.root.resources,
                     R.drawable.ic_challenge_crown_skyblue,
@@ -52,7 +52,7 @@ class ChallengeDetailRankingAdapter(
                 )
                 holder.binding.rankingCrown.setImageDrawable(crownImg)
             }
-            2 -> {
+            "3" -> {
                 val crownImg: Drawable? = ResourcesCompat.getDrawable(
                     holder.binding.root.resources,
                     R.drawable.ic_challenge_crown_orange,

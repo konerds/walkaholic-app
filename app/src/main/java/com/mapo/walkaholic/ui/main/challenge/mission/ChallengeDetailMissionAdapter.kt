@@ -19,8 +19,8 @@ import com.mapo.walkaholic.databinding.ItemChallengeMissionBinding
 import com.mapo.walkaholic.ui.favoritepath.FavoritePathClickListener
 
 class ChallengeDetailMissionAdapter(
-    private val missions: ArrayList<MissionResponse.Mission>,
-    private val listener: ChallengeDetailMissionListener
+    private val missions: ArrayList<MissionResponse.Mission>
+    //private var listener: ChallengeDetailMissionListener
 ) : RecyclerView.Adapter<ChallengeDetailMissionAdapter.ItemChallengeMissionViewHolder>() {
 
     inner class ItemChallengeMissionViewHolder(
@@ -39,13 +39,13 @@ class ChallengeDetailMissionAdapter(
         )
     )
 
+/*    fun setItemClickListener(listener: ChallengeDetailMissionListener) {
+        this.listener = listener
+    }*/
+
     override fun onBindViewHolder(holder: ItemChallengeMissionViewHolder, position: Int) {
         holder.binding.missionItem = missions[position]
         holder.binding.viewModel
-
-        holder.binding.missionBtn.setOnClickListener {
-            listener?.onItemClick(it, position)
-        }
 
         when (position) {
             0 -> {
@@ -110,6 +110,11 @@ class ChallengeDetailMissionAdapter(
                 }
             }
         }
+
+        /*holder.binding.missionBtn.setOnClickListener {
+            listener?.onItemClick(it, position)
+            Log.e("number", "1")
+        }*/
     }
 
     override fun getItemCount() = missions.size
