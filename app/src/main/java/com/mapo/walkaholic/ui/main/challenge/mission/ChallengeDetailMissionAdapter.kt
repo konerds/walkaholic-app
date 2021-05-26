@@ -23,10 +23,6 @@ class ChallengeDetailMissionAdapter(
     private val listener: ChallengeDetailMissionListener
 ) : RecyclerView.Adapter<ChallengeDetailMissionAdapter.ItemChallengeMissionViewHolder>() {
 
-    fun setItemClickListener(listener: listener) {
-        this.listener = listener
-    }
-
     inner class ItemChallengeMissionViewHolder(
         val binding: ItemChallengeMissionBinding
     ) : RecyclerView.ViewHolder(binding.root)

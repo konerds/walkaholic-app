@@ -21,12 +21,14 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
+import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionListener
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 class ChallengeDetailFragment(
-    private val position: Int
+    private val position: Int,
+    private val listener: ChallengeDetailMissionListener
 ) : BaseFragment<ChallengeDetailViewModel, FragmentDetailChallengeBinding, MainRepository>() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
@@ -49,16 +51,15 @@ class ChallengeDetailFragment(
                                         is Resource.Success -> {
                                             when (_missionResponse.value.code) {
                                                 "200" -> {
-                                                    ChallengeDetailMissionAdapter(_missionResponse.value.data).setItemClickListener(object :
-                                                        ChallengeDetailMissionAdapter.ChallengeDetailMissionClickListener{
+                                                    /*listener.
                                                         override fun onItemClick(view: View, position: Int) {
                                                             Log.e("냐옹", "냐옹")
                                                             //viewModel.getMissionReward(_userResponse.value.data.first().id, _missionResponse.value.data.first().missionId)
                                                         }
-                                                    })
+                                                    })*/
 
                                                     _challengeRVMission.adapter =
-                                                        ChallengeDetailMissionAdapter(_missionResponse.value.data)
+                                                        ChallengeDetailMissionAdapter(_missionResponse.value.data, listener)
 
                                                     val filteredData = _missionResponse.value.data
                                                     filteredData.add(when(position) {
@@ -70,7 +71,7 @@ class ChallengeDetailFragment(
                                                         }
                                                     })
                                                     _challengeRVMission.adapter =
-                                                        ChallengeDetailMissionAdapter(filteredData)
+                                                        ChallengeDetailMissionAdapter(filteredData, listener)
                                                 }
                                                 else -> {
                                                     // Error
