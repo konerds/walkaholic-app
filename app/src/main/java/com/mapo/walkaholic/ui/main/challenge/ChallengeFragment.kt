@@ -2,6 +2,7 @@ package com.mapo.walkaholic.ui.main.challenge
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,12 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabName?.get(position)
         }.attach()
+
+        Log.e("challengePosition", challengeArgs.toString())
+
+        tabLayout.getTabAt(challengeArgs.idChallenge)?.select()
+        viewPager.currentItem = challengeArgs.idChallenge
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 viewPager.currentItem = tab!!.position
@@ -55,7 +62,7 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
 
             }
         })
-        when(challengeArgs.idChallenge) {
+        /*when(challengeArgs.idChallenge) {
             0 -> {
                 val currentTab = tabLayout.getTabAt(0)
                 if(currentTab != null) {
@@ -80,7 +87,7 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
             else -> {
                 // Never Occur
             }
-        }
+        }*/
     }
 
     override fun onAttach(context: Context) {

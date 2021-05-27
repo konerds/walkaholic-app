@@ -48,6 +48,7 @@ class ChallengeDetailFragment(
                         when (_userResponse.value.code) {
                             "200" -> {
                                 viewModel.getMission(_userResponse.value.data.first().id, position)
+                                Log.e("position", position.toString())
                                 viewModel.missionResponse.observe(viewLifecycleOwner, Observer { _missionResponse ->
                                     when (_missionResponse) {
                                         is Resource.Success -> {
