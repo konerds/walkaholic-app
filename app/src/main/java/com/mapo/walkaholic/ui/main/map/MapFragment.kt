@@ -224,9 +224,9 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                         }
                         // Pause
                         2 -> {
-                            // 일시 정지 상태에서 플레이 버튼 클릭 시
-                            binding.mapWalkControllerLayout.visible(true)
-                            binding.mapWalkControllerLayout2.visible(false)
+                            // 일시 정지 상태에서 일시 정지 버튼 클릭 시
+                            binding.mapWalkControllerLayout.visible(false)
+                            binding.mapWalkControllerLayout2.visible(true)
                             binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
                             walkProcess = 1
                         }
@@ -481,7 +481,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 mMap.locationTrackingMode = LocationTrackingMode.NoFollow
             }
         }
-        mMap.locationTrackingMode = LocationTrackingMode.Follow
         mMap.uiSettings.isLocationButtonEnabled = true
         mMap.uiSettings.logoGravity = Gravity.TOP + Gravity.RIGHT
         mMap.uiSettings.setLogoMargin(80, 80, 80, 80)
