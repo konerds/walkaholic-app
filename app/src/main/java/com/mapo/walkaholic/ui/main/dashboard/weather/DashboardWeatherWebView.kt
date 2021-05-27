@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.dashboard.weather
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ class DashboardWeatherWebView : Fragment() {
         return inflater.inflate(R.layout.fragment_dashboard_weather_web_view, container, false)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

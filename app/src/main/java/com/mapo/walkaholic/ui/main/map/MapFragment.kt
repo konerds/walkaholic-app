@@ -1,9 +1,12 @@
 package com.mapo.walkaholic.ui.main.map
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +51,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     private lateinit var mMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     val mapArgs: MapFragmentArgs by navArgs()
+
+    private val arrayListMapFacilities = arrayListOf<MapFacilities>()
+
+    val arrayListToiletMarker = arrayListOf<Marker>()
+    val arrayListStoreMarker = arrayListOf<Marker>()
+    val arrayListCafeMarker = arrayListOf<Marker>()
+    val arrayListPharmacyMarker = arrayListOf<Marker>()
+    val arrayListBicycleMarker = arrayListOf<Marker>()
+    val arrayListPoliceMarker = arrayListOf<Marker>()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -107,7 +119,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     binding.mapNavigationLayoutFacilities.visible(true)
                     binding.mapNavigationLayoutCourse.visible(false)
                     binding.mapRVFacilities.also { _mapRVFacilities ->
-                        val arrayListMapFacilities = arrayListOf<MapFacilities>()
                         arrayListMapFacilities.add(
                             MapFacilities(
                                 com.mapo.walkaholic.R.drawable.selector_map_toilet,
@@ -269,19 +280,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
             }
             return
         }
-        /*val currentLocationSource = GlobalApplication.getLocationSource()
-        if (currentLocationSource != null) {
-            if (currentLocationSource.onRequestPermissionsResult(
-                    requestCode, permissions,
-                    grantResults
-                )
-            ) {
-                if (!currentLocationSource.isActivated) {
-                    mMap.locationTrackingMode = LocationTrackingMode.None
-                }
-                return
-            }
-        }*/
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
@@ -369,12 +367,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         }
         mMap.setOnMapClickListener { point, coord ->
         }
-        val marker = Marker()
-        marker.position = LatLng(37.5670135, 126.9783740)
-        marker.map = mMap
     }
 
-    private fun setupDataOnMap(naverMap: NaverMap) {
+    private fun setupDataOnMap(naverMap: NaverMap, marker: Marker) {
+    }
+
+    /*private fun setupDataOnMap(naverMap: NaverMap) {
         val zoom = naverMap.cameraPosition.zoom
         viewModel.getMarkers(zoom).observe(this, Observer {
             if (!it.isNullOrEmpty()) {
@@ -385,7 +383,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 this.onResume()
             }
         })
-    }
+    }*/
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -428,12 +426,11 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     override fun onItemClick(position: Int, facilitiesId: Int, isSelected: Boolean) {
         when (facilitiesId) {
             1 -> {
-                val arrayListToiletMarker = arrayListOf<Marker>()
                 if (!isSelected) {
                     viewModel.getMarkerToilet(
                         facilitiesId,
-                        GlobalApplication.currentLat,
-                        GlobalApplication.currentLng
+                        GlobalApplication.currentLng,
+                        GlobalApplication.currentLat
                     )
                     viewModel.markerToiletResponse.observe(
                         viewLifecycleOwner,
@@ -442,24 +439,24 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerToiletResponse.value.code) {
                                         "200" -> {
-                                            _markerToiletResponse.value.data.forEachIndexed { _ToiletIndex, _ToiletElement ->
+                                            _markerToiletResponse.value.data.forEachIndexed { _toiletIndex, _toiletElement ->
                                                 val infoWindow = InfoWindow()
                                                 infoWindow.adapter = object :
                                                     InfoWindow.DefaultTextAdapter(requireContext()) {
                                                     override fun getText(infoWindow: InfoWindow): CharSequence {
-                                                        return _ToiletElement.name + "\n" + _ToiletElement.address
+                                                        return _toiletElement.name + "\n" + _toiletElement.address
                                                     }
                                                 }
                                                 infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _ToiletElement.x.toDouble(),
-                                                    _ToiletElement.y.toDouble()
+                                                    _toiletElement.y.toDouble(),
+                                                    _toiletElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_toilet)
-                                                marker.width = 20
-                                                marker.height = 20
+                                                marker.width = Marker.SIZE_AUTO
+                                                marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
                                                 marker.setOnClickListener {
@@ -506,12 +503,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             2 -> {
-                val arrayListStoreMarker = arrayListOf<Marker>()
+
                 if (!isSelected) {
                     viewModel.getMarkerStore(
                         facilitiesId,
-                        GlobalApplication.currentLat,
-                        GlobalApplication.currentLng
+                        GlobalApplication.currentLng,
+                        GlobalApplication.currentLat
                     )
                     viewModel.markerStoreResponse.observe(
                         viewLifecycleOwner,
@@ -531,13 +528,13 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _StoreElement.x.toDouble(),
-                                                    _StoreElement.y.toDouble()
+                                                    _StoreElement.y.toDouble(),
+                                                    _StoreElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_store)
-                                                marker.width = 20
-                                                marker.height = 20
+                                                marker.width = Marker.SIZE_AUTO
+                                                marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
                                                 marker.setOnClickListener {
@@ -584,12 +581,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             3 -> {
-                val arrayListCafeMarker = arrayListOf<Marker>()
+
                 if (!isSelected) {
                     viewModel.getMarkerCafe(
                         facilitiesId,
-                        GlobalApplication.currentLat,
-                        GlobalApplication.currentLng
+                        GlobalApplication.currentLng,
+                        GlobalApplication.currentLat
                     )
                     viewModel.markerCafeResponse.observe(
                         viewLifecycleOwner,
@@ -609,13 +606,13 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _CafeElement.x.toDouble(),
-                                                    _CafeElement.y.toDouble()
+                                                    _CafeElement.y.toDouble(),
+                                                    _CafeElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_cafe)
-                                                marker.width = 20
-                                                marker.height = 20
+                                                marker.width = Marker.SIZE_AUTO
+                                                marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
                                                 marker.setOnClickListener {
@@ -662,12 +659,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             4 -> {
-                val arrayListPharmacyMarker = arrayListOf<Marker>()
+
                 if (!isSelected) {
                     viewModel.getMarkerPharmacy(
                         facilitiesId,
-                        GlobalApplication.currentLat,
-                        GlobalApplication.currentLng
+                        GlobalApplication.currentLng,
+                        GlobalApplication.currentLat
                     )
                     viewModel.markerPharmacyResponse.observe(
                         viewLifecycleOwner,
@@ -687,13 +684,13 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _PharmacyElement.x.toDouble(),
-                                                    _PharmacyElement.y.toDouble()
+                                                    _PharmacyElement.y.toDouble(),
+                                                    _PharmacyElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_pharmacy)
-                                                marker.width = 20
-                                                marker.height = 20
+                                                marker.width = Marker.SIZE_AUTO
+                                                marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
                                                 marker.setOnClickListener {
@@ -740,12 +737,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             5 -> {
-                val arrayListBicycleMarker = arrayListOf<Marker>()
+
                 if (!isSelected) {
                     viewModel.getMarkerBicycle(
                         facilitiesId,
-                        GlobalApplication.currentLat,
-                        GlobalApplication.currentLng
+                        GlobalApplication.currentLng,
+                        GlobalApplication.currentLat
                     )
                     viewModel.markerBicycleResponse.observe(
                         viewLifecycleOwner,
@@ -765,13 +762,13 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _BicycleElement.x.toDouble(),
-                                                    _BicycleElement.y.toDouble()
+                                                    _BicycleElement.y.toDouble(),
+                                                    _BicycleElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_bicycle)
-                                                marker.width = 20
-                                                marker.height = 20
+                                                marker.width = Marker.SIZE_AUTO
+                                                marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
                                                 marker.setOnClickListener {
@@ -818,12 +815,12 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             6 -> {
-                val arrayListPoliceMarker = arrayListOf<Marker>()
+
                 if (!isSelected) {
                     viewModel.getMarkerPolice(
                         facilitiesId,
-                        GlobalApplication.currentLat,
-                        GlobalApplication.currentLng
+                        GlobalApplication.currentLng,
+                        GlobalApplication.currentLat
                     )
                     viewModel.markerPoliceResponse.observe(
                         viewLifecycleOwner,
@@ -832,6 +829,8 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerPoliceResponse.value.code) {
                                         "200" -> {
+                                            Log.d(TAG, GlobalApplication.currentLat + GlobalApplication.currentLng)
+                                            Log.d(TAG, _markerPoliceResponse.value.data.toString())
                                             _markerPoliceResponse.value.data.forEachIndexed { _policeIndex, _policeElement ->
                                                 val infoWindow = InfoWindow()
                                                 infoWindow.adapter = object :
@@ -843,13 +842,13 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _policeElement.x.toDouble(),
-                                                    _policeElement.y.toDouble()
+                                                    _policeElement.y.toDouble(),
+                                                    _policeElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_police)
-                                                marker.width = 20
-                                                marker.height = 20
+                                                marker.width = Marker.SIZE_AUTO
+                                                marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
                                                 marker.setOnClickListener {

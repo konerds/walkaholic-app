@@ -1,6 +1,7 @@
 <resources>
     <!-- Base Screen Theme -->
     <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:splitMotionEvents">false</item>
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
         <item name="tabTextAppearance">@style/TextAppearance.App.CommonButton</item>
