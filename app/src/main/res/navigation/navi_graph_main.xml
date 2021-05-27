@@ -192,5 +192,17 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/challengeDetailFragment"
+        android:name="com.mapo.walkaholic.ui.main.challenge.ChallengeDetailFragment"
+        android:label="ChallengeDetailFragment">
+        <action
+            android:id="@+id/action_challengeDetailFragment_self"
+            app:destination="@id/challengeDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
 </navigation>
