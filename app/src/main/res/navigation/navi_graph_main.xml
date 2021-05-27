@@ -151,7 +151,24 @@
     <fragment
         android:id="@+id/actionBnvChallenge"
         android:name="com.mapo.walkaholic.ui.main.challenge.ChallengeFragment"
-        tools:layout="@layout/fragment_challenge"></fragment>
+        tools:layout="@layout/fragment_challenge">
+
+        <action
+            android:id="@+id/action_actionBnvChallenge_self"
+            app:destination="@id/actionBnvChallenge"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" >
+            <argument
+                android:name="idChallenge"
+                app:argType="integer" />
+        </action>
+        <argument
+            android:name="idChallenge"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
     <fragment
         android:id="@+id/actionBnvMap"
@@ -187,18 +204,6 @@
         <action
             android:id="@+id/action_actionBnvDashWeatherDetail_to_actionBnvDash"
             app:destination="@id/actionBnvDash"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-    <fragment
-        android:id="@+id/challengeDetailFragment"
-        android:name="com.mapo.walkaholic.ui.main.challenge.ChallengeDetailFragment"
-        android:label="ChallengeDetailFragment">
-        <action
-            android:id="@+id/action_challengeDetailFragment_self"
-            app:destination="@id/challengeDetailFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"

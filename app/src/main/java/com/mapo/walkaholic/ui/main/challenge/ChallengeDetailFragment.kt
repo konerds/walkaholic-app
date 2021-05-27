@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -23,6 +25,7 @@ import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionAdapter
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionListener
 import com.mapo.walkaholic.ui.main.challenge.ranking.ChallengeRankingViewPagerAdapter
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -305,8 +308,48 @@ class ChallengeDetailFragment(
                                     _userResponse.value.data.first().id,
                                     missionId.toString()
                                 )
-                                Log.e("id", missionId.toString())
-                                viewModel.getMission(_userResponse.value.data.first().id, position)
+                                viewModel.missionRewardResponse.observe(viewLifecycleOwner, Observer { _missionRewardResponse ->
+                                    when(_missionRewardResponse) {
+                                        is Resource.Success -> {
+                                            when(_missionRewardResponse.value.code){
+                                                "200" -> {
+                                                    confirmDialog(
+                                                        _missionRewardResponse.value.message,
+                                                        {
+                                                            val navDirection: NavDirections? =
+                                                                ChallengeFragmentDirections.actionActionBnvChallengeSelf(position)
+                                                            if (navDirection != null) {
+                                                                findNavController().navigate(navDirection)
+                                                            }
+                                                        },
+                                                        "확인"
+                                                    )
+                                                }
+                                                else -> {
+                                                    confirmDialog(
+                                                        _missionRewardResponse.value.message,
+                                                        {
+                                                            viewModel.getMissionReward(
+                                                                _userResponse.value.data.first().id,
+                                                                missionId.toString()
+                                                            )
+                                                        },
+                                                        "재시도"
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        is Resource.Loading -> {
+                                            // Loading
+                                        }
+                                        is Resource.Failure -> {
+                                            handleApiError(_missionRewardResponse) { viewModel.getMissionReward(
+                                                _userResponse.value.data.first().id,
+                                                missionId.toString()
+                                            ) }
+                                        }
+                                    }
+                                })
                             }
                             else -> {
                                 // Error

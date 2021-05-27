@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,6 +18,7 @@ import com.mapo.walkaholic.databinding.FragmentChallengeBinding
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.main.challenge.mission.ChallengeDetailMissionListener
+import com.mapo.walkaholic.ui.main.map.MapFragmentArgs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -24,6 +26,8 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
 {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
+
+    val challengeArgs: ChallengeFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +55,32 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
 
             }
         })
+        when(challengeArgs.idChallenge) {
+            0 -> {
+                val currentTab = tabLayout.getTabAt(0)
+                if(currentTab != null) {
+                    currentTab.select()
+                    viewPager.currentItem = 0
+                }
+            }
+            1 -> {
+                val currentTab = tabLayout.getTabAt(1)
+                if(currentTab != null) {
+                    currentTab.select()
+                    viewPager.currentItem = 1
+                }
+            }
+            2 -> {
+                val currentTab = tabLayout.getTabAt(2)
+                if(currentTab != null) {
+                    currentTab.select()
+                    viewPager.currentItem = 2
+                }
+            }
+            else -> {
+                // Never Occur
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
