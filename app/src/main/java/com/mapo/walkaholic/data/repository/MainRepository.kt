@@ -235,6 +235,10 @@ class MainRepository(
         api.getThemeCourse(id.toString())
     }
 
+    suspend fun getThemeCourseRoute(id: Int) = safeApiCall {
+        api.getThemeCourseRoute(id.toString())
+    }
+
     suspend fun getRanking(position: Int) = safeApiCall {
         api.getRanking(position)
     }

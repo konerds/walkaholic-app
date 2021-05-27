@@ -99,6 +99,11 @@ interface InnerApi {
         @Path("id") id: String
     ): ThemeCourseResponse
 
+    @GET("course/theme/route/{type}")
+    suspend fun getThemeCourseRoute(
+        @Path("type") type: String
+    ): ThemeCourseRouteResponse
+
     @GET("user/{id}/detail/walk-record")
     suspend fun getWalkRecord(
         @Path("id") id: String,

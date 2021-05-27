@@ -25,10 +25,8 @@ class MapFacilitiesAdapter(
     private fun toggleItemSelected(position: Int) {
         if (mSelectedMapFacilitiesItems.get(position, false)) {
             mSelectedMapFacilitiesItems.delete(position)
-            notifyItemChanged(position)
         } else {
             mSelectedMapFacilitiesItems.put(position, true)
-            notifyItemChanged(position)
         }
     }
 
@@ -53,6 +51,7 @@ class MapFacilitiesAdapter(
         holder.binding.itemMapFacilitiesLayout.setOnClickListener {
             toggleItemSelected(position)
             holder.binding.itemMapFacilitiesIv.isSelected = isItemSelected(position)
+            notifyItemChanged(position)
             listener.onItemClick(
                 position,
                 arrayListFacilities[position].facilitiesId,

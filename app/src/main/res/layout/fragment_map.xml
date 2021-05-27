@@ -43,8 +43,7 @@
                 android:layout_gravity="top|center_horizontal"
                 android:background="@drawable/box_map_corner_b3ffffff_16dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:visibility="gone"
-                tools:visibility="@{isWalk ? View.VISIBLE : View.GONE}">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/mapIvWalkStart"
@@ -61,8 +60,7 @@
                 android:background="@drawable/box_map_corner_b3ffffff_16dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
-                android:visibility="gone"
-                tools:visibility="@{isWalk ? View.VISIBLE : View.GONE}">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/mapIvWalkPause"
@@ -100,12 +98,12 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/mapNavigationLayout"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="bottom|center_horizontal"
             android:orientation="vertical"
-            android:visibility="visible"
-            tools:visibility="@{isWalk ? View.VISIBLE : View.GONE}">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -293,13 +291,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/mapThemeCourseLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:minHeight="221.36dp"
             android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="@{isWalk ? View.GONE : View.VISIBLE}">
+            android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
