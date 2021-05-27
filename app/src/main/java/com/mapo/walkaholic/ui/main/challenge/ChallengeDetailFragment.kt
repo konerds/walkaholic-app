@@ -28,8 +28,7 @@ import kotlinx.coroutines.runBlocking
 
 class ChallengeDetailFragment(
     private val position: Int
-    //private var listener: ChallengeDetailMissionListener
-    ) : BaseFragment<ChallengeDetailViewModel, FragmentDetailChallengeBinding, MainRepository>() {
+    ) : BaseFragment<ChallengeDetailViewModel, FragmentDetailChallengeBinding, MainRepository>(), ChallengeDetailMissionListener {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
@@ -51,28 +50,15 @@ class ChallengeDetailFragment(
                                         is Resource.Success -> {
                                             when (_missionResponse.value.code) {
                                                 "200" -> {
-                                                    /*ChallengeDetailMissionAdapter(_missionResponse.value.data, listener)
-                                                        .setItemClickListener(object : ChallengeDetailMissionListener{
-                                                            override fun onItemClick(view: View, position: Int) {
-                                                                viewModel.getMissionReward(_userResponse.value.data.first().id, _missionResponse.value.data.first().missionId)
-                                                            }
-                                                        })*/
+                                                    Log.e("missionResponse", _missionResponse.value.data.toString())
 
                                                     _challengeRVMission.adapter =
-                                                        ChallengeDetailMissionAdapter(_missionResponse.value.data)
+                                                        ChallengeDetailMissionAdapter(_missionResponse.value.data, this)
 
                                                     val filteredData = _missionResponse.value.data
-                                                    filteredData.add(when(position) {
-                                                        0 -> {
-                                                            MissionResponse.Mission("7", "모든미션완료", "0", "0", "모든 ")
-                                                        }
-                                                        else -> {
-                                                            MissionResponse.Mission("8", "모든미션완료", "0", "0", "모든 ")
-                                                        }
-                                                    })
+                                                    filteredData.add(MissionResponse.Mission("7", "모든미션완료", "0", "0", "모든 "))
                                                     _challengeRVMission.adapter =
-                                                        ChallengeDetailMissionAdapter(filteredData)
-
+                                                        ChallengeDetailMissionAdapter(filteredData, this)
                                                 }
                                                 else -> {
                                                     // Error
@@ -158,10 +144,6 @@ class ChallengeDetailFragment(
                                         ) { tab, position ->
                                             tab.text = tabName?.get(position)
                                         }.attach()
-
-                                        /*var rankingPositionOneTvIntro1: String = "1"
-                                        var rankingPositionOneRankNum: String = "2"
-                                        var rankingPositionOneTvIntro3: String = "3"*/
 
                                         viewModel.getMonthRanking(_userResponse.value.data.first().id)
                                         viewModel.monthRankingResponse.observe(viewLifecycleOwner, Observer { _monthRankingResponse ->
@@ -300,5 +282,52 @@ class ChallengeDetailFragment(
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
+    }
+
+    override fun onItemClick(view: View, pos: Int) {
+        viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+                when (_userResponse) {
+                    is Resource.Success -> {
+                        when (_userResponse.value.code) {
+                            "200" -> {
+                                var missionId: Int = 0
+                                val missionArr = arrayOf(arrayOf(1, 2, 3), arrayOf(4, 5, 6))
+                                when(position) {
+                                    0 -> {
+                                        missionId = missionArr[0][pos]
+                                    }
+                                    1 -> {
+                                        missionId = missionArr[1][pos]
+                                    }
+                                }
+                                //보상 받기
+                                viewModel.getMissionReward(
+                                    _userResponse.value.data.first().id,
+                                    missionId.toString()
+                                )
+                                Log.e("id", missionId.toString())
+                                viewModel.getMission(_userResponse.value.data.first().id, position)
+                            }
+                            else -> {
+                                // Error
+                                confirmDialog(
+                                    _userResponse.value.message,
+                                    {
+                                        viewModel.getUser()
+                                    },
+                                    "재시도"
+                                )
+                            }
+                        }
+                    }
+                    is Resource.Loading -> {
+                        // Loading
+                    }
+                    is Resource.Failure -> {
+                        // Network Error
+                        handleApiError(_userResponse) { viewModel.getUser() }
+                    }
+                }
+        })
     }
 }
