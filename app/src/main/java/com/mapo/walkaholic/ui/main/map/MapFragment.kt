@@ -478,7 +478,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 mMap.locationTrackingMode = LocationTrackingMode.Follow
             }
             false -> {
-
+                mMap.locationTrackingMode = LocationTrackingMode.NoFollow
             }
         }
         mMap.locationTrackingMode = LocationTrackingMode.Follow
