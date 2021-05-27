@@ -491,19 +491,19 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         mMap.addOnCameraIdleListener { }
         mMap.addOnCameraChangeListener { reason, animated -> }
         mMap.setOnMapClickListener { point, coord ->
-            when(binding.mapNavigationLayout.visibility) {
-                View.VISIBLE -> {
-                    binding.mapNavigationLayout.visible(false)
-                }
-                View.GONE -> {
-                    binding.mapNavigationLayout.visible(true)
-                }
-                else -> {
-                    // Never Occur
-                }
-            }
             when (mapArgs.isWalk) {
                 true -> {
+                    when(binding.mapNavigationLayout.visibility) {
+                        View.VISIBLE -> {
+                            binding.mapNavigationLayout.visible(false)
+                        }
+                        View.GONE -> {
+                            binding.mapNavigationLayout.visible(true)
+                        }
+                        else -> {
+                            // Never Occur
+                        }
+                    }
                     when (walkProcess) {
                         // 정지 상태
                         0 -> {
@@ -550,6 +550,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     }
                 }
                 false -> {
+                    binding.mapNavigationLayout.visible(false)
                     when(binding.mapThemeCourseLayout.visibility) {
                         View.VISIBLE -> {
                             binding.mapThemeCourseLayout.visible(false)
