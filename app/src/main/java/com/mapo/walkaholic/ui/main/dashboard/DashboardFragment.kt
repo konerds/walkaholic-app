@@ -45,6 +45,7 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.handleApiError
+import com.mapo.walkaholic.ui.main.theme.ThemeFragmentDirections
 import com.mapo.walkaholic.ui.setImageUrl
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -52,7 +53,8 @@ import kotlinx.coroutines.runBlocking
 import kotlin.math.*
 
 class DashboardFragment :
-    BaseFragment<DashboardViewModel, FragmentDashboardBinding, MainRepository>() {
+    BaseFragment<DashboardViewModel, FragmentDashboardBinding, MainRepository>(),
+DashboardThemeClickListener {
     companion object {
         private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
@@ -556,7 +558,7 @@ class DashboardFragment :
                                     _dashRVTheme.setHasFixedSize(true)
                                     _dashRVTheme.adapter =
                                         DashboardThemeAdapter(
-                                            _filenameThemeCategoryImageResponse.value.data
+                                            _filenameThemeCategoryImageResponse.value.data, this
                                         )
                                 }
                             }
@@ -871,5 +873,13 @@ class DashboardFragment :
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
+    }
+
+    override fun onItemClick(position: Int) {
+        val navDirection: NavDirections? =
+            DashboardFragmentDirections.actionActionBnvDashToActionBnvThemeDetail(position)
+        if (navDirection != null) {
+            findNavController().navigate(navDirection)
+        }
     }
 }

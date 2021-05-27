@@ -7,7 +7,8 @@ import com.mapo.walkaholic.data.model.response.FilenameThemeCategoryImageRespons
 import com.mapo.walkaholic.databinding.ItemDashboardThemeBinding
 
 class DashboardThemeAdapter(
-    private val arrayListFilenameThemeCategoryImage: ArrayList<FilenameThemeCategoryImageResponse.FilenameThemeCategoryImage>
+    private val arrayListFilenameThemeCategoryImage: ArrayList<FilenameThemeCategoryImageResponse.FilenameThemeCategoryImage>,
+    private val listener: DashboardThemeClickListener
 ) : RecyclerView.Adapter<DashboardThemeAdapter.DashboardThemeViewHolder>() {
     inner class DashboardThemeViewHolder(
         val binding: ItemDashboardThemeBinding
@@ -31,6 +32,10 @@ class DashboardThemeAdapter(
 
     override fun onBindViewHolder(holder: DashboardThemeViewHolder, position: Int) {
         holder.setThemeEnumItem(arrayListFilenameThemeCategoryImage[position])
+
+        holder.binding.dashboardThemeCV.setOnClickListener {
+            listener.onItemClick(position)
+        }
     }
 
     override fun getItemCount() = arrayListFilenameThemeCategoryImage.size

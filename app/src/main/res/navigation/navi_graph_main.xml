@@ -60,6 +60,18 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_actionBnvDash_to_actionBnvThemeDetail"
+            app:destination="@id/actionBnvTheme"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="themePosition"
+                app:argType="integer"/>
+        </action>
     </fragment>
 
     <fragment
@@ -146,6 +158,19 @@
                 android:name="themeId"
                 app:argType="integer" />
         </action>
+
+        <action
+            android:id="@+id/action_actionBnvThemeDetail_to_actionBnvDash"
+            app:destination="@id/actionBnvDash"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" >
+        </action>
+        <argument
+            android:name="themePosition"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
     <fragment

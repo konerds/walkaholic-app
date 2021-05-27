@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,6 +31,8 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
 
+    val themeDetailArgs: ThemeFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tabLayout = binding.themeTL
@@ -46,9 +49,15 @@ class ThemeFragment : BaseFragment<ThemeViewModel, FragmentThemeBinding, MainRep
                             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                                 tab.text = tabName?.get(position)?.themeName
                             }.attach()
+
+                            // 대쉬보드에서 테마 선택시
+                            tabLayout.getTabAt(themeDetailArgs.themePosition)?.select()
+                            viewPager.currentItem = themeDetailArgs.themePosition
+                            
                             tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                                 override fun onTabSelected(tab: TabLayout.Tab?) {
                                     viewPager.currentItem = tab!!.position
+                                    //viewPager.currentItem = themeDetailArgs.themePosition
                                 }
 
                                 override fun onTabUnselected(tab: TabLayout.Tab?) {

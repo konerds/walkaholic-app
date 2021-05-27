@@ -26,158 +26,162 @@
         android:fillViewport="true"
         android:theme="@style/Theme.DashboardCharacterTheme">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F9F9F9"
+            android:orientation="vertical"
             android:scrollbars="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/dashCharacterInfoLayout1Head"
+            <LinearLayout
+                android:id="@+id/characterInfoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/box_dashboard_uppercorner_f37520"
-                android:elevation="4dp"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout1Space"
-                app:layout_constraintTop_toTopOf="parent">
+                android:background="@drawable/box_dashboard_corner_white_16dp"
+                android:elevation="2dp">
 
-                <TextView
-                    android:id="@+id/dashCharacterInfoTvCharacterName"
-                    style="@style/font_semi_bold_16_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@{user.petName}"
-                    android:textColor="@color/mdWhite1000"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/dashCharacterInfoIvShop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_character_shop"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/dashCharacterInfoLayout1Space"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="#ECECEC"
-                android:elevation="4dp"
-                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout1"
-                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1Head" />
-
-            <LinearLayout
-                android:id="@+id/dashCharacterInfoLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/box_dashboard_lowercorner_white"
-                android:elevation="4dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout2"
-                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1Space">
-
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dashCharacterInfoLayout1Head"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16sp"
-                    android:layout_marginTop="14sp"
-                    android:orientation="vertical">
+                    android:layout_height="40dp"
+                    android:background="@drawable/box_dashboard_uppercorner_f37520"
+                    android:elevation="4dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout1Space"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/font_semi_bold_10_one"
+                        android:id="@+id/dashCharacterInfoTvCharacterName"
+                        style="@style/font_semi_bold_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="보유 포인트"
-                        android:textColor="@color/h4" />
+                        android:layout_gravity="center_vertical"
+                        android:text="@{user.petName}"
+                        android:textColor="@color/mdWhite1000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/dashCharacterInfoIvShop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_character_shop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/dashCharacterInfoLayout1Space"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#ECECEC"
+                    app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout1"
+                    app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1Head" />
+
+                <LinearLayout
+                    android:id="@+id/dashCharacterInfoLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout2"
+                    app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1Space">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16sp"
+                        android:layout_marginTop="14sp"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/dashCharacterInfoTvPoint"
-                            style="@style/font_black_28_one"
+                            style="@style/font_semi_bold_10_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.toAnyToString(user.currentPoint)}"
-                            android:textColor="@color/color689f38" />
+                            android:text="보유 포인트"
+                            android:textColor="@color/h4" />
 
-                        <TextView
-                            style="@style/font_black_20_one"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" 포인트"
-                            android:textColor="@color/h1" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/dashCharacterInfoTvPoint"
+                                style="@style/font_black_28_one"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.toAnyToString(user.currentPoint)}"
+                                android:textColor="@color/color689f38" />
+
+                            <TextView
+                                style="@style/font_black_20_one"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 포인트"
+                                android:textColor="@color/h1" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/dashCharacterInfoTvIntro"
-                    style="@style/font_medium_16_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="22dp"
-                    android:background="@drawable/box_dashboard_corner_feeadb"
-                    android:gravity="center|center_vertical"
-                    android:minWidth="220dp"
-                    android:minHeight="32dp"
-                    android:text="상점에서 아이템을 구매하세요!"
-                    android:textSize="14sp" />
-
-                <FrameLayout
-                    android:id="@+id/dashCharacterInfoLayoutFrame"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="4dp">
-
-                    <ImageView
-                        android:id="@+id/dashCharacterInfoIvCharacter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|center_vertical" />
-
                     <TextView
-                        style="@style/font_black_16_one"
+                        android:id="@+id/dashCharacterInfoTvIntro"
+                        style="@style/font_medium_16_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left|bottom"
-                        android:layout_marginLeft="16dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="22dp"
+                        android:background="@drawable/box_dashboard_corner_feeadb"
                         android:gravity="center|center_vertical"
-                        android:text='@{"LV." + viewModel.toAnyToString(user.levelId)}' />
+                        android:minWidth="220dp"
+                        android:minHeight="32dp"
+                        android:text="상점에서 아이템을 구매하세요!"
+                        android:textSize="14sp" />
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/dashCharacterInfoLayoutFrame"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="4dp">
 
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp"
-                    android:layout_margin="16dp"
-                    android:max="@{expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp}"
-                    android:progress="@{user.currentExp - expInformation.currentLevelNeedExp}"
-                    android:progressDrawable="@drawable/progressbar_dashboard_character_info" />
+                        <ImageView
+                            android:id="@+id/dashCharacterInfoIvCharacter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_vertical" />
+
+                        <TextView
+                            style="@style/font_black_16_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|bottom"
+                            android:layout_marginLeft="16dp"
+                            android:gravity="center|center_vertical"
+                            android:text='@{"LV." + viewModel.toAnyToString(user.levelId)}' />
+
+                    </FrameLayout>
+
+                    <ProgressBar
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="16dp"
+                        android:layout_margin="16dp"
+                        android:max="@{expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp}"
+                        android:progress="@{user.currentExp - expInformation.currentLevelNeedExp}"
+                        android:progressDrawable="@drawable/progressbar_dashboard_character_info" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -189,7 +193,7 @@
                 android:gravity="center|center_vertical"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@id/dashCharacterInfoLayout2"
-                app:layout_constraintTop_toBottomOf="@id/dashCharacterInfoLayout1">
+                app:layout_constraintTop_toBottomOf="@id/characterInfoLayout">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -246,7 +250,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="@{viewModel.progressBarVisibility ? View.VISIBLE : View.GONE}" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 </layout>
