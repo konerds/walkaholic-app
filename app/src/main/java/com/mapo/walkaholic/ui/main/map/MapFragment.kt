@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.map
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
@@ -11,7 +12,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -38,8 +38,8 @@ import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.InfoWindow
 import com.naver.maps.map.overlay.Marker
-import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.overlay.PathOverlay
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.fragment_map.view.*
 import kotlinx.coroutines.flow.first
@@ -61,6 +61,10 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     val arrayListBicycleMarker = arrayListOf<Marker>()
     val arrayListPoliceMarker = arrayListOf<Marker>()
 
+    // 0 : Stop / 1 : Playing / 2 : Pause
+    private var walkProcess: Int = 0
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
@@ -84,11 +88,19 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE
             )
 
+        binding.mapWalkControllerLayout.setOnTouchListener { v, event ->
+            true
+        }
+        binding.mapWalkControllerLayout2.setOnTouchListener { v, event ->
+            true
+        }
         binding.mapView.getMapAsync(this)
         when (mapArgs.isWalk) {
             true -> {
                 binding.mapWalkControllerLayout.visible(true)
                 binding.mapWalkControllerLayout2.visible(false)
+                binding.mapNavigationLayout.visible(true)
+                binding.mapThemeCourseLayout.visible(false)
                 binding.mapViewWalkRecord.setBackgroundColor(Color.parseColor("#F37520"))
                 binding.mapViewFacilities.setBackgroundColor(Color.parseColor("#E3E0DB"))
                 binding.mapViewCourse.setBackgroundColor(Color.parseColor("#E3E0DB"))
@@ -183,20 +195,78 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     binding.mapNavigationLayoutCourse.visible(true)
                 }
                 binding.mapIvWalkStart.setOnClickListener {
-                    binding.mapWalkControllerLayout.visible(false)
-                    binding.mapWalkControllerLayout2.visible(true)
+                    when (walkProcess) {
+                        // Stop
+                        0 -> {
+                            // 정지 상태에서 플레이 버튼 클릭 시
+                            binding.mapWalkControllerLayout.visible(false)
+                            binding.mapWalkControllerLayout2.visible(true)
+                            walkProcess = 1
+                        }
+                        else -> {
+                            // Never Occur
+                        }
+                    }
                 }
                 binding.mapIvWalkPause.setOnClickListener {
-                    // Flag 필요
+                    when (walkProcess) {
+                        // Stop
+                        0 -> {
+                            // Never Occur
+                        }
+                        // Playing
+                        1 -> {
+                            // 플레이 상태에서 일시 정지 버튼 클릭 시
+                            binding.mapWalkControllerLayout.visible(false)
+                            binding.mapWalkControllerLayout2.visible(true)
+                            binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_start)
+                            walkProcess = 2
+                        }
+                        // Pause
+                        2 -> {
+                            // 일시 정지 상태에서 플레이 버튼 클릭 시
+                            binding.mapWalkControllerLayout.visible(true)
+                            binding.mapWalkControllerLayout2.visible(false)
+                            binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
+                            walkProcess = 1
+                        }
+                        else -> {
+                            // Never Occur
+                        }
+                    }
                 }
                 binding.mapIvWalkStop.setOnClickListener {
-                    binding.mapWalkControllerLayout.visible(true)
-                    binding.mapWalkControllerLayout2.visible(false)
+                    when (walkProcess) {
+                        // Stop
+                        0 -> {
+                            // Never Occur
+                        }
+                        // Playing
+                        1 -> {
+                            // 플레이 상태에서 정지 버튼 클릭 시
+                            binding.mapWalkControllerLayout.visible(true)
+                            binding.mapWalkControllerLayout2.visible(false)
+                            walkProcess = 0
+                        }
+                        // Pause
+                        2 -> {
+                            // 일시 정지 상태에서 정지 버튼 클릭 시
+                            binding.mapWalkControllerLayout.visible(true)
+                            binding.mapWalkControllerLayout2.visible(false)
+                            binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
+                            walkProcess = 0
+                        }
+                        else -> {
+                            // Never Occur
+                        }
+                    }
                 }
             }
             false -> {
                 binding.mapWalkControllerLayout.visible(false)
                 binding.mapWalkControllerLayout2.visible(false)
+                binding.mapThemeCourseLayout.visible(true)
+                binding.mapNavigationLayout.visible(false)
                 viewModel.getThemeCourse(mapArgs.themeId)
                 viewModel.themeCourseResponse.observe(
                     viewLifecycleOwner,
@@ -248,6 +318,53 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 // Network Error
                                 handleApiError(_themeCourseResponse) {
                                     viewModel.getThemeCourse(
+                                        mapArgs.themeId
+                                    )
+                                }
+                            }
+                        }
+                    })
+                viewModel.getThemeCourseRoute(mapArgs.themeId)
+                viewModel.themeCourseRouteResponse.observe(
+                    viewLifecycleOwner,
+                    Observer { _themeCourseRouteResponse ->
+                        when (_themeCourseRouteResponse) {
+                            is Resource.Success -> {
+                                when (_themeCourseRouteResponse.value.code) {
+                                    "200" -> {
+                                        val arrayListLatLng = mutableListOf<LatLng>()
+                                        _themeCourseRouteResponse.value.data.forEachIndexed { _courseRouteIndex, _courseRouteElement ->
+                                            if(_courseRouteIndex == 0) {
+                                                mMap.moveCamera(CameraUpdate.scrollTo(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble())))
+                                            }
+                                            arrayListLatLng.add(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble()))
+                                            if(_courseRouteIndex == _themeCourseRouteResponse.value.data.size - 1) {
+                                                val path = PathOverlay()
+                                                path.coords = arrayListLatLng
+                                                path.map = mMap
+                                            }
+                                        }
+
+                                    }
+                                    else -> {
+                                        // Error
+                                        confirmDialog(
+                                            _themeCourseRouteResponse.value.message,
+                                            {
+                                                viewModel.getThemeCourseRoute(mapArgs.themeId)
+                                            },
+                                            "재시도"
+                                        )
+                                    }
+                                }
+                            }
+                            is Resource.Loading -> {
+                                // Loading
+                            }
+                            is Resource.Failure -> {
+                                // Network Error
+                                handleApiError(_themeCourseRouteResponse) {
+                                    viewModel.getThemeCourseRoute(
                                         mapArgs.themeId
                                     )
                                 }
@@ -345,14 +462,25 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     override fun onMapReady(naverMap: NaverMap) {
         this.mMap = naverMap
         mMap.locationSource = locationSource
-        mMap.moveCamera(
-            CameraUpdate.toCameraPosition(
-                CameraPosition(
-                    LatLng(35.231574, 129.084433),
-                    12.0
+        when (mapArgs.isWalk) {
+            true -> {
+                mMap.moveCamera(
+                    CameraUpdate.toCameraPosition(
+                        CameraPosition(
+                            LatLng(
+                                GlobalApplication.currentLat.toDouble(),
+                                GlobalApplication.currentLng.toDouble()
+                            ),
+                            12.0
+                        )
+                    )
                 )
-            )
-        )
+                mMap.locationTrackingMode = LocationTrackingMode.Follow
+            }
+            false -> {
+
+            }
+        }
         mMap.locationTrackingMode = LocationTrackingMode.Follow
         mMap.uiSettings.isLocationButtonEnabled = true
         mMap.uiSettings.logoGravity = Gravity.TOP + Gravity.RIGHT
@@ -360,12 +488,81 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         mMap.minZoom = 5.0
         mMap.maxZoom = 18.0
         mMap.extent = LatLngBounds(LatLng(31.43, 122.37), LatLng(44.35, 132.0))
-        /*mMap.addOnCameraIdleListener {
-            setupDataOnMap(mMap)
-        }*/
-        mMap.addOnCameraChangeListener { reason, animated ->
-        }
+        mMap.addOnCameraIdleListener { }
+        mMap.addOnCameraChangeListener { reason, animated -> }
         mMap.setOnMapClickListener { point, coord ->
+            when(binding.mapNavigationLayout.visibility) {
+                View.VISIBLE -> {
+                    binding.mapNavigationLayout.visible(false)
+                }
+                View.GONE -> {
+                    binding.mapNavigationLayout.visible(true)
+                }
+                else -> {
+                    // Never Occur
+                }
+            }
+            when (mapArgs.isWalk) {
+                true -> {
+                    when (walkProcess) {
+                        // 정지 상태
+                        0 -> {
+                            when(binding.mapWalkControllerLayout.visibility) {
+                                View.VISIBLE -> {
+                                    binding.mapWalkControllerLayout.visible(false)
+                                }
+                                View.GONE -> {
+                                    binding.mapWalkControllerLayout.visible(true)
+                                }
+                                else -> {
+                                    // Never Occur
+                                }
+                            }
+                        }
+                        // 플레이 상태
+                        1 -> {
+                            when(binding.mapWalkControllerLayout2.visibility) {
+                                View.VISIBLE -> {
+                                    binding.mapWalkControllerLayout2.visible(false)
+                                }
+                                View.GONE -> {
+                                    binding.mapWalkControllerLayout2.visible(true)
+                                }
+                                else -> {
+                                    // Never Occur
+                                }
+                            }
+                        }
+                        // 일시 정지 상태
+                        2 -> {
+                            when(binding.mapWalkControllerLayout2.visibility) {
+                                View.VISIBLE -> {
+                                    binding.mapWalkControllerLayout2.visible(false)
+                                }
+                                View.GONE -> {
+                                    binding.mapWalkControllerLayout2.visible(true)
+                                }
+                                else -> {
+                                    // Never Occur
+                                }
+                            }
+                        }
+                    }
+                }
+                false -> {
+                    when(binding.mapThemeCourseLayout.visibility) {
+                        View.VISIBLE -> {
+                            binding.mapThemeCourseLayout.visible(false)
+                        }
+                        View.GONE -> {
+                            binding.mapThemeCourseLayout.visible(true)
+                        }
+                        else -> {
+                            // Never Occur
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -444,7 +641,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.isHideCollidedSymbols = true
                                                 infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    if(infoWindow.isVisible) {
+                                                    if (infoWindow.isVisible) {
                                                         infoWindow.isVisible = false
                                                         infoWindow.close()
                                                     } else {
@@ -527,7 +724,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.isHideCollidedSymbols = true
                                                 infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    if(infoWindow.isVisible) {
+                                                    if (infoWindow.isVisible) {
                                                         infoWindow.isVisible = false
                                                         infoWindow.close()
                                                     } else {
@@ -610,7 +807,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.isHideCollidedSymbols = true
                                                 infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    if(infoWindow.isVisible) {
+                                                    if (infoWindow.isVisible) {
                                                         infoWindow.isVisible = false
                                                         infoWindow.close()
                                                     } else {
@@ -693,7 +890,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.isHideCollidedSymbols = true
                                                 infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    if(infoWindow.isVisible) {
+                                                    if (infoWindow.isVisible) {
                                                         infoWindow.isVisible = false
                                                         infoWindow.close()
                                                     } else {
@@ -776,7 +973,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.isHideCollidedSymbols = true
                                                 infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    if(infoWindow.isVisible) {
+                                                    if (infoWindow.isVisible) {
                                                         infoWindow.isVisible = false
                                                         infoWindow.close()
                                                     } else {
@@ -838,7 +1035,10 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerPoliceResponse.value.code) {
                                         "200" -> {
-                                            Log.d(TAG, GlobalApplication.currentLat + GlobalApplication.currentLng)
+                                            Log.d(
+                                                TAG,
+                                                GlobalApplication.currentLat + GlobalApplication.currentLng
+                                            )
                                             Log.d(TAG, _markerPoliceResponse.value.data.toString())
                                             _markerPoliceResponse.value.data.forEachIndexed { _policeIndex, _policeElement ->
                                                 val infoWindow = InfoWindow()
@@ -861,7 +1061,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.isHideCollidedSymbols = true
                                                 infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    if(infoWindow.isVisible) {
+                                                    if (infoWindow.isVisible) {
                                                         infoWindow.isVisible = false
                                                         infoWindow.close()
                                                     } else {

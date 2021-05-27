@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.mapo.walkaholic.data.model.Point
 import com.mapo.walkaholic.data.model.request.MapRequestBody
-import com.mapo.walkaholic.data.model.response.MapResponse
-import com.mapo.walkaholic.data.model.response.MarkerLatLngResponse
-import com.mapo.walkaholic.data.model.response.ThemeCourseResponse
-import com.mapo.walkaholic.data.model.response.UserResponse
+import com.mapo.walkaholic.data.model.response.*
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.MainRepository
 import com.mapo.walkaholic.ui.base.BaseViewModel
@@ -28,6 +25,10 @@ class MapViewModel(
         MutableLiveData()
     val themeCourseResponse: LiveData<Resource<ThemeCourseResponse>>
         get() = _themeCourseResponse
+    private val _themeCourseRouteResponse: MutableLiveData<Resource<ThemeCourseRouteResponse>> =
+        MutableLiveData()
+    val themeCourseRouteResponse: LiveData<Resource<ThemeCourseRouteResponse>>
+        get() = _themeCourseRouteResponse
     private val _markerToiletResponse: MutableLiveData<Resource<MarkerLatLngResponse>> =
         MutableLiveData()
     val markerToiletResponse: LiveData<Resource<MarkerLatLngResponse>>
@@ -108,6 +109,12 @@ class MapViewModel(
     fun getThemeCourse(id: Int) {
         viewModelScope.launch {
             _themeCourseResponse.value = mainRepository.getThemeCourse(id)
+        }
+    }
+
+    fun getThemeCourseRoute(id: Int) {
+        viewModelScope.launch {
+            _themeCourseRouteResponse.value = mainRepository.getThemeCourseRoute(id)
         }
     }
 }
