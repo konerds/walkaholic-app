@@ -369,22 +369,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         }
     }
 
-    private fun setupDataOnMap(naverMap: NaverMap, marker: Marker) {
-    }
-
-    /*private fun setupDataOnMap(naverMap: NaverMap) {
-        val zoom = naverMap.cameraPosition.zoom
-        viewModel.getMarkers(zoom).observe(this, Observer {
-            if (!it.isNullOrEmpty()) {
-                for (i in it) {
-                    i.map = naverMap
-                }
-            } else {
-                this.onResume()
-            }
-        })
-    }*/
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callback = object : OnBackPressedCallback(true) {
@@ -447,7 +431,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                         return _toiletElement.name + "\n" + _toiletElement.address
                                                     }
                                                 }
-                                                infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
                                                     _toiletElement.y.toDouble(),
@@ -459,8 +442,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
+                                                infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    infoWindow.open(marker)
+                                                    if(infoWindow.isVisible) {
+                                                        infoWindow.isVisible = false
+                                                        infoWindow.close()
+                                                    } else {
+                                                        infoWindow.isVisible = true
+                                                        infoWindow.open(marker)
+                                                    }
                                                     true
                                                 }
                                                 arrayListToiletMarker.add(marker)
@@ -503,7 +493,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             2 -> {
-
                 if (!isSelected) {
                     viewModel.getMarkerStore(
                         facilitiesId,
@@ -525,7 +514,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                         return _StoreElement.name + "\n" + _StoreElement.address
                                                     }
                                                 }
-                                                infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
                                                     _StoreElement.y.toDouble(),
@@ -537,8 +525,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
+                                                infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    infoWindow.open(marker)
+                                                    if(infoWindow.isVisible) {
+                                                        infoWindow.isVisible = false
+                                                        infoWindow.close()
+                                                    } else {
+                                                        infoWindow.isVisible = true
+                                                        infoWindow.open(marker)
+                                                    }
                                                     true
                                                 }
                                                 arrayListStoreMarker.add(marker)
@@ -581,7 +576,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             3 -> {
-
                 if (!isSelected) {
                     viewModel.getMarkerCafe(
                         facilitiesId,
@@ -603,7 +597,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                         return _CafeElement.name + "\n" + _CafeElement.address
                                                     }
                                                 }
-                                                infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
                                                     _CafeElement.y.toDouble(),
@@ -615,8 +608,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
+                                                infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    infoWindow.open(marker)
+                                                    if(infoWindow.isVisible) {
+                                                        infoWindow.isVisible = false
+                                                        infoWindow.close()
+                                                    } else {
+                                                        infoWindow.isVisible = true
+                                                        infoWindow.open(marker)
+                                                    }
                                                     true
                                                 }
                                                 arrayListCafeMarker.add(marker)
@@ -659,7 +659,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             4 -> {
-
                 if (!isSelected) {
                     viewModel.getMarkerPharmacy(
                         facilitiesId,
@@ -681,7 +680,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                         return _PharmacyElement.name + "\n" + _PharmacyElement.address
                                                     }
                                                 }
-                                                infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
                                                     _PharmacyElement.y.toDouble(),
@@ -693,8 +691,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
+                                                infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    infoWindow.open(marker)
+                                                    if(infoWindow.isVisible) {
+                                                        infoWindow.isVisible = false
+                                                        infoWindow.close()
+                                                    } else {
+                                                        infoWindow.isVisible = true
+                                                        infoWindow.open(marker)
+                                                    }
                                                     true
                                                 }
                                                 arrayListPharmacyMarker.add(marker)
@@ -737,7 +742,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             5 -> {
-
                 if (!isSelected) {
                     viewModel.getMarkerBicycle(
                         facilitiesId,
@@ -759,7 +763,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                         return _BicycleElement.name + "\n" + _BicycleElement.address
                                                     }
                                                 }
-                                                infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
                                                     _BicycleElement.y.toDouble(),
@@ -771,8 +774,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
+                                                infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    infoWindow.open(marker)
+                                                    if(infoWindow.isVisible) {
+                                                        infoWindow.isVisible = false
+                                                        infoWindow.close()
+                                                    } else {
+                                                        infoWindow.isVisible = true
+                                                        infoWindow.open(marker)
+                                                    }
                                                     true
                                                 }
                                                 arrayListBicycleMarker.add(marker)
@@ -815,7 +825,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
             6 -> {
-
                 if (!isSelected) {
                     viewModel.getMarkerPolice(
                         facilitiesId,
@@ -839,7 +848,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                         return _policeElement.name + "\n" + _policeElement.address
                                                     }
                                                 }
-                                                infoWindow.alpha = 0.5f
                                                 val marker = Marker()
                                                 marker.position = LatLng(
                                                     _policeElement.y.toDouble(),
@@ -851,8 +859,15 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                                 marker.height = Marker.SIZE_AUTO
                                                 marker.zIndex = facilitiesId
                                                 marker.isHideCollidedSymbols = true
+                                                infoWindow.isVisible = false
                                                 marker.setOnClickListener {
-                                                    infoWindow.open(marker)
+                                                    if(infoWindow.isVisible) {
+                                                        infoWindow.isVisible = false
+                                                        infoWindow.close()
+                                                    } else {
+                                                        infoWindow.isVisible = true
+                                                        infoWindow.open(marker)
+                                                    }
                                                     true
                                                 }
                                                 arrayListPoliceMarker.add(marker)
