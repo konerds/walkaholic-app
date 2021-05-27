@@ -267,110 +267,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 binding.mapWalkControllerLayout2.visible(false)
                 binding.mapThemeCourseLayout.visible(true)
                 binding.mapNavigationLayout.visible(false)
-                viewModel.getThemeCourse(mapArgs.themeId)
-                viewModel.themeCourseResponse.observe(
-                    viewLifecycleOwner,
-                    Observer { _themeCourseResponse ->
-                        when (_themeCourseResponse) {
-                            is Resource.Success -> {
-                                when (_themeCourseResponse.value.code) {
-                                    "200" -> {
-                                        binding.themeCourse = _themeCourseResponse.value.data
-                                    }
-                                    else -> {
-                                        binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
-                                            -1,
-                                            "오류",
-                                            "오류",
-                                            "오류",
-                                            "오류",
-                                            "오류",
-                                            "오류",
-                                            "오류",
-                                            "오류"
-                                        )
-                                        // Error
-                                        confirmDialog(
-                                            _themeCourseResponse.value.message,
-                                            {
-                                                viewModel.getThemeCourse(mapArgs.themeId)
-                                            },
-                                            "재시도"
-                                        )
-                                    }
-                                }
-                            }
-                            is Resource.Loading -> {
-                                // Loading
-                            }
-                            is Resource.Failure -> {
-                                binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
-                                    -1,
-                                    "오류",
-                                    "오류",
-                                    "오류",
-                                    "오류",
-                                    "오류",
-                                    "오류",
-                                    "오류",
-                                    "오류"
-                                )
-                                // Network Error
-                                handleApiError(_themeCourseResponse) {
-                                    viewModel.getThemeCourse(
-                                        mapArgs.themeId
-                                    )
-                                }
-                            }
-                        }
-                    })
-                viewModel.getThemeCourseRoute(mapArgs.themeId)
-                viewModel.themeCourseRouteResponse.observe(
-                    viewLifecycleOwner,
-                    Observer { _themeCourseRouteResponse ->
-                        when (_themeCourseRouteResponse) {
-                            is Resource.Success -> {
-                                when (_themeCourseRouteResponse.value.code) {
-                                    "200" -> {
-                                        val arrayListLatLng = mutableListOf<LatLng>()
-                                        _themeCourseRouteResponse.value.data.forEachIndexed { _courseRouteIndex, _courseRouteElement ->
-                                            if(_courseRouteIndex == 0) {
-                                                mMap.moveCamera(CameraUpdate.scrollTo(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble())))
-                                            }
-                                            arrayListLatLng.add(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble()))
-                                            if(_courseRouteIndex == _themeCourseRouteResponse.value.data.size - 1) {
-                                                val path = PathOverlay()
-                                                path.coords = arrayListLatLng
-                                                path.map = mMap
-                                            }
-                                        }
-
-                                    }
-                                    else -> {
-                                        // Error
-                                        confirmDialog(
-                                            _themeCourseRouteResponse.value.message,
-                                            {
-                                                viewModel.getThemeCourseRoute(mapArgs.themeId)
-                                            },
-                                            "재시도"
-                                        )
-                                    }
-                                }
-                            }
-                            is Resource.Loading -> {
-                                // Loading
-                            }
-                            is Resource.Failure -> {
-                                // Network Error
-                                handleApiError(_themeCourseRouteResponse) {
-                                    viewModel.getThemeCourseRoute(
-                                        mapArgs.themeId
-                                    )
-                                }
-                            }
-                        }
-                    })
                 binding.mapBtnFavoriteCourse.setOnClickListener {
                     alertDialog("코스 정보를 찜 하시겠습니까?", null, {
                         // Favorite Rest
@@ -479,6 +375,109 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
             }
             false -> {
                 mMap.locationTrackingMode = LocationTrackingMode.NoFollow
+                viewModel.getThemeCourse(mapArgs.themeId)
+                viewModel.themeCourseResponse.observe(
+                    viewLifecycleOwner,
+                    Observer { _themeCourseResponse ->
+                        when (_themeCourseResponse) {
+                            is Resource.Success -> {
+                                when (_themeCourseResponse.value.code) {
+                                    "200" -> {
+                                        binding.themeCourse = _themeCourseResponse.value.data
+                                    }
+                                    else -> {
+                                        binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
+                                            -1,
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류",
+                                            "오류"
+                                        )
+                                        // Error
+                                        confirmDialog(
+                                            _themeCourseResponse.value.message,
+                                            {
+                                                viewModel.getThemeCourse(mapArgs.themeId)
+                                            },
+                                            "재시도"
+                                        )
+                                    }
+                                }
+                            }
+                            is Resource.Loading -> {
+                                // Loading
+                            }
+                            is Resource.Failure -> {
+                                binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
+                                    -1,
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류",
+                                    "오류"
+                                )
+                                // Network Error
+                                handleApiError(_themeCourseResponse) {
+                                    viewModel.getThemeCourse(
+                                        mapArgs.themeId
+                                    )
+                                }
+                            }
+                        }
+                    })
+                viewModel.getThemeCourseRoute(mapArgs.themeId)
+                viewModel.themeCourseRouteResponse.observe(
+                    viewLifecycleOwner,
+                    Observer { _themeCourseRouteResponse ->
+                        when (_themeCourseRouteResponse) {
+                            is Resource.Success -> {
+                                when (_themeCourseRouteResponse.value.code) {
+                                    "200" -> {
+                                        val arrayListLatLng = mutableListOf<LatLng>()
+                                        _themeCourseRouteResponse.value.data.forEachIndexed { _courseRouteIndex, _courseRouteElement ->
+                                            if(_courseRouteIndex == 0) {
+                                                mMap.moveCamera(CameraUpdate.scrollTo(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble())))
+                                            }
+                                            arrayListLatLng.add(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble()))
+                                            if(_courseRouteIndex == _themeCourseRouteResponse.value.data.size - 1) {
+                                                val path = PathOverlay()
+                                                path.coords = arrayListLatLng
+                                                path.map = mMap
+                                            }
+                                        }
+                                    }
+                                    else -> {
+                                        // Error
+                                        confirmDialog(
+                                            _themeCourseRouteResponse.value.message,
+                                            {
+                                                viewModel.getThemeCourseRoute(mapArgs.themeId)
+                                            },
+                                            "재시도"
+                                        )
+                                    }
+                                }
+                            }
+                            is Resource.Loading -> {
+                                // Loading
+                            }
+                            is Resource.Failure -> {
+                                // Network Error
+                                handleApiError(_themeCourseRouteResponse) {
+                                    viewModel.getThemeCourseRoute(
+                                        mapArgs.themeId
+                                    )
+                                }
+                            }
+                        }
+                    })
             }
         }
         mMap.uiSettings.isLocationButtonEnabled = true
