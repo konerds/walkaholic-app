@@ -129,6 +129,8 @@ class DashboardViewModel(
         }
     }
 
+    fun getBurnCalorie(walkCount : Int) = (walkCount * 5).toString() + "kcal"
+
     fun getDifferenceTemperature(todayTemperature: String?, yesterdayTemperature: String?): String {
         if (todayTemperature.isNullOrEmpty() || yesterdayTemperature.isNullOrEmpty()) {
             return "오류"

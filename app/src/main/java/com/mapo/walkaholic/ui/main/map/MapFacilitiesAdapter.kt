@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.map
 
+import android.annotation.SuppressLint
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -46,6 +47,7 @@ class MapFacilitiesAdapter(
         return ItemMapFacilitiesViewHolder(binding)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ItemMapFacilitiesViewHolder, position: Int) {
         holder.setMapFacilitiesItem(arrayListFacilities[position])
         holder.binding.itemMapFacilitiesLayout.setOnClickListener {

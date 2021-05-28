@@ -255,11 +255,6 @@ fun setImageUrl(view: ImageView, imageSrc: String?) {
                     resource: Drawable,
                     transition: Transition<in Drawable>?
                 ) {
-                    TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        resource.minimumWidth.toFloat(),
-                        GlobalApplication.getGlobalApplicationContext().resources.displayMetrics
-                    ).toInt()
                     view.minimumWidth = TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP,
                         resource.minimumWidth.toFloat(),

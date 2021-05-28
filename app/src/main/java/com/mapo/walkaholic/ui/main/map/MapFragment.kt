@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.util.SparseBooleanArray
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -44,13 +47,25 @@ import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.fragment_map.view.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepository>(),
-    OnMapReadyCallback, LocationListener, MapFacilitiesClickListener {
+    OnMapReadyCallback, LocationListener, MapFacilitiesClickListener, SensorEventListener {
     private lateinit var mapView: MapView
     private lateinit var mMap: NaverMap
     private lateinit var locationSource: FusedLocationSource
     val mapArgs: MapFragmentArgs by navArgs()
+
+    private var time = 0
+    private var timerTask: Timer? = null
+
+    private var mSteps = 0
+    private var mPrevSteps = 0
+    private var mPauseSteps = 0
+
+    private var sensorManager: SensorManager? = null
+    private var stepCountSensor: Sensor? = null
 
     private val arrayListMapFacilities = arrayListOf<MapFacilities>()
 
@@ -68,6 +83,8 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
+        binding.walkNum = "0"
+        binding.walkTime = "00:00:00"
         binding.isWalk = mapArgs.isWalk
         if (mapArgs.themeId == -1) {
             binding.themeCourse = ThemeCourseResponse.DataThemeCourse(
@@ -87,7 +104,6 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 this,
                 GlobalApplication.LOCATION_PERMISSION_REQUEST_CODE
             )
-
         binding.mapWalkControllerLayout.setOnTouchListener { v, event ->
             true
         }
@@ -199,9 +215,34 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                         // Stop
                         0 -> {
                             // 정지 상태에서 플레이 버튼 클릭 시
-                            binding.mapWalkControllerLayout.visible(false)
-                            binding.mapWalkControllerLayout2.visible(true)
-                            walkProcess = 1
+                            sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+                            stepCountSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+                            if (sensorManager != null && stepCountSensor != null) {
+                                sensorManager!!.registerListener(
+                                    this,
+                                    stepCountSensor,
+                                    SensorManager.SENSOR_DELAY_GAME
+                                )
+                                binding.mapWalkControllerLayout.visible(false)
+                                binding.mapWalkControllerLayout2.visible(true)
+                                walkProcess = 1
+                                timerTask = kotlin.concurrent.timer(period = 1000) {
+                                    time++
+                                    val lTime = time.toFloat().toLong()
+                                    val hour = TimeUnit.SECONDS.toHours(lTime) - (TimeUnit.SECONDS.toDays(lTime).toInt()) * 24
+                                    val minute = TimeUnit.SECONDS.toMinutes(lTime) - (TimeUnit.SECONDS.toHours(lTime)) * 60
+                                    val second = TimeUnit.SECONDS.toSeconds(lTime) - (TimeUnit.SECONDS.toMinutes(lTime)) * 60
+                                    val zeroFillHour = if(hour < 10) { "0" } else { "" }
+                                    val zeroFillMinute = if(minute < 10) { "0" } else { "" }
+                                    val zeroFillSecond = if(second < 10) { "0" } else { "" }
+
+                                    requireActivity().runOnUiThread {
+                                        binding.walkTime = "${zeroFillHour}${hour.toString().format("%02d", 2)}:${zeroFillMinute}${minute.toString().format("%02d", 2)}:${zeroFillSecond}${second.toString().format("%02d", 2)}"
+                                    }
+                                }
+                            } else {
+                                confirmDialog("걸음수 측정을 위한 센서를 찾을 수 없습니다", null, null)
+                            }
                         }
                         else -> {
                             // Never Occur
@@ -217,18 +258,45 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                         // Playing
                         1 -> {
                             // 플레이 상태에서 일시 정지 버튼 클릭 시
-                            binding.mapWalkControllerLayout.visible(false)
-                            binding.mapWalkControllerLayout2.visible(true)
-                            binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_start)
-                            walkProcess = 2
+                            if (sensorManager != null) {
+                                binding.mapWalkControllerLayout.visible(false)
+                                binding.mapWalkControllerLayout2.visible(true)
+                                binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_start)
+                                walkProcess = 2
+                                mPauseSteps = mSteps
+                                sensorManager!!.unregisterListener(this)
+                                timerTask?.cancel()
+                            } else {
+                                confirmDialog("걸음수 측정을 위한 센서를 찾을 수 없습니다", null, null)
+                            }
                         }
                         // Pause
                         2 -> {
                             // 일시 정지 상태에서 일시 정지 버튼 클릭 시
-                            binding.mapWalkControllerLayout.visible(false)
-                            binding.mapWalkControllerLayout2.visible(true)
-                            binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
-                            walkProcess = 1
+                            if (sensorManager != null && stepCountSensor != null) {
+                                binding.mapWalkControllerLayout.visible(false)
+                                binding.mapWalkControllerLayout2.visible(true)
+                                binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
+                                walkProcess = 1
+                                sensorManager!!.registerListener(
+                                    this,
+                                    stepCountSensor,
+                                    SensorManager.SENSOR_DELAY_GAME
+                                )
+                                mSteps = mPauseSteps
+                                mPauseSteps = 0
+                                timerTask = kotlin.concurrent.timer(period = 1000) {
+                                    time++
+                                    val hour = time / 36000
+                                    val minute = time / 6000
+                                    val second = time / 100
+                                    requireActivity().runOnUiThread {
+                                        binding.walkTime = "${"%02d".format(hour)}:${"%02d".format(minute)}:${"%02d".format(second)}"
+                                    }
+                                }
+                            } else {
+                                confirmDialog("걸음수 측정을 위한 센서를 찾을 수 없습니다", null, null)
+                            }
                         }
                         else -> {
                             // Never Occur
@@ -244,17 +312,41 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                         // Playing
                         1 -> {
                             // 플레이 상태에서 정지 버튼 클릭 시
-                            binding.mapWalkControllerLayout.visible(true)
-                            binding.mapWalkControllerLayout2.visible(false)
-                            walkProcess = 0
+                            if (sensorManager != null) {
+                                binding.mapWalkControllerLayout.visible(true)
+                                binding.mapWalkControllerLayout2.visible(false)
+                                walkProcess = 0
+                                binding.walkNum = "0"
+                                mSteps = 0
+                                mPauseSteps = 0
+                                mPrevSteps = 0
+                                sensorManager!!.unregisterListener(this)
+                                timerTask?.cancel()
+                                time = 0
+                                binding.walkTime = "00:00:00"
+                            } else {
+                                confirmDialog("걸음수 측정을 위한 센서를 찾을 수 없습니다", null, null)
+                            }
                         }
                         // Pause
                         2 -> {
                             // 일시 정지 상태에서 정지 버튼 클릭 시
-                            binding.mapWalkControllerLayout.visible(true)
-                            binding.mapWalkControllerLayout2.visible(false)
-                            binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
-                            walkProcess = 0
+                            if (sensorManager != null) {
+                                binding.mapWalkControllerLayout.visible(true)
+                                binding.mapWalkControllerLayout2.visible(false)
+                                binding.mapIvWalkPause.setImageResource(com.mapo.walkaholic.R.drawable.ic_walk_pause)
+                                walkProcess = 0
+                                binding.walkNum = "0"
+                                mSteps = 0
+                                mPauseSteps = 0
+                                mPrevSteps = 0
+                                sensorManager!!.unregisterListener(this)
+                                timerTask?.cancel()
+                                time = 0
+                                binding.walkTime = "00:00:00"
+                            } else {
+                                confirmDialog("걸음수 측정을 위한 센서를 찾을 수 없습니다", null, null)
+                            }
                         }
                         else -> {
                             // Never Occur
@@ -313,6 +405,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
 
     override fun onPause() {
         super.onPause()
+        timerTask?.cancel()
         mapView.onPause()
     }
 
@@ -442,11 +535,23 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                     "200" -> {
                                         val arrayListLatLng = mutableListOf<LatLng>()
                                         _themeCourseRouteResponse.value.data.forEachIndexed { _courseRouteIndex, _courseRouteElement ->
-                                            if(_courseRouteIndex == 0) {
-                                                mMap.moveCamera(CameraUpdate.scrollTo(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble())))
+                                            if (_courseRouteIndex == 0) {
+                                                mMap.moveCamera(
+                                                    CameraUpdate.scrollTo(
+                                                        LatLng(
+                                                            _courseRouteElement.x.toDouble(),
+                                                            _courseRouteElement.y.toDouble()
+                                                        )
+                                                    )
+                                                )
                                             }
-                                            arrayListLatLng.add(LatLng(_courseRouteElement.x.toDouble(), _courseRouteElement.y.toDouble()))
-                                            if(_courseRouteIndex == _themeCourseRouteResponse.value.data.size - 1) {
+                                            arrayListLatLng.add(
+                                                LatLng(
+                                                    _courseRouteElement.x.toDouble(),
+                                                    _courseRouteElement.y.toDouble()
+                                                )
+                                            )
+                                            if (_courseRouteIndex == _themeCourseRouteResponse.value.data.size - 1) {
                                                 val path = PathOverlay()
                                                 path.coords = arrayListLatLng
                                                 path.map = mMap
@@ -491,7 +596,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
         mMap.setOnMapClickListener { point, coord ->
             when (mapArgs.isWalk) {
                 true -> {
-                    when(binding.mapNavigationLayout.visibility) {
+                    when (binding.mapNavigationLayout.visibility) {
                         View.VISIBLE -> {
                             binding.mapNavigationLayout.visible(false)
                         }
@@ -505,7 +610,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                     when (walkProcess) {
                         // 정지 상태
                         0 -> {
-                            when(binding.mapWalkControllerLayout.visibility) {
+                            when (binding.mapWalkControllerLayout.visibility) {
                                 View.VISIBLE -> {
                                     binding.mapWalkControllerLayout.visible(false)
                                 }
@@ -519,7 +624,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                         }
                         // 플레이 상태
                         1 -> {
-                            when(binding.mapWalkControllerLayout2.visibility) {
+                            when (binding.mapWalkControllerLayout2.visibility) {
                                 View.VISIBLE -> {
                                     binding.mapWalkControllerLayout2.visible(false)
                                 }
@@ -533,7 +638,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                         }
                         // 일시 정지 상태
                         2 -> {
-                            when(binding.mapWalkControllerLayout2.visibility) {
+                            when (binding.mapWalkControllerLayout2.visibility) {
                                 View.VISIBLE -> {
                                     binding.mapWalkControllerLayout2.visible(false)
                                 }
@@ -549,7 +654,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
                 false -> {
                     binding.mapNavigationLayout.visible(false)
-                    when(binding.mapThemeCourseLayout.visibility) {
+                    when (binding.mapThemeCourseLayout.visibility) {
                         View.VISIBLE -> {
                             binding.mapThemeCourseLayout.visible(false)
                         }
@@ -1109,5 +1214,21 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                 }
             }
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event != null) {
+            if (event.sensor.type == Sensor.TYPE_STEP_COUNTER) {
+                if (mPrevSteps < 1) {
+                    mPrevSteps = event.values[0].toInt()
+                }
+                mSteps = (event.values[0] - mPrevSteps).toInt()
+                binding.walkNum = mSteps.toString()
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
     }
 }
