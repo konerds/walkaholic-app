@@ -61,7 +61,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="@string/tutorial"
-                android:textColor="#999283"
+                android:textColor="#6C6B67"
                 android:textSize="12sp"
                 android:theme="@style/Theme.MaterialComponents.Light"
                 app:chipIcon="@drawable/ic_login_tutorial"

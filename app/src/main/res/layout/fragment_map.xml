@@ -18,6 +18,14 @@
         <variable
             name="themeCourse"
             type="com.mapo.walkaholic.data.model.response.ThemeCourseResponse.DataThemeCourse" />
+
+        <variable
+            name="walkNum"
+            type="String" />
+
+        <variable
+            name="walkTime"
+            type="String" />
     </data>
 
     <FrameLayout
@@ -76,7 +84,7 @@
                     style="@style/font_black_20_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00:00:30"
+                    android:text="@{walkTime}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -230,7 +238,7 @@
                         style="@style/font_black_30_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0"
+                        android:text="@{walkNum}"
                         android:textColor="@color/color689f38" />
 
                     <TextView
@@ -343,6 +351,7 @@
                         style="@style/font_semi_bold_12_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text='@{"소요시간 " + themeCourse.courseTime}'
                         android:textColor="#9B9790"
                         app:full_text='@{"소요시간 " + themeCourse.courseTime}'
                         app:span_color="@{@color/colorf37520}"

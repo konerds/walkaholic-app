@@ -109,14 +109,15 @@
 
                     <FrameLayout
                         android:id="@+id/dashLayoutFrame"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="20dp">
 
                         <ImageView
                             android:id="@+id/dashIvCharacterInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_gravity="center|center_vertical" />
 
                         <ImageView
@@ -138,12 +139,12 @@
 
                     </FrameLayout>
 
-                    <!--<TextView
-                        style="@style/font_semi_bold_10_one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - expInformation.currentLevelNeedExp) + " / " + viewModel.toAnyToString(expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp)}' />-->
+                <!--<TextView
+                    style="@style/font_semi_bold_10_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text='@{"경험치 " + viewModel.toAnyToString(user.currentExp - expInformation.currentLevelNeedExp) + " / " + viewModel.toAnyToString(expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp)}' />-->
 
                     <TextView
                         android:id="@+id/dashTvIntro"
@@ -221,7 +222,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|center_vertical"
                             android:gravity="left"
-                            android:text="8,000"
                             android:textColor="#F37520" />
 
                         <TextView
@@ -252,14 +252,15 @@
                             android:text="@string/dash_km_distance"
                             android:textColor="@color/h5" />
 
-                        <TextView
-                            style="@style/font_black_16_one"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="16dp"
-                            android:text="4.7KM" />
+                    <TextView
+                        android:id="@+id/dashTvDistance"
+                        style="@style/font_black_16_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="16dp"
+                        android:text='@{user.walkDistance + "KM"}' />
 
                     </RelativeLayout>
 
@@ -271,7 +272,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/dashTvcalorie"
                             style="@style/font_semi_bold_16_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -282,13 +282,13 @@
                             android:textColor="@color/h5" />
 
                         <TextView
+                            android:id="@+id/dashTvCalorie"
                             style="@style/font_black_16_one"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="right|center_vertical"
-                            android:layout_marginRight="16dp"
-                            android:text="122CAL" />
+                            android:layout_marginRight="16dp" />
 
                     </RelativeLayout>
 
