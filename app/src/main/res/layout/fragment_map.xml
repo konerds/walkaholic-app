@@ -278,11 +278,11 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="340dp"
                     android:layout_height="80dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="12dp" />
+                    android:src="@drawable/ic_map_navigation_course"
+                    android:layout_gravity="center" />
 
             </LinearLayout>
 
