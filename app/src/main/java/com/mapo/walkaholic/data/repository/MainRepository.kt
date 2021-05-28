@@ -5,6 +5,7 @@ import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
+import com.mapo.walkaholic.data.model.request.WalkRewardRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import com.mapo.walkaholic.data.network.ApisApi
@@ -267,6 +268,10 @@ class MainRepository(
 
     suspend fun getMarker(type:Int, latitude: String, longitude: String) = safeApiCall {
         api.getMarker(type.toString(), latitude, longitude)
+    }
+
+    suspend fun setReward(userId: Long, walkCount : Int) = safeApiCall {
+        api.setReward(userId.toString(), WalkRewardRequestBody(walkCount.toLong()))
     }
 
 }

@@ -317,6 +317,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 binding.mapWalkControllerLayout2.visible(false)
                                 walkProcess = 0
                                 binding.walkNum = "0"
+                                val resultWalkNum = mSteps
                                 mSteps = 0
                                 mPauseSteps = 0
                                 mPrevSteps = 0
@@ -324,6 +325,47 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 timerTask?.cancel()
                                 time = 0
                                 binding.walkTime = "00:00:00"
+                                viewModel.getUser()
+                                viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
+                                    when(_userResponse) {
+                                        is Resource.Success -> {
+                                            when(_userResponse.value.code) {
+                                                "200" -> {
+                                                    viewModel.setReward(_userResponse.value.data.first().id, mSteps)
+                                                    viewModel.walkRewardResponse.observe(viewLifecycleOwner, Observer { _walkRewardResponse ->
+                                                        when(_walkRewardResponse) {
+                                                            is Resource.Success -> {
+                                                                when(_walkRewardResponse.value.code) {
+                                                                    "200" -> {
+                                                                        confirmDialog(_walkRewardResponse.value.message, null, null)
+                                                                    }
+                                                                    "400" -> {
+                                                                        // Error
+                                                                    }
+                                                                }
+                                                            }
+                                                            is Resource.Loading -> {
+                                                                // Loading
+                                                            }
+                                                            is Resource.Failure -> {
+                                                                handleApiError(_walkRewardResponse) { viewModel.setReward(_userResponse.value.data.first().id, mSteps) }
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                                else -> {
+                                                    // Error
+                                                }
+                                            }
+                                        }
+                                        is Resource.Loading -> {
+                                            //
+                                        }
+                                        is Resource.Failure -> {
+                                            handleApiError(_userResponse) { viewModel.getUser() }
+                                        }
+                                    }
+                                })
                             } else {
                                 confirmDialog("걸음수 측정을 위한 센서를 찾을 수 없습니다", null, null)
                             }

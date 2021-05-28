@@ -53,6 +53,9 @@ class MapViewModel(
         MutableLiveData()
     val markerPoliceResponse: LiveData<Resource<MarkerLatLngResponse>>
         get() = _markerPoliceResponse
+    private val _walkRewardResponse: MutableLiveData<Resource<WalkRecordResponse>> = MutableLiveData()
+    val walkRewardResponse : LiveData<Resource<WalkRecordResponse>>
+        get() = _walkRewardResponse
 
     fun init(mMap: NaverMap) {
         this.mMap = mMap
@@ -115,6 +118,12 @@ class MapViewModel(
     fun getThemeCourseRoute(id: Int) {
         viewModelScope.launch {
             _themeCourseRouteResponse.value = mainRepository.getThemeCourseRoute(id)
+        }
+    }
+
+    fun setReward(userId: Long, walkCount : Int) {
+        viewModelScope.launch {
+            _walkRewardResponse.value = mainRepository.setReward(userId, walkCount)
         }
     }
 }

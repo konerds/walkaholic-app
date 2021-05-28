@@ -3,6 +3,7 @@ package com.mapo.walkaholic.data.network
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
+import com.mapo.walkaholic.data.model.request.WalkRewardRequestBody
 import com.mapo.walkaholic.data.model.response.*
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -156,4 +157,14 @@ interface InnerApi {
         @Query("x") x: String,
         @Query("y") y: String
     ): MarkerLatLngResponse
+
+    @Headers(
+        "Accept:application/json, text/plain, */*",
+        "Content-Type:application/json;charset=UTF-8"
+    )
+    @PUT("user/{id}/walk/reward")
+    suspend fun setReward(
+        @Path("id") id : String,
+        @Body walkCount : WalkRewardRequestBody
+    ) : WalkRecordResponse
 }
