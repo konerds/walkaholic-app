@@ -44,10 +44,10 @@ class ChallengeFragment : BaseFragment<ChallengeViewModel, FragmentChallengeBind
             tab.text = tabName?.get(position)
         }.attach()
 
-        Log.e("challengePosition", challengeArgs.toString())
+        Log.e("challengePosition", challengeArgs.idChallenge.toString())
 
-        tabLayout.getTabAt(challengeArgs.idChallenge)?.select()
-        viewPager.currentItem = challengeArgs.idChallenge
+        /*tabLayout.getTabAt(challengeArgs.idChallenge)?.select()
+        viewPager.currentItem = challengeArgs.idChallenge*/
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

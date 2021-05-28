@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.ui.main.challenge
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -10,7 +11,6 @@ class ChallengeViewPagerAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     private val fragmentSize: Int
-    //private var listener: ChallengeDetailMissionListener
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int = fragmentSize
 

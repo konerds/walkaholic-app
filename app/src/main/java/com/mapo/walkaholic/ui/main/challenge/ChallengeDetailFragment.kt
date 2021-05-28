@@ -38,6 +38,8 @@ class ChallengeDetailFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.e("position", position.toString())
+
         viewModel.getUser()
         viewModel.userResponse.observe(viewLifecycleOwner, Observer { _userResponse ->
             binding.challengeRVMission.also { _challengeRVMission ->
@@ -48,7 +50,6 @@ class ChallengeDetailFragment(
                         when (_userResponse.value.code) {
                             "200" -> {
                                 viewModel.getMission(_userResponse.value.data.first().id, position)
-                                Log.e("position", position.toString())
                                 viewModel.missionResponse.observe(viewLifecycleOwner, Observer { _missionResponse ->
                                     when (_missionResponse) {
                                         is Resource.Success -> {

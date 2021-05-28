@@ -49,7 +49,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/box_dashboard_uppercorner_f37520"
-                    android:elevation="4dp"
                     android:orientation="horizontal"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
@@ -157,8 +156,8 @@
 
                         <ImageView
                             android:id="@+id/dashCharacterInfoIvCharacter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
                             android:layout_gravity="center|center_vertical" />
 
                         <TextView
@@ -166,6 +165,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|bottom"
+                            android:layout_marginTop="5dp"
                             android:layout_marginLeft="16dp"
                             android:gravity="center|center_vertical"
                             android:text='@{"LV." + viewModel.toAnyToString(user.levelId)}' />
@@ -176,7 +176,10 @@
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="16dp"
-                        android:layout_margin="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="4dp"
                         android:max="@{expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp}"
                         android:progress="@{user.currentExp - expInformation.currentLevelNeedExp}"
                         android:progressDrawable="@drawable/progressbar_dashboard_character_info" />
