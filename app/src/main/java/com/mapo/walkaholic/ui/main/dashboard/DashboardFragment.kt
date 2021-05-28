@@ -56,8 +56,11 @@ class DashboardFragment :
     BaseFragment<DashboardViewModel, FragmentDashboardBinding, MainRepository>(),
 DashboardThemeClickListener {
     companion object {
+        private const val PIXELS_PER_METRE = 4
         private const val ANIMATION_DURATION = 300
         private const val DASH_CHARACTER_RATE = 0.6051
+        private const val CHARACTER_BETWEEN_CIRCLE_PADDING = 65
+        private const val CHARACTER_EXP_CIRCLE_SIZE = 99
     }
 
     private val dashboardArgs: DashboardFragmentArgs by navArgs()
@@ -169,7 +172,7 @@ DashboardThemeClickListener {
                                                                                     AnimationDrawable()
                                                                                 animationDrawable.isOneShot =
                                                                                     false
-                                                                                /*_userCharacterFilenameResponse.value.data.forEachIndexed { _characterUriIndex, _characterUriElement ->
+                                                                                _userCharacterFilenameResponse.value.data.forEachIndexed { _characterUriIndex, _characterUriElement ->
                                                                                     Glide.with(
                                                                                         requireContext()
                                                                                     )
@@ -305,9 +308,9 @@ DashboardThemeClickListener {
                                                                                                     }
                                                                                                 }
                                                                                             })
-                                                                                }*/
+                                                                                }
 
-                                                                                _userCharacterFilenameResponse.value.data.forEachIndexed { _characterUriIndex, _characterUriElement ->
+                                                                                /*_userCharacterFilenameResponse.value.data.forEachIndexed { _characterUriIndex, _characterUriElement ->
                                                                                     Glide.with(
                                                                                         requireContext()
                                                                                     )
@@ -422,7 +425,7 @@ DashboardThemeClickListener {
                                                                                                             false,
                                                                                                             paint
                                                                                                         )
-                                                                                                        /*paint.xfermode =
+                                                                                                        *//*paint.xfermode =
                                                                                                             PorterDuffXfermode(
                                                                                                                 PorterDuff.Mode.CLEAR
                                                                                                             )
@@ -432,7 +435,7 @@ DashboardThemeClickListener {
                                                                                                             sweepAngle,
                                                                                                             true,
                                                                                                             paint
-                                                                                                        )*/
+                                                                                                        )*//*
                                                                                                         binding.dashIvCharacterInfo.setImageBitmap(
                                                                                                             bitmapInfoSheet
                                                                                                         )
@@ -459,7 +462,7 @@ DashboardThemeClickListener {
                                                                                                     }
                                                                                                 }
                                                                                             })
-                                                                                }
+                                                                                }*/
 
 
                                                                             }
