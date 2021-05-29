@@ -130,7 +130,7 @@ DashboardThemeClickListener {
                             )
                         }
                         addOnFailureListener { e ->
-                            val exception = e as ApiException
+                            confirmDialog("위치 정보 권한 설정에 실패하였습니다", { setCurrentLocation() }, "재시도")
                         }
                     }
                 } else {
