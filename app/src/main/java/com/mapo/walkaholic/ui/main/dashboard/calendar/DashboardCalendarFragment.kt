@@ -308,7 +308,7 @@ class DashboardCalendarFragment :
 
     override fun getFragmentRepository(): MainRepository {
         val accessToken = runBlocking { userPreferences.jwtToken.first() }
-        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, accessToken)
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, accessToken, false)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)

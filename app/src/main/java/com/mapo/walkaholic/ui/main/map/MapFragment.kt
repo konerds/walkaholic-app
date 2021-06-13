@@ -744,7 +744,7 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
 
     override fun getFragmentRepository(): MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }
-        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken, false)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)
@@ -849,18 +849,18 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerStoreResponse.value.code) {
                                         "200" -> {
-                                            _markerStoreResponse.value.data.forEachIndexed { _StoreIndex, _StoreElement ->
+                                            _markerStoreResponse.value.data.forEachIndexed { _storeIndex, _storeElement ->
                                                 val infoWindow = InfoWindow()
                                                 infoWindow.adapter = object :
                                                     InfoWindow.DefaultTextAdapter(requireContext()) {
                                                     override fun getText(infoWindow: InfoWindow): CharSequence {
-                                                        return _StoreElement.name + "\n" + _StoreElement.address
+                                                        return _storeElement.name + "\n" + _storeElement.address
                                                     }
                                                 }
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _StoreElement.y.toDouble(),
-                                                    _StoreElement.x.toDouble()
+                                                    _storeElement.y.toDouble(),
+                                                    _storeElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_store)
@@ -932,18 +932,18 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerCafeResponse.value.code) {
                                         "200" -> {
-                                            _markerCafeResponse.value.data.forEachIndexed { _CafeIndex, _CafeElement ->
+                                            _markerCafeResponse.value.data.forEachIndexed { _cafeIndex, _cafeElement ->
                                                 val infoWindow = InfoWindow()
                                                 infoWindow.adapter = object :
                                                     InfoWindow.DefaultTextAdapter(requireContext()) {
                                                     override fun getText(infoWindow: InfoWindow): CharSequence {
-                                                        return _CafeElement.name + "\n" + _CafeElement.address
+                                                        return _cafeElement.name + "\n" + _cafeElement.address
                                                     }
                                                 }
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _CafeElement.y.toDouble(),
-                                                    _CafeElement.x.toDouble()
+                                                    _cafeElement.y.toDouble(),
+                                                    _cafeElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_cafe)
@@ -1015,18 +1015,18 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerPharmacyResponse.value.code) {
                                         "200" -> {
-                                            _markerPharmacyResponse.value.data.forEachIndexed { _PharmacyIndex, _PharmacyElement ->
+                                            _markerPharmacyResponse.value.data.forEachIndexed { _pharmacyIndex, _pharmacyElement ->
                                                 val infoWindow = InfoWindow()
                                                 infoWindow.adapter = object :
                                                     InfoWindow.DefaultTextAdapter(requireContext()) {
                                                     override fun getText(infoWindow: InfoWindow): CharSequence {
-                                                        return _PharmacyElement.name + "\n" + _PharmacyElement.address
+                                                        return _pharmacyElement.name + "\n" + _pharmacyElement.address
                                                     }
                                                 }
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _PharmacyElement.y.toDouble(),
-                                                    _PharmacyElement.x.toDouble()
+                                                    _pharmacyElement.y.toDouble(),
+                                                    _pharmacyElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_pharmacy)
@@ -1098,18 +1098,18 @@ class MapFragment : BaseFragment<MapViewModel, FragmentMapBinding, MainRepositor
                                 is Resource.Success -> {
                                     when (_markerBicycleResponse.value.code) {
                                         "200" -> {
-                                            _markerBicycleResponse.value.data.forEachIndexed { _BicycleIndex, _BicycleElement ->
+                                            _markerBicycleResponse.value.data.forEachIndexed { _bicycleIndex, _bicycleElement ->
                                                 val infoWindow = InfoWindow()
                                                 infoWindow.adapter = object :
                                                     InfoWindow.DefaultTextAdapter(requireContext()) {
                                                     override fun getText(infoWindow: InfoWindow): CharSequence {
-                                                        return _BicycleElement.name + "\n" + _BicycleElement.address
+                                                        return _bicycleElement.name + "\n" + _bicycleElement.address
                                                     }
                                                 }
                                                 val marker = Marker()
                                                 marker.position = LatLng(
-                                                    _BicycleElement.y.toDouble(),
-                                                    _BicycleElement.x.toDouble()
+                                                    _bicycleElement.y.toDouble(),
+                                                    _bicycleElement.x.toDouble()
                                                 )
                                                 marker.icon =
                                                     OverlayImage.fromResource(com.mapo.walkaholic.R.drawable.ic_small_bicycle)

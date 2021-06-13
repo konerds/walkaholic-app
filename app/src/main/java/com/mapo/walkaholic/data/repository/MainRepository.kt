@@ -1,17 +1,16 @@
 package com.mapo.walkaholic.data.repository
 
-import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
 import com.mapo.walkaholic.data.model.request.MapRequestBody
-import com.mapo.walkaholic.data.model.request.WalkRewardRequestBody
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse
 import com.mapo.walkaholic.data.model.response.YesterdayWeatherResponse
 import com.mapo.walkaholic.data.network.ApisApi
 import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.network.SgisApi
+import kotlinx.coroutines.flow.first
 import retrofit2.http.Body
 import java.net.URLDecoder
 import java.text.SimpleDateFormat
@@ -39,25 +38,8 @@ class MainRepository(
         private const val SGIS_EPSG_BESSEL = "5181"
     }
 
-    private var userId : String = ""
-
     suspend fun getUser() = safeApiCall {
-        //setUser()
-        //api.getUser(userId)
-
-        api.getUser("1693276776")
-    }
-
-    private fun setUser() {
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                // Fail
-            }
-            else if (tokenInfo != null) {
-                // Success
-                userId = tokenInfo.id.toString()
-            }
-        }
+        api.getUser(preferences.userId.first()!!)
     }
 
     suspend fun getUserCharacterFilename(userId: Long) = safeApiCall {
@@ -271,7 +253,7 @@ class MainRepository(
     }
 
     suspend fun setReward(userId: Long, walkCount : Int) = safeApiCall {
-        api.setReward(userId.toString(), WalkRewardRequestBody(walkCount.toLong()))
+        api.setReward(userId.toString(), walkCount.toLong())
     }
 
 }

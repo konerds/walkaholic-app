@@ -12,13 +12,16 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.GuestApi
+import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentLoginBinding
@@ -26,7 +29,10 @@ import com.mapo.walkaholic.ui.*
 import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.main.MainActivity
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentDirections
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRepository>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -79,28 +85,40 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                         GlobalApplication.getGlobalApplicationContext()
                             .getString(R.string.msg_success_auth)
                     )
-                    viewModel.login()
+                    viewModel.login(token)
                     viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
                         when (_loginResponse) {
                             is Resource.Success -> {
+                                showToastEvent(_loginResponse.value.message.trim())
                                 when (_loginResponse.value.code) {
                                     "200" -> {
                                         lifecycleScope.launch {
-                                            showToastEvent(_loginResponse.value.message.trim())
-                                            /*viewModel.saveJwtToken(it.value.jwtToken)*/
-                                            // Log.d(TAG, it.value.jwtToken)
+                                            viewModel.saveJwtToken(_loginResponse.value.data.first().token)
+                                            Log.d(TAG, _loginResponse.value.data.first().token)
+                                            Log.d(TAG, _loginResponse.value.message)
+                                            val navDirection: NavDirections? =
+                                                LoginFragmentDirections.actionLoginFragmentToRegisterFragment(_loginResponse.value.data.first().token)
+                                            if (navDirection != null) {
+                                                findNavController().navigate(navDirection)
+                                            }
+                                        }
+                                    }
+                                    "401" -> {
+                                        // Unauthorized Error
+                                        lifecycleScope.launch {
+                                            Log.d(TAG, _loginResponse.value.data.first().token)
                                             Log.d(TAG, _loginResponse.value.message)
                                             requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
                                         }
                                     }
+                                    "403" -> {
+                                        // Forbidden Error
+                                    }
+                                    "404" -> {
+                                        // Not Found Error
+                                    }
                                     else -> {
-                                        confirmDialog(
-                                            _loginResponse.value.message,
-                                            {
-                                                viewModel.login()
-                                            },
-                                            "재시도"
-                                        )
+                                        // Error
                                     }
                                 }
                             }
@@ -109,7 +127,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                             }
                             is Resource.Failure -> {
                                 // Network Error
-                                handleApiError(_loginResponse) { viewModel.login() }
+                                handleApiError(_loginResponse) { viewModel.login(token) }
                             }
                         }
                     })
@@ -136,7 +154,7 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                         }
                     } else {
                         // Token Existed (If need, Refresh)
-
+                        requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
                         /*UserApiClient.instance.logout { error ->
                             if (error != null) {
                                 Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
@@ -145,41 +163,6 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
                                 Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
                             }
                         }*/
-
-                        viewModel.login()
-                        viewModel.loginResponse.observe(viewLifecycleOwner, Observer { _loginResponse ->
-                            when (_loginResponse) {
-                                is Resource.Success -> {
-                                    when (_loginResponse.value.code) {
-                                        "200" -> {
-                                            lifecycleScope.launch {
-                                                showToastEvent(_loginResponse.value.message.trim())
-                                                /*viewModel.saveJwtToken(it.value.jwtToken)*/
-                                                // Log.d(TAG, it.value.jwtToken)
-                                                Log.d(TAG, _loginResponse.value.message)
-                                                requireActivity().startNewActivity(MainActivity::class.java as Class<Activity>)
-                                            }
-                                        }
-                                        else -> {
-                                            confirmDialog(
-                                                _loginResponse.value.message,
-                                                {
-                                                    viewModel.login()
-                                                },
-                                                "재시도"
-                                            )
-                                        }
-                                    }
-                                }
-                                is Resource.Loading -> {
-                                    // Loading
-                                }
-                                is Resource.Failure -> {
-                                    // Network Error
-                                    handleApiError(_loginResponse) { viewModel.login() }
-                                }
-                            }
-                        })
                     }
                 }
             } else {
@@ -225,8 +208,10 @@ class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding, AuthRep
     ) = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository {
+        val jwtToken = runBlocking { userPreferences.jwtToken.first() }
         return AuthRepository(
             remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java),
+            remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken, false),
             userPreferences
         )
     }

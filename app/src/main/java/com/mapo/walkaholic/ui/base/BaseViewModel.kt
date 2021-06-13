@@ -79,6 +79,14 @@ abstract class BaseViewModel(
         progressBarVisibility.set(false)
     }
 
+    suspend fun saveUserId(userId: String) {
+        progressBarVisibility.set(true)
+        viewModelScope.launch {
+            repository.saveUserId(userId)
+        }
+        progressBarVisibility.set(false)
+    }
+
     suspend fun saveIsLocationGranted() {
         progressBarVisibility.set(true)
         viewModelScope.launch {

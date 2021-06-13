@@ -1,14 +1,16 @@
 package com.mapo.walkaholic.data.network
 
-import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
-import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
-import com.mapo.walkaholic.data.model.request.MapRequestBody
-import com.mapo.walkaholic.data.model.request.WalkRewardRequestBody
+import com.mapo.walkaholic.data.model.request.*
 import com.mapo.walkaholic.data.model.response.*
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface InnerApi {
+    @POST("signup")
+    suspend fun register(
+        @Body userSignUpDto: SignupRequestBody
+    ): RegisterResponse
+
     @GET("auth/logout")
     suspend fun logout(): ResponseBody
 
@@ -165,6 +167,6 @@ interface InnerApi {
     @PUT("user/{id}/walk/reward")
     suspend fun setReward(
         @Path("id") id : String,
-        @Body walkCount : WalkRewardRequestBody
+        @Body walkCount : Long
     ) : WalkRecordResponse
 }

@@ -15,6 +15,7 @@ import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.network.GuestApi
+import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.ActivityAuthBinding
 import com.mapo.walkaholic.ui.base.BaseActivity
@@ -22,6 +23,8 @@ import com.mapo.walkaholic.ui.base.ViewModelFactory
 import com.mapo.walkaholic.ui.global.GlobalApplication
 import com.mapo.walkaholic.ui.startNewActivity
 import kotlinx.android.synthetic.main.fragment_register.view.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @RequiresApi(Build.VERSION_CODES.M)
 class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthRepository>() {
@@ -85,8 +88,12 @@ class AuthActivity : BaseActivity<AuthViewModel, ActivityAuthBinding, AuthReposi
     override fun getViewModel(): Class<AuthViewModel> = AuthViewModel::class.java
 
     override fun getActivityRepository(): AuthRepository {
-        val api = remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java)
-        return AuthRepository(api, userPreferences)
+        val jwtToken = runBlocking { userPreferences.jwtToken.first() }
+        return AuthRepository(
+            remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java),
+            remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken, false),
+            userPreferences
+        )
     }
 
     /*private fun getHashKey(): String? {

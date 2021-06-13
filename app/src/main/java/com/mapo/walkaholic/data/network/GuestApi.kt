@@ -1,7 +1,5 @@
 package com.mapo.walkaholic.data.network
 
-import com.mapo.walkaholic.data.model.request.LoginRequestBody
-import com.mapo.walkaholic.data.model.request.SignupRequestBody
 import com.mapo.walkaholic.data.model.response.*
 import retrofit2.http.*
 
@@ -25,19 +23,20 @@ interface GuestApi {
         "Accept:application/json, text/plain, */*",
         "Content-Type:application/json;charset=UTF-8"
     )
-    @POST("signup")
-    suspend fun register(
-        @Body userSignUpDto: SignupRequestBody
-    ): AuthResponse
 
-    @Headers(
-        "Accept:application/json, text/plain, */*",
-        "Content-Type:application/json;charset=UTF-8"
-    )
-    @POST("login")
+    @GET("oauth/kakao/login")
     suspend fun login(
-        @Body userLogin: LoginRequestBody
-    ): AuthResponse
+        @Query("accessToken") accessToken : String
+    ): LoginResponse
+
+//    @Headers(
+//        "Accept:application/json, text/plain, */*",
+//        "Content-Type:application/json;charset=UTF-8"
+//    )
+//    @POST("login")
+//    suspend fun login(
+//        @Body userLogin: LoginRequestBody
+//    ): RegisterResponse
 
     /*
     @FormUrlEncoded
@@ -47,6 +46,6 @@ interface GuestApi {
         @Field("accessTokenExpiresAt") accessTokenExpiresAt: String,
         @Field("refreshToken") refreshToken: String,
         @Field("refreshTokenExpiresAt") refreshTokenExpiresAt : String
-    ): AuthResponse
+    ): RegisterResponse
      */
 }

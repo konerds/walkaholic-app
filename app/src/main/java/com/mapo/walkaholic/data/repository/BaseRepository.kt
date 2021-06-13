@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
 abstract class BaseRepository(
-    private val preferences: UserPreferences
+    val preferences: UserPreferences
 ) {
     companion object {
         private const val RESOURCE_BASE_URL = "http://15.164.103.223:8080/static/img/"
@@ -39,6 +39,10 @@ abstract class BaseRepository(
 
     suspend fun saveAuthToken(accessToken: String) {
         preferences.saveJwtToken(accessToken)
+    }
+
+    suspend fun saveUserId(userId: String) {
+        preferences.saveUserId(userId)
     }
 
     suspend fun saveIsFirst(isFirst: Boolean) {

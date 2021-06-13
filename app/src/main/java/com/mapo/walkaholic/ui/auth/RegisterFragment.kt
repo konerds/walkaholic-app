@@ -22,10 +22,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.GuestApi
+import com.mapo.walkaholic.data.network.InnerApi
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.data.repository.AuthRepository
 import com.mapo.walkaholic.databinding.FragmentRegisterBinding
@@ -33,14 +35,20 @@ import com.mapo.walkaholic.ui.base.BaseFragment
 import com.mapo.walkaholic.ui.confirmDialog
 import com.mapo.walkaholic.ui.handleApiError
 import com.mapo.walkaholic.ui.main.MainActivity
+import com.mapo.walkaholic.ui.main.dashboard.DashboardFragmentArgs
 import com.mapo.walkaholic.ui.startNewActivity
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
 class RegisterFragment :
     BaseFragment<RegisterViewModel, FragmentRegisterBinding, AuthRepository>() {
+
+    private val registerArgs: RegisterFragmentArgs by navArgs()
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         binding.viewModel = viewModel
@@ -274,7 +282,8 @@ class RegisterFragment :
                                     when (_registerResponse.value.code) {
                                         "200" -> {
                                             lifecycleScope.launch {
-                                                /*viewModel.saveJwtToken(it.value.jwtToken)*/
+                                                viewModel.saveJwtToken(registerArgs.jwtToken)
+                                                viewModel.saveUserId(_registerResponse.value.data.first().userId.toString())
                                                 requireActivity().startNewActivity(MainActivity::class.java)
                                             }
                                         }
@@ -340,8 +349,10 @@ class RegisterFragment :
     ) = FragmentRegisterBinding.inflate(inflater, container, false)
 
     override fun getFragmentRepository(): AuthRepository {
+        val jwtToken = registerArgs.jwtToken
         return AuthRepository(
-            remoteDataSource.buildRetrofitInnerApi(GuestApi::class.java),
+            remoteDataSource.buildRetrofitGuestApi(GuestApi::class.java),
+            remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken, true),
             userPreferences
         )
     }

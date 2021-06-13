@@ -19,6 +19,11 @@ class UserPreferences(
             preferences[JWT_TOKEN]
         }
 
+    val userId: Flow<String?>
+        get() = dataStore.data.map { preferences ->
+            preferences[USER_ID]
+        }
+
     val isPermissionLocation: Flow<Boolean?>
         get() = dataStore.data.map { preferences ->
             preferences[IS_LOCATION_GRANTED]
@@ -38,6 +43,12 @@ class UserPreferences(
     suspend fun saveJwtToken(jwtToken: String) {
         dataStore.edit { preferences ->
             preferences[JWT_TOKEN] = jwtToken
+        }
+    }
+
+    suspend fun saveUserId(userId: String) {
+        dataStore.edit { preferences ->
+            preferences[USER_ID] = userId
         }
     }
 
@@ -68,6 +79,7 @@ class UserPreferences(
     companion object {
         private val IS_FIRST = preferencesKey<Boolean>("is_first")
         private val JWT_TOKEN = preferencesKey<String>("jwt_token")
+        private val USER_ID = preferencesKey<String>("user_id")
         private val IS_LOCATION_GRANTED = preferencesKey<Boolean>("is_location_granted")
     }
 }

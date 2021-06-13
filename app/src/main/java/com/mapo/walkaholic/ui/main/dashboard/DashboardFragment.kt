@@ -1028,7 +1028,7 @@ DashboardThemeClickListener {
 
     override fun getFragmentRepository(): MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }
-        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken, false)
         val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
         val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
         return MainRepository(api, apiWeather, apiSGIS, userPreferences)

@@ -200,9 +200,9 @@ class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding, MainReposi
 
     override fun getActivityRepository(): MainRepository {
         val jwtToken = runBlocking { userPreferences.jwtToken.first() }
-        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken)
-        val apiAPIS = remoteDataSource.buildRetrofitInnerApi(ApisApi::class.java, jwtToken)
-        val apiSGIS = remoteDataSource.buildRetrofitInnerApi(SgisApi::class.java, jwtToken)
-        return MainRepository(api, apiAPIS, apiSGIS, userPreferences)
+        val api = remoteDataSource.buildRetrofitInnerApi(InnerApi::class.java, jwtToken, false)
+        val apiWeather = remoteDataSource.buildRetrofitApiWeatherAPI(ApisApi::class.java)
+        val apiSGIS = remoteDataSource.buildRetrofitApiSGISAPI(SgisApi::class.java)
+        return MainRepository(api, apiWeather, apiSGIS, userPreferences)
     }
 }

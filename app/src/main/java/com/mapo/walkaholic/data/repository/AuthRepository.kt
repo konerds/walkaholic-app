@@ -1,19 +1,16 @@
 package com.mapo.walkaholic.data.repository
 
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.user.UserApiClient
 import com.mapo.walkaholic.data.UserPreferences
-import com.mapo.walkaholic.data.model.request.LoginRequestBody
 import com.mapo.walkaholic.data.model.request.SignupRequestBody
 import com.mapo.walkaholic.data.network.GuestApi
+import com.mapo.walkaholic.data.network.InnerApi
 
 class AuthRepository(
     private val api: GuestApi,
+    private val innerApi: InnerApi,
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
-
-    private var userId : Long = 0
-
     suspend fun getFilenameLogoImage() = safeApiCall {
         api.getFilenameLogoImage()
     }
@@ -26,24 +23,17 @@ class AuthRepository(
         api.getTermPrivacy()
     }
 
-    suspend fun login(userId: Long) = safeApiCall {
-        api.login(LoginRequestBody(userId))
-    }
-
-    /*
     suspend fun login(token:OAuthToken) = safeApiCall {
-        api.login(token.accessToken, token.accessTokenExpiresAt.toString(), token.refreshToken, token.refreshTokenExpiresAt.toString())
+        api.login(token.accessToken)
     }
-     */
 
     suspend fun register(
         userBirth: String,
         userGender: String,
         userHeight : String,
-        userId: Long,
         userNickname: String,
         userWeight : String
     ) = safeApiCall {
-        api.register(SignupRequestBody(userBirth, userGender, userHeight, userId, userNickname, userWeight))
+        innerApi.register(SignupRequestBody(userBirth, userGender, userHeight, userNickname, userWeight))
     }
 }

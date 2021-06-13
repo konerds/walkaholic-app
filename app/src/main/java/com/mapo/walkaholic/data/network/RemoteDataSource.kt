@@ -18,7 +18,8 @@ class RemoteDataSource {
     ): Api {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(OkHttpClient.Builder().also { client ->
+            .client(
+                OkHttpClient.Builder().also { client ->
                     if (BuildConfig.DEBUG) {
                         val logging = HttpLoggingInterceptor()
                         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -33,61 +34,70 @@ class RemoteDataSource {
 
     fun <Api> buildRetrofitInnerApi(
         api: Class<Api>,
-        jwtToken: String ?= null
+        jwtToken: String? = null,
+        isSignup: Boolean
     ): Api {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(OkHttpClient.Builder().addInterceptor { chain ->
-                    chain.proceed(chain.request().newBuilder().also {
-                        it.addHeader("Authorization", "Bearer $jwtToken")
-                    }.build())
-                }
-                        .also { client ->
-                            if (BuildConfig.DEBUG) {
-                                val logging = HttpLoggingInterceptor()
-                                logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-                                client.addInterceptor(logging)
-                            }
-                        }.build()
-                )
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(api)
+            .baseUrl(BASE_URL)
+            .client(OkHttpClient.Builder().addInterceptor { chain ->
+                chain.proceed(chain.request().newBuilder().also {
+                    it.addHeader(
+                        if (isSignup) {
+                            "token"
+                        } else {
+                            "auth"
+                        }, "$jwtToken"
+                    )
+                }.build())
+            }
+                .also { client ->
+                    if (BuildConfig.DEBUG) {
+                        val logging = HttpLoggingInterceptor()
+                        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                        client.addInterceptor(logging)
+                    }
+                }.build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
     }
 
     fun <Api> buildRetrofitApiWeatherAPI(
-            api: Class<Api>
+        api: Class<Api>
     ): Api {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL_OPENAPI_APIS)
-                .client(OkHttpClient.Builder().also { client ->
+            .baseUrl(BASE_URL_OPENAPI_APIS)
+            .client(
+                OkHttpClient.Builder().also { client ->
                     if (BuildConfig.DEBUG) {
                         val logging = HttpLoggingInterceptor()
                         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
                         client.addInterceptor(logging)
                     }
                 }.build()
-                )
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(api)
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
     }
 
     fun <Api> buildRetrofitApiSGISAPI(
-            api: Class<Api>
+        api: Class<Api>
     ): Api {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL_OPENAPI_SGIS)
-                .client(OkHttpClient.Builder().also { client ->
+            .baseUrl(BASE_URL_OPENAPI_SGIS)
+            .client(
+                OkHttpClient.Builder().also { client ->
                     if (BuildConfig.DEBUG) {
                         val logging = HttpLoggingInterceptor()
                         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
                         client.addInterceptor(logging)
                     }
                 }.build()
-                )
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(api)
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(api)
     }
 }

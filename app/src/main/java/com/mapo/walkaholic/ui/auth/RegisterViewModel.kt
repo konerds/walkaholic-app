@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kakao.sdk.user.UserApiClient
-import com.mapo.walkaholic.data.model.response.AuthResponse
+import com.mapo.walkaholic.data.model.response.RegisterResponse
 import com.mapo.walkaholic.data.model.response.FilenameLogoImageResponse
 import com.mapo.walkaholic.data.model.response.TermPrivacyResponse
 import com.mapo.walkaholic.data.model.response.TermServiceResponse
@@ -30,8 +30,8 @@ class RegisterViewModel(
     val termPrivacyResponse: LiveData<Resource<TermPrivacyResponse>>
         get() = _termPrivacyResponse
 
-    private val _registerResponse: MutableLiveData<Resource<AuthResponse>> = MutableLiveData()
-    val registerResponse: LiveData<Resource<AuthResponse>>
+    private val _registerResponse: MutableLiveData<Resource<RegisterResponse>> = MutableLiveData()
+    val registerResponse: LiveData<Resource<RegisterResponse>>
         get() = _registerResponse
 
     fun getFilenameTitleLogo() = viewModelScope.launch {
@@ -62,20 +62,15 @@ class RegisterViewModel(
         userWeight : String
     ) {
         progressBarVisibility.set(true)
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            tokenInfo!!.id.let {
-                viewModelScope.launch {
-                    _registerResponse.value =
-                        repository.register(
-                            userBirth,
-                            userGender,
-                            userHeight,
-                            it,
-                            userNickname,
-                            userWeight
-                        )
-                }
-            }
+        viewModelScope.launch {
+            _registerResponse.value =
+                repository.register(
+                    userBirth,
+                    userGender,
+                    userHeight,
+                    userNickname,
+                    userWeight
+                )
         }
         progressBarVisibility.set(false)
     }
