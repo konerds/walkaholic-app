@@ -180,8 +180,8 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="16dp"
                         android:layout_marginTop="4dp"
-                        android:max="@{expInformation.nextLevelNeedExp - expInformation.currentLevelNeedExp}"
-                        android:progress="@{user.currentExp - expInformation.currentLevelNeedExp}"
+                        android:max="@{expInformation.nextLevelExp - expInformation.currentLevelNeedExp}"
+                        android:progress="@{expInformation.nextLevelExp - expInformation.currentLevelNeedExp - expInformation.nextLevelNeedExp}"
                         android:progressDrawable="@drawable/progressbar_dashboard_character_info" />
 
                 </LinearLayout>

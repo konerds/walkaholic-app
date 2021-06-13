@@ -211,8 +211,8 @@ DashboardThemeClickListener {
                                                                                                     )
                                                                                                     if (animationDrawable.numberOfFrames == _userCharacterFilenameResponse.value.data.size) {
                                                                                                         val charExp =
-                                                                                                            (100.0 * (_userResponse.value.data.first().currentExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())
-                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
+                                                                                                            (100.0 * ((_expInformationResponse.value.data.first().nextLevelExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat()) - (_expInformationResponse.value.data.first().nextLevelNeedExp.toFloat()))
+                                                                                                                    / (_expInformationResponse.value.data.first().nextLevelExp.toFloat() - _expInformationResponse.value.data.first().currentLevelNeedExp.toFloat())).toLong()
                                                                                                         val radius =
                                                                                                             CHARACTER_BETWEEN_CIRCLE_PADDING + PIXELS_PER_METRE * if (resource.width >= resource.height) resource.width / 2 else resource.height / 2
                                                                                                         val bitmapInfoSheet =
