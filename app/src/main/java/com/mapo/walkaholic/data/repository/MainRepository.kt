@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.data.repository
 
+import com.mapo.walkaholic.BuildConfig
 import com.mapo.walkaholic.data.UserPreferences
 import com.mapo.walkaholic.data.model.request.BuyItemRequestBody
 import com.mapo.walkaholic.data.model.request.EquipItemRequestBody
@@ -23,8 +24,7 @@ class MainRepository(
     preferences: UserPreferences
 ) : BaseRepository(preferences) {
     companion object {
-        private const val APIS_API_KEY =
-            "qJr%2BQI4XC6oql7dTNz2MAuqL%2BKyg2AEdr6pKt2bBbzm9Bsj9jXkbPR%2FiQq%2BHKXN90xmsL%2BLrN4woIelJo1Ul4g%3D%3D"
+        private const val APIS_API_KEY = BuildConfig.APIS_API_KEY
         private const val APIS_WEATHER_NUM_OF_ROWS = "100"
         private const val APIS_RETURN_TYPE = "json"
         private const val APIS_ENCODE_TYPE = "utf-8"
@@ -32,8 +32,8 @@ class MainRepository(
         private const val APIS_WEATHER_DATE_FORMAT = "yyyyMMdd"
         private const val APIS_WEATHER_TIME_FORMAT = "HHmm"
         private const val TIME_ZONE = "Asia/Seoul"
-        private const val SGIS_API_CONSUMER_KEY = "70ae3222d3e94dd5a9e5"
-        private const val SGIS_API_SECRET_KEY = "638a9b5ec41b40f2ba5a"
+        private const val SGIS_API_CONSUMER_KEY = BuildConfig.SGIS_API_CONSUMER_KEY
+        private const val SGIS_API_SECRET_KEY = BuildConfig.SGIS_API_SECRET_KEY
         private const val SGIS_EPSG_WGS = "4326"
         private const val SGIS_EPSG_BESSEL = "5181"
     }

@@ -23,7 +23,10 @@ android {
         buildConfigField "String","RESOURCE_BASE_URL",properties['resource_base_url']
         buildConfigField "String","BACKEND_BASE_URL",properties['backend_base_url']
         buildConfigField "String","BASE_URL_OPENAPI_APIS",properties['base_url_openapi_apis']
+        buildConfigField "String","APIS_API_KEY",properties['api_key_openapi_apis']
         buildConfigField "String","BASE_URL_OPENAPI_SGIS",properties['base_url_openapi_sgis']
+        buildConfigField "String","SGIS_API_CONSUMER_KEY",properties['sgis_api_consumer_key']
+        buildConfigField "String","SGIS_API_SECRET_KEY",properties['sgis_api_secret_key']
         buildConfigField "String","URL_WEATHER_NAVER",properties['url_weather_naver']
 
         manifestPlaceholders = [kakaoOAuthHostScheme: "${properties['kakao_oauth_host_scheme']}"]
