@@ -27,6 +27,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.mapo.walkaholic.BuildConfig
 import com.mapo.walkaholic.R
 import com.mapo.walkaholic.data.network.Resource
 import com.mapo.walkaholic.ui.auth.LoginFragment
@@ -34,7 +35,7 @@ import com.mapo.walkaholic.ui.global.GlobalApplication
 import kotlinx.android.synthetic.main.dialog_alert.view.*
 import kotlinx.android.synthetic.main.dialog_confirm.view.*
 
-private const val RESOURCE_BASE_URL = "http://15.164.103.223:8080/static/img/"
+private const val RESOURCE_BASE_URL = BuildConfig.RESOURCE_BASE_URL;
 
 fun <A : Activity> Activity.startNewActivity(activity: Class<A>) {
     Intent(this, activity).also {

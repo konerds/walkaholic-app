@@ -1,6 +1,6 @@
 package com.mapo.walkaholic.data.network
 
-import androidx.databinding.library.BuildConfig
+import com.mapo.walkaholic.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,16 +8,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RemoteDataSource {
     companion object {
-        private const val BASE_URL = "http://15.164.103.223:8080/api/v1/"
-        private const val BASE_URL_OPENAPI_APIS = "http://apis.data.go.kr/"
-        private const val BASE_URL_OPENAPI_SGIS = "https://sgisapi.kostat.go.kr/OpenAPI3/"
+        private const val BACKEND_BASE_URL = BuildConfig.BACKEND_BASE_URL
+        private const val BASE_URL_OPENAPI_APIS = BuildConfig.BASE_URL_OPENAPI_APIS
+        private const val BASE_URL_OPENAPI_SGIS = BuildConfig.BASE_URL_OPENAPI_SGIS
     }
 
     fun <Api> buildRetrofitGuestApi(
         api: Class<Api>
     ): Api {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BACKEND_BASE_URL)
             .client(
                 OkHttpClient.Builder().also { client ->
                     if (BuildConfig.DEBUG) {
@@ -38,7 +38,7 @@ class RemoteDataSource {
         isSignup: Boolean
     ): Api {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BACKEND_BASE_URL)
             .client(OkHttpClient.Builder().addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder().also {
                     it.addHeader(

@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.fragment.app.Fragment
+import com.mapo.walkaholic.BuildConfig
 import com.mapo.walkaholic.R
 import kotlinx.android.synthetic.main.fragment_dashboard_weather_web_view.view.*
+
+private const val URL_WEATHER_NAVER = BuildConfig.URL_WEATHER_NAVER;
 
 class DashboardWeatherWebView : Fragment() {
     override fun onCreateView(
@@ -32,8 +35,7 @@ class DashboardWeatherWebView : Fragment() {
         }
         view.dashboardWeatherWebView.webViewClient = WeatherWebViewClient()
 
-        val naverWeather = "https://weather.naver.com"
-        view.dashboardWeatherWebView.loadUrl(naverWeather)
+        view.dashboardWeatherWebView.loadUrl(URL_WEATHER_NAVER)
 
         return view
     }

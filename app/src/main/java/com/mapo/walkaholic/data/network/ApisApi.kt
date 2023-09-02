@@ -1,5 +1,6 @@
 package com.mapo.walkaholic.data.network
 
+import com.mapo.walkaholic.BuildConfig
 import com.mapo.walkaholic.data.model.response.NearMsrstnResponse
 import com.mapo.walkaholic.data.model.response.WeatherDustResponse
 import com.mapo.walkaholic.data.model.response.TodayWeatherResponse

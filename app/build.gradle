@@ -4,6 +4,9 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -16,6 +19,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String","RESOURCE_BASE_URL",properties['resource_base_url']
+        buildConfigField "String","BACKEND_BASE_URL",properties['backend_base_url']
+        buildConfigField "String","BASE_URL_OPENAPI_APIS",properties['base_url_openapi_apis']
+        buildConfigField "String","BASE_URL_OPENAPI_SGIS",properties['base_url_openapi_sgis']
+        buildConfigField "String","URL_WEATHER_NAVER",properties['url_weather_naver']
     }
 
     buildTypes {
@@ -32,8 +41,8 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     buildFeatures {
-        viewBinding true
-        dataBinding true
+        viewBinding = true
+        dataBinding = true
     }
 }
 
