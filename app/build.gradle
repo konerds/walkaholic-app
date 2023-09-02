@@ -4,9 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -20,11 +17,16 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
         buildConfigField "String","RESOURCE_BASE_URL",properties['resource_base_url']
         buildConfigField "String","BACKEND_BASE_URL",properties['backend_base_url']
         buildConfigField "String","BASE_URL_OPENAPI_APIS",properties['base_url_openapi_apis']
         buildConfigField "String","BASE_URL_OPENAPI_SGIS",properties['base_url_openapi_sgis']
         buildConfigField "String","URL_WEATHER_NAVER",properties['url_weather_naver']
+
+        manifestPlaceholders = [kakaoOAuthHostScheme: "${properties['kakao_oauth_host_scheme']}"]
     }
 
     buildTypes {

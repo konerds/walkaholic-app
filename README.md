@@ -25,6 +25,7 @@
 | base_url_openapi_apis | API Server of OpenAPI URL (eg. http://apis.data.go.kr/) |
 | base_url_openapi_sgis | API Server of OpenAPI SGIS URL |
 | url_weather_naver | Web View URL for Naver Weather Service |
+| kakao_oauth_host_scheme | Kakao OAuth Host Scheme (eg. kakao${NATIVE_APP_KEY}) |
 
 ### Github Repository Link of Project
 
