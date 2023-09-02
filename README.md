@@ -23,7 +23,7 @@
 | resource_base_url | Asset Storage Server of Backend URL |
 | backend_base_url | API Server of Backend REST Service URL |
 | base_url_openapi_apis | API Server of OpenAPI URL (eg. http://apis.data.go.kr/) |
-| api_key_openapi_apis | API Key from OpenAPI Service) |
+| api_key_openapi_apis | API Key from OpenAPI Service |
 | base_url_openapi_sgis | API Server of OpenAPI SGIS URL |
 | sgis_api_consumer_key | Consumer Key from OpenAPI SGIS |
 | sgis_api_secret_key | Secret Key from OpenAPI SGIS |
